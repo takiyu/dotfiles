@@ -119,7 +119,7 @@ NeoBundle 'takiyu/ibus-switcher.vim' "ibus
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'https://takiyu@bitbucket.org/takiyu/my-vim-snippets.git'
+NeoBundle 'takiyu/my-vim-snippet'
 
 "#C/C++#
 "シンタックスハイライト
