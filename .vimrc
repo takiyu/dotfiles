@@ -185,7 +185,7 @@ let g:OmniSharp_typeLookupInPreview = 1
 let g:tex_conceal=''
 autocmd BufWritePost *.tex :Latexmk
 let g:LatexBox_output_type = 'pdf'
-let g:LatexBox_latexmk_options = '-pdfdvi'
+let g:LatexBox_latexmk_options = '-pdfdvi -recorder-'
 let g:LatexBox_viewer = 'xdg-open'
 let g:LatexBox_quickfix = 1
 let g:LatexBox_autojump = 1
