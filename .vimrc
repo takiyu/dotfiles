@@ -110,7 +110,7 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 NeoBundle 'tyru/caw.vim' "コメントアウト補助
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic' "文法チェック
-" NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'itchyny/lightline.vim' "ステータスライン
 NeoBundle 't9md/vim-quickhl' "ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim.git' "括弧+αをハイライト
@@ -240,15 +240,16 @@ let NERDTreeQuitOnOpen = 1 " 開いたら非表示
 " let NERDTreeMapOpenInTab='<ENTER>' " デフォルトでタブで開く (フォルダ移動などはoを使用)
 
 "##########plugin:clever_f##########
-" " 大文字入力時のみ考慮
-" let g:clever_f_ignore_case = 1
-" let g:clever_f_smart_case = 1
-" " 日本語
-" let g:clever_f_use_migemo = 1
-" " 移動方向を修正
-" let g:clever_f_fix_key_direction = 1
-" " 記号の代用文字
-" let g:clever_f_chars_match_any_signs = ';'
+" 大文字入力時のみ考慮
+let g:clever_f_ignore_case = 1
+let g:clever_f_smart_case = 1
+" 日本語
+autocmd FileType text let g:clever_f_use_migemo = 1
+autocmd FileType tex let g:clever_f_use_migemo = 1
+" 移動方向を修正
+let g:clever_f_fix_key_direction = 1
+" 記号の代用文字
+let g:clever_f_chars_match_any_signs = ';'
 
 "##########plugin:quickhl.vim##########
 let g:quickhl_manual_hl_priority = 10 " プライオリティの設定
