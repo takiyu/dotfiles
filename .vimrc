@@ -13,7 +13,6 @@ if has('win32') || has('win64')
 else
     " Windows以外
 	set guifont=DejaVu\ Sans\ Mono\ 10
-" 	set guifont=Ricty\ 11
 " 	set guifont=DejaVu\ Sans\ Mono\ 13
 	" set lsp=4 " gvimでの行間
 endif
@@ -375,7 +374,7 @@ NeoBundleCheck
 "##########colorscheme####################
 colorscheme muzzl
 
-hi Normal		guifg=#eeeeec
+hi Normal		guifg=#dddddc
 hi Folded		guifg=#eeeeec guibg=#555753
 hi FoldColumn				  guibg=#2e3436
 hi Statement    guifg=#fce94f               gui=bold
