@@ -13,6 +13,7 @@ if has('win32') || has('win64')
 else
     " Windows以外
 	set guifont=DejaVu\ Sans\ Mono\ 10
+" 	set guifont=Ricty\ 11
 " 	set guifont=DejaVu\ Sans\ Mono\ 13
 	" set lsp=4 " gvimでの行間
 endif
@@ -107,6 +108,7 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 
 "#############add plugins ##############
 "#共通#
+NeoBundle 'vim-scripts/muzzl.vim' "カラースキーム
 NeoBundle 'tyru/caw.vim' "コメントアウト補助
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic' "文法チェック
@@ -165,7 +167,7 @@ NeoBundleLazy 'othree/html5-syntax.vim', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 
 
-"###########matchit, hl-matchi settings##########
+"###########matchit, hl-matchit settings##########
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
 
@@ -203,34 +205,36 @@ autocmd InsertLeave *.txt call ibus_switcher#save()
 autocmd insertleave *.txt call ibus_switcher#loadDefault()
 
 "##########plugin:lightline##########
-"ステータスライン "\ 'colorscheme': 'wombat',
+"ステータスライン 
+"		\ 'colorscheme': 'wombat',
+"       \              [ 'fileencoding', 'filetype', 'syntastic'] ]
 let g:lightline = {
       \ 'active': {
 	  \   'left': [ ['mode', 'paste'],
 	  \     ['readonly', 'filename', 'modified'] ],
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
-      \              [ 'fileencoding', 'filetype', 'syntastic'] ]
+      \              [ 'fileencoding', 'filetype' ] ],
       \ },
 	  \ 'component': {
 	  \   'readonly': '%{&readonly?"R":"W"}',
 	  \ },
       \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag'
+      \   'syntastic': 'SyntasticStatuslineFlag',
       \ },
       \ 'component_type': {
-      \   'syntastic': 'error'
+      \   'syntastic': 'error',
       \ },
 	  \ 'separator': {'left': '', 'right': ''},
 	  \ 'subseparator': {'left': '|', 'right': '|'},
       \ }
 " 保存時にsyntasticでチェックをしてから表示をアップデート
-let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
-autocmd BufWritePost * call s:syntastic_check()
-function! s:syntastic_check()
-	SyntasticCheck
-	call lightline#update()
-endfunction
+" let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
+" autocmd BufWritePost * call s:syntastic_check()
+" function! s:syntastic_check()
+" 	SyntasticCheck
+" 	call lightline#update()
+" endfunction
 "##########plugin:syntastic##########
 let g:syntastic_auto_jump = 1
 
@@ -296,7 +300,7 @@ let g:neocomplete#auto_completion_stairt_length = 3 " 補完が自動で開始�
 " let g:neocomplete#skip_auto_completion_time = 0
 let g:neocomplete#enable_ignore_case = 1 "大文字が入力されるまで区別無視
 let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#enable_underbar_completion = 1 " アンダーバー補完を有効
+let g:neocomplete#enable_underbar_completion = 0 " アンダーバー補完を有効
 let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスをキャッシュするときの最小文字数
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*' " ロックパターン
 call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
@@ -367,3 +371,18 @@ filetype plugin indent on
 syntax on
 
 NeoBundleCheck
+
+"##########colorscheme####################
+colorscheme muzzl
+
+hi Normal		guifg=#eeeeec
+hi Folded		guifg=#eeeeec guibg=#555753
+hi FoldColumn				  guibg=#2e3436
+hi Statement    guifg=#fce94f               gui=bold
+hi Type			guifg=#8ae234               gui=bold
+
+hi PreProc		guifg=#eeeeec  " generic Preprocessor
+hi Include		guifg=#eeeeec  " #include
+hi Define		guifg=#eeeeec  " #define
+hi Macro		guifg=#eeeeec  " same as Define
+hi PreCondit	guifg=#eeeeec gui=bold " #if, #else, #endif, section(tex)
