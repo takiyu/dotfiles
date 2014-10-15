@@ -374,13 +374,16 @@ NeoBundleCheck
 "##########colorscheme####################
 colorscheme muzzl
 
-hi Normal		guifg=#e4e4ef
-hi Folded		guifg=#eeeeec guibg=#555753
-hi FoldColumn	guifg=#fce94f guibg=#2e3436
-hi Statement    guifg=#fce94f               gui=bold
-hi Type			guifg=#8ae234               gui=bold
+hi Normal		guifg=#e4e4ef ctermbg=gray
+hi Folded		guifg=#eeeeec guibg=#555753 ctermfg=Black ctermbg=gray
+hi FoldColumn	guifg=#fce94f guibg=#2e3436 ctermfg=3 ctermbg=Black cterm=bold
+hi Statement    guifg=#fce94f gui=bold cterm=bold
+hi Type			guifg=#8ae234 gui=bold cterm=bold
+hi Identifier	cterm=bold
+hi Constant		ctermfg=3
+hi Comment		ctermfg=blue cterm=bold
 
-hi PreProc		guifg=#eeeeec  " generic Preprocessor
+hi PreProc		guifg=#eeeeec cterm=bold " generic Preprocessor
 hi Include		guifg=#eeeeec  " #include
 hi Define		guifg=#eeeeec  " #define
 hi Macro		guifg=#eeeeec  " same as Define
