@@ -374,7 +374,7 @@ NeoBundleCheck
 "##########colorscheme####################
 colorscheme muzzl
 
-hi Normal		guifg=#dddddc
+hi Normal		guifg=#e4e4ef
 hi Folded		guifg=#eeeeec guibg=#555753
 hi FoldColumn	guifg=#fce94f guibg=#2e3436
 hi Statement    guifg=#fce94f               gui=bold
