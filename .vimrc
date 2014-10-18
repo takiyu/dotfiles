@@ -205,9 +205,9 @@ autocmd insertleave *.txt call ibus_switcher#loadDefault()
 
 "##########plugin:lightline##########
 "ステータスライン 
-"		\ 'colorscheme': 'wombat',
 "       \              [ 'fileencoding', 'filetype', 'syntastic'] ]
 let g:lightline = {
+	  \ 'colorscheme': 'Tomorrow_Night_Bright',
       \ 'active': {
 	  \   'left': [ ['mode', 'paste'],
 	  \     ['readonly', 'filename', 'modified'] ],
@@ -375,17 +375,42 @@ NeoBundleCheck
 colorscheme muzzl
 syntax reset
 
-hi Normal		guifg=#f0f0ff ctermfg=none ctermbg=none
+hi Normal		guifg=#f3f3ff ctermfg=none ctermbg=none
 hi Folded		guifg=#eeeeec guibg=#555753 ctermfg=black ctermbg=gray
 hi FoldColumn	guifg=#fce94f guibg=#2e3436 ctermfg=3 ctermbg=none cterm=bold
 hi Statement    guifg=#fce94f gui=bold cterm=bold
 hi Type			guifg=#8ae234 gui=bold cterm=bold
 hi Identifier   guifg=#7acccc cterm=bold
 hi Constant		guifg=#fcaf3e ctermfg=3
-hi Comment		guifg=#aaccff ctermfg=blue cterm=bold
+hi Comment		guifg=#bbddff ctermfg=blue cterm=bold
+hi StatusLineNC gui=bold guibg=green guifg=black ctermfg = Blue
 
 hi PreProc		guifg=#eeeeec cterm=bold " generic Preprocessor
 hi Include		guifg=#eeeeec  " #include
 hi Define		guifg=#eeeeec  " #define
 hi Macro		guifg=#eeeeec  " same as Define
 hi PreCondit	guifg=#eeeeec gui=bold " #if, #else, #endif, section(tex)
+
+" タブの表示設定
+function! GuiTabLabel() " 個別に設定
+	let l:label = ''
+	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
+	" 表示文字列にバッファ名中のファイル名を追加
+	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
+	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
+	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
+	if l:wincount > 1
+		let l:label .= '[' . l:wincount . ']'
+	endif
+
+	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
+		if getbufvar(bufnr, "&modified")
+			let l:label .= '[+]'
+			break
+		endif
+	endfor
+
+	return l:label
+endfunction
+" guitablabelに上の関数を設定
+set guitablabel=%N:\ %{GuiTabLabel()}
