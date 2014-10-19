@@ -42,6 +42,7 @@ set guioptions-=m " メニューバー,ツールバーを非表示
 set guioptions-=T
 " 折りたたみの設定
 set foldmethod=syntax
+set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
 " 補完時の設定
@@ -378,6 +379,7 @@ syntax reset
 hi Normal		guifg=#f3f3ff ctermfg=none ctermbg=none
 hi Folded		guifg=#eeeeec guibg=#555753 ctermfg=black ctermbg=gray
 hi FoldColumn	guifg=#fce94f guibg=#2e3436 ctermfg=3 ctermbg=none cterm=bold
+" hi Cursor       guifg=#2e3436 guibg=#9ae244 gui=bold ctermfg=Black ctermbg=Green cterm=bold
 hi Statement    guifg=#fce94f gui=bold cterm=bold
 hi Type			guifg=#8ae234 gui=bold cterm=bold
 hi Identifier   guifg=#7acccc cterm=bold
