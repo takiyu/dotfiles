@@ -80,6 +80,8 @@ nnoremap <F3> gt
 inoremap <F3> <Esc>gt
 nnoremap <F2> gT
 inoremap <F2> <Esc>gT
+nnoremap 3 gt
+nnoremap 2 gT
 " omni補完
 inoremap <C-o> <C-x><C-o>
 " クリップボードから貼り付け,コピー
@@ -104,7 +106,8 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expan
 inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
-
+" F1のヘルプを無効化
+map <F1> <Esc>
 
 "#############add plugins ##############
 "#共通#
@@ -154,9 +157,9 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 			\ 'autoload':{ 'filetypes':[ 'verilog' ]}
 			\ }
 "#JavaScript, HTML#
+" NeoBundleLazy 'mattn/jscomplete-vim', { "重すぎる
+" 			\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 "シンタックスハイライト
-NeoBundleLazy 'mattn/jscomplete-vim', {
-			\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'jelera/vim-javascript-syntax', {
 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'othree/html5-syntax.vim', {
@@ -177,7 +180,7 @@ set rtp+=$GOROOT/misc/vim
 exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 
 "###########plugin:jscomplete##########
-let g:jscomplete_use = ['dom', 'moz', 'xpcom']
+" let g:jscomplete_use = ['dom', 'moz', 'xpcom']
 
 "##########plugin:OmniSharp##########
 let g:OmniSharp_host = "http://localhost:2000"
@@ -193,6 +196,7 @@ let g:LatexBox_quickfix = 1
 let g:LatexBox_autojump = 1
 let g:LatexBox_complete_inlineMath = 1
 let g:LatexBox_Folding = 1
+let g:LatexBox_latexmk_async = 1
 
 "###########plugin:ibus-switcher.vim##########
 let g:ibus_switcher_default_engine = 'xkb:jp::jpn'
