@@ -1,0 +1,8 @@
+keycode 100 = Escape
+! For Source Command
+keycode 66 = Caps_Lock
+
+! Remove Caps_Lock
+remove Lock = Caps_Lock
+keysym Caps_Lock = Control_L
+add Control = Control_L

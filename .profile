@@ -8,7 +8,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-xmodmap .xmodmaprc
 export PATH=$HOME/local/bin:$PATH
 
 # if running bash
@@ -23,13 +22,3 @@ fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
-
-export GOPATH=$HOME/Gocode
-export GOROOT=/usr/local/go
-export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
-
-export PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init -)"
-#echo 'eval "$(rbenv init -)"' 
-
-export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '

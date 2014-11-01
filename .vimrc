@@ -2,7 +2,7 @@ if has('vim_starting')
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 "NeoBundleFetch 'Shougo/neobundle.vim'
 "
@@ -12,7 +12,7 @@ if has('win32') || has('win64')
 	set guifont=MS_Gothic:h13
 else
     " Windows以外
-	set guifont=DejaVu\ Sans\ Mono\ 10
+	set guifont=DejaVu\ Sans\ Mono\ 9
 " 	set guifont=DejaVu\ Sans\ Mono\ 13
 	" set lsp=4 " gvimでの行間
 endif
@@ -370,6 +370,8 @@ endif
 " スニペットファイルの保存ディレクトリのパスを登録
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
 let g:neosnippet#enable_preview = 1
+
+call neobundle#end()
 
 filetype plugin indent on
 syntax on

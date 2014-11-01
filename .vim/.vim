@@ -1,0 +1,1 @@
+/home/takiyu/dotfiles/.vim
