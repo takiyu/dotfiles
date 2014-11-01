@@ -140,14 +140,14 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
 " 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
 " 			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
 " "#Unity c#
-NeoBundleLazy 'nosami/Omnisharp', {
-			\   'autoload': {'filetypes': ['cs']},
-			\   'build': {
-			\     'mac': 'xbuild server/OmniSharp.sln',
-			\     'unix': 'xbuild server/OmniSharp.sln', }}
-NeoBundleLazy 'tpope/vim-dispatch', {
-			\   'autoload': {'filetypes': ['cs']},
-			\ }
+" NeoBundleLazy 'nosami/Omnisharp', {
+" 			\   'autoload': {'filetypes': ['cs']},
+" 			\   'build': {
+" 			\     'mac': 'xbuild server/OmniSharp.sln',
+" 			\     'unix': 'xbuild server/OmniSharp.sln', }}
+" NeoBundleLazy 'tpope/vim-dispatch', {
+" 			\   'autoload': {'filetypes': ['cs']},
+" 			\ }
 "#TeX#
 NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box', {
 			\ 'autoload':{ 'filetypes':[ 'tex' ]}
