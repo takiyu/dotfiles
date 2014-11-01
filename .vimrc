@@ -160,10 +160,10 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 " NeoBundleLazy 'mattn/jscomplete-vim', { "重すぎる
 " 			\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 "シンタックスハイライト
-NeoBundleLazy 'jelera/vim-javascript-syntax', {
-		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
-NeoBundleLazy 'othree/html5-syntax.vim', {
-			\ 'autoload': { 'filetypes': ['html']} }
+" NeoBundleLazy 'jelera/vim-javascript-syntax', {
+" 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+" NeoBundleLazy 'othree/html5-syntax.vim', {
+" 			\ 'autoload': { 'filetypes': ['html']} }
 " NeoBundle 'hallison/vim-markdown'
 "#Ruby#
 " NeoBundleLazy 'cespare/ruby-complete', {
@@ -307,7 +307,7 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#enable_underbar_completion = 0 " アンダーバー補完を有効
 let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスをキャッシュするときの最小文字数
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*' " ロックパターン
-call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
+" call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
 let g:neocomplete#enable_auto_close_preview = 0 " プレビューウインドウを閉じない
 
 " Define dictionary.
@@ -371,12 +371,12 @@ endif
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
 let g:neosnippet#enable_preview = 1
 
-call neobundle#end()
 
 filetype plugin indent on
 syntax on
 
 NeoBundleCheck
+call neobundle#end()
 
 "##########colorscheme####################
 colorscheme muzzl
