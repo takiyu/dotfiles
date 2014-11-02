@@ -13,6 +13,9 @@ for dotfile in .?*; do
 	.vim) #念の為
 		continue
 		;;
+	*.swp)
+		continue
+		;;
 	#それ以外はシンボリックリンクを張る
 	*)
 		echo ">シンボリックリンクを作成:$dotfile"

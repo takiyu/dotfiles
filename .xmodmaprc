@@ -1,8 +1,14 @@
+! ----esc----
 keycode 100 = Escape
-! For Source Command
-keycode 66 = Caps_Lock
 
-! Remove Caps_Lock
-remove Lock = Caps_Lock
+! ----ctrl----
+remove lock = Caps_Lock
 keysym Caps_Lock = Control_L
 add Control = Control_L
+
+! ----mod3----
+clear mod3
+! remove mod1 = Alt_L
+! keysym Alt_L = Hiragana_Katakana
+keysym Muhenkan = Hiragana_Katakana
+add mod3 = Hiragana_Katakana
