@@ -1,0 +1,22 @@
+Config { font = "xft:Sans-8:bold"
+       , borderColor = "black"
+       , border = TopB
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Top
+       , lowerOnStart = True
+       , persistent = False
+       , hideOnStart = False
+       , commands = [ Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                    , Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                    , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run Swap [] 10
+					--, Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+					, Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       -- , template =  "%StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %eth1% | <fc=#ee9a00>%date%</fc>"
+       , template =  "%StdinReader% }{ %cpu% || %memory% / %swap% || %eth0% / %wlan0%"
+       }

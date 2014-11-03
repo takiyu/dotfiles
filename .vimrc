@@ -175,7 +175,6 @@ source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
 
 "###########golang settings##########
-" NeoBundle 'Blackrush/vim-gocode'
 " set rtp+=$GOROOT/misc/vim
 " exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 
