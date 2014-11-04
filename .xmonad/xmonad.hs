@@ -19,7 +19,7 @@ import XMonad.Layout.MultiToggle.Instances
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-
+-- layout
 tall = ResizableTall 1 (3/100) (1/2) []
 myLayout = avoidStruts $ smartBorders $ mkToggle1 FULL $ tall ||| Mirror tall
 
@@ -79,11 +79,12 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm.|.shiftMask, xK_l), flashText defaultSTConfig 1 "|=>" >> shiftToNext >> nextWS)
 			, ((modm.|.shiftMask, xK_h), flashText defaultSTConfig 1 "<=|" >> shiftToPrev >> prevWS)
 
+			-- tall
 			, ((modm, xK_f ), sendMessage (Toggle FULL))
 			, ((modm, xK_9 ), sendMessage Shrink)
 			, ((modm, xK_0 ), sendMessage Expand)
-			, ((modm, xK_z ), sendMessage MirrorShrink)
-			, ((modm, xK_a ), sendMessage MirrorExpand)
+			, ((modm.|.shiftMask, xK_9 ), sendMessage MirrorExpand)
+			, ((modm.|.shiftMask, xK_0 ), sendMessage MirrorShrink)
 
 			-- alt tab
 			, ((mod1Mask, xK_Tab ), windows W.focusDown)
