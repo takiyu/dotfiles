@@ -1,22 +1,30 @@
-Config { font = "xft:Sans-8:bold"
-       , borderColor = "black"
-       , border = TopB
-       , bgColor = "black"
-       , fgColor = "grey"
-       , position = Top
-       , lowerOnStart = True
-       , persistent = False
-       , hideOnStart = False
-       , commands = [ Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                    , Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                    , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
-                    , Run Memory ["-t","Mem: <usedratio>%"] 10
-                    , Run Swap [] 10
-					--, Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
-					, Run StdinReader
-                    ]
-       , sepChar = "%"
-       , alignSep = "}{"
-       -- , template =  "%StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %eth1% | <fc=#ee9a00>%date%</fc>"
-       , template =  "%StdinReader% }{ %cpu% || %memory% / %swap% || %eth0% / %wlan0%"
-       }
+Config { font = "xft:Sans-8.7:bold"
+		, borderColor = "black"
+		, border = TopB
+		, bgColor = "black"
+		, fgColor = "grey"
+		, position = Top
+		, lowerOnStart = False
+		, persistent = False
+		, hideOnStart = False
+		, commands =
+			[ Run MultiCpu ["-t", "CPU:[<autototal>]%", "-L", "4", "-H", "50"
+							, "--normal", "green", "--high", "red"] 20
+			, Run Memory ["-t", "Mem:<usedratio>%(<cache>M)"] 20
+			, Run Network "eth0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
+							, "--normal", "green", "--high", "red"] 20
+			, Run Network "wlan0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
+							, "--normal", "green", "--high", "red"] 20
+			, Run BatteryP ["BAT0"]	["-t", "<acstatus> (<left>%)"
+							, "-L", "10", "-H", "80", "-p", "3"
+							, "-l", "red", "-h", "green"
+							, "--", "-O", "AC: <fc=orange>Charging</fc>"
+							, "-i", "AC: <fc=green>Idle</fc>"
+							, "-o", "Battery"
+							, "-L", "-15", "-H", "-5"] 300 
+			, Run StdinReader
+		]
+		, sepChar = "%"
+		, alignSep = "}{"
+		, template = "%StdinReader% }{ %multicpu%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0% / %wlan0%  <fc=#ffffff>||</fc>  %battery%"
+}

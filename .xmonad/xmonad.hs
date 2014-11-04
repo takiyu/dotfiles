@@ -22,7 +22,7 @@ modm = mod3Mask
 main :: IO ()
 main = do
 	xmproc <- spawnPipe "xmobar"
-	xmonad $ defaultConfig{
+	xmonad $ defaultConfig {
 		manageHook = manageDocks <+> manageHook defaultConfig ,
 		layoutHook = avoidStruts  $  layoutHook defaultConfig ,
 		-- Update Screen to Clear flashtext 
@@ -46,14 +46,7 @@ main = do
 
 		-- Use mate-terminal
 		terminal = "mate-terminal" 
-
 		}
-
-		`additionalKeys`[
-			((modm, xK_e), unsafeSpawn "caja ~")
--- 			((modm, xK_t), runOrRaise "urxvt" (className =? "URxvt"))
-		]
-
 
 
 -- Make New Key Binding
@@ -63,6 +56,7 @@ newKeys x = keysToAdd x `M.union` tmpKeys x
 keysToDel :: XConfig Layout -> [(KeyMask, KeySym)]
 keysToDel x =
 			[ (modm              , xK_p )
+			, (modm              , xK_q )
 			, (modm .|. shiftMask, xK_q )
 			]
 			++
@@ -81,14 +75,21 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 
 			, ((mod1Mask, xK_Tab ), windows W.focusDown)
 			, ((mod1Mask .|. shiftMask, xK_Tab ), windows W.swapDown )
--- 			, ((modm, xK_l ), windows W.focusDown)
--- 			, ((modm, xK_h ), windows W.focusUp )
--- 			, ((modm .|. shiftMask, xK_l ), windows W.swapDown )
--- 			, ((modm .|. shiftMask, xK_h ), windows W.swapUp )
 
-			, ((modm, xK_e ), safeSpawnProg "caja ~")
-
-			, ((modm, xK_r ), shellPrompt  defaultXPConfig)
-			, ((modm, xK_p ), shellPrompt  defaultXPConfig)
+			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
+			, ((modm, xK_p ), shellPrompt  shellPromptConfig)
+			, ((modm, xK_colon ), shellPrompt  shellPromptConfig)
 			, ((modm, xK_q), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
+
+			, ((modm, xK_e), unsafeSpawn "caja ~")
 			]
+
+-- Shell Prompt Config
+shellPromptConfig = defaultXPConfig { 
+		font = "xft:Sans-9:bold"
+		, bgColor  = "black"
+		, fgColor  = "grey"
+		, bgHLight = "#000000"
+		, fgHLight = "#FF0000"
+		, position = Bottom
+    }
