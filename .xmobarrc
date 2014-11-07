@@ -1,4 +1,4 @@
-Config { font = "xft:Sans-8.7:bold"
+Config { font = "xft:Sans-8.6:bold"
 		, borderColor = "black"
 		, border = TopB
 		, bgColor = "black"
@@ -10,10 +10,10 @@ Config { font = "xft:Sans-8.7:bold"
 		, commands =
 			[ Run MultiCpu ["-t", "CPU:[<autototal>]%", "-L", "4", "-H", "50"
 							, "--normal", "green", "--high", "red"] 20
-			--, Run CpuFreq ["-t", "Freq:<cpu0>/<cpu1>/<cpu2>/<cpu3>"
-			--				, "-L", "1", "-H", "2"
-			--				, "-l", "lightblue", "-n","orange", "-h", "red"] 50
-			, Run Memory ["-t", "Mem:<usedratio>%(<cache>M)"] 20
+			, Run CpuFreq ["-t", "<cpu0>/<cpu1>/<cpu2>/<cpu3>"
+							, "-L", "1", "-H", "2"
+							, "-l", "lightblue", "-n","orange", "-h", "red"] 50
+			, Run Memory ["-t", "Mem:<usedratio>%"] 50
 			, Run Network "eth0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
 							, "--normal", "green", "--high", "red"] 20
 			, Run Network "wlan0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
@@ -29,5 +29,5 @@ Config { font = "xft:Sans-8.7:bold"
 		]
 		, sepChar = "%"
 		, alignSep = "}{"
-		, template = "%StdinReader% }{ %multicpu%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0% / %wlan0%  <fc=#ffffff>||</fc>  %battery%"
+		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0%/%wlan0%  <fc=#ffffff>||</fc>  %battery%"
 }

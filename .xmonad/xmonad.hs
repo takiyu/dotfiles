@@ -4,46 +4,63 @@ import XMonad.Actions.ShowText
 import XMonad.Actions.WindowGo
 import XMonad.Util.Run
 import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.Loggers (logCurrent)
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Prompt.XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout
 import XMonad.Layout.Gaps
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
+import Data.Maybe (fromMaybe)
+import XMonad.Layout.SimpleFloat
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- layout
-tall = ResizableTall 1 (3/100) (1/2) []
-myLayout = avoidStruts $ smartBorders $ mkToggle1 FULL $ tall ||| Mirror tall
 
 -- mod mask key
 modm = mod3Mask   	 
 
+-- StartUp
+startup :: X ()
+startup = do
+          spawn "xmodmap /home/takiyu/.xmodmaprc"
+          spawn "mate-terminal"
+
+-- layout
+tall = ResizableTall 1 (3/100) (1/2) []
+-- myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall ||| simpleFloat)
+myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall)
+-- handleEventHook
+myHandleEventHook = fullscreenEventHook -- for ewmh
+					<+> handleTimerEvent -- Update Screen to Clear flashtext 
+					<+> handleEventHook defaultConfig
+
 main :: IO ()
 main = do
 	xmproc <- spawnPipe "xmobar"
-	xmonad $ defaultConfig {
-		manageHook = manageDocks <+> manageHook defaultConfig ,
+	xmonad $ ewmh defaultConfig {
 		layoutHook = myLayout ,
-		-- Update Screen to Clear flashtext 
-		handleEventHook = handleTimerEvent <+> handleEventHook defaultConfig ,
+		manageHook = manageDocks <+> manageHook defaultConfig ,
+		handleEventHook = myHandleEventHook,
 		-- Send to xmobar
 		logHook = dynamicLogWithPP $ xmobarPP
 					{ ppOutput = hPutStrLn xmproc
 					, ppTitle = xmobarColor "green" "" . shorten 50
 					},
+		-- Start Up
+		startupHook = startup,
 
 		-- Border settings
 		borderWidth = 3 ,
-		normalBorderColor  = "#000000" ,
-		focusedBorderColor = "#11ff43" , -- green
+		normalBorderColor  = "#6666aa" ,
+		focusedBorderColor = "#ED8931" ,
 
 		-- Set Hiragana_Katakana as mod
 		modMask = mod3Mask ,
@@ -59,7 +76,6 @@ main = do
 -- Make New Key Binding
 tmpKeys x = foldr M.delete (keys defaultConfig x) (keysToDel x)
 newKeys x = keysToAdd x `M.union` tmpKeys x
-
 -- Keys To Delete
 keysToDel :: XConfig Layout -> [(KeyMask, KeySym)]
 keysToDel x =
@@ -74,10 +90,10 @@ keysToDel x =
 
 -- Keys To Add
 keysToAdd conf@(XConfig {modMask = a}) = M.fromList
-			[ ((modm, xK_l), flashText defaultSTConfig 1 "->" >> nextWS)
-			, ((modm, xK_h), flashText defaultSTConfig 1 "<-" >> prevWS)
-			, ((modm.|.shiftMask, xK_l), flashText defaultSTConfig 1 "|=>" >> shiftToNext >> nextWS)
-			, ((modm.|.shiftMask, xK_h), flashText defaultSTConfig 1 "<=|" >> shiftToPrev >> prevWS)
+			[ ((modm, xK_h), prevWS >> logCurrent >>= moveFlashText)
+			, ((modm, xK_l), nextWS >> logCurrent >>= moveFlashText)
+			, ((modm.|.shiftMask, xK_h), shiftToPrev >> prevWS >> logCurrent >>= shiftLeftFlashText)
+			, ((modm.|.shiftMask, xK_l), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
 
 			-- tall
 			, ((modm, xK_f ), sendMessage (Toggle FULL))
@@ -91,11 +107,13 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((mod1Mask .|. shiftMask, xK_Tab ), windows W.swapDown )
 
 			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
--- 			, ((modm, xK_p ), shellPrompt  shellPromptConfig)
--- 			, ((modm, xK_colon ), shellPrompt  shellPromptConfig)
 			, ((modm, xK_q ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 
 			, ((modm, xK_e ), unsafeSpawn "caja ~")
+			, ((modm, xK_o ), unsafeSpawn "mate-terminal")
+			, ((mod1Mask, xK_q ), unsafeSpawn "xmodmap ~/.xmodmaprc")
+
+			, ((modm, xK_F5), refresh)
 			]
 
 -- Shell Prompt Config
@@ -107,3 +125,13 @@ shellPromptConfig = defaultXPConfig {
 		, fgHLight = "#FF0000"
 		, position = Bottom
     }
+
+-- flashtext settings
+mySTConfig = defaultSTConfig{ st_font = "xft:Droid Sans:pixelsize=40"
+							, st_bg   = "black"
+							, st_fg   = "green"
+							}
+moveFlashText m = flashText mySTConfig 1 (" " ++ fromMaybe "" m ++ " ")
+shiftRightFlashText m = flashText mySTConfig 1 ("->" ++ fromMaybe "" m ++ "")
+shiftLeftFlashText  m = flashText mySTConfig 1 ("" ++ fromMaybe "" m ++ "<-")
+

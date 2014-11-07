@@ -119,7 +119,7 @@ NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'itchyny/lightline.vim' "ステータスライン
 NeoBundle 't9md/vim-quickhl' "ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim.git' "括弧+αをハイライト
-NeoBundle 'takiyu/ibus-switcher.vim' "ibus
+" NeoBundle 'takiyu/ibus-switcher.vim' "ibus
 "#補完# (+luaが必要)
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -198,14 +198,14 @@ let g:LatexBox_Folding = 1
 let g:LatexBox_latexmk_async = 1
 
 "###########plugin:ibus-switcher.vim##########
-let g:ibus_switcher_default_engine = 'xkb:jp::jpn'
+" let g:ibus_switcher_default_engine = 'xkb:jp::jpn'
 "tex、texのみで動作
-autocmd InsertEnter *.tex call ibus_switcher#load()
-autocmd InsertLeave *.tex call ibus_switcher#save()
-autocmd insertleave *.tex call ibus_switcher#loadDefault()
-autocmd InsertEnter *.txt call ibus_switcher#load()
-autocmd InsertLeave *.txt call ibus_switcher#save()
-autocmd insertleave *.txt call ibus_switcher#loadDefault()
+" autocmd InsertEnter *.tex call ibus_switcher#load()
+" autocmd InsertLeave *.tex call ibus_switcher#save()
+" autocmd insertleave *.tex call ibus_switcher#loadDefault()
+" autocmd InsertEnter *.txt call ibus_switcher#load()
+" autocmd InsertLeave *.txt call ibus_switcher#save()
+" autocmd insertleave *.txt call ibus_switcher#loadDefault()
 
 "##########plugin:lightline##########
 "ステータスライン 

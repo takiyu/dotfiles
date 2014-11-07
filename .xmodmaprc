@@ -11,7 +11,7 @@ add Control = Control_L
 
 ! ----mod3----
 clear mod3
-! remove mod1 = Alt_L
-! keysym Alt_L = Hiragana_Katakana
-keysym Muhenkan = Hiragana_Katakana
-add mod3 = Hiragana_Katakana
+! remove mod1 = Alt_R
+keysym Muhenkan = Pause
+keysym Hiragana_Katakana = Pause
+add mod3 = Pause
