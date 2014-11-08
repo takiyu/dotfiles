@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.ShowText
 import XMonad.Actions.WindowGo
+import XMonad.Config.Gnome
 import XMonad.Util.Run
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Loggers (logCurrent)
@@ -10,7 +11,6 @@ import XMonad.Prompt.Shell
 import XMonad.Prompt.XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout
 import XMonad.Layout.Gaps
 import XMonad.Layout.ResizableTile
@@ -27,35 +27,20 @@ import qualified Data.Map        as M
 -- mod mask key
 modm = mod3Mask   	 
 
--- StartUp
-startup :: X ()
-startup = do
-          spawn "xmodmap /home/takiyu/.xmodmaprc"
-          spawn "mate-terminal"
-
 -- layout
 tall = ResizableTall 1 (3/100) (1/2) []
 -- myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall ||| simpleFloat)
 myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall)
 -- handleEventHook
-myHandleEventHook = fullscreenEventHook -- for ewmh
-					<+> handleTimerEvent -- Update Screen to Clear flashtext 
+myHandleEventHook = handleTimerEvent -- Update Screen to Clear flashtext 
 					<+> handleEventHook defaultConfig
 
 main :: IO ()
 main = do
-	xmproc <- spawnPipe "xmobar"
-	xmonad $ ewmh defaultConfig {
+	xmonad $ gnomeConfig {
 		layoutHook = myLayout ,
 		manageHook = manageDocks <+> manageHook defaultConfig ,
 		handleEventHook = myHandleEventHook,
-		-- Send to xmobar
-		logHook = dynamicLogWithPP $ xmobarPP
-					{ ppOutput = hPutStrLn xmproc
-					, ppTitle = xmobarColor "green" "" . shorten 50
-					},
-		-- Start Up
-		startupHook = startup,
 
 		-- Border settings
 		borderWidth = 3 ,
@@ -68,8 +53,8 @@ main = do
 		-- Add New KeyBinds
 		keys = newKeys,
 
-		-- Use mate-terminal
-		terminal = "mate-terminal" 
+		-- Use gnome-terminal
+		terminal = "gnome-terminal" 
 		}
 
 
@@ -109,8 +94,8 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
 			, ((modm, xK_q ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 
-			, ((modm, xK_e ), unsafeSpawn "caja ~")
-			, ((modm, xK_o ), unsafeSpawn "mate-terminal")
+			, ((modm, xK_e ), unsafeSpawn "nemo ~")
+			, ((modm, xK_o ), unsafeSpawn "gnome-terminal")
 			, ((mod1Mask, xK_q ), unsafeSpawn "xmodmap ~/.xmodmaprc")
 
 			, ((modm, xK_F5), refresh)
@@ -118,9 +103,9 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 
 -- Shell Prompt Config
 shellPromptConfig = defaultXPConfig { 
-		font = "xft:Sans-9:bold"
+		font = "xft:Sans-12:bold"
 		, bgColor  = "black"
-		, fgColor  = "grey"
+		, fgColor  = "white"
 		, bgHLight = "#000000"
 		, fgHLight = "#FF0000"
 		, position = Bottom

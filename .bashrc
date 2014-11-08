@@ -9,8 +9,8 @@ export PATH=$HOME/bin:$PATH
 #<For Check>
 #echo 'eval "$(rbenv init -)"' 
 
-export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '
 
+export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '
 
 # VAIO T Scroll direction setting
 xinput --set-button-map 11 1 2 3 5 4 7 6 8 9 10 11 12
