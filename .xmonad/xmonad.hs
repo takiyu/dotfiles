@@ -33,14 +33,14 @@ tall = ResizableTall 1 (3/100) (1/2) []
 myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall)
 -- handleEventHook
 myHandleEventHook = handleTimerEvent -- Update Screen to Clear flashtext 
-					<+> handleEventHook defaultConfig
+					<+> handleEventHook gnomeConfig
 
 main :: IO ()
 main = do
 	xmonad $ gnomeConfig {
 		layoutHook = myLayout ,
-		manageHook = manageDocks <+> manageHook defaultConfig ,
-		handleEventHook = myHandleEventHook,
+		manageHook = manageDocks <+> manageHook gnomeConfig ,
+		handleEventHook = myHandleEventHook ,
 
 		-- Border settings
 		borderWidth = 3 ,
