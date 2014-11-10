@@ -18,49 +18,69 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 import Data.Maybe (fromMaybe)
-import XMonad.Layout.SimpleFloat
+-- import XMonad.Layout.SimpleFloat
+-- import XMonad.Layout.Maximize
+import XMonad.Hooks.ManageHelpers
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import qualified XMonad.Actions.FlexibleManipulate as Flex
 
 
+-- my apps
+myFiler = "nemo"
+myTerminal = "gnome-terminal"
 -- mod mask key
 modm = mod3Mask   	 
 
--- layout
+-- layoutHook
 tall = ResizableTall 1 (3/100) (1/2) []
--- myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall ||| simpleFloat)
 myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall)
+
+-- manageHook
+myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
+				 isFullscreen -?> doFullFloat
+			 ]
+
 -- handleEventHook
 myHandleEventHook = handleTimerEvent -- Update Screen to Clear flashtext 
 					<+> handleEventHook gnomeConfig
 
 main :: IO ()
 main = do
+	xmproc <- spawnPipe "xmobar"
 	xmonad $ gnomeConfig {
 		layoutHook = myLayout ,
-		manageHook = manageDocks <+> manageHook gnomeConfig ,
+		manageHook = myManageHook ,
 		handleEventHook = myHandleEventHook ,
+		-- Send to xmobar
+		logHook = logHook gnomeConfig <+> (dynamicLogWithPP $ xmobarPP
+				{ ppOutput = hPutStrLn xmproc
+				, ppTitle = xmobarColor "green" "" . shorten 50 }) ,
 
+		workspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9"] ,
 		-- Border settings
 		borderWidth = 3 ,
-		normalBorderColor  = "#6666aa" ,
-		focusedBorderColor = "#ED8931" ,
+		normalBorderColor  = "#555577" ,
+		focusedBorderColor = "red" ,
 
 		-- Set Hiragana_Katakana as mod
 		modMask = mod3Mask ,
 
 		-- Add New KeyBinds
-		keys = newKeys,
+		keys = myKeys,
 
-		-- Use gnome-terminal
-		terminal = "gnome-terminal" 
-		}
+		-- Mouse Binding
+		mouseBindings = myMouseBindings,
+
+		-- set terminal
+		terminal = myTerminal
+	}
 
 
 -- Make New Key Binding
 tmpKeys x = foldr M.delete (keys defaultConfig x) (keysToDel x)
-newKeys x = keysToAdd x `M.union` tmpKeys x
+myKeys x = keysToAdd x `M.union` tmpKeys x
 -- Keys To Delete
 keysToDel :: XConfig Layout -> [(KeyMask, KeySym)]
 keysToDel x =
@@ -94,21 +114,30 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
 			, ((modm, xK_q ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 
-			, ((modm, xK_e ), unsafeSpawn "nemo ~")
-			, ((modm, xK_o ), unsafeSpawn "gnome-terminal")
-			, ((mod1Mask, xK_q ), unsafeSpawn "xmodmap ~/.xmodmaprc")
+			, ((modm, xK_e ), unsafeSpawn (myFiler ++ " ~"))
+			, ((modm, xK_o ), unsafeSpawn myTerminal)
+			, ((mod1Mask, xK_o ), unsafeSpawn myTerminal)
 
 			, ((modm, xK_F5), refresh)
 			]
 
+-- Mouse Binding
+myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
+			[ ((modm,button1), (\w -> focus w >> mouseMoveWindow w
+								>> windows W.shiftMaster))
+			, ((modm.|.shiftMask, button1), (\w -> focus w 
+									>> Flex.mouseWindow Flex.resize w))
+			]
+
 -- Shell Prompt Config
 shellPromptConfig = defaultXPConfig { 
-		font = "xft:Sans-12:bold"
+		font = "xft:Sans-11"
 		, bgColor  = "black"
 		, fgColor  = "white"
 		, bgHLight = "#000000"
 		, fgHLight = "#FF0000"
-		, position = Bottom
+		, borderColor = "#000000"
+		, position = Top
     }
 
 -- flashtext settings

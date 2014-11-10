@@ -1,20 +1,24 @@
-Config { font = "xft:Sans-8.6:bold"
-		, borderColor = "black"
+Config { font = "xft:Sans-7.5:bold"
+		, borderColor = "gray"
 		, border = TopB
 		, bgColor = "black"
 		, fgColor = "grey"
-		, position = Top
+	--	, position = Bottom
+		, position = Static { xpos = 0 , ypos = 21, width = 1366, height = 15 }
 		, lowerOnStart = False
-		, persistent = False
+		, persistent = True
 		, hideOnStart = False
 		, commands =
 			[ Run MultiCpu ["-t", "CPU:[<autototal>]%", "-L", "4", "-H", "50"
 							, "--normal", "green", "--high", "red"] 20
-			, Run CpuFreq ["-t", "<cpu0>/<cpu1>/<cpu2>/<cpu3>"
+			, Run CpuFreq ["-t", "<cpu0>/<cpu1>/<cpu2>/<cpu3>]"
 							, "-L", "1", "-H", "2"
 							, "-l", "lightblue", "-n","orange", "-h", "red"] 50
+			, Run CoreTemp ["-t", "[<core0>|<core1>]C"
+							, "-L", "40", "-H", "60"
+							, "-l", "lightblue", "-n", "gray90", "-h", "red"] 50
 			, Run Memory ["-t", "Mem:<usedratio>%"] 50
-			, Run Network "eth0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
+			, Run Network "p2p1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
 							, "--normal", "green", "--high", "red"] 20
 			, Run Network "wlan0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
 							, "--normal", "green", "--high", "red"] 20
@@ -29,5 +33,5 @@ Config { font = "xft:Sans-8.6:bold"
 		]
 		, sepChar = "%"
 		, alignSep = "}{"
-		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0%/%wlan0%  <fc=#ffffff>||</fc>  %battery%"
+		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %p2p1%/%wlan0%  <fc=#ffffff>||</fc>  %battery%"
 }
