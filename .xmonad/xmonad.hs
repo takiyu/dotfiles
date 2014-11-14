@@ -10,21 +10,27 @@ import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Prompt.XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import XMonad.Layout
-import XMonad.Layout.Gaps
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.NoBorders
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances
-import Data.Maybe (fromMaybe)
--- import XMonad.Layout.SimpleFloat
--- import XMonad.Layout.Maximize
 import XMonad.Hooks.ManageHelpers
+import XMonad.Layout
+import XMonad.Layout.Named
+import XMonad.Layout.Maximize
+import XMonad.Layout.NoBorders
+import XMonad.Layout.BorderResize
+import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spiral
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.SimpleDecoration
+import XMonad.Layout.ButtonDecoration
+import XMonad.Layout.DecorationAddons
+import Data.Maybe (fromMaybe)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-import qualified XMonad.Actions.FlexibleManipulate as Flex
+
+-- import XMonad.Layout.WindowNavigation
 
 
 -- my apps
@@ -34,17 +40,24 @@ myTerminal = "gnome-terminal"
 modm = mod3Mask   	 
 
 -- layoutHook
-tall = ResizableTall 1 (3/100) (1/2) []
-myLayout = avoidStruts $ smartBorders $ mkToggle (single FULL) (tall ||| Mirror tall)
+myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
+myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
+		$ maximize $ simplestFloat
+	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
+mySpiral = named "Spiral" $ spiral (6/7)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat|||mySpiral)
+-- myLayout = windowNavigation $ avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat|||mySpiral)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
-				 isFullscreen -?> doFullFloat
+				isFullscreen -?> doFullFloat,
+				isDialog -?> doCenterFloat
 			 ]
 
 -- handleEventHook
 myHandleEventHook = handleTimerEvent -- Update Screen to Clear flashtext 
 					<+> handleEventHook gnomeConfig
+					<+> fullscreenEventHook
 
 main :: IO ()
 main = do
@@ -100,8 +113,18 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm.|.shiftMask, xK_h), shiftToPrev >> prevWS >> logCurrent >>= shiftLeftFlashText)
 			, ((modm.|.shiftMask, xK_l), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
 
-			-- tall
-			, ((modm, xK_f ), sendMessage (Toggle FULL))
+-- 			, ((modm,                 xK_Right), sendMessage $ Go R)
+-- 			, ((modm,                 xK_Left ), sendMessage $ Go L)
+-- 			, ((modm,                 xK_Up   ), sendMessage $ Go U)
+-- 			, ((modm,                 xK_Down ), sendMessage $ Go D)
+-- 			, ((modm .|. shiftMask, xK_Right), sendMessage $ Swap R)
+-- 			, ((modm .|. shiftMask, xK_Left ), sendMessage $ Swap L)
+-- 			, ((modm .|. shiftMask, xK_Up   ), sendMessage $ Swap U)
+-- 			, ((modm .|. shiftMask, xK_Down ), sendMessage $ Swap D)
+
+			-- layout toggle
+			, ((modm, xK_f ), sendMessage ToggleLayout)
+			-- layout tall, spiral
 			, ((modm, xK_9 ), sendMessage Shrink)
 			, ((modm, xK_0 ), sendMessage Expand)
 			, ((modm.|.shiftMask, xK_9 ), sendMessage MirrorExpand)
@@ -111,9 +134,9 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((mod1Mask, xK_Tab ), windows W.focusDown)
 			, ((mod1Mask .|. shiftMask, xK_Tab ), windows W.swapDown )
 
+			-- run application
 			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
 			, ((modm, xK_q ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
-
 			, ((modm, xK_e ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm, xK_o ), unsafeSpawn myTerminal)
 			, ((mod1Mask, xK_o ), unsafeSpawn myTerminal)
@@ -123,10 +146,9 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 
 -- Mouse Binding
 myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
-			[ ((modm,button1), (\w -> focus w >> mouseMoveWindow w
-								>> windows W.shiftMaster))
-			, ((modm.|.shiftMask, button1), (\w -> focus w 
-									>> Flex.mouseWindow Flex.resize w))
+			[ ((modm,button1), (\w -> focus w))
+			, ((modm.|.shiftMask, button1), (\w -> focus w >> mouseMoveWindow w 
+														   >> windows W.shiftMaster))
 			]
 
 -- Shell Prompt Config
@@ -141,11 +163,11 @@ shellPromptConfig = defaultXPConfig {
     }
 
 -- flashtext settings
+moveFlashText m = flashText mySTConfig 1 (" " ++ fromMaybe "" m ++ " ")
+shiftRightFlashText m = flashText mySTConfig 1 ("->" ++ fromMaybe "" m ++ "")
+shiftLeftFlashText  m = flashText mySTConfig 1 ("" ++ fromMaybe "" m ++ "<-")
 mySTConfig = defaultSTConfig{ st_font = "xft:Droid Sans:pixelsize=40"
 							, st_bg   = "black"
 							, st_fg   = "green"
 							}
-moveFlashText m = flashText mySTConfig 1 (" " ++ fromMaybe "" m ++ " ")
-shiftRightFlashText m = flashText mySTConfig 1 ("->" ++ fromMaybe "" m ++ "")
-shiftLeftFlashText  m = flashText mySTConfig 1 ("" ++ fromMaybe "" m ++ "<-")
 
