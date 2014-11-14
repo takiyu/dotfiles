@@ -44,14 +44,13 @@ myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
-mySpiral = named "Spiral" $ spiral (6/7)
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat|||mySpiral)
+-- mySpiral = named "Spiral" $ spiral (6/7)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat)
 -- myLayout = windowNavigation $ avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat|||mySpiral)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
-				isFullscreen -?> doFullFloat,
-				isDialog -?> doCenterFloat
+				isFullscreen -?> doFullFloat
 			 ]
 
 -- handleEventHook
