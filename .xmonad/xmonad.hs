@@ -116,12 +116,12 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm.|.shiftMask, xK_l), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
 
 			-- physical screen
-			, ((modm, xK_2), onPrevNeighbour W.view)
-			, ((modm, xK_3), onNextNeighbour W.view)
-			, ((modm.|.shiftMask,   xK_2), onPrevNeighbour W.shift)
-			, ((modm.|.controlMask, xK_2), onPrevNeighbour W.shift)
-			, ((modm.|.shiftMask,   xK_3), onNextNeighbour W.shift)
-			, ((modm.|.controlMask, xK_3), onNextNeighbour W.shift)
+			, ((modm, xK_2), onPrevNeighbour W.view >> logCurrent >>= moveFlashText)
+			, ((modm, xK_3), onNextNeighbour W.view >> logCurrent >>= moveFlashText)
+			, ((modm.|.shiftMask,   xK_2), onPrevNeighbour W.shift >> logCurrent >>= shiftLeftFlashText)
+			, ((modm.|.controlMask, xK_2), onPrevNeighbour W.shift >> logCurrent >>= shiftLeftFlashText)
+			, ((modm.|.shiftMask,   xK_3), onNextNeighbour W.shift >> logCurrent >>= shiftRightFlashText)
+			, ((modm.|.controlMask, xK_3), onNextNeighbour W.shift >> logCurrent >>= shiftRightFlashText)
 
 			-- layout toggle
 			, ((modm, xK_f ), sendMessage ToggleLayout)
