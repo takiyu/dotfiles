@@ -31,6 +31,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 -- import XMonad.Layout.WindowNavigation
+import XMonad.Layout.Grid
+import XMonad.Actions.PhysicalScreens
 
 
 -- my apps
@@ -41,12 +43,11 @@ modm = mod3Mask
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
+myGrid = named "Grid" $ GridRatio (4/3)
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
--- mySpiral = named "Spiral" $ spiral (6/7)
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat)
--- myLayout = windowNavigation $ avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myFloat|||mySpiral)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myGrid|||myFloat)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
@@ -107,19 +108,20 @@ keysToDel x =
 
 -- Keys To Add
 keysToAdd conf@(XConfig {modMask = a}) = M.fromList
-			[ ((modm, xK_h), prevWS >> logCurrent >>= moveFlashText)
+			[
+			-- workspaces
+   			  ((modm, xK_h), prevWS >> logCurrent >>= moveFlashText)
 			, ((modm, xK_l), nextWS >> logCurrent >>= moveFlashText)
 			, ((modm.|.shiftMask, xK_h), shiftToPrev >> prevWS >> logCurrent >>= shiftLeftFlashText)
 			, ((modm.|.shiftMask, xK_l), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
 
--- 			, ((modm,                 xK_Right), sendMessage $ Go R)
--- 			, ((modm,                 xK_Left ), sendMessage $ Go L)
--- 			, ((modm,                 xK_Up   ), sendMessage $ Go U)
--- 			, ((modm,                 xK_Down ), sendMessage $ Go D)
--- 			, ((modm .|. shiftMask, xK_Right), sendMessage $ Swap R)
--- 			, ((modm .|. shiftMask, xK_Left ), sendMessage $ Swap L)
--- 			, ((modm .|. shiftMask, xK_Up   ), sendMessage $ Swap U)
--- 			, ((modm .|. shiftMask, xK_Down ), sendMessage $ Swap D)
+			-- physical screen
+			, ((modm, xK_2), onPrevNeighbour W.view)
+			, ((modm, xK_3), onNextNeighbour W.view)
+			, ((modm.|.shiftMask,   xK_2), onPrevNeighbour W.shift)
+			, ((modm.|.controlMask, xK_2), onPrevNeighbour W.shift)
+			, ((modm.|.shiftMask,   xK_3), onNextNeighbour W.shift)
+			, ((modm.|.controlMask, xK_3), onNextNeighbour W.shift)
 
 			-- layout toggle
 			, ((modm, xK_f ), sendMessage ToggleLayout)
@@ -139,8 +141,6 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm, xK_e ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm, xK_o ), unsafeSpawn myTerminal)
 			, ((mod1Mask, xK_o ), unsafeSpawn myTerminal)
-
-			, ((modm, xK_F5), refresh)
 			]
 
 -- Mouse Binding
