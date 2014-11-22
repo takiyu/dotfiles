@@ -26,6 +26,7 @@ import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.ButtonDecoration
 import XMonad.Layout.DecorationAddons
 import Data.Maybe (fromMaybe)
+import XMonad.Hooks.ICCCMFocus -- for android studio
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -67,9 +68,11 @@ main = do
 		manageHook = myManageHook ,
 		handleEventHook = myHandleEventHook ,
 		-- Send to xmobar
-		logHook = logHook gnomeConfig <+> (dynamicLogWithPP $ xmobarPP
-				{ ppOutput = hPutStrLn xmproc
-				, ppTitle = xmobarColor "green" "" . shorten 50 }) ,
+		logHook = logHook gnomeConfig 
+				<+> takeTopFocus -- for android studio
+				<+> (dynamicLogWithPP $ xmobarPP
+					{ ppOutput = hPutStrLn xmproc
+					, ppTitle = xmobarColor "green" "" . shorten 50 }) ,
 
 		workspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9"] ,
 		-- Border settings
