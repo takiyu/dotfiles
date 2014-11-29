@@ -42,7 +42,7 @@ set guioptions-=m " メニューバー,ツールバーを非表示
 set guioptions-=T
 " 折りたたみの設定
 set foldmethod=syntax
-set nofoldenable "自動では折りたたまない
+" set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
 " 補完時の設定
@@ -240,6 +240,7 @@ let g:lightline = {
 " endfunction
 "##########plugin:syntastic##########
 let g:syntastic_auto_jump = 1
+noremap <F9> :SyntasticToggleMode<CR>
 
 "##########plugin:nerdtree##########
 noremap <C-e> :NERDTreeToggle<CR>
@@ -359,6 +360,10 @@ let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*
 let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
 let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+" Eclim用の設定
+let g:EclimCompletionMethod = 'omnifunc'
+let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
 
 "##########plugin:neosnippet####################
 "標準のsnippetを消したら、初めて挿入モードになった時にエラー(直ぐ消える)
