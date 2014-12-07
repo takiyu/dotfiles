@@ -129,15 +129,15 @@ NeoBundle 'takiyu/my-vim-snippets'
 "シンタックスハイライト
 NeoBundleLazy 'vim-jp/cpp-vim', {
 			\ 'autoload':{ 'filetypes':[ 'cpp' ]} }
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
-" NeoBundle 'Shougo/vimproc', {
-" 	\ 'build' : {
-" 	\     'mac' : 'make -f make_mac.mak',
-" 	\     'unix' : 'make -f make_unix.mak' } }
-" NeoBundleLazy 'osyo-manga/vim-marching', {
-" 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
-" 			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
+" NeoBundleLazy 'Rip-Rip/clang_complete', {
+" 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
+NeoBundle 'Shougo/vimproc', {
+	\ 'build' : {
+	\     'mac' : 'make -f make_mac.mak',
+	\     'unix' : 'make -f make_unix.mak' } }
+NeoBundleLazy 'osyo-manga/vim-marching', {
+			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
+			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
 " "#Unity c#
 " NeoBundleLazy 'nosami/Omnisharp', {
 " 			\   'autoload': {'filetypes': ['cs']},
@@ -283,16 +283,17 @@ nmap \C <Plug>(caw:I:uncomment)
 vmap \C <Plug>(caw:I:uncomment)
 
 "##########plugin:marching##########
-" let g:marching_enable_neocomplete = 1
-" set updatetime=200
+let g:marching_enable_neocomplete = 1
+set updatetime=200
+" let g:marching_backend = "sync_clang_command" "同期処理の場合
 "##########plugin:clang_complete##########
 " let g:clang_library_path = $HOME.'/dotfiles'
 " let g:clang_library_path = $HOME.'/local/lib'
-let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
+" let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
 " clang_complete では自動補完を行わない用に設定
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
-let g:clang_sort_patterns = 'none'
+" let g:clang_complete_auto = 0
+" let g:clang_auto_select = 0
+" let g:clang_sort_patterns = 'none'
 
 "##########plugin:jedi.vim(python)##########
 "let g:jedi#popup_select_first=0
@@ -327,15 +328,15 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal omnifunc=jedi#completions
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType cpp set omnifunc=cppcomplete#Complete
+" autocmd FileType c set omnifunc=ccomplete#Complete
+" autocmd FileType cpp set omnifunc=cppcomplete#Complete
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType typescript setlocal omnifunc=TSScompleteFunc
 autocmd FileType cs set omnifunc=OmniSharp#Complete
-autocmd FileType ruby,eruby setlocal omnifunc=rubycomplete#Complete
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+" autocmd FileType ruby,eruby setlocal omnifunc=rubycomplete#Complete
+" autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+" autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+" autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " omni補完 input_pattern
 if !exists('g:neocomplete#sources#omni#input_patterns')
