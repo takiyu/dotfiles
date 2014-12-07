@@ -119,7 +119,6 @@ NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'itchyny/lightline.vim' "ステータスライン
 NeoBundle 't9md/vim-quickhl' "ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim.git' "括弧+αをハイライト
-" NeoBundle 'takiyu/ibus-switcher.vim' "ibus
 "#補完# (+luaが必要)
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -168,15 +167,22 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 "#Ruby#
 " NeoBundleLazy 'cespare/ruby-complete', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
+" #Python#
+NeoBundleLazy 'davidhalter/jedi-vim', {
+			\ 'autoload':{ 'filetypes':[ 'python' ]}
+			\ }
 
+NeoBundleCheck
+call neobundle#end() "call function() はこれ以降でないと無効
 
-"###########matchit, hl-matchit settings##########
-source $VIMRUNTIME/macros/matchit.vim "括弧を追加
-let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
 
 "###########golang settings##########
 " set rtp+=$GOROOT/misc/vim
 " exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+
+"###########matchit, hl-matchit settings##########
+source $VIMRUNTIME/macros/matchit.vim "括弧を追加
+let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
 
 "###########plugin:jscomplete##########
 " let g:jscomplete_use = ['dom', 'moz', 'xpcom']
@@ -197,19 +203,9 @@ let g:LatexBox_complete_inlineMath = 1
 let g:LatexBox_Folding = 1
 let g:LatexBox_latexmk_async = 1
 
-"###########plugin:ibus-switcher.vim##########
-" let g:ibus_switcher_default_engine = 'xkb:jp::jpn'
-"tex、texのみで動作
-" autocmd InsertEnter *.tex call ibus_switcher#load()
-" autocmd InsertLeave *.tex call ibus_switcher#save()
-" autocmd insertleave *.tex call ibus_switcher#loadDefault()
-" autocmd InsertEnter *.txt call ibus_switcher#load()
-" autocmd InsertLeave *.txt call ibus_switcher#save()
-" autocmd insertleave *.txt call ibus_switcher#loadDefault()
-
 "##########plugin:lightline##########
 "ステータスライン 
-"       \              [ 'fileencoding', 'filetype', 'syntastic'] ]
+"       \              [ 'fileencoding', 'filetype' ] ],
 let g:lightline = {
 	  \ 'colorscheme': 'Tomorrow_Night_Bright',
       \ 'active': {
@@ -217,7 +213,7 @@ let g:lightline = {
 	  \     ['readonly', 'filename', 'modified'] ],
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
-      \              [ 'fileencoding', 'filetype' ] ],
+      \              [ 'fileencoding', 'filetype', 'syntastic'] ]
       \ },
 	  \ 'component': {
 	  \   'readonly': '%{&readonly?"R":"W"}',
@@ -232,15 +228,14 @@ let g:lightline = {
 	  \ 'subseparator': {'left': '|', 'right': '|'},
       \ }
 " 保存時にsyntasticでチェックをしてから表示をアップデート
-" let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
-" autocmd BufWritePost * call s:syntastic_check()
-" function! s:syntastic_check()
-" 	SyntasticCheck
-" 	call lightline#update()
-" endfunction
+let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
+autocmd BufWritePost * call s:syntastic_check()
+function! s:syntastic_check()
+	SyntasticCheck
+	call lightline#update()
+endfunction
 "##########plugin:syntastic##########
-let g:syntastic_auto_jump = 1
-noremap <F9> :SyntasticToggleMode<CR>
+" let g:syntastic_auto_jump = 1
 
 "##########plugin:nerdtree##########
 noremap <C-e> :NERDTreeToggle<CR>
@@ -298,6 +293,12 @@ let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
 let g:clang_complete_auto = 0
 let g:clang_auto_select = 0
 let g:clang_sort_patterns = 'none'
+
+"##########plugin:jedi.vim(python)##########
+"let g:jedi#popup_select_first=0
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+
 "##########plugin:neocomplete##########
 let g:neocomplete#enable_at_startup = 1 " neocompleteを有効
 let g:neocomplete#auto_completion_stairt_length = 3 " 補完が自動で開始される文字数
@@ -307,7 +308,7 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#enable_underbar_completion = 0 " アンダーバー補完を有効
 let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスをキャッシュするときの最小文字数
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*' " ロックパターン
-" call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
+call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
 let g:neocomplete#enable_auto_close_preview = 0 " プレビューウインドウを閉じない
 
 " Define dictionary.
@@ -319,11 +320,12 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*' "日本語を補完候補として取得しない
 
-" omni補完
+" omni補完 omnifunc
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType python setlocal omnifunc=jedi#completions
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType cpp set omnifunc=cppcomplete#Complete
@@ -335,7 +337,7 @@ autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
-" heavy omni補完
+" omni補完 input_pattern
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
@@ -351,7 +353,8 @@ let g:neocomplete#sources#omni#input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 
-" clang系 と併用して使用する場合は以下の設定も行う
+" omni補完 force_input_pattern
+" 別プラグインと併用して使用する場合は以下の設定も行う
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
@@ -360,6 +363,7 @@ let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*
 let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
 let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
 " Eclim用の設定
 let g:EclimCompletionMethod = 'omnifunc'
@@ -379,8 +383,6 @@ let g:neosnippet#enable_preview = 1
 filetype plugin indent on
 syntax on
 
-NeoBundleCheck
-call neobundle#end()
 
 "##########colorscheme####################
 colorscheme muzzl
@@ -389,7 +391,7 @@ syntax reset
 hi Normal		guifg=#f3f3ff ctermfg=none ctermbg=none
 hi Folded		guifg=#eeeeec guibg=#555753 ctermfg=black ctermbg=gray
 hi FoldColumn	guifg=#fce94f guibg=#2e3436 ctermfg=3 ctermbg=none cterm=bold
-" hi Cursor       guifg=#2e3436 guibg=#9ae244 gui=bold ctermfg=Black ctermbg=Green cterm=bold
+hi Cursor       guifg=#2e3436 guibg=#ffffff gui=bold ctermfg=Black ctermbg=White cterm=bold
 hi Statement    guifg=#fce94f gui=bold cterm=bold
 hi Type			guifg=#8ae234 gui=bold cterm=bold
 hi Identifier   guifg=#7acccc cterm=bold

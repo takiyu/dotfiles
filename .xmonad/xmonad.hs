@@ -69,12 +69,12 @@ main = do
 		handleEventHook = myHandleEventHook ,
 		-- Send to xmobar
 		logHook = logHook gnomeConfig 
-				<+> takeTopFocus -- for android studio
 				<+> (dynamicLogWithPP $ xmobarPP
 					{ ppOutput = hPutStrLn xmproc
-					, ppTitle = xmobarColor "green" "" . shorten 50 }) ,
+					, ppTitle = xmobarColor "green" "" . shorten 50 })
+				<+> takeTopFocus , -- for android studio(Java)
 
-		workspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9"] ,
+		workspaces = ["a", "b" ,"c", "d", "e", "f", "g", "h", "i", "j", "k", "l" ] ,
 		-- Border settings
 		borderWidth = 3 ,
 		normalBorderColor  = "#555577" ,

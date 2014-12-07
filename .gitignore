@@ -1,4 +1,4 @@
-.vim/bundle/
+.vim
 *.swp
 *.swo
 .xmonad/xmonad-x86_64-linux
