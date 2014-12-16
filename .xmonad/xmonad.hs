@@ -32,7 +32,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 -- import XMonad.Layout.WindowNavigation
-import XMonad.Layout.Grid
+-- import XMonad.Layout.Grid
+import XMonad.Layout.StackTile
 import XMonad.Actions.PhysicalScreens
 
 
@@ -44,15 +45,17 @@ modm = mod3Mask
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
-myGrid = named "Grid" $ GridRatio (4/3)
+myStack = StackTile 2 (3/100) (5/6)
+-- myGrid = named "Grid" $ GridRatio (4/3)
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myGrid|||myFloat)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myFloat)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
-				isFullscreen -?> doFullFloat
+				isFullscreen -?> doFullFloat,
+				isDialog -?> doFloat
 			 ]
 
 -- handleEventHook

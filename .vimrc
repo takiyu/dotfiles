@@ -84,6 +84,8 @@ nnoremap 3 gt
 nnoremap 2 gT
 " omni補完
 inoremap <C-o> <C-x><C-o>
+" omni補完 marching
+imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
@@ -302,6 +304,7 @@ let g:jedi#auto_vim_configuration = 0
 
 "##########plugin:neocomplete##########
 let g:neocomplete#enable_at_startup = 1 " neocompleteを有効
+let g:neocomplete#enable_auto_select = 0 " 候補を自動選択しない
 let g:neocomplete#auto_completion_stairt_length = 3 " 補完が自動で開始される文字数
 " let g:neocomplete#skip_auto_completion_time = 0
 let g:neocomplete#enable_ignore_case = 1 "大文字が入力されるまで区別無視
