@@ -3,6 +3,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.ShowText
 import XMonad.Actions.WindowGo
 import XMonad.Config.Gnome
+import XMonad.Config.Desktop (desktopLayoutModifiers)
 import XMonad.Util.Run
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Loggers (logCurrent)
@@ -31,8 +32,6 @@ import XMonad.Hooks.ICCCMFocus -- for android studio
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- import XMonad.Layout.WindowNavigation
--- import XMonad.Layout.Grid
 import XMonad.Layout.StackTile
 import XMonad.Actions.PhysicalScreens
 
@@ -67,7 +66,7 @@ main :: IO ()
 main = do
 	xmproc <- spawnPipe "xmobar"
 	xmonad $ gnomeConfig {
-		layoutHook = myLayout ,
+		layoutHook = desktopLayoutModifiers( myLayout ),
 		manageHook = myManageHook ,
 		handleEventHook = myHandleEventHook ,
 		-- Send to xmobar
