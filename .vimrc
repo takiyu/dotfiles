@@ -126,6 +126,10 @@ NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'takiyu/my-vim-snippets'
+NeoBundle 'Shougo/vimproc', {
+	\ 'build' : {
+	\     'mac' : 'make -f make_mac.mak',
+	\     'unix' : 'make -f make_unix.mak' } }
 
 "#C/C++#
 "シンタックスハイライト
@@ -133,10 +137,6 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
 			\ 'autoload':{ 'filetypes':[ 'cpp' ]} }
 " NeoBundleLazy 'Rip-Rip/clang_complete', {
 " 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
-NeoBundle 'Shougo/vimproc', {
-	\ 'build' : {
-	\     'mac' : 'make -f make_mac.mak',
-	\     'unix' : 'make -f make_unix.mak' } }
 NeoBundleLazy 'osyo-manga/vim-marching', {
 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
 			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
