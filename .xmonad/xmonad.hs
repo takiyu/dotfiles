@@ -25,6 +25,7 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.ButtonDecoration
+-- import XMonad.Layout.ImageButtonDecoration
 import XMonad.Layout.DecorationAddons
 import Data.Maybe (fromMaybe)
 import XMonad.Hooks.ICCCMFocus -- for android studio
@@ -34,6 +35,7 @@ import qualified Data.Map        as M
 
 import XMonad.Layout.StackTile
 import XMonad.Actions.PhysicalScreens
+
 
 
 -- my apps
@@ -49,6 +51,10 @@ myStack = StackTile 2 (3/100) (5/6)
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
+-- 	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
+-- 		{ activeColor = "black"
+-- 		, inactiveColor = "grey"
+-- 		, fontName = "sans-serif" }
 myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myFloat)
 
 -- manageHook
