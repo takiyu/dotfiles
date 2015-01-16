@@ -42,6 +42,7 @@ set guioptions-=m " メニューバー,ツールバーを非表示
 set guioptions-=T
 " 折りたたみの設定
 set foldmethod=syntax
+autocmd FileType python set foldmethod=indent
 " set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
