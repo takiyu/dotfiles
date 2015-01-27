@@ -175,14 +175,26 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 NeoBundleLazy 'davidhalter/jedi-vim', {
 			\ 'autoload':{ 'filetypes':[ 'python' ]}
 			\ }
+" #Golang#
+NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
+" NeoBundleLazy 'fatih/vim-go', {
+" 			\ 'autoload':{ 'filetypes':[ 'go' ]}
+" 			\ }
+" NeoBundle 'google/vim-ft-go' "補完機能等が含まれず
 
 NeoBundleCheck
 call neobundle#end() "call function() はこれ以降でないと無効
 
 
 "###########golang settings##########
-" set rtp+=$GOROOT/misc/vim
+" set rtp+=$GOROOT/misc/vim " misc/vimは廃止された
 " exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>d <Plug>(go-doc)
+au FileType go nmap <Leader>db <Plug>(go-doc-browser)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
 
 "###########matchit, hl-matchit settings##########
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
