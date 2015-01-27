@@ -190,11 +190,16 @@ call neobundle#end() "call function() はこれ以降でないと無効
 " set rtp+=$GOROOT/misc/vim " misc/vimは廃止された
 " exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>d <Plug>(go-doc)
+au FileType go nmap <Leader>dc <Plug>(go-doc)
 au FileType go nmap <Leader>db <Plug>(go-doc-browser)
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+" let g:go_highlight_functions = 1
+" let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_fmt_autosave = 1
 
 "###########matchit, hl-matchit settings##########
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
