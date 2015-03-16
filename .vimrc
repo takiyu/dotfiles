@@ -21,17 +21,24 @@ if has('persistent_undo')
     set undodir=~/.vimundo " ~/.vim/undo
     set undofile
 endif
+
+" #ハードタブ
+set tabstop=4 " タブを表示するときの幅
+set shiftwidth=4 " タブを挿入するときの幅
+set noexpandtab "　空白文字ではなくタブ文字を使用する
+" #ソフトタブ
+" set tabstop=2
+" set shiftwidth=2
+" set expandtab
+autocmd FileType neosnippet set noexpandtab "効いていない？
+
 set backspace=indent,eol,start " インサートモード時にバックスペースを使う
 set whichwrap=b,s,h,l,<,>,[,] " 行頭から前行文末へ移動可能にする
 " set scrolloff=999 " スクロール時にカーソルを中央へ移動
 set scrolloff=3 " スクロールを開始する行数
 set cindent " cオートインデント
 set cinoptions=g0 " cppでのpublic宣言を下げる
-set tabstop=4 " タブを表示するときの幅
-set shiftwidth=4 " タブを挿入するときの幅
 " set showtabline=2 " タブ(上部)を常に表示する
-setlocal noexpandtab "　空白文字ではなくタブ文字を使用する
-autocmd FileType neosnippet set noexpandtab "効いていない？
 set mouse=a " マウス
 set ttymouse=xterm2
 set number " 行数を表示する
@@ -133,6 +140,8 @@ NeoBundle 'Shougo/vimproc', {
 	\     'mac' : 'make -f make_mac.mak',
 	\     'unix' : 'make -f make_unix.mak' } }
 
+" GLSL
+NeoBundle 'tikhomirov/vim-glsl'
 "#C/C++#
 "シンタックスハイライト
 NeoBundleLazy 'vim-jp/cpp-vim', {
