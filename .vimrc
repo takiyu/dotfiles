@@ -118,6 +118,9 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 " F1のヘルプを無効化
 map <F1> <Esc>
+" Vimgrep
+nmap <C-[> :cN<CR>
+nmap <C-]> :cn<CR>
 
 "#############add plugins ##############
 "#共通#
