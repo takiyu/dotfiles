@@ -45,6 +45,8 @@ sudo apt-get -yV install libvo-amrwbenc-dev
 sudo apt-get -yV install libvorbis-dev 
 sudo apt-get -yV install libvpx-dev
 
+sudo apt-get -yV install unzip
+
 cd /tmp
 if [ ! -f OpenCV-2.4.10.zip ]; then 
     wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip
