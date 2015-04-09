@@ -41,6 +41,7 @@ import XMonad.Actions.PhysicalScreens
 -- my apps
 myFiler = "nemo"
 myTerminal = "gnome-terminal"
+myXmodmap = "xmodmap ~/.Xmodmap"
 -- mod mask key
 modm = mod3Mask   	 
 
@@ -153,7 +154,7 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm, xK_q ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 			, ((modm, xK_e ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm, xK_o ), unsafeSpawn myTerminal)
-			, ((mod1Mask, xK_o ), unsafeSpawn myTerminal)
+			, ((mod1Mask, xK_o ), unsafeSpawn myXmodmap)
 			]
 
 -- Mouse Binding
