@@ -93,7 +93,9 @@ nnoremap 3 gt
 nnoremap 2 gT
 " omni補完
 inoremap <C-o> <C-x><C-o>
-" omni補完 marching
+" omni補完 オムニ補完時に補完ワードを挿入しない(marching)
+imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+" omni補完 キャッシュを破棄、再取得(marching)
 imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
@@ -323,7 +325,8 @@ vmap \C <Plug>(caw:I:uncomment)
 
 "##########plugin:marching##########
 let g:marching_enable_neocomplete = 1
-set updatetime=200
+" set updatetime=200
+set updatetime=10
 " let g:marching_backend = "sync_clang_command" "同期処理の場合
 "##########plugin:clang_complete##########
 " let g:clang_library_path = $HOME.'/dotfiles'
