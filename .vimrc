@@ -471,3 +471,12 @@ function! GuiTabLabel() " 個別に設定
 endfunction
 " guitablabelに上の関数を設定
 set guitablabel=%N:\ %{GuiTabLabel()}
+
+" engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485)
+function! EngDict()
+    sp +enew | put = system('engdict ' . @*)
+    set bufhidden=hide noswapfile noro nomodified
+	normal gg
+endfunction  
+vnoremap <silent> <c-d> :call EngDict()<CR>
+
