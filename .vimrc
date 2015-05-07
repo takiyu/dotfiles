@@ -6,68 +6,62 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 
 "NeoBundleFetch 'Shougo/neobundle.vim'
 "
-"フォント設定
-if has('win32') || has('win64')
-    " Windows
-	set guifont=MS_Gothic:h13
-else
-    " Windows以外
-	set guifont=DejaVu\ Sans\ Mono\ 10
-" 	set guifont=DejaVu\ Sans\ Mono\ 13
-	" set lsp=4 " gvimでの行間
-endif
-" 無限Undo
-if has('persistent_undo')
-    set undodir=~/.vimundo " ~/.vim/undo
-    set undofile
-endif
-
-" #ハードタブ
-set tabstop=4 " タブを表示するときの幅
-set shiftwidth=4 " タブを挿入するときの幅
-set noexpandtab "　空白文字ではなくタブ文字を使用する
-" #ソフトタブ
-" set tabstop=2
-" set shiftwidth=2
-" set expandtab
-autocmd FileType neosnippet set noexpandtab "効いていない？
-
-set backspace=indent,eol,start " インサートモード時にバックスペースを使う
-set whichwrap=b,s,h,l,<,>,[,] " 行頭から前行文末へ移動可能にする
-" set scrolloff=999 " スクロール時にカーソルを中央へ移動
-set scrolloff=3 " スクロールを開始する行数
-set cindent " cオートインデント
-set cinoptions=g0 " cppでのpublic宣言を下げる
-" set showtabline=2 " タブ(上部)を常に表示する
-set mouse=a " マウス
-set ttymouse=xterm2
-set number " 行数を表示する
-" set hlsearch " 検索文字列を強調
-set ignorecase " 大文字小文字を無視 ただし大文字入力時のみ考慮
-set smartcase
-set guioptions-=m " メニューバー,ツールバーを非表示
-set guioptions-=T
-" 折りたたみの設定
+set backspace=indent,eol,start	" インサートモード時にバックスペースを使う
+set whichwrap=b,s,h,l,<,>,[,]	" 行頭から前行文末へ移動可能にする
+" set scrolloff=999				" スクロール時にカーソルを中央へ移動
+set scrolloff=3					" スクロールを開始する行数
+set cindent						" cオートインデント
+set cinoptions=g0				" cppでのpublic宣言を下げる
+" set showtabline=2				" タブ(上部)を常に表示する
+set mouse=a						" マウス
+" set ttymouse=xterm2
+set number						" 行数を表示する
+" set hlsearch					" 検索文字列を強調
+set ignorecase					" 大文字小文字を無視
+set smartcase					" (ただし大文字入力時のみ考慮)
+set guioptions-=m				" メニューバーを非表示
+set guioptions-=T				" ツールバーを非表示
+" === Folding ===
 set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
 autocmd FileType glsl set foldmethod=indent
 " set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
-" 補完時の設定
-" プレビューウインドウで表示
-set completeopt=menuone,longest,preview
+" === PreviewWindow ===
+set completeopt=menuone,longest,preview	" プレビューウインドウで表示
 " set completeopt=menuone
-" プレビューウインドウの高さ
-set previewheight=1
-" 下に表示
-set splitbelow
-" ステータスラインを常に表示
-set laststatus=2
-" 保存時に行末の空白を除去する
-" autocmd BufWritePre * :%s/\s\+$//ge
+set previewheight=1						" プレビューウインドウの高さ
+set splitbelow							" 下に表示
+set laststatus=2						" ステータスラインを常に表示
+" autocmd BufWritePre * :%s/\s\+$//ge	" 保存時に行末の空白を除去する
+" === Tab Settings ===
+" Hard Tab
+set tabstop=4		" タブを表示するときの幅
+set shiftwidth=4	" タブを挿入するときの幅
+set noexpandtab		" 空白文字ではなくタブ文字を使用する
+" Soft Tab
+" set tabstop=2
+" set shiftwidth=2
+" set expandtab
+autocmd FileType neosnippet set noexpandtab "効いていない？
+"=== Font Settings ===
+if has('win32') || has('win64')
+	set guifont=MS_Gothic:h13 " Windows
+else
+    " Windows以外
+	set guifont=DejaVu\ Sans\ Mono\ 10
+" 	set guifont=DejaVu\ Sans\ Mono\ 13
+	" set lsp=4 " gvimでの行間
+endif
+"=== Infinity Undo ===
+if has('persistent_undo')
+    set undodir=~/.vimundo " ~/.vim/undo
+    set undofile
+endif
 
-"##########keybind###########
+
+"===== KeyBind =====
 " 再描画
 nnoremap <F5> <C-l>
 inoremap <F5> <Esc><C-l>a
@@ -95,7 +89,7 @@ nnoremap 2 gT
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
 vnoremap <C-c> "+y
-" 折り込みショートカット
+" 折り込み
 " nnoremap <C-c> zc
 " inoremap <C-c> <Esc>zc
 " F1のヘルプを無効化
@@ -104,39 +98,40 @@ map <F1> <Esc>
 nmap <C-[> :cN<CR>
 nmap <C-]> :cn<CR>
 " PreviewWindowの非表示
-" nnoremap <C-c> <C-w>z
-" inoremap <C-c> <C-w>z
+nnoremap <C-c> <C-w>z
+inoremap <C-c> <C-w>z
 " omni補完
 inoremap <C-o> <C-x><C-o>
-" omni補完 オムニ補完時に補完ワードを挿入しない(marching)
+" omni補完(marching) オムニ補完時に補完ワードを挿入しない
 au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
-" omni補完 キャッシュを破棄、再取得(marching)
+" omni補完(marching) キャッシュを破棄、再取得
 au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
-"補完のTabキーバインド
-" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-imap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Enterで補完を決定、または次へジャンプ
-imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_jump_or_expand)" : neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>"
+imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_jump_or_expand)" :
+			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>"
 " Tabで選択
-imap <expr><TAB> pumvisible() ? "\<C-n>" : neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
+imap <expr><TAB> pumvisible() ? "\<C-n>" :
+			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"補完のShift-Tab
+imap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Escで補完ポップアップを閉じて標準モード(続けて書く方法がわからなかった)
 inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
-"#############add plugins ##############
-"#共通#
-NeoBundle 'vim-scripts/muzzl.vim' "カラースキーム
-NeoBundle 'tyru/caw.vim' "コメントアウト補助
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'scrooloose/syntastic' "文法チェック
-NeoBundle 'rhysd/clever-f.vim'
-NeoBundle 'itchyny/lightline.vim' "ステータスライン
-NeoBundle 't9md/vim-quickhl' "ハイライト
-NeoBundle 'vimtaku/hl_matchit.vim.git' "括弧+αをハイライト
-NeoBundle 'ujihisa/neco-look' "英単語補完
-"#補完# (+luaが必要)
+"===== Plugins =====
+"=== 共通 ===
+NeoBundle 'vim-scripts/muzzl.vim'		" カラースキーム
+NeoBundle 'tyru/caw.vim'				" コメントアウト補助
+NeoBundle 'scrooloose/nerdtree'			" Filer
+NeoBundle 'scrooloose/syntastic'		" 文法チェック
+NeoBundle 'rhysd/clever-f.vim'			" Clever-f
+NeoBundle 'itchyny/lightline.vim'		" ステータスライン
+NeoBundle 't9md/vim-quickhl'			" ハイライト
+NeoBundle 'vimtaku/hl_matchit.vim.git'	" 括弧+αをハイライト
+NeoBundle 'ujihisa/neco-look'			" 英単語補完
+"=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
@@ -151,10 +146,9 @@ NeoBundle 'Shougo/vimproc.vim', {
 \    },
 \ }
 
-" GLSL
+"=== GLSL ===
 NeoBundle 'tikhomirov/vim-glsl'
-"#C/C++#
-"シンタックスハイライト
+"===C/C++ ===
 NeoBundleLazy 'vim-jp/cpp-vim', {
 			\ 'autoload':{ 'filetypes':[ 'cpp' ]} }
 " NeoBundleLazy 'Rip-Rip/clang_complete', {
@@ -162,7 +156,7 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
 NeoBundleLazy 'osyo-manga/vim-marching', {
 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
 			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
-" "#Unity c#
+"=== Unity C# ==
 " NeoBundleLazy 'nosami/Omnisharp', {
 " 			\   'autoload': {'filetypes': ['cs']},
 " 			\   'build': {
@@ -171,31 +165,31 @@ NeoBundleLazy 'osyo-manga/vim-marching', {
 " NeoBundleLazy 'tpope/vim-dispatch', {
 " 			\   'autoload': {'filetypes': ['cs']},
 " 			\ }
-"#TeX#
+"=== TeX ===
 NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box', {
 			\ 'autoload':{ 'filetypes':[ 'tex' ]}
 			\ }
-"#Verilog#
+"=== Verilog ===
 NeoBundleLazy 'vim-scripts/verilog.vim', {
 			\ 'autoload':{ 'filetypes':[ 'verilog' ]}
 			\ }
-"#JavaScript#
+"=== JavaScript ===
 NeoBundle 'marijnh/tern_for_vim', {
 			\ 'autoload':{ 'filetypes':[ 'javascript' ]},
 			\ 'build': { 'others': 'npm install' } }
-" NeoBundleLazy 'jelera/vim-javascript-syntax', {
-" 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+NeoBundleLazy 'jelera/vim-javascript-syntax', {
+		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundleLazy 'othree/html5-syntax.vim', {
 " 			\ 'autoload': { 'filetypes': ['html']} }
 " NeoBundle 'hallison/vim-markdown'
-"#Ruby#
+"=== Ruby ===
 " NeoBundleLazy 'cespare/ruby-complete', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
-" #Python#
+"=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
 			\ 'autoload':{ 'filetypes':[ 'python' ]}
 			\ }
-" #Golang#
+"=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
 " NeoBundleLazy 'fatih/vim-go', {
 " 			\ 'autoload':{ 'filetypes':[ 'go' ]}
@@ -205,8 +199,11 @@ NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmd�
 NeoBundleCheck
 call neobundle#end() "call function() はこれ以降でないと無効
 
+filetype plugin indent on
+syntax on
 
-"###########golang settings##########
+
+"####### Plugin : fatih/vim-go (Golang) #######
 " set rtp+=$GOROOT/misc/vim " misc/vimは廃止された
 " exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 au FileType go nmap <Leader>i <Plug>(go-info)
@@ -221,15 +218,15 @@ au FileType go nmap <Leader>e <Plug>(go-rename)
 let g:go_highlight_structs = 1
 let g:go_fmt_autosave = 1
 
-"###########matchit, hl-matchit settings##########
+"####### Plugin : hl-matchit #######
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
 
-"##########plugin:OmniSharp##########
+"####### Plugin : OmniSharp #######
 let g:OmniSharp_host = "http://localhost:2000"
 let g:OmniSharp_typeLookupInPreview = 1
 
-"###########plugin:latex-box##########
+"####### Plugin : latex-box #######
 let g:tex_conceal=''
 autocmd BufWritePost *.tex :Latexmk
 let g:LatexBox_output_type = 'pdf'
@@ -241,7 +238,7 @@ let g:LatexBox_complete_inlineMath = 1
 let g:LatexBox_Folding = 1
 let g:LatexBox_latexmk_async = 1
 
-"##########plugin:lightline##########
+"####### Plugin : lightline #######
 "ステータスライン 
 "       \              [ 'fileencoding', 'filetype' ] ],
 let g:lightline = {
@@ -272,15 +269,15 @@ function! s:syntastic_check()
 	SyntasticCheck
 	call lightline#update()
 endfunction
-"##########plugin:syntastic##########
+"####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
 
-"##########plugin:nerdtree##########
+"####### Plugin : nerdtree #######
 noremap <C-e> :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen = 1 " 開いたら非表示
 " let NERDTreeMapOpenInTab='<ENTER>' " デフォルトでタブで開く (フォルダ移動などはoを使用)
 
-"##########plugin:clever_f##########
+"####### Plugin : clever_f #######
 " 大文字入力時のみ考慮
 let g:clever_f_ignore_case = 1
 let g:clever_f_smart_case = 1
@@ -313,19 +310,19 @@ nmap <F8> <Plug>(quickhl-manual-toggle)
 nmap M <Plug>(quickhl-manual-reset)
 vmap M <Plug>(quickhl-manual-reset)
 
-"##########plugin:caw.vim##########
+"####### Plugin : caw.vim #######
 " コメントアウトのショートカット
 nmap \c <Plug>(caw:I:toggle)
 vmap \c <Plug>(caw:I:toggle)
 nmap \C <Plug>(caw:I:uncomment)
 vmap \C <Plug>(caw:I:uncomment)
 
-"##########plugin:marching##########
+"####### Plugin : marching #######
 let g:marching_enable_neocomplete = 1
 " set updatetime=200
 set updatetime=10
 " let g:marching_backend = "sync_clang_command" "同期処理の場合
-"##########plugin:clang_complete##########
+"####### Plugin : clang_complete #######
 " let g:clang_library_path = $HOME.'/dotfiles'
 " let g:clang_library_path = $HOME.'/local/lib'
 " let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
@@ -334,31 +331,38 @@ set updatetime=10
 " let g:clang_auto_select = 0
 " let g:clang_sort_patterns = 'none'
 
-"##########plugin:jedi.vim(Python)##########
+"####### Plugin : jedi.vim (Python) #######
 "let g:jedi#popup_select_first=0
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
 
-"##########plugin:term_for_vim(JavaScript)##########
-let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file']
 
-"##########plugin:neocomplete##########
-let g:neocomplete#enable_at_startup = 1 " neocompleteを有効
-let g:neocomplete#enable_auto_select = 0 " 候補を自動選択しない
-let g:neocomplete#auto_completion_stairt_length = 2 " 補完が自動で開始される文字数
+"####### Plugin : term_for_vim (JavaScript) #######
+" let g:tern_show_argument_hints = 'on_move'
+let g:tern_show_argument_hints = 'on_hold'
+" au FileType javascript nmap <silent> <Leader>t :TernType<CR>
+au FileType javascript nmap <silent> <Leader>d :TernDoc<CR>
+let g:tern_show_signature_in_pum = 1
+let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file'] " for Ubuntu command
+
+"####### Plugin : jelera/vim-javascript-syntax (JavaScript) #######
+au FileType javascript call JavaScriptFold()
+
+"####### Plugin : neocomplete #######
+let g:neocomplete#enable_at_startup = 1				" neocompleteを有効
+let g:neocomplete#enable_auto_select = 0			" 候補を自動選択しない
+let g:neocomplete#auto_completion_stairt_length = 2	" 補完が自動で開始される文字数
 " let g:neocomplete#skip_auto_completion_time = 0
-let g:neocomplete#enable_ignore_case = 1 "大文字が入力されるまで区別無視
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#enable_underbar_completion = 0 " アンダーバー補完を有効
+let g:neocomplete#enable_ignore_case = 1			" 大文字小文字を無視
+let g:neocomplete#enable_smart_case = 1				" (ただし大文字入力時のみ考慮)
+let g:neocomplete#enable_underbar_completion = 0	" アンダーバー補完を有効
 let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスをキャッシュするときの最小文字数
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*' " ロックパターン
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'	" ロックパターン
 call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
-let g:neocomplete#enable_auto_close_preview = 0 " プレビューウインドウを閉じない
-
-" Define dictionary.
+let g:neocomplete#enable_auto_close_preview = 0			" プレビューウインドウを閉じない
+" 辞書設定
 let g:neocomplete#sources#dictionary#dictionaries = { 'default' : '', 'vimshell' : $HOME.'/.vimshell_hist', 'scheme' : $HOME.'/.gosh_completions' }
-
-"補完するためのキーワードパターンを指定
+" 補完するためのキーワードパターン
 if !exists('g:neocomplete#keyword_patterns')
 	let g:neocomplete#keyword_patterns = {}
 endif
@@ -396,7 +400,6 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 
 " omni補完 force_input_pattern
-" 別プラグインと併用して使用する場合は以下の設定も行う
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
@@ -407,14 +410,14 @@ let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)
 let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
-"##########plugin:Eclim##########
+"####### Plugin : Eclim #######
 noremap \f :JavaFormat<CR>
 let g:EclimCompletionMethod = 'omnifunc'
 let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
 
-"##########plugin:neosnippet####################
+"####### Plugin : neosnippet #######
 "標準のsnippetを消したら、初めて挿入モードになった時にエラー(直ぐ消える)
-" For snippet_complete marker.
+" For snippet_complete marker
 if has('conceal')
 set conceallevel=2 concealcursor=i
 endif
@@ -423,11 +426,7 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
 let g:neosnippet#enable_preview = 1
 
 
-filetype plugin indent on
-syntax on
-
-
-"##########colorscheme####################
+"===== Color Scheme =====
 colorscheme muzzl
 syntax reset
 
@@ -448,7 +447,7 @@ hi Define		guifg=#eeeeec  " #define
 hi Macro		guifg=#eeeeec  " same as Define
 hi PreCondit	guifg=#eeeeec gui=bold " #if, #else, #endif, section(tex)
 
-" タブの表示設定
+"===== タブの表示設定 =====
 function! GuiTabLabel() " 個別に設定
 	let l:label = ''
 	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
@@ -459,20 +458,18 @@ function! GuiTabLabel() " 個別に設定
 	if l:wincount > 1
 		let l:label .= '[' . l:wincount . ']'
 	endif
-
 	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
 		if getbufvar(bufnr, "&modified")
 			let l:label .= '[+]'
 			break
 		endif
 	endfor
-
 	return l:label
 endfunction
 " guitablabelに上の関数を設定
 set guitablabel=%N:\ %{GuiTabLabel()}
 
-" engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485)
+"===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
 function! EngDict()
     sp +enew | put = system('engdict ' . @*)
     set bufhidden=hide noswapfile noro nomodified
