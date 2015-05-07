@@ -91,12 +91,6 @@ nnoremap <F2> gT
 inoremap <F2> <Esc>gT
 nnoremap 3 gt
 nnoremap 2 gT
-" omni補完
-inoremap <C-o> <C-x><C-o>
-" omni補完 オムニ補完時に補完ワードを挿入しない(marching)
-imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
-" omni補完 キャッシュを破棄、再取得(marching)
-imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
@@ -104,10 +98,21 @@ vnoremap <C-c> "+y
 " 折り込みショートカット
 " nnoremap <C-c> zc
 " inoremap <C-c> <Esc>zc
+" F1のヘルプを無効化
+map <F1> <Esc>
+" Vimgrep
+nmap <C-[> :cN<CR>
+nmap <C-]> :cn<CR>
 " PreviewWindowの非表示
-nnoremap <C-c> <C-w>z
-inoremap <C-c> <C-w>z
-"補完のキーバインド
+" nnoremap <C-c> <C-w>z
+" inoremap <C-c> <C-w>z
+" omni補完
+inoremap <C-o> <C-x><C-o>
+" omni補完 オムニ補完時に補完ワードを挿入しない(marching)
+au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+" omni補完 キャッシュを破棄、再取得(marching)
+au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
+"補完のTabキーバインド
 " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 imap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Enterで補完を決定、または次へジャンプ
@@ -119,11 +124,6 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expan
 inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
-" F1のヘルプを無効化
-map <F1> <Esc>
-" Vimgrep
-nmap <C-[> :cN<CR>
-nmap <C-]> :cn<CR>
 
 "#############add plugins ##############
 "#共通#
@@ -179,10 +179,10 @@ NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box', {
 NeoBundleLazy 'vim-scripts/verilog.vim', {
 			\ 'autoload':{ 'filetypes':[ 'verilog' ]}
 			\ }
-"#JavaScript, HTML#
-" NeoBundleLazy 'mattn/jscomplete-vim', { "重すぎる
-" 			\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
-"シンタックスハイライト
+"#JavaScript#
+NeoBundle 'marijnh/tern_for_vim', {
+			\ 'autoload':{ 'filetypes':[ 'javascript' ]},
+			\ 'build': { 'others': 'npm install' } }
 " NeoBundleLazy 'jelera/vim-javascript-syntax', {
 " 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundleLazy 'othree/html5-syntax.vim', {
@@ -224,9 +224,6 @@ let g:go_fmt_autosave = 1
 "###########matchit, hl-matchit settings##########
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
-
-"###########plugin:jscomplete##########
-" let g:jscomplete_use = ['dom', 'moz', 'xpcom']
 
 "##########plugin:OmniSharp##########
 let g:OmniSharp_host = "http://localhost:2000"
@@ -337,10 +334,13 @@ set updatetime=10
 " let g:clang_auto_select = 0
 " let g:clang_sort_patterns = 'none'
 
-"##########plugin:jedi.vim(python)##########
+"##########plugin:jedi.vim(Python)##########
 "let g:jedi#popup_select_first=0
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
+
+"##########plugin:term_for_vim(JavaScript)##########
+let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file']
 
 "##########plugin:neocomplete##########
 let g:neocomplete#enable_at_startup = 1 " neocompleteを有効
@@ -389,7 +389,7 @@ let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 let g:neocomplete#sources#omni#input_patterns.typescript = '.*[^=\);]'
-let g:neocomplete#sources#omni#input_patterns.javascript = '[^. *\t]\.\w*\|\h\w*::'
+" let g:neocomplete#sources#omni#input_patterns.javascript = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplete#sources#omni#input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
