@@ -367,12 +367,12 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*' "日本語を補完候�
 " omni補完 omnifunc
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal omnifunc=jedi#completions
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType cpp set omnifunc=cppcomplete#Complete
+" autocmd FileType c set omnifunc=ccomplete#Complete
+" autocmd FileType cpp set omnifunc=cppcomplete#Complete
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType typescript setlocal omnifunc=TSScompleteFunc
 autocmd FileType cs set omnifunc=OmniSharp#Complete
@@ -389,7 +389,7 @@ let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 let g:neocomplete#sources#omni#input_patterns.typescript = '.*[^=\);]'
-" let g:neocomplete#sources#omni#input_patterns.javascript = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.javascript = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplete#sources#omni#input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
@@ -407,7 +407,7 @@ let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)
 let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
-" Eclim用の設定
+"##########plugin:Eclim##########
 noremap \f :JavaFormat<CR>
 let g:EclimCompletionMethod = 'omnifunc'
 let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
