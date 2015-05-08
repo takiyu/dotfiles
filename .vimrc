@@ -174,10 +174,12 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 			\ 'autoload':{ 'filetypes':[ 'verilog' ]}
 			\ }
 "=== JavaScript ===
-NeoBundle 'marijnh/tern_for_vim', {
+NeoBundleLazy 'marijnh/tern_for_vim', {
 			\ 'autoload':{ 'filetypes':[ 'javascript' ]},
 			\ 'build': { 'others': 'npm install' } }
 NeoBundleLazy 'jelera/vim-javascript-syntax', {
+		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundleLazy 'othree/html5-syntax.vim', {
 " 			\ 'autoload': { 'filetypes': ['html']} }
@@ -339,8 +341,9 @@ let g:jedi#auto_vim_configuration = 0
 
 "####### Plugin : term_for_vim (JavaScript) #######
 " let g:tern_show_argument_hints = 'on_move'
-let g:tern_show_argument_hints = 'on_hold'
+" let g:tern_show_argument_hints = 'on_hold'
 " au FileType javascript nmap <silent> <Leader>t :TernType<CR>
+au FileType javascript nmap <silent> <c-t> :TernType<CR>
 au FileType javascript nmap <silent> <Leader>d :TernDoc<CR>
 let g:tern_show_signature_in_pum = 1
 let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file'] " for Ubuntu command
