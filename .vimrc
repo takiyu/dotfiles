@@ -95,8 +95,8 @@ vnoremap <C-c> "+y
 " F1のヘルプを無効化
 map <F1> <Esc>
 " Vimgrep
-nmap <C-[> :cN<CR>
-nmap <C-]> :cn<CR>
+" nmap <C-[> :cN<CR>
+" nmap <C-]> :cn<CR>
 " PreviewWindowの非表示
 nnoremap <C-c> <C-w>z
 inoremap <C-c> <C-w>z
@@ -122,7 +122,7 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 
 "===== Plugins =====
 "=== 共通 ===
-NeoBundle 'vim-scripts/muzzl.vim'		" カラースキーム
+NeoBundle 'takiyu/tango-lx'		" カラースキーム
 NeoBundle 'tyru/caw.vim'				" コメントアウト補助
 NeoBundle 'scrooloose/nerdtree'			" Filer
 NeoBundle 'scrooloose/syntastic'		" 文法チェック
@@ -177,7 +177,9 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 NeoBundleLazy 'marijnh/tern_for_vim', {
 			\ 'autoload':{ 'filetypes':[ 'javascript' ]},
 			\ 'build': { 'others': 'npm install' } }
-NeoBundleLazy 'jelera/vim-javascript-syntax', {
+" NeoBundleLazy 'jelera/vim-javascript-syntax', {
+" 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+NeoBundleLazy 'pangloss/vim-javascript', {
 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
@@ -273,6 +275,9 @@ function! s:syntastic_check()
 endfunction
 "####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_error_symbol = ">>"
+let g:syntastic_warning_symbol = ">>"
 
 "####### Plugin : nerdtree #######
 noremap <C-e> :NERDTreeToggle<CR>
@@ -349,7 +354,7 @@ let g:tern_show_signature_in_pum = 1
 let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file'] " for Ubuntu command
 
 "####### Plugin : jelera/vim-javascript-syntax (JavaScript) #######
-au FileType javascript call JavaScriptFold()
+" au FileType javascript call JavaScriptFold()
 
 "####### Plugin : neocomplete #######
 let g:neocomplete#enable_at_startup = 1				" neocompleteを有効
@@ -428,27 +433,8 @@ endif
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
 let g:neosnippet#enable_preview = 1
 
-
 "===== Color Scheme =====
-colorscheme muzzl
-syntax reset
-
-hi Normal		guifg=#f3f3ff ctermfg=none ctermbg=none
-hi Folded		guifg=#eeeeec guibg=#555753 ctermfg=black ctermbg=gray
-hi FoldColumn	guifg=#fce94f guibg=#2e3436 ctermfg=3 ctermbg=none cterm=bold
-hi Cursor       guifg=#2e3436 guibg=#ffffff gui=bold ctermfg=Black ctermbg=White cterm=bold
-hi Statement    guifg=#fce94f gui=bold cterm=bold
-hi Type			guifg=#8ae234 gui=bold cterm=bold
-hi Identifier   guifg=#7acccc cterm=bold
-hi Constant		guifg=#fcaf3e ctermfg=3
-hi Comment		guifg=#bbddff ctermfg=blue cterm=bold
-hi StatusLineNC gui=bold guibg=green guifg=black ctermfg = Blue
-
-hi PreProc		guifg=#eeeeec cterm=bold " generic Preprocessor
-hi Include		guifg=#eeeeec  " #include
-hi Define		guifg=#eeeeec  " #define
-hi Macro		guifg=#eeeeec  " same as Define
-hi PreCondit	guifg=#eeeeec gui=bold " #if, #else, #endif, section(tex)
+colorscheme tango_lx
 
 "===== タブの表示設定 =====
 function! GuiTabLabel() " 個別に設定
