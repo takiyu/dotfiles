@@ -41,9 +41,9 @@ set tabstop=4		" タブを表示するときの幅
 set shiftwidth=4	" タブを挿入するときの幅
 set noexpandtab		" 空白文字ではなくタブ文字を使用する
 " Soft Tab
-" set tabstop=2
-" set shiftwidth=2
-" set expandtab
+autocmd FileType javascript set tabstop=2
+autocmd FileType javascript set shiftwidth=2
+autocmd FileType javascript set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
 "=== Font Settings ===
 if has('win32') || has('win64')
