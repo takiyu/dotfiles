@@ -49,14 +49,14 @@ modm = mod3Mask
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
 myStack = StackTile 2 (3/100) (5/6)
 -- myGrid = named "Grid" $ GridRatio (4/3)
--- myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
--- 		$ maximize $ simplestFloat
+myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
+		$ maximize $ simplestFloat
 -- 	where floatingDeco l = buttonDeco shrinkText defaultThemeWithButtons l
--- 	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
--- 		{ activeColor = "black"
--- 		, inactiveColor = "grey"
--- 		, fontName = "sans-serif" }
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack)
+	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
+		{ activeColor = "black"
+		, inactiveColor = "grey"
+		, fontName = "sans-serif" }
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myFloat)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
