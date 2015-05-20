@@ -21,6 +21,7 @@ set ignorecase					" 大文字小文字を無視
 set smartcase					" (ただし大文字入力時のみ考慮)
 set guioptions-=m				" メニューバーを非表示
 set guioptions-=T				" ツールバーを非表示
+set guioptions-=e				" タブのGUI表示をOFF
 " === Folding ===
 set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
