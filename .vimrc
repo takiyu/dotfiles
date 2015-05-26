@@ -6,6 +6,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 
 "NeoBundleFetch 'Shougo/neobundle.vim'
 "
+set synmaxcol=500				" ハイライトする文字数を制限する
 set backspace=indent,eol,start	" インサートモード時にバックスペースを使う
 set whichwrap=b,s,h,l,<,>,[,]	" 行頭から前行文末へ移動可能にする
 " set scrolloff=999				" スクロール時にカーソルを中央へ移動
@@ -437,27 +438,27 @@ let g:neosnippet#enable_preview = 1
 "===== Color Scheme =====
 colorscheme tango_lx
 
-"===== タブの表示設定 =====
-function! GuiTabLabel() " 個別に設定
-	let l:label = ''
-	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
-	" 表示文字列にバッファ名中のファイル名を追加
-	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
-	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
-	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
-	if l:wincount > 1
-		let l:label .= '[' . l:wincount . ']'
-	endif
-	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
-		if getbufvar(bufnr, "&modified")
-			let l:label .= '[+]'
-			break
-		endif
-	endfor
-	return l:label
-endfunction
-" guitablabelに上の関数を設定
-set guitablabel=%N:\ %{GuiTabLabel()}
+"===== GUIタブの表示設定 =====
+" function! GuiTabLabel() " 個別に設定
+" 	let l:label = ''
+" 	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
+" 	" 表示文字列にバッファ名中のファイル名を追加
+" 	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
+" 	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
+" 	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
+" 	if l:wincount > 1
+" 		let l:label .= '[' . l:wincount . ']'
+" 	endif
+" 	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
+" 		if getbufvar(bufnr, "&modified")
+" 			let l:label .= '[+]'
+" 			break
+" 		endif
+" 	endfor
+" 	return l:label
+" endfunction
+" " guitablabelに上の関数を設定
+" set guitablabel=%N:\ %{GuiTabLabel()}
 
 "===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
 function! EngDict()
@@ -467,3 +468,27 @@ function! EngDict()
 endfunction  
 vnoremap <silent> <c-d> :call EngDict()<CR>
 
+
+"==== Auto fcitx ====
+let g:input_toggle = 0
+function! Fcitx2en()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status == 2
+      let g:input_toggle = 1
+      let l:a = system("fcitx-remote -c")
+   endif
+endfunction
+
+function! Fcitx2zh()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status != 2 && g:input_toggle == 1
+      let l:a = system("fcitx-remote -o")
+      let g:input_toggle = 0
+   endif
+endfunction
+
+set iminsert=0
+set imsearch=0
+" set ttimeoutlen=150
+autocmd InsertLeave * call Fcitx2en()
+autocmd InsertEnter * call Fcitx2zh()
