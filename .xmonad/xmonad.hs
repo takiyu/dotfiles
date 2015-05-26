@@ -37,13 +37,15 @@ import XMonad.Layout.StackTile
 import XMonad.Actions.PhysicalScreens
 
 
-
 -- my apps
 myFiler = "nemo"
 myTerminal = "gnome-terminal"
 myXmodmap = "xmodmap ~/.Xmodmap"
 -- mod mask key
 modm = mod3Mask   	 
+-- workspaces
+myWorkspaces = ["a", "b" ,"c", "d", "e", "f", "g", "h", "i", "j", "k", "l" ]
+-- myWorkspaces = withScreens 2 ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
@@ -85,7 +87,8 @@ main = do
 					, ppTitle = xmobarColor "green" "" . shorten 50 })
 				<+> takeTopFocus , -- for android studio(Java)
 
-		workspaces = ["a", "b" ,"c", "d", "e", "f", "g", "h", "i", "j", "k", "l" ] ,
+		-- Workspaces
+		workspaces =  myWorkspaces,
 		-- Border settings
 		borderWidth = 3 ,
 		normalBorderColor  = "#555577" ,
@@ -106,29 +109,34 @@ main = do
 
 
 -- Make New Key Binding
-tmpKeys x = foldr M.delete (keys defaultConfig x) (keysToDel x)
-myKeys x = keysToAdd x `M.union` tmpKeys x
--- Keys To Delete
-keysToDel :: XConfig Layout -> [(KeyMask, KeySym)]
-keysToDel x =
-			[ (modm              , xK_p )
-			, (modm              , xK_q )
-			, (modm .|. shiftMask, xK_q )
-			]
-			++
-			[ (modm, k) | k <- [xK_1 .. xK_9]]
-			++
-			[ (modm .|. shiftMask, k) | k <- [xK_1 .. xK_9]]
-
--- Keys To Add
-keysToAdd conf@(XConfig {modMask = a}) = M.fromList
+myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 			[
+			  ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+			, ((modMask .|. shiftMask, xK_c     ), kill)
+			, ((modMask,               xK_Return), windows W.swapMaster)
+			, ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  )
+			, ((modMask .|. shiftMask, xK_k     ), windows W.swapUp    )
+			-- layout toggle
+			, ((modMask,               xK_space ), sendMessage NextLayout)
+			, ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+			, ((modm, xK_f ), sendMessage ToggleLayout)
+
+			, ((modMask,               xK_n     ), refresh)
+
+			-- alt tab
+			, ((modMask,               xK_Tab   ), windows W.focusDown)
+			, ((modMask .|. shiftMask, xK_Tab   ), windows W.focusUp  )
+			, ((mod1Mask,              xK_Tab   ), windows W.focusDown)
+			, ((mod1Mask .|. shiftMask, xK_Tab  ), windows W.swapDown )
+			, ((modMask,               xK_j     ), windows W.focusDown)
+			, ((modMask,               xK_k     ), windows W.focusUp  )
+			, ((modMask,               xK_m     ), windows W.focusMaster  )
 			-- workspaces
-   			  ((modm, xK_h), prevWS >> logCurrent >>= moveFlashText)
-			, ((modm, xK_l), nextWS >> logCurrent >>= moveFlashText)
+   			, ((modm, xK_h),             prevWS >> logCurrent >>= moveFlashText)
+			, ((modm, xK_l),             nextWS >> logCurrent >>= moveFlashText)
 			, ((modm.|.shiftMask, xK_h), shiftToPrev >> prevWS >> logCurrent >>= shiftLeftFlashText)
 			, ((modm.|.shiftMask, xK_l), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
-
 			-- physical screen
 			, ((modm, xK_2), onPrevNeighbour W.view >> logCurrent >>= moveFlashText)
 			, ((modm, xK_3), onNextNeighbour W.view >> logCurrent >>= moveFlashText)
@@ -137,17 +145,17 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm.|.shiftMask,   xK_3), onNextNeighbour W.shift >> logCurrent >>= shiftRightFlashText)
 			, ((modm.|.controlMask, xK_3), onNextNeighbour W.shift >> logCurrent >>= shiftRightFlashText)
 
-			-- layout toggle
-			, ((modm, xK_f ), sendMessage ToggleLayout)
-			-- layout tall, spiral
+
+			-- Shrink, Expand
 			, ((modm, xK_9 ), sendMessage Shrink)
 			, ((modm, xK_0 ), sendMessage Expand)
 			, ((modm.|.shiftMask, xK_9 ), sendMessage MirrorExpand)
 			, ((modm.|.shiftMask, xK_0 ), sendMessage MirrorShrink)
 
-			-- alt tab
-			, ((mod1Mask, xK_Tab ), windows W.focusDown)
-			, ((mod1Mask .|. shiftMask, xK_Tab ), windows W.swapDown )
+			, ((modMask,               xK_t     ), withFocused $ windows . W.sink)
+
+			, ((modMask              , xK_comma ), sendMessage (IncMasterN 1))
+			, ((modMask              , xK_period), sendMessage (IncMasterN (-1)))
 
 			-- run application
 			, ((modm, xK_r ), shellPrompt  shellPromptConfig)
@@ -156,6 +164,16 @@ keysToAdd conf@(XConfig {modMask = a}) = M.fromList
 			, ((modm, xK_o ), unsafeSpawn myTerminal)
 			, ((mod1Mask, xK_o ), unsafeSpawn myXmodmap)
 			]
+-- 			++
+-- 			[((m .|. modMask, k), windows $ f i)
+-- 				| (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+-- 				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+-- 			++
+-- 			[((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+-- 				| (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+-- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+
 
 -- Mouse Binding
 myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
