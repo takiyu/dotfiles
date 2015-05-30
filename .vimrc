@@ -22,7 +22,7 @@ set ignorecase					" 大文字小文字を無視
 set smartcase					" (ただし大文字入力時のみ考慮)
 set guioptions-=m				" メニューバーを非表示
 set guioptions-=T				" ツールバーを非表示
-set guioptions-=e				" タブのGUI表示をOFF
+" set guioptions-=e				" TabのGUI表示をOFF
 " === Folding ===
 set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
@@ -197,6 +197,7 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 			\ }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
+                         " :GoInstallBinarys を実行
 " NeoBundleLazy 'fatih/vim-go', {
 " 			\ 'autoload':{ 'filetypes':[ 'go' ]}
 " 			\ }
@@ -439,26 +440,26 @@ let g:neosnippet#enable_preview = 1
 colorscheme tango_lx
 
 "===== GUIタブの表示設定 =====
-" function! GuiTabLabel() " 個別に設定
-" 	let l:label = ''
-" 	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
-" 	" 表示文字列にバッファ名中のファイル名を追加
-" 	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
-" 	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
-" 	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
-" 	if l:wincount > 1
-" 		let l:label .= '[' . l:wincount . ']'
-" 	endif
-" 	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
-" 		if getbufvar(bufnr, "&modified")
-" 			let l:label .= '[+]'
-" 			break
-" 		endif
-" 	endfor
-" 	return l:label
-" endfunction
-" " guitablabelに上の関数を設定
-" set guitablabel=%N:\ %{GuiTabLabel()}
+function! GuiTabLabel() " 個別に設定
+	let l:label = ''
+	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
+	" 表示文字列にバッファ名中のファイル名を追加
+	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
+	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
+	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
+	if l:wincount > 1
+		let l:label .= '[' . l:wincount . ']'
+	endif
+	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
+		if getbufvar(bufnr, "&modified")
+			let l:label .= '[+]'
+			break
+		endif
+	endfor
+	return l:label
+endfunction
+" guitablabelに上の関数を設定
+set guitablabel=%N:\ %{GuiTabLabel()}
 
 "===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
 function! EngDict()
@@ -489,6 +490,8 @@ endfunction
 
 set iminsert=0
 set imsearch=0
-" set ttimeoutlen=150
-autocmd InsertLeave * call Fcitx2en()
-autocmd InsertEnter * call Fcitx2zh()
+set ttimeoutlen=150
+autocmd InsertLeave *.txt call Fcitx2en()
+autocmd InsertEnter *.txt call Fcitx2zh()
+autocmd InsertLeave *.tex call Fcitx2en()
+autocmd InsertEnter *.tex call Fcitx2zh()
