@@ -1,7 +1,6 @@
 export PATH=$HOME/bin:$PATH
 
 # export GOPATH=$HOME/Projects/Gocode
-# export GOROOT=/usr/local/go
 # export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
 # export PATH=$HOME/.rbenv/bin:$PATH
