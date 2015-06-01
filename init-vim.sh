@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # .vimディレクトリを作成
 mkdir .vim
 
