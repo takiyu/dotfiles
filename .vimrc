@@ -133,6 +133,7 @@ NeoBundle 'itchyny/lightline.vim'		" ステータスライン
 NeoBundle 't9md/vim-quickhl'			" ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim.git'	" 括弧+αをハイライト
 NeoBundle 'ujihisa/neco-look'			" 英単語補完
+NeoBundle 'vim-scripts/YankRing.vim'	" ヤンク
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -193,7 +194,10 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]}
+			\ 'autoload':{ 'filetypes':[ 'python' ]},
+			\ 'build': {
+			\   'mac': 'pip install jedi',
+			\   'unix': 'pip install jedi'}
 			\ }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
@@ -342,7 +346,7 @@ set updatetime=10
 " let g:clang_sort_patterns = 'none'
 
 "####### Plugin : jedi.vim (Python) #######
-"let g:jedi#popup_select_first=0
+let g:jedi#popup_select_first = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
 
@@ -383,8 +387,6 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*' "日本語を補完候�
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 " autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType python setlocal omnifunc=jedi#completions
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 " autocmd FileType c set omnifunc=ccomplete#Complete
 " autocmd FileType cpp set omnifunc=cppcomplete#Complete
@@ -395,6 +397,8 @@ autocmd FileType cs set omnifunc=OmniSharp#Complete
 " autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 " autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 " autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType python setlocal omnifunc=jedi#completions
 
 " omni補完 input_pattern
 if !exists('g:neocomplete#sources#omni#input_patterns')
