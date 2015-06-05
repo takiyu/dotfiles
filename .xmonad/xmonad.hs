@@ -137,6 +137,7 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
    			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
 			-- physical screen
 			, ((modm,                  xK_w  ), nextScreen)
+			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
 -- 			, ((modm,                  xK_w  ), prevScreen)
 
 			-- shrink, expand
