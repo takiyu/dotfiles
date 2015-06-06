@@ -332,6 +332,9 @@ vmap \c <Plug>(caw:I:toggle)
 nmap \C <Plug>(caw:I:uncomment)
 vmap \C <Plug>(caw:I:uncomment)
 
+"####### Plugin : yankring.vim #######
+let g:yankring_history_dir = $HOME.'/.vim'
+
 "####### Plugin : marching #######
 let g:marching_enable_neocomplete = 1
 " set updatetime=200
