@@ -131,7 +131,7 @@ NeoBundle 'scrooloose/syntastic'		" 文法チェック
 NeoBundle 'rhysd/clever-f.vim'			" Clever-f
 NeoBundle 'itchyny/lightline.vim'		" ステータスライン
 NeoBundle 't9md/vim-quickhl'			" ハイライト
-NeoBundle 'vimtaku/hl_matchit.vim.git'	" 括弧+αをハイライト
+NeoBundle 'vimtaku/hl_matchit.vim'	" 括弧+αをハイライト
 NeoBundle 'ujihisa/neco-look'			" 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'	" ヤンク
 "=== 補完 (+luaが必要) ===
@@ -139,7 +139,7 @@ NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'takiyu/my-vim-snippets'
-NeoBundle 'Shougo/vimproc.vim', {
+NeoBundle 'Shougo/vimproc', {
 \ 'build' : {
 \     'windows' : 'tools\\update-dll-mingw',
 \     'cygwin' : 'make -f make_cygwin.mak',
