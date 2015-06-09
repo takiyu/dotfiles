@@ -193,12 +193,9 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 " NeoBundleLazy 'cespare/ruby-complete', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
+"jedi-vim needs 'sudo pip install jedi'
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]},
-			\ 'build': {
-			\   'mac': 'pip install jedi',
-			\   'unix': 'pip install jedi'}
-			\ }
+			\ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
@@ -353,6 +350,10 @@ set updatetime=10
 let g:jedi#popup_select_first = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
+" disable showing function arguments in upper line
+let g:jedi#show_call_signatures = 0
+" non-auto close preview window
+let g:jedi#auto_close_doc = 0
 
 
 "####### Plugin : term_for_vim (JavaScript) #######
