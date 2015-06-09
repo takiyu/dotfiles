@@ -431,9 +431,9 @@ let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->
 let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
 "####### Plugin : Eclim #######
-noremap \f :JavaFormat<CR>
-let g:EclimCompletionMethod = 'omnifunc'
-let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
+autocmd FileType java noremap \f :JavaFormat<CR>
+autocmd FileType java let g:EclimCompletionMethod = 'omnifunc'
+autocmd FileType java let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
 
 "####### Plugin : neosnippet #######
 "標準のsnippetを消したら、初めて挿入モードになった時にエラー(直ぐ消える)
