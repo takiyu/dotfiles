@@ -118,8 +118,8 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			-- window alt-tab
 			, ((modm,                  xK_Tab), windows W.focusDown)
 			, ((modm.|.shiftMask,      xK_Tab), windows W.focusUp  )
-			, ((mod1Mask,              xK_Tab), windows W.focusDown)
-			, ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
+-- 			, ((mod1Mask,              xK_Tab), windows W.focusDown)
+-- 			, ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
 
 			-- layout toggle
 			, ((modm,                  xK_space), sendMessage NextLayout)
