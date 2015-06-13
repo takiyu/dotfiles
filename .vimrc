@@ -27,6 +27,7 @@ set guioptions-=T				" ツールバーを非表示
 set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
 autocmd FileType glsl set foldmethod=indent
+autocmd FileType verilog set foldmethod=indent
 " set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
