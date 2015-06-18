@@ -334,6 +334,7 @@ vmap \C <Plug>(caw:I:uncomment)
 let g:yankring_history_dir = $HOME.'/.vim'
 
 "####### Plugin : marching #######
+let g:marching_clang_command = "clang-3.6"
 let g:marching_enable_neocomplete = 1
 " set updatetime=200
 set updatetime=10
@@ -352,7 +353,7 @@ let g:jedi#popup_select_first = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
 " disable showing function arguments in upper line
-let g:jedi#show_call_signatures = 0
+let g:jedi#show_call_signatures = 2
 " non-auto close preview window
 let g:jedi#auto_close_doc = 0
 
