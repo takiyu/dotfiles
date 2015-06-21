@@ -193,11 +193,10 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 " NeoBundleLazy 'cespare/ruby-complete', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
-"jedi-vim needs 'sudo pip install jedi'
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} }
+			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi
 NeoBundleLazy 'tmhedberg/SimpylFold', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} }
+			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install pep8 pyflakes
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
@@ -282,7 +281,8 @@ endfunction
 "####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
 let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_python_checkers = ['pylint']
+" let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_checkers = ['pyflakes', 'pep8']
 let g:syntastic_error_symbol = ">>"
 let g:syntastic_warning_symbol = ">>"
 
