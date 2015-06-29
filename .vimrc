@@ -303,7 +303,7 @@ let g:clever_f_fix_key_direction = 1
 " 記号の代用文字
 let g:clever_f_chars_match_any_signs = ';'
 
-"##########plugin:quickhl.vim##########
+"####### Plugin : quickhl.vim #######
 let g:quickhl_manual_hl_priority = 10 " プライオリティの設定
 " let g:quickhl_cword_enable_at_startup = 1 " カーソル下の単語を一時的にハイライト
 " 色指定(同時に個数も指定)
@@ -358,7 +358,6 @@ let g:jedi#show_call_signatures = 2
 " non-auto close preview window
 let g:jedi#auto_close_doc = 0
 
-
 "####### Plugin : term_for_vim (JavaScript) #######
 " let g:tern_show_argument_hints = 'on_move'
 " let g:tern_show_argument_hints = 'on_hold'
@@ -368,7 +367,7 @@ au FileType javascript nmap <silent> <Leader>d :TernDoc<CR>
 let g:tern_show_signature_in_pum = 1
 let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_modules/tern/bin/tern', '--no-port-file'] " for Ubuntu command
 
-"####### Plugin : jelera/vim-javascript-syntax (JavaScript) #######
+"####### Plugin : vim-javascript-syntax (JavaScript) #######
 " au FileType javascript call JavaScriptFold()
 
 "####### Plugin : neocomplete #######
