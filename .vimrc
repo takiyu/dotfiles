@@ -97,8 +97,8 @@ vnoremap <C-c> "+y
 " F1のヘルプを無効化
 map <F1> <Esc>
 " Vimgrep
-" nmap <C-[> :cN<CR>
-" nmap <C-]> :cn<CR>
+nmap <C-[> :cN<CR>
+nmap <C-]> :cn<CR>
 " PreviewWindowの非表示
 nnoremap <C-c> <C-w>z
 inoremap <C-c> <C-w>z
