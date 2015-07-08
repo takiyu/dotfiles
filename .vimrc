@@ -124,7 +124,7 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 
 "===== Plugins =====
 "=== 共通 ===
-NeoBundle 'takiyu/tango-lx'		" カラースキーム
+NeoBundle 'takiyu/tango-lx'				" カラースキーム
 NeoBundle 'tyru/caw.vim'				" コメントアウト補助
 NeoBundle 'scrooloose/nerdtree'			" Filer
 NeoBundle 'scrooloose/syntastic'		" 文法チェック
