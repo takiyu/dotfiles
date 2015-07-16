@@ -236,7 +236,10 @@ let g:OmniSharp_host = "http://localhost:2000"
 let g:OmniSharp_typeLookupInPreview = 1
 
 "####### Plugin : latex-box #######
-let g:tex_conceal=''
+" let g:tex_conceal=''
+let g:tex_conceal='adbmgs'
+setlocal conceallevel=2
+
 autocmd BufWritePost *.tex :Latexmk
 let g:LatexBox_output_type = 'pdf'
 let g:LatexBox_latexmk_options = '-pdfdvi -recorder-'
