@@ -236,8 +236,8 @@ let g:OmniSharp_host = "http://localhost:2000"
 let g:OmniSharp_typeLookupInPreview = 1
 
 "####### Plugin : latex-box #######
-" let g:tex_conceal=''
-let g:tex_conceal='abgms'
+let g:tex_conceal=''
+" let g:tex_conceal='abgms'
 " let g:tex_conceal='adbmgs'
 setlocal conceallevel=2
 
