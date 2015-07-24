@@ -7,6 +7,7 @@ Config {
 		, fgColor = "grey"
 	--	, position = Bottom
 		, position = Static { xpos = 0 , ypos = 21, width = 1366, height = 15 }
+	--	, position = Static { xpos = 0 , ypos = 21, width = 1920, height = 15 }
 		, lowerOnStart = False
 		, persistent = True
 		, hideOnStart = False
@@ -37,5 +38,5 @@ Config {
 		, sepChar = "%"
 		, alignSep = "}{"
 		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %p2p1%/%wlan0%  <fc=#ffffff>||</fc>  %battery%"
-	--	, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0%  <fc=#ffffff>"
+	--	, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0%"
 }
