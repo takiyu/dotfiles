@@ -1,4 +1,6 @@
-Config { font = "xft:Sans-8:bold"
+Config {
+		  font = "xft:Sans-8:bold"
+	--	  font = "xft:Sans-10:bold"
 		, borderColor = "gray"
 		, border = TopB
 		, bgColor = "black"
@@ -19,6 +21,7 @@ Config { font = "xft:Sans-8:bold"
 							, "-l", "lightblue", "-n", "gray90", "-h", "red"] 50
 			, Run Memory ["-t", "Mem:<usedratio>%"] 50
 			, Run Network "p2p1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
+	--		, Run Network "eth0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
 							, "--normal", "green", "--high", "red"] 20
 			, Run Network "wlan0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32"
 							, "--normal", "green", "--high", "red"] 20
@@ -34,4 +37,5 @@ Config { font = "xft:Sans-8:bold"
 		, sepChar = "%"
 		, alignSep = "}{"
 		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %p2p1%/%wlan0%  <fc=#ffffff>||</fc>  %battery%"
+	--	, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %eth0%  <fc=#ffffff>"
 }
