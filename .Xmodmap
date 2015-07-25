@@ -3,14 +3,18 @@ keycode 100 = Escape
 
 ! ----ctrl----
 remove lock = Caps_Lock
-keysym Caps_Lock = Control_L
-keysym Pause = Caps_Lock
-add lock = Caps_Lock
-add Control = Control_L
+! keysym Caps_Lock = Control_L
+! keysym Pause = Caps_Lock
+! add lock = Caps_Lock
+add lock = Pause
+! add Control = Control_L
+add Control = Caps_Lock
 
 ! ----mod3----
 clear mod3
 remove mod4 = Super_R
-keysym Muhenkan = Super_R
-keysym Hiragana_Katakana = Super_R
+! keysym Muhenkan = Super_R
+! keysym Hiragana_Katakana = Super_R
 add mod3 = Super_R
+add mod3 = Muhenkan
+add mod3 = Hiragana_Katakana
