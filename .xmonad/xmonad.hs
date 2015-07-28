@@ -1,6 +1,6 @@
 import XMonad
 import XMonad.Actions.CycleWS
--- import XMonad.Actions.ShowText
+import XMonad.Actions.ShowText
 import XMonad.Actions.WindowGo
 import XMonad.Config.Gnome
 import XMonad.Config.Desktop (desktopLayoutModifiers)
@@ -64,7 +64,7 @@ myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
 
 -- handleEventHook
 myHandleEventHook = handleEventHook gnomeConfig
--- 					<+> handleTimerEvent -- Update Screen to Clear flashtext
+					<+> handleTimerEvent -- Update Screen to Clear flashtext
 					<+> fullscreenEventHook
 
 main :: IO ()
@@ -129,15 +129,15 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm.|.shiftMask,      xK_n  ), refresh)
 
 			-- workspaces
-   			, ((modm,                  xK_h  ), prevWS)
-			, ((modm,                  xK_l  ), nextWS)
-			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev >> prevWS)
-			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS)
-   			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
-   			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
+   			, ((modm,                  xK_h  ), prevWS >> logCurrent >>= moveFlashText)
+			, ((modm,                  xK_l  ), nextWS >> logCurrent >>= moveFlashText)
+			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev >> prevWS >> logCurrent >>= shiftLeftFlashText)
+			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS >> logCurrent >>= shiftRightFlashText)
+   			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS >> logCurrent >>= moveFlashText)
+   			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS >> logCurrent >>= moveFlashText)
 			-- physical screen
-			, ((modm,                  xK_w  ), nextScreen)
-			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
+			, ((modm,                  xK_w  ), nextScreen >> logCurrent >>= moveFlashText)
+			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen >> logCurrent >>= moveFlashText)
 -- 			, ((modm,                  xK_w  ), prevScreen)
 
 			-- shrink, expand
@@ -189,3 +189,12 @@ shellPromptConfig = defaultXPConfig {
 		, borderColor = "#000000"
 		, position = Top
     }
+
+-- flashtext settings
+moveFlashText m = flashText mySTConfig 1 (" " ++ fromMaybe "" m ++ " ")
+shiftRightFlashText m = flashText mySTConfig 1 ("->" ++ fromMaybe "" m ++ "")
+shiftLeftFlashText  m = flashText mySTConfig 1 ("" ++ fromMaybe "" m ++ "<-")
+mySTConfig = defaultSTConfig{ st_font = "xft:Droid Sans:pixelsize=40"
+							, st_bg   = "black"
+							, st_fg   = "green"
+							}
