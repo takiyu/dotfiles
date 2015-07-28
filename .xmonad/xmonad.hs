@@ -132,8 +132,8 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
    			, ((modm,                  xK_h  ), prevWS)
 --    			, ((modm,                  xK_h  ), prevWS >> logCurrent >>= moveFlashText)
 			, ((modm,                  xK_l  ), nextWS)
-			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev)
-			, ((modm.|.shiftMask,      xK_l  ), shiftToNext)
+			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev >> prevWS)
+			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS)
    			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
    			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
 			-- physical screen
