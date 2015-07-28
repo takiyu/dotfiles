@@ -1,13 +1,13 @@
 Config {
 		  font = "xft:Sans-8:bold"
-	--	  font = "xft:Sans-10:bold"
+	--	  font = "xft:Sans-13:bold"
 		, borderColor = "gray"
 		, border = TopB
 		, bgColor = "black"
 		, fgColor = "grey"
 	--	, position = Bottom
 		, position = Static { xpos = 0 , ypos = 21, width = 1366, height = 15 }
-	--	, position = Static { xpos = 0 , ypos = 25, width = 1920, height = 15 }
+	--	, position = Static { xpos = 0 , ypos =  0, width = 1920, height = 21 }
 		, lowerOnStart = False
 		, persistent = True
 		, hideOnStart = False
