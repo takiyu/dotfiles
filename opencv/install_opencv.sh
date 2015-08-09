@@ -48,14 +48,15 @@ sudo apt-get -yV install libvpx-dev
 sudo apt-get -yV install unzip
 
 cd /tmp
-if [ ! -f OpenCV-2.4.10.zip ]; then 
-    wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip
+if [ ! -f OpenCV-2.4.11.zip ]; then
+    wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.11/opencv-2.4.11.zip
 fi 
 
-sudo rm -rf opencv-2.4.10
-unzip /tmp/opencv-2.4.10.zip
-cd opencv-2.4.10
+sudo rm -rf opencv-2.4.11
+unzip /tmp/opencv-2.4.11.zip
+cd opencv-2.4.11
 cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=OFF -DWITH_OPENNI=ON -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON  .
+# cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=ON -DWITH_OPENNI=ON -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON -D CUDA_GENERATION=Kepler .
 make -j4
 sudo make install
 sudo ldconfig
