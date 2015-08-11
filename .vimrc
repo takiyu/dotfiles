@@ -124,16 +124,17 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 
 "===== Plugins =====
 "=== 共通 ===
-NeoBundle 'takiyu/tango-lx'				" カラースキーム
-NeoBundle 'tyru/caw.vim'				" コメントアウト補助
-NeoBundle 'scrooloose/nerdtree'			" Filer
-NeoBundle 'scrooloose/syntastic'		" 文法チェック
-NeoBundle 'rhysd/clever-f.vim'			" Clever-f
-NeoBundle 'itchyny/lightline.vim'		" ステータスライン
-NeoBundle 't9md/vim-quickhl'			" ハイライト
-NeoBundle 'vimtaku/hl_matchit.vim'	" 括弧+αをハイライト
-NeoBundle 'ujihisa/neco-look'			" 英単語補完
-NeoBundle 'vim-scripts/YankRing.vim'	" ヤンク
+NeoBundle 'takiyu/tango-lx'				    " カラースキーム
+NeoBundle 'tyru/caw.vim'				    " コメントアウト補助
+NeoBundle 'scrooloose/nerdtree'			    " Filer
+NeoBundle 'scrooloose/syntastic'		    " 文法チェック
+NeoBundle 'rhysd/clever-f.vim'			    " Clever-f
+NeoBundle 'itchyny/lightline.vim'		    " ステータスライン
+NeoBundle 't9md/vim-quickhl'			    " ハイライト
+NeoBundle 'vimtaku/hl_matchit.vim'	        " 括弧+αをハイライト
+NeoBundle 'ujihisa/neco-look'			    " 英単語補完
+NeoBundle 'vim-scripts/YankRing.vim'	    " ヤンク
+NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -230,6 +231,9 @@ let g:go_fmt_autosave = 1
 "####### Plugin : hl-matchit #######
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
+
+"####### Plugin : vim-indent-guides #######
+let g:indent_guides_enable_on_vim_startup = 1 "autostart
 
 "####### Plugin : OmniSharp #######
 let g:OmniSharp_host = "http://localhost:2000"
