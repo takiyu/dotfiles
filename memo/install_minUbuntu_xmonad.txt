@@ -1,0 +1,18 @@
+1: 最小パッケージのubuntuをインストール（ディスク容量が４０M弱）
+sudo apt-get install xinit gnome fcitx fcitx-mozc git firefox vim vim-gtk nemo xinput xmonad
+
+sudo apt-get purge ibus
+sudo autoremove
+
+git clone https://github.com/takiyu/dotfiles
+
+# set Nemo as Default File manager+
+xdg-mime default nemo.desktop inode/directory application/x-gnome-saced-search
+
+=====================================================
+2:
+# 本当に必要化は不明
+sudo apt-get install gnome-network-admin
+
+# 有線ネットワークが有効にならない問題の解決
+/etc/network/interfaces の p2p1の項目をコメントアウト
