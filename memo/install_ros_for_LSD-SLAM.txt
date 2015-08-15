@@ -1,3 +1,4 @@
+# ROS install
 sudo apt-get install libopencv-dev
 
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -20,6 +21,8 @@ echo "source ~/rosbuild_ws/setup.bash" >> ~/.bashrc # make sure inS this order
 bash
 cd package_dir
 
+# Build lsd_slam
+
 git clone https://github.com/tum-vision/lsd_slam.git lsd_slam
 
 sudo rosdep init
@@ -27,33 +30,32 @@ rosdep update
 
 rosmake lsd_slam
 
-
-
+# Run uvc_camera
 sudo apt-get install ros-indigo-uvc-camera
 bash
 roscore
 rosrun uvc_camera uvc_camera_node
 
+# Check image_view
 rostopic list # check camera name
 rosrun image_view image_view image:=/image_raw
 
-
+# Camera calibration
 rosdep install camera_calibration
 rosmake camera_calibration
 rosrun camera_calibration cameracalibrator.py --size 10x7 --square 0.108 image:=/image_raw
 
 
-
-rosrun lsd_slam_core live_slam /image:=/image_raw _calib:=/home/takiyu/rosbuild_ws/package_dir/lsd_sl/lsd_slam_core/calib/note_camera_calib.cfg
+# Run LSD-SLAM
+rosrun lsd_slam_core live_slam /image:=/image_raw _calib:=/home/takiyu/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/calib/note_camera_calib.cfg
 rosrun lsd_slam_viewer viewer
 
 
 
-
+# /dev/video1
 cd /opt/ros/indigo/share/uvc_camera/launch 
 sudo gvim camera_node.launch
 roslaunch ./camera_node.launch
-
 
 <launch>
   <node pkg="uvc_camera" type="uvc_camera_node" name="uvc_camera" output="screen">
@@ -72,3 +74,8 @@ roslaunch ./camera_node.launch
     <param name="camera_info_url" type="string" value="file://$(find uvc_camera)/example.yaml" />
   </node>
 </launch>
+
+
+# ps4eye
+roslaunch ps4eye stereo.launch DEVICE:=/dev/video1
+rosrun lsd_slam_core live_slam /image:=/stereo/right/image_raw _calib:=/home/takiyu/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/calib/ps4eye_calib.cfg
