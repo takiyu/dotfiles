@@ -50,6 +50,7 @@ rosrun camera_calibration cameracalibrator.py --size 10x7 --square 0.108 image:=
 rosrun lsd_slam_core live_slam /image:=/image_raw _calib:=/home/takiyu/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/calib/note_camera_calib.cfg
 rosrun lsd_slam_viewer viewer
 
+rosrun lsd_slam_core dataset_slam _files:=/home/takiyu/Projects/c/opencv/Duo3D/record/images/ _hz:=30 _calib:=/home/takiyu/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/calib/duo_calib.cfg
 
 
 # /dev/video1
