@@ -196,9 +196,9 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi
+			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi pep8 pyflakes
 " NeoBundleLazy 'tmhedberg/SimpylFold', {
-" 			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install pep8 pyflakes
+" 			\ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
