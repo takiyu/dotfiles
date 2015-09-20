@@ -25,6 +25,7 @@ set guioptions-=T				" ツールバーを非表示
 " set guioptions-=e				" TabのGUI表示をOFF
 " === Folding ===
 set foldmethod=syntax
+autocmd FileType python set foldmethod=indent
 autocmd FileType glsl set foldmethod=indent
 autocmd FileType verilog set foldmethod=indent
 " set nofoldenable "自動では折りたたまない
@@ -196,8 +197,8 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 "=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
 			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi
-NeoBundleLazy 'tmhedberg/SimpylFold', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install pep8 pyflakes
+" NeoBundleLazy 'tmhedberg/SimpylFold', {
+" 			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install pep8 pyflakes
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
