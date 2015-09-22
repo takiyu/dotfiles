@@ -24,7 +24,7 @@ set guioptions-=m				" メニューバーを非表示
 set guioptions-=T				" ツールバーを非表示
 " set guioptions-=e				" TabのGUI表示をOFF
 " === Folding ===
-set foldmethod=syntax
+autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
 autocmd FileType glsl set foldmethod=indent
 autocmd FileType verilog set foldmethod=indent
@@ -40,13 +40,11 @@ set laststatus=2						" ステータスラインを常に表示
 " autocmd BufWritePre * :%s/\s\+$//ge	" 保存時に行末の空白を除去する
 " === Tab Settings ===
 " Hard Tab
-set tabstop=4		" タブを表示するときの幅
-set shiftwidth=4	" タブを挿入するときの幅
-set noexpandtab		" 空白文字ではなくタブ文字を使用する
+autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
+                      " タブを挿入幅  タブを表示幅  Hard Tab
 " Soft Tab
-autocmd FileType javascript set tabstop=2
-autocmd FileType javascript set shiftwidth=2
-autocmd FileType javascript set expandtab
+autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
+autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
 "=== Font Settings ===
 if has('win32') || has('win64')
