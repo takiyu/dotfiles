@@ -290,6 +290,7 @@ endfunction
 let g:syntastic_javascript_checkers = ['jshint']
 " let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_checkers = ['pyflakes', 'pep8']
+let g:syntastic_python_pep8_args = "--config=".expand("$HOME")."/.pep8"
 let g:syntastic_error_symbol = ">>"
 let g:syntastic_warning_symbol = ">>"
 
