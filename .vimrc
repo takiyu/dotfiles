@@ -96,8 +96,8 @@ vnoremap <C-c> "+y
 " F1のヘルプを無効化
 map <F1> <Esc>
 " Vimgrep
-nmap <C-[> :cN<CR>
-nmap <C-]> :cn<CR>
+nmap <A-[> :cN<CR>
+nmap <A-]> :cn<CR>
 " PreviewWindowの非表示
 nnoremap <C-c> <C-w>z
 inoremap <C-c> <C-w>z
@@ -117,7 +117,7 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expan
 "補完のShift-Tab
 imap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Escで補完ポップアップを閉じて標準モード(続けて書く方法がわからなかった)
-inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
+imap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
