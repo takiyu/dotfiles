@@ -8,40 +8,44 @@ set selection-clipboard clipboard
 set show-scrollbars true
 
 
-map [normal]     <A-1> set "first-page-column 1"
-map [fullscreen] <A-1> set "first-page-column 1"
-map [normal]     <A-2> set "first-page-column 2"
-map [fullscreen] <A-2> set "first-page-column 2"
+map [normal]     <C-n> navigate next
+map [fullscreen] <C-n> navigate next
+map [normal]     <C-p> navigate previous
+map [fullscreen] <C-p> navigate previous
 
-map [normal]     <C-k> navigate previous
-map [fullscreen] <C-k> navigate previous
-map [normal]     <C-j> navigate next
-map [fullscreen] <C-j> navigate next
+map [normal]     <C-j> scroll half-down
+map [fullscreen] <C-j> scroll half-down
+map [normal]     <C-k> scroll half-up
+map [fullscreen] <C-k> scroll half-up
 
-map [normal]     <F11> toggle_fullscreen
-map [fullscreen] <F11> toggle_fullscreen
-map [normal]     <F5> reload
-map [fullscreen] <F5> reload
+map [normal]     <Space> scroll half-down
+map [fullscreen] <Space> scroll half-down
+map [normal]     <S-Space> scroll half-up
+map [fullscreen] <S-Space> scroll half-up
 
-map [normal] r reload
+map [normal]     r reload
 map [fullscreen] r reload
-map [normal] R rotate
+map [normal]     R rotate
 map [fullscreen] R rotate
 
-map [normal] <C-9> zoom in
-map [normal] <C-0> zoom out
-
-map [normal]     9 adjust_window width
-map [fullscreen] 9 adjust_window width
-map [normal]     0 adjust_window best-fit
-map [fullscreen] 0 adjust_window best-fit
+map [normal] 9 zoom in
+map [normal] 0 zoom out
+map [normal]     <C-9> adjust_window width
+map [fullscreen] <C-9> adjust_window width
+map [normal]     <C-0> adjust_window best-fit
+map [fullscreen] <C-0> adjust_window best-fit
 
 map [normal]     <Tab> toggle_index
 map [fullscreen] <Tab> toggle_index
 map [normal]     d toggle_page_mode 2
 map [fullscreen] d toggle_page_mode 2
 
-map [normal]     <Space> scroll down
-map [fullscreen] <Space> scroll down
-map [normal]     <S-Space> scroll up
-map [fullscreen] <S-Space> scroll up
+map [normal]     <F11> toggle_fullscreen
+map [fullscreen] <F11> toggle_fullscreen
+map [normal]     <F5> reload
+map [fullscreen] <F5> reload
+
+map [normal]     <A-1> set "first-page-column 1"
+map [fullscreen] <A-1> set "first-page-column 1"
+map [normal]     <A-2> set "first-page-column 2"
+map [fullscreen] <A-2> set "first-page-column 2"
