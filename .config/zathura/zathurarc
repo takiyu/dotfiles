@@ -30,10 +30,10 @@ map [fullscreen] <Tab> toggle_index
 map [normal]     d toggle_page_mode 2
 map [fullscreen] d toggle_page_mode 2
 
-map [normal]     9 adjust_window best-fit
-map [fullscreen] 9 adjust_window best-fit
-map [normal]     0 adjust_window width
-map [fullscreen] 0 adjust_window width
+map [normal]     9 adjust_window width
+map [fullscreen] 9 adjust_window width
+map [normal]     0 adjust_window best-fit
+map [fullscreen] 0 adjust_window best-fit
 
 map [normal]     <Space> scroll down
 map [fullscreen] <Space> scroll down
