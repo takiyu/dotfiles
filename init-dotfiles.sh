@@ -21,6 +21,9 @@ for dotfile in .?*; do
 	*.swo)
 		continue
 		;;
+	.config)
+		continue
+		;;
 	#それ以外はシンボリックリンクを張る
 	*)
 		echo ">> シンボリックリンクを作成:$dotfile"
@@ -28,3 +31,8 @@ for dotfile in .?*; do
 		;;
     esac
 done
+
+# その他
+echo ">> シンボリックリンクを作成:.config/zathura/zaturarc"
+ln -s "$PWD/.config/zathura/zathurarc" "$HOME/.config/zathura/"
+
