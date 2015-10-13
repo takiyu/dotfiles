@@ -34,5 +34,6 @@ done
 
 # その他
 echo ">> シンボリックリンクを作成:.config/zathura/zaturarc"
+mkdir -p "$HOME/.config/zathura/"
 ln -s "$PWD/.config/zathura/zathurarc" "$HOME/.config/zathura/"
 

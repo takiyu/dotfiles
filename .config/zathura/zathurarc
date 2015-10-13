@@ -5,6 +5,7 @@ unmap [fullscreen] p
 
 set recolor-keephue
 set selection-clipboard clipboard
+set show-scrollbars true
 
 
 map [normal]     <A-1> set "first-page-column 1"
@@ -22,18 +23,23 @@ map [fullscreen] <F11> toggle_fullscreen
 map [normal]     <F5> reload
 map [fullscreen] <F5> reload
 
+map [normal] r reload
+map [fullscreen] r reload
+map [normal] R rotate
+map [fullscreen] R rotate
+
 map [normal] <C-9> zoom in
 map [normal] <C-0> zoom out
-
-map [normal]     <Tab> toggle_index
-map [fullscreen] <Tab> toggle_index
-map [normal]     d toggle_page_mode 2
-map [fullscreen] d toggle_page_mode 2
 
 map [normal]     9 adjust_window width
 map [fullscreen] 9 adjust_window width
 map [normal]     0 adjust_window best-fit
 map [fullscreen] 0 adjust_window best-fit
+
+map [normal]     <Tab> toggle_index
+map [fullscreen] <Tab> toggle_index
+map [normal]     d toggle_page_mode 2
+map [fullscreen] d toggle_page_mode 2
 
 map [normal]     <Space> scroll down
 map [fullscreen] <Space> scroll down
