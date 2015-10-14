@@ -159,7 +159,7 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
 " 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
 NeoBundleLazy 'osyo-manga/vim-marching', {
 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
-			\ 'depends' : ['Shougo/vimproc', 'osyo-manga/vim-reunions'] }
+			\ 'depends' : ['Shougo/vimproc'] }
 "=== Unity C# ==
 " NeoBundleLazy 'nosami/Omnisharp', {
 " 			\   'autoload': {'filetypes': ['cs']},
@@ -344,11 +344,17 @@ vmap \C <Plug>(caw:I:uncomment)
 let g:yankring_history_dir = $HOME.'/.vim'
 
 "####### Plugin : marching #######
-let g:marching_clang_command = "clang-3.6"
+" let g:marching_clang_command = "clang-3.6"
+let g:marching_clang_command = "clang"
 let g:marching_enable_neocomplete = 1
 " set updatetime=200
 set updatetime=10
 " let g:marching_backend = "sync_clang_command" "同期処理の場合
+let g:marching_include_paths = filter(
+	\	split(glob('/usr/include/c++/*'), '\n') +
+	\	split(glob('/usr/include/*/c++/*'), '\n') +
+	\	split(glob('/usr/include/*/'), '\n'),
+	\	'isdirectory(v:val)')
 "####### Plugin : clang_complete #######
 " let g:clang_library_path = $HOME.'/dotfiles'
 " let g:clang_library_path = $HOME.'/local/lib'
