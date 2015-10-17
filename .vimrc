@@ -300,6 +300,8 @@ endfunction
 function! s:syntastic_check()
 	if s:syntastic_check_flag
 		SyntasticCheck
+	else
+		SyntasticReset
 	endif
 	call lightline#update()
 endfunction
