@@ -205,6 +205,10 @@ NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmd�
 " 			\ 'autoload':{ 'filetypes':[ 'go' ]}
 " 			\ }
 " NeoBundle 'google/vim-ft-go' "補完機能等が含まれず
+"=== Lisp ===
+NeoBundleLazy 'luochen1990/rainbow', {
+			\ 'autoload':{ 'filetypes':[ 'lisp' ]}
+			\ }
 
 NeoBundleCheck
 call neobundle#end() "call function() はこれ以降でないと無効
@@ -231,6 +235,9 @@ let g:go_fmt_autosave = 1
 "####### Plugin : hl-matchit #######
 source $VIMRUNTIME/macros/matchit.vim "括弧を追加
 let g:hl_matchit_enable_on_vim_startup = 1 "ハイライトを有効
+
+"####### Plugin : rainbow #######
+let g:rainbow_active = 1
 
 "####### Plugin : vim-indent-guides #######
 let g:indent_guides_enable_on_vim_startup = 1 "autostart
