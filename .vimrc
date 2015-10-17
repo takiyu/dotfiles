@@ -288,11 +288,23 @@ let g:lightline = {
       \ }
 " 保存時にsyntasticでチェックをしてから表示をアップデート
 let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
-autocmd BufWritePost * call s:syntastic_check()
+" Syntastic Check Toggle
+let s:syntastic_check_flag = 1
+function! g:syntastic_toggle()
+	if s:syntastic_check_flag
+		let s:syntastic_check_flag = 0
+	else
+		let s:syntastic_check_flag = 1
+	endif
+endfunction
 function! s:syntastic_check()
-	SyntasticCheck
+	if s:syntastic_check_flag
+		SyntasticCheck
+	endif
 	call lightline#update()
 endfunction
+autocmd BufWritePost * call s:syntastic_check()
+nnoremap <F11> :call g:syntastic_toggle()<CR>
 "####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
 let g:syntastic_javascript_checkers = ['jshint']
