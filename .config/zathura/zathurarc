@@ -6,7 +6,18 @@ unmap [fullscreen] p
 set recolor-keephue
 set selection-clipboard clipboard
 set show-scrollbars true
+set search-hadjust false
+set window-title-page true
 
+
+map [normal]     j scroll down
+map [fullscreen] j scroll down
+map [normal]     k scroll up
+map [fullscreen] k scroll up
+map [normal]     l scroll right
+map [fullscreen] l scroll right
+map [normal]     h scroll left
+map [fullscreen] h scroll left
 
 map [normal]     <C-n> navigate next
 map [fullscreen] <C-n> navigate next
@@ -28,8 +39,10 @@ map [fullscreen] r reload
 map [normal]     R rotate
 map [fullscreen] R rotate
 
-map [normal] 9 zoom in
-map [normal] 0 zoom out
+map [normal]     9 zoom in
+map [fullscreen] 9 zoom in
+map [normal]     0 zoom out
+map [fullscreen] 0 zoom out
 map [normal]     <C-9> adjust_window width
 map [fullscreen] <C-9> adjust_window width
 map [normal]     <C-0> adjust_window best-fit
@@ -49,3 +62,9 @@ map [normal]     <A-1> set "first-page-column 1"
 map [fullscreen] <A-1> set "first-page-column 1"
 map [normal]     <A-2> set "first-page-column 2"
 map [fullscreen] <A-2> set "first-page-column 2"
+
+map [normal]     c recolor
+map [fullscreen] c recolor
+
+map [fullscreen] : focus_inputbar
+map [fullscreen] <Esc> toggle_fullscreen
