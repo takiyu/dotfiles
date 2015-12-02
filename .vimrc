@@ -116,9 +116,9 @@ imap <expr><TAB> pumvisible() ? "\<C-n>" :
 			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "補完のShift-Tab
-imap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Escで補完ポップアップを閉じて標準モード(続けて書く方法がわからなかった)
-imap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
+inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
@@ -344,6 +344,12 @@ let g:quickhl_manual_colors = [
 	\ "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
 	\ "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
 	\ "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
+	\ "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
+	\ "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
+	\ "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
+	\ "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
+	\ "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
+	\ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
 \ ]
 " ハイライトショートカット
 nmap m <Plug>(quickhl-manual-this)
