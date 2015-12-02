@@ -112,7 +112,7 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm,                  xK_k  ), windows W.focusUp  )
 			, ((modm.|.shiftMask,      xK_k  ), windows W.swapUp   )
 			, ((modm,                  xK_m  ), windows W.focusMaster)
-			, ((modm,                  xK_Return), windows W.swapMaster)
+			, ((modm,                  xK_Return), windows W.shiftMaster)
 			, ((modm.|.shiftMask,      xK_c  ), kill)
 			, ((modm,                  xK_t  ), withFocused $ windows . W.sink)
 			-- window alt-tab
