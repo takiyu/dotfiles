@@ -108,12 +108,14 @@ inoremap <C-o> <C-x><C-o>
 au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
 " omni補完(marching) キャッシュを破棄、再取得
 au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
-" S-Enterで補完を決定、または次へジャンプ
-imap <expr><S-CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
-			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<S-CR>"
-" Enterで次へジャンプ、または補完を決定
-imap <expr><CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
-			\ pumvisible() ? "\<Plug>(neosnippet_expand)" :"\<CR>"
+" Enterで補完を決定、または次へジャンプ
+imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
+			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>"
+" S-Enter,C-Enterで次へジャンプ、または補完を決定
+imap <expr><S-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
+			\ pumvisible() ? "\<Plug>(neosnippet_expand)" :"\<S-CR>"
+imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
+			\ pumvisible() ? "\<Plug>(neosnippet_expand)" :"\<C-CR>"
 " Tabで選択
 imap <expr><TAB> pumvisible() ? "\<C-n>" :
 			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
