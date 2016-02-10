@@ -127,6 +127,20 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
+"===== Spell =====
+let s:spell_check_flag = 1
+set spell spelllang=en_us
+function! g:spellcheck_toggle()
+	if s:spell_check_flag
+		let s:spell_check_flag = 0
+		set nospell
+	else
+		let s:spell_check_flag = 1
+		set spell spelllang=en_us
+	endif
+endfunction
+nnoremap <F12> :call g:spellcheck_toggle()<CR>
+
 "===== Plugins =====
 "=== 共通 ===
 NeoBundle 'takiyu/tango-lx'				    " カラースキーム
