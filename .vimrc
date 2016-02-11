@@ -134,9 +134,11 @@ function! g:spellcheck_toggle()
 	if s:spell_check_flag
 		let s:spell_check_flag = 0
 		set nospell
+		echomsg string('spell off')
 	else
 		let s:spell_check_flag = 1
 		set spell spelllang=en_us
+		echomsg string('spell on')
 	endif
 endfunction
 nnoremap <F12> :call g:spellcheck_toggle()<CR>
@@ -312,8 +314,10 @@ let s:syntastic_check_flag = 1
 function! g:syntastic_toggle()
 	if s:syntastic_check_flag
 		let s:syntastic_check_flag = 0
+		echomsg string('syntastic on')
 	else
 		let s:syntastic_check_flag = 1
+		echomsg string('syntastic off')
 	endif
 endfunction
 function! s:syntastic_check()
