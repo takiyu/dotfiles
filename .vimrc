@@ -42,11 +42,39 @@ set laststatus=2						" ステータスラインを常に表示
 " === Tab Settings ===
 " Hard Tab
 autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
+" autocmd FileType * set tabstop=2 | set shiftwidth=2 | set expandtab
                       " タブを挿入幅  タブを表示幅  Hard Tab
 " Soft Tab
 autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
 autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
+" === Tab Settings Toggle ===
+let s:tab4_flag = 1
+function! g:tab4_toggle()
+	if s:tab4_flag
+		let s:tab4_flag = 0
+		set tabstop=2 | set shiftwidth=2
+		echomsg string('tab 2')
+	else
+		let s:tab4_flag = 1
+		set tabstop=4 | set shiftwidth=4
+		echomsg string('tab 4')
+	endif
+endfunction
+nnoremap <F8> :call g:tab4_toggle()<CR>
+let s:tabhard_flag = 1
+function! g:tabhard_toggle()
+	if s:tabhard_flag
+		let s:tabhard_flag = 0
+		set expandtab
+		echomsg string('tab soft')
+	else
+		let s:tabhard_flag = 1
+		set noexpandtab
+		echomsg string('tab hard')
+	endif
+endfunction
+nnoremap <F7> :call g:tabhard_toggle()<CR>
 "=== Font Settings ===
 if has('win32') || has('win64')
 	set guifont=MS_Gothic:h13 " Windows
@@ -110,20 +138,21 @@ au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
 au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " Enterで補完を決定、または次へジャンプ
 imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
-			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>"
+			\ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
 " S-Enter,C-Enterで次へジャンプ、または補完を閉じてEnter
 imap <expr><S-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
-			\ neocomplete#close_popup() ? "\<CR>" :"\<S-CR>"
+			\ (neocomplete#close_popup() ? "\<CR>" :"\<S-CR>")
 imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
-			\ neocomplete#close_popup() ? "\<CR>" :"\<C-CR>"
+			\ (neocomplete#close_popup() ? "\<CR>" :"\<C-CR>")
 " Tabで選択
-imap <expr><TAB> pumvisible() ? "\<C-n>" :
-			\ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
+imap <expr><TAB> pumvisible() ?
+			\ (neocomplete#complete_common_string() != '' ? neocomplete#complete_common_string() :"\<C-n>" ) :
+			\ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "補完のShift-Tab
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-" Escで補完ポップアップを閉じて標準モード(続けて書く方法がわからなかった)
-inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup() ? "<Esc>" : "<Esc>" : "<Esc>"
+" Escで補完ポップアップを閉じて標準モード
+inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup()."<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
@@ -378,7 +407,7 @@ let g:quickhl_manual_colors = [
 nmap m <Plug>(quickhl-manual-this)
 vmap m <Plug>(quickhl-manual-this)
 " 表示トグル
-nmap <F8> <Plug>(quickhl-manual-toggle)
+nmap <F9> <Plug>(quickhl-manual-toggle)
 " ハイライトを削除
 nmap M <Plug>(quickhl-manual-reset)
 vmap M <Plug>(quickhl-manual-reset)
@@ -447,6 +476,7 @@ let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスを�
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'	" ロックパターン
 call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
 let g:neocomplete#enable_auto_close_preview = 0			" プレビューウインドウを閉じない
+let g:neocomplete#use_vimproc = 1                   " バックグラウンド実行
 " 辞書設定
 let g:neocomplete#sources#dictionary#dictionaries = { 'default' : '', 'vimshell' : $HOME.'/.vimshell_hist', 'scheme' : $HOME.'/.gosh_completions' }
 " 補完するためのキーワードパターン
@@ -506,7 +536,7 @@ let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*f
 "標準のsnippetを消したら、初めて挿入モードになった時にエラー(直ぐ消える)
 " For snippet_complete marker
 if has('conceal')
-set conceallevel=2 concealcursor=i
+set conceallevel=2 concealcursor=niv
 endif
 " スニペットファイルの保存ディレクトリのパスを登録
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
