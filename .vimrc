@@ -48,7 +48,7 @@ autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
 autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
 autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
-" === Tab Settings Toggle ===
+" === Tab Indent Toggle ===
 let s:tab4_flag = 1
 function! g:tab4_toggle()
 	if s:tab4_flag
@@ -61,20 +61,38 @@ function! g:tab4_toggle()
 		echomsg string('tab 4')
 	endif
 endfunction
+function! g:echo_pre_tab4()
+	if !s:tab4_flag
+		echomsg string('tab 2')
+	else
+		echomsg string('tab 4')
+	endif
+endfunction
 nnoremap <F8> :call g:tab4_toggle()<CR>
+			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
+			\ :call g:echo_pre_tab4()<CR>
+" === Soft/Hard tab toggle ===
 let s:tabhard_flag = 1
 function! g:tabhard_toggle()
 	if s:tabhard_flag
 		let s:tabhard_flag = 0
 		set expandtab
-		echomsg string('tab soft')
 	else
 		let s:tabhard_flag = 1
 		set noexpandtab
+	endif
+endfunction
+function! g:echo_pre_tabhard()
+	if !s:tabhard_flag
+		echomsg string('tab soft')
+	else
 		echomsg string('tab hard')
 	endif
 endfunction
 nnoremap <F7> :call g:tabhard_toggle()<CR>
+			\ :retab!
+			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
+			\ :call g:echo_pre_tabhard()<CR>
 "=== Font Settings ===
 if has('win32') || has('win64')
 	set guifont=MS_Gothic:h13 " Windows
@@ -421,6 +439,9 @@ vmap \C <Plug>(caw:I:uncomment)
 
 "####### Plugin : yankring.vim #######
 let g:yankring_history_dir = $HOME.'/.vim'
+
+"####### Plugin : vim-indent-guides #######
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 "####### Plugin : marching #######
 let g:marching_clang_command = "clang-3.6"
