@@ -23,6 +23,7 @@ set smartcase					" (ただし大文字入力時のみ考慮)
 set guioptions-=m				" メニューバーを非表示
 set guioptions-=T				" ツールバーを非表示
 " set guioptions-=e				" TabのGUI表示をOFF
+set colorcolumn=80				" 80文字のライン
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
@@ -90,9 +91,9 @@ function! g:echo_pre_tabhard()
 	endif
 endfunction
 nnoremap <F7> :call g:tabhard_toggle()<CR>
-			\ :retab!
 			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
 			\ :call g:echo_pre_tabhard()<CR>
+" 			\ :retab!
 "=== Font Settings ===
 if has('win32') || has('win64')
 	set guifont=MS_Gothic:h13 " Windows
