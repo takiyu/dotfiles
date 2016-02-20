@@ -1,23 +1,93 @@
-export PATH=$HOME/bin:$PATH
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
-# export PATH=$HOME/.rbenv/bin:$PATH
-# eval "$(rbenv init -)"
-#<For Check>
-#echo 'eval "$(rbenv init -)"' 
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
-export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
 
-# VAIO T Scroll direction setting
-xinput --set-button-map 11 1 2 3 5 4 7 6 8 9 10 11 12
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
 
-# gksu freq_powersave
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-export GOPATH=$HOME/Projects/Gocode
-export PATH=$GOPATH/bin:$PATH
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
 
-export PATH=/usr/local/cuda-7.0/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+      . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+      . /etc/bash_completion
+    fi
+fi
+
+# auto fix cd path
+shopt -s cdspell
+# append to the history file, don't overwrite it
+shopt -s histappend
+# check the window size after each command
+shopt -s checkwinsize
+# enable **
+shopt -s globstar
+
+# color prompt
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias sl=ls
+alias v=gvim
 
 function zathura() { command zathura $1 & > /dev/null; }
 
-alias sl=ls
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+export PATH=$HOME/bin:$PATH
+
+# Microchip
+export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
+# export PATH="$PATH:"/opt/microchip/xc32/v1.40/bin""
+
+# ROS
+# source /opt/ros/indigo/setup.bash
+# source ~/rosbuild_ws/setup.bash
+
+# Duo
+# export DUO_SDK=/home/takiyu/rosbuild_ws/package_dir/DUO-Camera-ROS/build/devel/DUOSDK
+
+# Golang
+export GOPATH=$HOME/Projects/Gocode
+
+# Android
+export PATH=$PATH:/home/takiyu/Downloads/Android/android-ndk-r10e
+export ANDROID_HOME=/home/takiyu/android-sdks
