@@ -1,0 +1,18 @@
+libfreenect2 (https://github.com/OpenKinect/libfreenect2)のインストール(2015/12/19)
+ubuntu14.04 (kernel3.13, 3.19)で動作確認
+
+基本的にREADMEに書かれている通りだが、以下の点で注意が必要。
+
+[libusb]
+	depends/install_libusb.shでは依存関係がおかしくなるようなのでppaを追加する。
+	sudo apt-add-repository ppa:floe/libusb
+	sudo apt-get update
+	sudo apt-get install libusb-1.0-0-dev
+
+[glfw3]
+	depends/install_ubuntu.shではmake時に一部エラーが出るため使用せず、depends/install_glfw.shを実行する。
+	バージョンがシビアな模様
+
+[実行(bin/Protonect)]
+	実行にはsudoが必要
+
