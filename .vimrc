@@ -380,7 +380,8 @@ autocmd BufWritePost * call s:syntastic_check()
 nnoremap <F11> :call g:syntastic_toggle()<CR>
 "####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
-let g:syntastic_javascript_checkers = ['jshint']
+" let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['jsxhint']
 " let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_checkers = ['pyflakes', 'pep8']
 let g:syntastic_python_pep8_args = "--config=".expand("$HOME")."/.pep8"
