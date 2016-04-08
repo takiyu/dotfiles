@@ -42,9 +42,10 @@ set laststatus=2						" ステータスラインを常に表示
 " autocmd BufWritePre * :%s/\s\+$//ge	" 保存時に行末の空白を除去する
 " === Tab Settings ===
 " Hard Tab
-autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
+" autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
 " autocmd FileType * set tabstop=2 | set shiftwidth=2 | set expandtab
                       " タブを挿入幅  タブを表示幅  Hard Tab
+autocmd FileType * set tabstop=4 | set shiftwidth=4 | set expandtab
 " Soft Tab
 autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
 autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
