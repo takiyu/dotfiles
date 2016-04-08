@@ -63,7 +63,7 @@ function! g:Tab4_toggle()
 		echomsg string('tab 4')
 	endif
 endfunction
-function! g:echo_pre_tab4()
+function! g:Echo_pre_tab4()
 	if !s:tab4_flag
 		echomsg string('tab 2')
 	else
@@ -72,7 +72,7 @@ function! g:echo_pre_tab4()
 endfunction
 nnoremap <F8> :call g:Tab4_toggle()<CR>
 			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-			\ :call g:echo_pre_tab4()<CR>
+			\ :call g:Echo_pre_tab4()<CR>
 " === Soft/Hard tab toggle ===
 let s:tabhard_flag = 1
 function! g:Tabhard_toggle()
@@ -84,7 +84,7 @@ function! g:Tabhard_toggle()
 		set noexpandtab
 	endif
 endfunction
-function! g:echo_pre_tabhard()
+function! g:Echo_pre_tabhard()
 	if !s:tabhard_flag
 		echomsg string('tab soft')
 	else
@@ -93,7 +93,7 @@ function! g:echo_pre_tabhard()
 endfunction
 nnoremap <F7> :call g:Tabhard_toggle()<CR>
 			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-			\ :call g:echo_pre_tabhard()<CR>
+			\ :call g:Echo_pre_tabhard()<CR>
 " 			\ :retab!
 "=== Font Settings ===
 if has('win32') || has('win64')
@@ -179,7 +179,7 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup()."<Esc>" : "<Esc>"
 "===== Spell =====
 let s:spell_check_flag = 1
 set spell spelllang=en_us
-function! g:spellcheck_toggle()
+function! g:Spellcheck_toggle()
 	if s:spell_check_flag
 		let s:spell_check_flag = 0
 		set nospell
@@ -190,7 +190,7 @@ function! g:spellcheck_toggle()
 		echomsg string('spell on')
 	endif
 endfunction
-nnoremap <F12> :call g:spellcheck_toggle()<CR>
+nnoremap <F12> :call g:Spellcheck_toggle()<CR>
 
 "===== Plugins =====
 "=== 共通 ===
@@ -360,7 +360,7 @@ let g:lightline = {
 let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
 " Syntastic Check Toggle
 let s:syntastic_check_flag = 1
-function! g:syntastic_toggle()
+function! g:Syntastic_toggle()
 	if s:syntastic_check_flag
 		let s:syntastic_check_flag = 0
 		echomsg string('syntastic on')
@@ -378,7 +378,7 @@ function! s:syntastic_check()
 	call lightline#update()
 endfunction
 autocmd BufWritePost * call s:syntastic_check()
-nnoremap <F11> :call g:syntastic_toggle()<CR>
+nnoremap <F11> :call g:Syntastic_toggle()<CR>
 "####### Plugin : syntastic #######
 " let g:syntastic_auto_jump = 1
 " let g:syntastic_javascript_checkers = ['jshint']
