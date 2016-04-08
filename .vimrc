@@ -52,7 +52,7 @@ autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
 " === Tab Indent Toggle ===
 let s:tab4_flag = 1
-function! g:tab4_toggle()
+function! g:Tab4_toggle()
 	if s:tab4_flag
 		let s:tab4_flag = 0
 		set tabstop=2 | set shiftwidth=2
@@ -70,12 +70,12 @@ function! g:echo_pre_tab4()
 		echomsg string('tab 4')
 	endif
 endfunction
-nnoremap <F8> :call g:tab4_toggle()<CR>
+nnoremap <F8> :call g:Tab4_toggle()<CR>
 			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
 			\ :call g:echo_pre_tab4()<CR>
 " === Soft/Hard tab toggle ===
 let s:tabhard_flag = 1
-function! g:tabhard_toggle()
+function! g:Tabhard_toggle()
 	if s:tabhard_flag
 		let s:tabhard_flag = 0
 		set expandtab
@@ -91,7 +91,7 @@ function! g:echo_pre_tabhard()
 		echomsg string('tab hard')
 	endif
 endfunction
-nnoremap <F7> :call g:tabhard_toggle()<CR>
+nnoremap <F7> :call g:Tabhard_toggle()<CR>
 			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
 			\ :call g:echo_pre_tabhard()<CR>
 " 			\ :retab!
