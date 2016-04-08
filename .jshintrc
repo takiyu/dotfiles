@@ -1,0 +1,10 @@
+{
+    "indent": 2,
+    "latedef": true,
+    "newcap": true,
+    "trailing": true,
+    "maxdepth": 5,
+    "jquery": true,
+    "node": true,
+    "esversion": 6
+}
