@@ -23,5 +23,11 @@ Fonts
     yaourt -S ttf-ricty
 
 Desktop
-    pacman -S xorg xfce4 gnome xmonad xmonad-contrib
-    pacman -S fcitx fcitx-mozc
+    pacman -S xorg xfce4 xmonad xmonad-contrib
+    pacman -S fcitx fcitx-mozc fcitx-configtool
+    pacman -S fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
+    pacman -S xfce4-notifyd xscreensaver
+    pacman -S networkmanager network-manager-applet gnome-keyring
+    pacman -S libcanberra libcanberra-pulse
+    pacman -S gvfs gvfs-smb sshfs
+    pacman -S zathura
