@@ -1,0 +1,27 @@
+Boot Arch CD and download AUI script.
+    wget https://github.com/helmuthdu/aui/tarball/master -O aui.tar && \
+    tar xzf aui.tar
+Run `./fifo` and reboot
+    https://wiki.archlinuxjp.org/index.php/%E3%83%93%E3%82%AE%E3%83%8A%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%A4%E3%83%89
+    Installing grub2 was failed, so use systemd
+Login as root and run ./lilo
+
+Yaourt.
+    Edit `/etc/pacman.conf` and append following.
+    ```
+        [archlinuxfr]
+        SigLevel = Never
+        Server = http://repo.archlinux.fr/$arch
+    ```
+    and `pacman --sync --refresh yaourt`
+
+My environment
+    `git clone https://github.com/takiyu/dotfiles` and run scripts.
+
+Fonts
+    pacman -S ttf-dejavu
+    yaourt -S ttf-ricty
+
+Desktop
+    pacman -S xorg xfce4 gnome xmonad xmonad-contrib
+    pacman -S fcitx fcitx-mozc

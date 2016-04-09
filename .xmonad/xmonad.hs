@@ -2,7 +2,7 @@ import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.ShowText
 import XMonad.Actions.WindowGo
-import XMonad.Config.Gnome
+import XMonad.Config.Kde
 import XMonad.Config.Desktop (desktopLayoutModifiers)
 import XMonad.Util.Loggers (logCurrent)
 import XMonad.Util.Run
@@ -34,8 +34,8 @@ import qualified Data.Map        as M
 
 
 -- my apps
-myFiler = "nemo"
-myTerminal = "gnome-terminal"
+myFiler = "thunar"
+myTerminal = "xfce4-terminal"
 myXmodmap = "xmodmap ~/.Xmodmap"
 -- mod mask key
 modm = mod3Mask   	 
@@ -55,7 +55,7 @@ myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myFloat)
 
 -- manageHook
-myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
+myManageHook = manageDocks <+> manageHook kdeConfig <+> composeOne [
 				isFullscreen -?> doFullFloat,
 				isDialog -?> doFloat
 			 ] <+> composeAll [
@@ -63,19 +63,19 @@ myManageHook = manageDocks <+> manageHook gnomeConfig <+> composeOne [
 			 ]
 
 -- handleEventHook
-myHandleEventHook = handleEventHook gnomeConfig
+myHandleEventHook = handleEventHook kdeConfig
 					<+> handleTimerEvent -- Update Screen to Clear flashtext
 					<+> fullscreenEventHook
 
 main :: IO ()
 main = do
 	xmproc <- spawnPipe "xmobar"
-	xmonad $ gnomeConfig {
+	xmonad $ kdeConfig {
 		layoutHook = desktopLayoutModifiers( myLayout ),
 		manageHook = myManageHook ,
 		handleEventHook = myHandleEventHook ,
 		-- Send to xmobar
-		logHook = logHook gnomeConfig 
+		logHook = logHook kdeConfig 
 				<+> (dynamicLogWithPP $ xmobarPP
 					{ ppOutput = hPutStrLn xmproc
 					, ppTitle = xmobarColor "green" "" . shorten 50 })
@@ -153,7 +153,7 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			-- run application
 			, ((modm.|.shiftMask,      xK_Return), spawn $ XMonad.terminal conf)
 			, ((modm,                  xK_r  ), shellPrompt  shellPromptConfig)
-			, ((modm,                  xK_q  ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
+			, ((modm,                  xK_q  ), spawn "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-panel -r")
 			, ((modm,                  xK_e  ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm,                  xK_o  ), unsafeSpawn myTerminal)
 			, ((mod1Mask,              xK_o  ), unsafeSpawn myXmodmap)
