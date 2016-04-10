@@ -30,4 +30,19 @@ Desktop
     pacman -S networkmanager network-manager-applet gnome-keyring
     pacman -S libcanberra libcanberra-pulse
     pacman -S gvfs gvfs-smb sshfs
+
+Others
     pacman -S zathura
+    pacman -S pkgfile
+    pacman -S net-tools
+    pacman -S smplayer mcomix
+
+Disable Histry
+    `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
+    configure smplayer and mcomix setting
+
+Development
+    pacman -S opencv
+    yaourt -S openni2-libfreenect libfeenect2
+    yaourt -S pcl
+    yaourt -S intel-opencl-runtime

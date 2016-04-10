@@ -167,8 +167,7 @@ imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
 			\ (neocomplete#close_popup() ? "\<CR>" :"\<C-CR>")
 " Tabで選択
 imap <expr><TAB> pumvisible() ?
-			\ (neocomplete#complete_common_string() != '' ? neocomplete#complete_common_string() :"\<C-n>" ) :
-			\ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
+			\ "\<C-n>" : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "補完のShift-Tab
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
@@ -206,6 +205,7 @@ NeoBundle 'vimtaku/hl_matchit.vim'	        " 括弧+αをハイライト
 NeoBundle 'ujihisa/neco-look'			    " 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'	    " ヤンク
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
+NeoBundle 'Konfekt/FastFold'
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -448,8 +448,8 @@ let g:yankring_history_dir = $HOME.'/.vim'
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 "####### Plugin : marching #######
-let g:marching_clang_command = "clang-3.6"
-" let g:marching_clang_command = "clang"
+" let g:marching_clang_command = "clang-3.6"
+let g:marching_clang_command = "clang"
 let g:marching_enable_neocomplete = 1
 " set updatetime=200
 set updatetime=10
