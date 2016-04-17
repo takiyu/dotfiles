@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# .vimディレクトリを作成
-mkdir .vim
+# create .vim dir
+if [ ! -e $PWD/.vim ]; then
+    mkdir $PWD/.vim
+fi
 
-# 元からある.vim,.vimrcを移動
-mv $HOME/.vim $HOME/_vim
-mv $HOME/.vimrc $HOME/_vimrc
+# move old files
+[ -e $HOME/.vim ] &&  mv $HOME/.vim $HOME/_.vim
+[ -e $HOME/.vimrc ] &&  mv $HOME/.vimrc $HOME/_.vimrc
 
-# シンボリックリンクを貼る
-echo ">シンボリックリンクを作成:.vim"
+# create links
+echo "ln -s $PWD/.vim $HOME"
 ln -s $PWD/.vim $HOME
-echo ">シンボリックリンクを作成:.vimrc"
+echo "ln -s $PWD/.vimrc $HOME"
 ln -s $PWD/.vimrc $HOME
 
-# 成功したらneobundleの導入
-echo ">NeoBundleをインストール"
+# NeoBundle
+echo "Install NeoBundle"
 git clone https://github.com/Shougo/neobundle.vim $PWD/.vim/bundle/neobundle.vim
 
-# プラグインインストールして終了(起動時に聞かれるのでyを入力)
-echo ">vimを起動:pluginをinstallでyを入力"
-vim -c :q
+echo "Please run vim and install plugins."
