@@ -47,6 +47,7 @@ VPN
     sudo systemctl start NetworkManager.service
 
 Others
+    pacman -S linux-headers
     pacman -S zathura zathura-pdf-poppler poppler-data
     pacman -S pkgfile
     pacman -S net-tools
@@ -70,3 +71,6 @@ Development
     yaourt -S intel-opencl-runtime
 
     pacman -S paraview
+
+Fix screen blinking bug for Dell XPS13
+    edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
