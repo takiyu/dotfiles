@@ -6,7 +6,7 @@ Run `./fifo` and reboot
     Installing grub2 was failed, so use systemd
 Login as root and run ./lilo
 
-Yaourt.
+Yaourt
     Edit `/etc/pacman.conf` and append following.
     ```
         [archlinuxfr]
@@ -32,6 +32,20 @@ Desktop
     pacman -S libcanberra libcanberra-pulse
     pacman -S gvfs gvfs-smb sshfs
 
+Stop samba daemon
+    sudo systemctl disable smbd
+    etc...
+
+VPN
+    pacman -S openvpn networkmanager-openvpn
+    yaourt private-internet-access-vpn
+
+    edit `/etc/private-internet-access/login.conf`
+
+    sudo pia -a
+    sudo systemctl stop NetworkManager.service
+    sudo systemctl start NetworkManager.service
+
 Others
     pacman -S zathura
     pacman -S pkgfile
@@ -49,8 +63,10 @@ Disable Histry
 
 Development
     pacman -S texlive-core texlive-langjapanese texlive-latexextra
-    pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra 
+    pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
     pacman -S opencv
     yaourt -S openni2-libfreenect libfeenect2
     yaourt -S pcl
     yaourt -S intel-opencl-runtime
+
+    pacman -S paraview
