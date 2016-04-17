@@ -47,7 +47,7 @@ VPN
     sudo systemctl start NetworkManager.service
 
 Others
-    pacman -S zathura
+    pacman -S zathura zathura-pdf-poppler poppler-data
     pacman -S pkgfile
     pacman -S net-tools
     pacman -S smplayer mcomix
