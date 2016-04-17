@@ -1,2 +1,10 @@
-**個人的環境導入リポジトリ**
-各種shellscriptを実行すると、ホームディレクトリにシンボリックリンクが貼られて環境が導入さる。
+##takiyu dotfiles##
+
+```
+./init-all.sh
+```
+or
+```
+./init-dotfiles.sh
+./init-vim.sh
+```
