@@ -30,7 +30,7 @@ Desktop
     pacman -S xscreensaver-arch-logo 
     pacman -S networkmanager network-manager-applet gnome-keyring
     pacman -S libcanberra libcanberra-pulse
-    pacman -S gvfs gvfs-smb sshfs
+    pacman -S gvfs gvfs-smb sshfs gvfs-mtp mtpfs
 
 Stop samba daemon
     sudo systemctl disable smbd
@@ -57,6 +57,7 @@ Others
     yaourt -S nkf lv
     pacman -S slack-desktop
     pacman -S goldendict
+    pacman -S recordmydesktop
 
 Disable Histry
     `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
