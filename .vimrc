@@ -280,6 +280,11 @@ NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmd�
 NeoBundleLazy 'luochen1990/rainbow', {
 			\ 'autoload':{ 'filetypes':[ 'lisp' ]}
 			\ }
+"=== Json ===
+NeoBundleLazy 'elzr/vim-json', {
+			\ 'autoload':{ 'filetypes':[ 'json' ]}
+			\ }
+let g:vim_json_syntax_conceal = 0
 
 NeoBundleCheck
 call neobundle#end() "call function() はこれ以降でないと無効
