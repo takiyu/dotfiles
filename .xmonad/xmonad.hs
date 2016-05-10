@@ -37,10 +37,13 @@ import qualified Data.Map        as M
 myFiler = "thunar"
 myTerminal = "xfce4-terminal"
 myXmodmap = "xmodmap ~/.Xmodmap"
+myDispCommand = "rot-xrandr.sh"
 -- mod mask key
 modm = mod3Mask   	 
 -- workspaces
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
+-- kill command
+killCommand = "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-panel -r"
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
@@ -140,6 +143,7 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm,                  xK_w  ), nextScreen)
 			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
 -- 			, ((modm,                  xK_w  ), prevScreen)
+			, ((modm,                  xK_s  ), swapNextScreen)
 
 			-- shrink, expand
 			, ((modm,                  xK_9  ), sendMessage Shrink)
@@ -153,10 +157,12 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			-- run application
 			, ((modm.|.shiftMask,      xK_Return), spawn $ XMonad.terminal conf)
 			, ((modm,                  xK_r  ), shellPrompt  shellPromptConfig)
-			, ((modm,                  xK_q  ), spawn "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-panel -r")
+			, ((modm,                  xK_q  ), spawn killCommand)
 			, ((modm,                  xK_e  ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm,                  xK_o  ), unsafeSpawn myTerminal)
 			, ((mod1Mask,              xK_o  ), unsafeSpawn myXmodmap)
+			, ((modm.|.shiftMask,      xK_r  ), unsafeSpawn myDispCommand)
+			, ((mod1Mask.|.shiftMask, xK_r  ), unsafeSpawn myDispCommand)
 			]
 -- 			++
 -- 			[((m .|. modm, k), windows $ f i)
