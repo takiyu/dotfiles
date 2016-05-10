@@ -5,6 +5,14 @@
 # $HOME/bin
 export PATH=$HOME/bin:$PATH
 
+# Lib
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+# Java
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+
 # Microchip
 # export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
 # export PATH="$PATH:"/opt/microchip/xc32/v1.40/bin""
