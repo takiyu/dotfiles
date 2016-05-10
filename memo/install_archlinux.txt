@@ -21,6 +21,7 @@ My environment
 Fonts
     pacman -S ttf-dejavu
     yaourt -S ttf-ricty
+    (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
 
 Desktop
     pacman -S xorg xfce4 xmonad xmonad-contrib
@@ -64,6 +65,14 @@ Disable Histry
     configure smplayer and mcomix setting
 
 Development
+    pacman -S jdk8-openjdk
+
+    pacman -S python python-pip python2 python2-pip
+    pacman -S nodejs npm
+
+    sudo pip install pyflakes pep8
+    sudo npm install jsxhint
+
     pacman -S texlive-core texlive-langjapanese texlive-latexextra
     pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
     pacman -S opencv
@@ -72,6 +81,9 @@ Development
     yaourt -S intel-opencl-runtime
 
     pacman -S paraview
+
+    pacman -S premake4
+    yaourt -S premake-git
 
 Fix screen blinking bug for Dell XPS13
     edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
