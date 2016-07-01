@@ -48,6 +48,7 @@ VPN
     sudo systemctl start NetworkManager.service
 
 Others
+    pacman -S alsa-firmware pavucontrol
     pacman -S linux-headers
     pacman -S zathura zathura-pdf-poppler poppler-data
     pacman -S pkgfile
@@ -56,9 +57,12 @@ Others
     pacman -S gnome-calculator
     pacman -S w3m
     yaourt -S nkf lv
+    pacman -S phantomjs
     pacman -S slack-desktop
     pacman -S goldendict
     pacman -S recordmydesktop
+
+    pacman -S sane xsane simple-scan
 
 Disable Histry
     `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
