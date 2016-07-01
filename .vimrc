@@ -101,7 +101,7 @@ if has('win32') || has('win64')
 else
     " Windows以外
 " 	set guifont=DejaVu\ Sans\ Mono\ 8.7
-	set guifont=DejaVu\ Sans\ Mono\ 10
+	set guifont=DejaVu\ Sans\ Mono\ 9.8
 " 	set guifont=DejaVu\ Sans\ Mono\ 13
 	" set lsp=4 " gvimでの行間
 endif
