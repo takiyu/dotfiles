@@ -66,7 +66,12 @@ alias sl=ls
 alias v=gvim
 
 function zathura() { command zathura $1 & > /dev/null; }
+function thunar() { command thunar $1 & > /dev/null; }
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Synaptics
+synclient VertScrollDelta=-30 HorizScrollDelta=-30
+synclient MaxSpeed=3.0 AccelFactor=0.18
