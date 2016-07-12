@@ -24,6 +24,7 @@ set guioptions-=m				" メニューバーを非表示
 set guioptions-=T				" ツールバーを非表示
 " set guioptions-=e				" TabのGUI表示をOFF
 set colorcolumn=80				" 80文字のライン
+set wildmenu                    " コマンドモードの補完方法
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
@@ -386,6 +387,7 @@ endfunction
 autocmd BufWritePost * call s:syntastic_check()
 nnoremap <F11> :call g:Syntastic_toggle()<CR>
 "####### Plugin : syntastic #######
+let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
 " let g:syntastic_auto_jump = 1
 " let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_javascript_checkers = ['jsxhint']
@@ -534,7 +536,7 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 " omni補完 input_pattern
 if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
+    let g:neocomplete#sources#omni#input_patterns = {}
 endif
 let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
@@ -548,7 +550,7 @@ let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 
 " omni補完 force_input_pattern
 if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
+    let g:neocomplete#force_omni_input_patterns = {}
 endif
 let g:neocomplete#force_overwrite_completefunc = 1
 let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
@@ -563,10 +565,10 @@ let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*f
 " autocmd FileType java let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
 
 "####### Plugin : neosnippet #######
-"標準のsnippetを消したら、初めて挿入モードになった時にエラー(直ぐ消える)
+let g:neosnippet#disable_runtime_snippets = {'_' : 1 }
 " For snippet_complete marker
 if has('conceal')
-set conceallevel=2 concealcursor=niv
+    set conceallevel=2 concealcursor=niv
 endif
 " スニペットファイルの保存ディレクトリのパスを登録
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
