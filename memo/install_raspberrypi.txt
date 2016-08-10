@@ -1,0 +1,33 @@
+# Install Raspbian OS to SD card
+sudo dd bs=4M if=2016-05-27-raspbian-jessie-lite.img of=/dev/mmcblk0
+# Run raspberry pi
+
+# Move root partition to SSD
+sudo mkfs.ext4 /dev/sda1
+sudo dd if=/dev/mmcblk0p2 of=/dev/sda1
+sudo e2fsck -f /dev/sda1
+sudo resize2fs /dev/sda1
+sudo reboot
+
+# Change root partition settings to boot
+sudo cp /boot/cmdline.txt /boot/cmdline.txt_
+sudo vi /boot/cmdline.txt  # root=/dev/mmcblk0p2 -> root=/dev/sda1
+sudo cp /etc/fstab /etc/fstab_
+sudo vi /mnt/etc/fstab  # /dev/mmcblk0p2 -> /dev/sda1
+
+# Backup boot partition and MBR
+sudo umount /boot
+mkdir /home/pi/backup
+sudo dd if=/dev/mmcblk0p1 of=/home/pi/backup/boot.img bs=64
+sudo dd if=/dev/mmcblk0 of=/home/pi/backup/mbr.img bs=512 count=1
+
+# Restore boot partition and MBR
+sudo dd if=/home/pi/mbr.img of=/dev/mmcblk0
+sudo dd if=/home/pi/boot.img of=/dev/mmcblk0p1
+
+
+# Set static IP `x` (/etc/dhcpcd.conf)
+interface eth0
+static ip_address=192.168.1.x/24
+static routers=192.168.1.1
+static domain_name_servers=192.168.1.1
