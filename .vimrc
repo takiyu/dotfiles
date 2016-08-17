@@ -137,6 +137,8 @@ nnoremap <F2> gT
 inoremap <F2> <Esc>gT
 nnoremap 3 gt
 nnoremap 2 gT
+nnoremap " :tabm -1 <CR>
+nnoremap # :tabm +1 <CR>
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
