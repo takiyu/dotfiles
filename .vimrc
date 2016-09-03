@@ -14,7 +14,7 @@ set scrolloff=3					" スクロールを開始する行数
 set cindent						" cオートインデント
 set cinoptions=g0				" cppでのpublic宣言を下げる
 " set showtabline=2				" タブ(上部)を常に表示する
-set mouse=a						" マウス
+" set mouse=a					" マウス
 " set ttymouse=xterm2
 set number						" 行数を表示する
 " set hlsearch					" 検索文字列を強調
