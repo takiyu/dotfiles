@@ -31,3 +31,32 @@ interface eth0
 static ip_address=192.168.1.x/24
 static routers=192.168.1.1
 static domain_name_servers=192.168.1.1
+
+
+# Install latest nodejs to /usr/local
+sudo apt-get install nodejs npm
+sudo npm cache clean
+sudo npm install n -g
+sudo n stable
+sudo apt-get purge nodejs npm
+# NodeJS environment
+sudo npm install tern -g
+
+# Python
+sudo apt-get install python3 python-pip python3-pip libpython-dev
+
+# OpenCV
+sudo apt-get install libopencv-dev
+sudo apt-get install python-opencv
+
+
+sudo apt-get install mongodb
+
+# tbb
+wget https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb44_20160526oss_src_0.tgz
+tar xf tbb44_20160526oss_src_0.tgz 
+cd tbb44_20160526oss/build
+CXXFLAGS="-DTBB_USE_GCC_BUILTINS=1 -D__TBB_64BIT_ATOMICS=0" make
+sudo cp ../include/tbb /usr/local/include/ -r
+sudo cp ./linux_armv7_gcc_cc4.9.2_libc2.19_kernel4.4.13_release/*.so /usr/local/lib/
+sudo cp ./linux_armv7_gcc_cc4.9.2_libc2.19_kernel4.4.13_release/*.so.2 /usr/local/lib/
