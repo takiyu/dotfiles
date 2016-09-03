@@ -269,9 +269,11 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 " 			\'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi pep8 pyflakes
+			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi pep8 pyflakes autopep8
 " NeoBundleLazy 'tmhedberg/SimpylFold', {
 " 			\ 'autoload':{ 'filetypes':[ 'python' ]} }
+NeoBundleLazy 'tell-k/vim-autopep8', {
+      \ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
@@ -438,7 +440,7 @@ let g:quickhl_manual_colors = [
 nmap m <Plug>(quickhl-manual-this)
 vmap m <Plug>(quickhl-manual-this)
 " 表示トグル
-nmap <F9> <Plug>(quickhl-manual-toggle)
+nmap <F6> <Plug>(quickhl-manual-toggle)
 " ハイライトを削除
 nmap M <Plug>(quickhl-manual-reset)
 vmap M <Plug>(quickhl-manual-reset)
@@ -485,6 +487,10 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#show_call_signatures = 2
 " non-auto close preview window
 let g:jedi#auto_close_doc = 0
+
+"####### Plugin : autopep8 (Python) #######
+autocmd FileType python map <buffer> <F9> :call Autopep8()<CR>
+" let g:autopep8_disable_show_diff=1
 
 "####### Plugin : term_for_vim (JavaScript) #######
 " let g:tern_show_argument_hints = 'on_move'
