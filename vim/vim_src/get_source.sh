@@ -1,1 +1,1 @@
-hg clone https://vim.googlecode.com/hg/ vim
+git clone https://github.com/vim/vim.git
