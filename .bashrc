@@ -76,10 +76,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 synclient VertScrollDelta=-30 HorizScrollDelta=-30
 synclient MaxSpeed=3.0 AccelFactor=0.18
 
-# Cuda
-# export PATH=/usr/local/cuda-7.5/bin:$PATH
-# export LD_LIBRARY_PATH=/usr/local/cuda-7.5/lib64:$LD_LIBRARY_PATH
-
 # Caffe 
 # export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
