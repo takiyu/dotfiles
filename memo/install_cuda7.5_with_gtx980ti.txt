@@ -1,4 +1,4 @@
-#CUDA7.0導入メモ
+#CUDA7.5導入メモ
 #OS:Ubuntu minimal 14.04
 #GPU:GTX980Ti
 
@@ -10,32 +10,9 @@ sudo apt-get install gnome
 #980Ti対応ドライバのインストール
 sudo apt-get install software-properties-common
 
-# sudo add-apt-repository ppa:mamarley/nvidia
-# sudo apt-get update
-# sudo apt-get install nvidia-352 nvidia-352-dev nvidia-352-uvm nvidia-settings
-
-sudo apt-get install linux-image-4.2.0-27-generic linux-headers-4.2.0-27 linux-headers-4.2.0-27-generic linux-image-extra-4.2.0-27-generic
-sudo apt-get install software-properties-common
-sudo apt-get update
-sudo apt-get install nvidia-361 nvidia-361-dev nvidia-settings
-
-#CUDA7.0のインストール
-# wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/cuda-repo-ubuntu1404_7.0-28_amd64.deb
-# sudo dpkg -i cuda-repo-ubuntu1404_7.0-28_amd64.deb
-#sudo apt-get update
-#sudo apt-get install cuda-command-line-tools-7-0 cuda-core-7-0 cuda-cublas-7-0 cuda-cublas-dev-7-0 cuda-cudart-7-0 cuda-cudart-dev-7-0 cuda-cufft-7-0 cuda-cufft-dev-7-0 cuda-curand-7-0 cuda-curand-dev-7-0 cuda-cusolver-7-0 cuda-cusolver-dev-7-0 cuda-cusparse-7-0 cuda-cusparse-dev-7-0 cuda-documentation-7-0 cuda-driver-dev-7-0 cuda-license-7-0 cuda-misc-headers-7-0 cuda-npp-7-0 cuda-npp-dev-7-0 cuda-nvrtc-7-0 cuda-nvrtc-dev-7-0 cuda-samples-7-0 cuda-toolkit-7-0 cuda-visual-tools-7-0 freeglut3 freeglut3-dev nvidia-modprobe
-
-wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda-repo-ubuntu1404-7-5-local_7.5-18_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu1404-7-5-local_7.5-18_amd64.deb
-sudo apt-get update
-sudo apt-get install cuda-samples-7-5
-
-#.bashrcに追加
-# export PATH=/usr/local/cuda-7.0/bin:$PATH
-# export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
-
-export PATH=/usr/local/cuda-7.5/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-7.5/lib64:$LD_LIBRARY_PATH
+# Ubuntu 16.04からは標準で入るようになった
+sudo apt install linux-generic
+sudo apt install nvidia-cuda-toolkit nvidia-361
 
 # 再起動
 
