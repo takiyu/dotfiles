@@ -47,6 +47,8 @@ VPN
     sudo systemctl stop NetworkManager.service
     sudo systemctl start NetworkManager.service
 
+    sudo pacman -S resolvconf
+
 Others
     pacman -S alsa-firmware pavucontrol
     pacman -S linux-headers
@@ -100,4 +102,11 @@ Fix "ALSA lib pcm.c:7843:(snd_pcm_recover) underrun occurred"
     ```
 
 Fix broadcom driver
-    yaourt -S b43-firmware
+    Install b43 driver
+        yaourt -S b43-firmware
+    Disable default drivers
+        sudo gvim /etc/modprobe.d/nobeep.conf
+        ```
+            blacklist brcmfmac
+            blacklist brcmsmac
+        ```
