@@ -27,6 +27,7 @@ Config {
 	--		, Run Network "tun0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
 			, Run Network "enp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
 			, Run Network "wlp58s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
+			, Run Network "wlp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
 			, Run BatteryP ["BAT0"]	["-t", "<acstatus> (<left>%)"
 							, "-L", "10", "-H", "80", "-p", "3"
 							, "-l", "red", "-h", "green"
@@ -39,5 +40,5 @@ Config {
 		, sepChar = "%"
 		, alignSep = "}{"
 	--	, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp0s31f6%/%tun0%"
-		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp0s20f0u1%/%wlp58s0%  <fc=#ffffff>||</fc>  %battery%"
+		, template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp0s20f0u1%/%wlp58s0%/%wlp0s20f0u1%  <fc=#ffffff>||</fc>  %battery%"
 }
