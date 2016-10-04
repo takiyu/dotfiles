@@ -63,6 +63,7 @@ Others
     pacman -S slack-desktop
     pacman -S goldendict
     pacman -S recordmydesktop
+    yaourt -S chromium chromium-widevine
 
     pacman -S sane xsane simple-scan
 
