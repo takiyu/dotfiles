@@ -27,7 +27,7 @@ Config {
 	--		, Run Network "tun0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
 			, Run Network "enp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
 			, Run Network "wlp58s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
-			, Run Network "wlp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
+			, Run Network "wlp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
 			, Run BatteryP ["BAT0"]	["-t", "<acstatus> (<left>%)"
 							, "-L", "10", "-H", "80", "-p", "3"
 							, "-l", "red", "-h", "green"
