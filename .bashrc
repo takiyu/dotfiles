@@ -65,8 +65,6 @@ alias l='ls -CF'
 alias sl=ls
 alias v=gvim
 
-export LANG='ja_JP.UTF-8'
-
 function zathura() { command zathura $1 & > /dev/null; }
 function thunar() { command thunar $1 & > /dev/null; }
 
