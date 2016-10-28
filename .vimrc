@@ -463,8 +463,8 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 " let g:marching_clang_command = "clang-3.6"
 let g:marching_clang_command = "clang"
 let g:marching_enable_neocomplete = 1
-" set updatetime=200
-set updatetime=10
+set updatetime=200
+" set updatetime=10
 " let g:marching_backend = "sync_clang_command" "同期処理の場合
 let g:marching_include_paths = filter(
 	\	split(glob('/usr/include/c++/*'), '\n') +
