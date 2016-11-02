@@ -113,3 +113,16 @@ Fix broadcom driver
             blacklist brcmfmac
             blacklist brcmsmac
         ```
+
+Tex allowed command
+    open `/usr/share/texmf-dist/web2c/texmf.cnf` and add `extract.bb` to
+    `/usr/share/texmf-dist/web2c`.
+        ```
+        shell_escape_commands = \
+        bibtex,bibtex8,\
+        kpsewhich,\
+        makeindex,\
+        mpost,\
+        repstopdf,\
+        extractbb,\  % Add this line
+        ```
