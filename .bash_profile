@@ -2,6 +2,8 @@
 # ~/.bash_profile
 #
 
+# $HOME/dotfiles/bin
+export PATH=$HOME/dotfiles/bin:$PATH
 # $HOME/bin
 export PATH=$HOME/bin:$PATH
 

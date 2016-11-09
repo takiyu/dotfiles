@@ -1,0 +1,9 @@
+#!/bin/bash
+#from http://d.hatena.ne.jp/aki-yam/20080629/1214757485
+KEY=`echo $@ | nkf -w -w80`
+URI="http://eow.alc.co.jp/$KEY/UTF-8/"
+RS=`echo '▼ 検索結果本体 ▼' | nkf -w -w80`
+RE=`echo '▲ 検索結果本体 ▲' | nkf -w -w80`
+wget -q --referer='http://eow.alc.co.jp/' \
+     -U 'Mozilla/5.0' -O - "$URI" | \
+sed -ne "/<!--\s*$RS\s*-->/,/<!--\s*$RE\s*-->/p" | w3m -dump -T 'text/html' | lv -c
