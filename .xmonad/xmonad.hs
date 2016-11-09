@@ -26,6 +26,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.StackTile
 import XMonad.Layout.ImageButtonDecoration
+import XMonad.Layout.Grid
 import Data.Maybe (fromMaybe)
 import XMonad.Hooks.ICCCMFocus -- for android studio
 
@@ -48,14 +49,14 @@ killCommand = "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-pa
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
 myStack = StackTile 2 (3/100) (5/6)
--- myGrid = named "Grid" $ GridRatio (4/3)
+myGrid = named "Grid" $ Mirror(GridRatio (9/16))
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
 		{ activeColor = "black"
 		, inactiveColor = "grey"
 		, fontName = "sans-serif" }
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myFloat)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myGrid|||myFloat)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook kdeConfig <+> composeOne [
