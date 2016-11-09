@@ -37,9 +37,9 @@ import qualified Data.Map        as M
 myFiler = "thunar"
 myTerminal = "xfce4-terminal"
 myXmodmap = "xmodmap ~/.Xmodmap"
-myDispCommand = "rot-xrandr.sh"
+myDisp = "rot-xrandr.sh"
 -- mod mask key
-modm = mod3Mask   	 
+modm = mod3Mask
 -- workspaces
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
 -- kill command
@@ -62,7 +62,7 @@ myManageHook = manageDocks <+> manageHook kdeConfig <+> composeOne [
 				isFullscreen -?> doFullFloat,
 				isDialog -?> doFloat
 			 ] <+> composeAll [
--- 				className =? "GoldenDict" --> doFullFloat
+--				className =? "GoldenDict" --> doFullFloat
 			 ]
 
 -- handleEventHook
@@ -121,8 +121,8 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			-- window alt-tab
 			, ((modm,                  xK_Tab), windows W.focusDown)
 			, ((modm.|.shiftMask,      xK_Tab), windows W.focusUp  )
--- 			, ((mod1Mask,              xK_Tab), windows W.focusDown)
--- 			, ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
+--			, ((mod1Mask,              xK_Tab), windows W.focusDown)
+--			, ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
 
 			-- layout toggle
 			, ((modm,                  xK_space), sendMessage NextLayout)
@@ -132,17 +132,17 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm.|.shiftMask,      xK_n  ), refresh)
 
 			-- workspaces
-   			, ((modm,                  xK_h  ), prevWS)
---    			, ((modm,                  xK_h  ), prevWS >> logCurrent >>= moveFlashText)
+			, ((modm,                  xK_h  ), prevWS)
+--			, ((modm,                  xK_h  ), prevWS >> logCurrent >>= moveFlashText)
 			, ((modm,                  xK_l  ), nextWS)
 			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev >> prevWS)
 			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS)
-   			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
-   			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
+			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
+			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
 			-- physical screen
 			, ((modm,                  xK_w  ), nextScreen)
 			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
--- 			, ((modm,                  xK_w  ), prevScreen)
+--			, ((modm,                  xK_w  ), prevScreen)
 			, ((modm,                  xK_s  ), swapNextScreen)
 
 			-- shrink, expand
@@ -161,21 +161,21 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm,                  xK_e  ), unsafeSpawn (myFiler ++ " ~"))
 			, ((modm,                  xK_o  ), unsafeSpawn myTerminal)
 			, ((mod1Mask,              xK_o  ), unsafeSpawn myXmodmap)
-			, ((modm.|.shiftMask,      xK_r  ), unsafeSpawn myDispCommand)
-			, ((mod1Mask.|.shiftMask, xK_r  ), unsafeSpawn myDispCommand)
+			, ((modm.|.shiftMask,      xK_r  ), unsafeSpawn myDisp)
+			, ((mod1Mask.|.shiftMask,  xK_r  ), unsafeSpawn myDisp)
 			]
--- 			++
--- 			[((m .|. modm, k), windows $ f i)
--- 				| (i, k) <- zip myWorkspaces [xK_1 .. xK_8]
--- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
--- 			++
--- 			[((m .|. modm, k), windows $ f i)
--- 				| (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_8]
--- 				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
--- 			++
--- 			[((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
--- 				| (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
--- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+--			++
+--			[((m .|. modm, k), windows $ f i)
+--				| (i, k) <- zip myWorkspaces [xK_1 .. xK_8]
+--				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+--			++
+--			[((m .|. modm, k), windows $ f i)
+--				| (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_8]
+--				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+--			++
+--			[((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+--				| (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+--				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 
@@ -195,13 +195,13 @@ shellPromptConfig = defaultXPConfig {
 		, fgHLight = "#FF0000"
 		, borderColor = "#000000"
 		, position = Top
-    }
+}
 
 -- flashtext settings
 -- moveFlashText m = flashText mySTConfig 1 (" " ++ fromMaybe "" m ++ " ")
 -- shiftRightFlashText m = flashText mySTConfig 1 ("->" ++ fromMaybe "" m ++ "")
 -- shiftLeftFlashText  m = flashText mySTConfig 1 ("" ++ fromMaybe "" m ++ "<-")
 -- mySTConfig = defaultSTConfig{ st_font = "xft:Droid Sans:pixelsize=40"
--- 							, st_bg   = "black"
--- 							, st_fg   = "green"
--- 							}
+--							, st_bg   = "black"
+--							, st_fg   = "green"
+--							}
