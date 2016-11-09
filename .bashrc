@@ -64,6 +64,7 @@ alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
 alias v=gvim
+alias lock='xscreensaver-command -lock'
 
 function zathura() { command zathura $1 & > /dev/null; }
 function thunar() { command thunar $1 & > /dev/null; }
