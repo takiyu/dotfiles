@@ -26,7 +26,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.StackTile
 import XMonad.Layout.ImageButtonDecoration
-import XMonad.Layout.Grid
+import XMonad.Layout.GridVariants
 import Data.Maybe (fromMaybe)
 import XMonad.Hooks.ICCCMFocus -- for android studio
 
@@ -49,7 +49,7 @@ killCommand = "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-pa
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
 myStack = StackTile 2 (3/100) (5/6)
-myGrid = named "Grid" $ Mirror(GridRatio (9/16))
+myGrid = SplitGrid XMonad.Layout.GridVariants.L 1 1 (4/5) (2/1) (3/100)
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
@@ -154,6 +154,12 @@ myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			-- layout num
 			, ((modm,                  xK_comma ), sendMessage (IncMasterN 1))
 			, ((modm,                  xK_period), sendMessage (IncMasterN (-1)))
+			-- split grid layout
+			, ((modm,                  xK_bracketleft), sendMessage $ IncMasterCols 1)
+			, ((modm,                  xK_bracketright), sendMessage $ IncMasterCols (-1))
+			, ((modm.|.shiftMask,      xK_bracketleft), sendMessage $ IncMasterRows 1)
+			, ((modm.|.shiftMask,      xK_bracketright), sendMessage $ IncMasterRows (-1))
+
 
 			-- run application
 			, ((modm.|.shiftMask,      xK_Return), spawn $ XMonad.terminal conf)
