@@ -26,6 +26,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.StackTile
 import XMonad.Layout.ImageButtonDecoration
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.GridVariants
 import Data.Maybe (fromMaybe)
 import XMonad.Hooks.ICCCMFocus -- for android studio
@@ -44,19 +45,20 @@ modm = mod3Mask
 -- workspaces
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
 -- kill command
-killCommand = "killall dzen2; xmonad --recompile && xmonad --restart && xfce4-panel -r"
+killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
-myStack = StackTile 2 (3/100) (5/6)
-myGrid = SplitGrid XMonad.Layout.GridVariants.L 1 1 (4/5) (2/1) (3/100)
+myStack = named "Stack" $ StackTile 2 (3/100) (5/6)
+myThree = named "Three" $ ThreeColMid 1 (3/100) (1/2)
+myGrid = named "Grid" $ SplitGrid XMonad.Layout.GridVariants.L 1 1 (4/5) (2/1) (3/100)
 myFloat = named "Float" $ floatingDeco $ borderResize $ withBorder 4
 		$ maximize $ simplestFloat
 	where floatingDeco = imageButtonDeco shrinkText defaultThemeWithImageButtons
 		{ activeColor = "black"
 		, inactiveColor = "grey"
 		, fontName = "sans-serif" }
-myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myGrid|||myFloat)
+myLayout = avoidStruts $ toggleLayouts (noBorders Full) (myTall|||myStack|||myThree|||myGrid|||myFloat)
 
 -- manageHook
 myManageHook = manageDocks <+> manageHook kdeConfig <+> composeOne [
