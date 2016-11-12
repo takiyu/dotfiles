@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# lua5.2 liblua5.2-dev
+# gpm libgpm-dev
+
 cd vim
 ./configure \
 --enable-multibyte \
