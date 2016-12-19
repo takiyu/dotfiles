@@ -508,8 +508,8 @@ let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_
 "####### Plugin : neocomplete #######
 let g:neocomplete#enable_at_startup = 1				" neocompleteを有効
 let g:neocomplete#enable_auto_select = 0			" 候補を自動選択しない
-let g:neocomplete#auto_completion_stairt_length = 2	" 補完が自動で開始される文字数
-" let g:neocomplete#skip_auto_completion_time = 0
+let g:neocomplete#auto_completion_stairt_length = 3	" 補完が自動で開始される文字数
+let g:neocomplete#skip_auto_completion_time = "0.5"
 let g:neocomplete#enable_ignore_case = 1			" 大文字小文字を無視
 let g:neocomplete#enable_smart_case = 1				" (ただし大文字入力時のみ考慮)
 let g:neocomplete#enable_underbar_completion = 0	" アンダーバー補完を有効
@@ -562,8 +562,8 @@ if !exists('g:neocomplete#force_omni_input_patterns')
     let g:neocomplete#force_omni_input_patterns = {}
 endif
 let g:neocomplete#force_overwrite_completefunc = 1
-let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+" let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
 let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
