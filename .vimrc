@@ -156,10 +156,10 @@ nnoremap <C-c> <C-w>z
 inoremap <C-c> <C-w>z
 " omni補完
 inoremap <C-o> <C-x><C-o>
-" " omni補完(marching) オムニ補完時に補完ワードを挿入しない
-" au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
-" " omni補完(marching) キャッシュを破棄、再取得
-" au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
+" omni補完(marching) オムニ補完時に補完ワードを挿入しない
+au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+" omni補完(marching) キャッシュを破棄、再取得
+au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " Enterで補完を決定、または次へジャンプ
 imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
 			\ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
@@ -229,11 +229,11 @@ NeoBundle 'tikhomirov/vim-glsl'
 "===C/C++ ===
 NeoBundleLazy 'vim-jp/cpp-vim', {
 			\ 'autoload':{ 'filetypes':[ 'cpp' ]} }
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
-" NeoBundleLazy 'osyo-manga/vim-marching', {
-" 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
-" 			\ 'depends' : ['Shougo/vimproc'] }
+" NeoBundleLazy 'Rip-Rip/clang_complete', {
+" 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
+NeoBundleLazy 'osyo-manga/vim-marching', {
+			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
+			\ 'depends' : ['Shougo/vimproc'] }
 "=== Unity C# ==
 " NeoBundleLazy 'nosami/Omnisharp', {
 " 			\   'autoload': {'filetypes': ['cs']},
@@ -461,24 +461,24 @@ let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 "####### Plugin : marching #######
 " let g:marching_clang_command = "clang-3.6"
-" let g:marching_clang_command = "clang"
-" let g:marching_enable_neocomplete = 1
-" set updatetime=200
-" " set updatetime=10
-" let g:marching_backend = "clang_command" "非同期
+let g:marching_clang_command = "clang"
+let g:marching_enable_neocomplete = 1
+set updatetime=200
+" set updatetime=10
+let g:marching_backend = "clang_command" "非同期
 " let g:marching_include_paths = filter(
 " 	\	split(glob('/usr/include/c++/*'), '\n') +
 " 	\	split(glob('/usr/include/*/c++/*'), '\n') +
 " 	\	split(glob('/usr/include/*/'), '\n'),
 " 	\	'isdirectory(v:val)')
 "####### Plugin : clang_complete #######
-" let g:clang_library_path = $HOME.'/dotfiles'
-" let g:clang_library_path = $HOME.'/local/lib'
-" let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
-" clang_complete では自動補完を行わない用に設定
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
-let g:clang_sort_patterns = 'none'
+" " let g:clang_library_path = $HOME.'/dotfiles'
+" " let g:clang_library_path = $HOME.'/local/lib'
+" " let g:clang_library_path = '/usr/lib/llvm-3.4/lib'
+" " clang_complete では自動補完を行わない用に設定
+" let g:clang_complete_auto = 0
+" let g:clang_auto_select = 0
+" let g:clang_sort_patterns = 'none'
 
 "####### Plugin : jedi.vim (Python) #######
 let g:jedi#popup_select_first = 0
