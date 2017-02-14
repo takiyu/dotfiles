@@ -338,7 +338,7 @@ autocmd BufWritePost *.tex :Latexmk
 let g:LatexBox_output_type = 'pdf'
 let g:LatexBox_latexmk_options = '-pdfdvi -recorder-'
 let g:LatexBox_viewer = 'xdg-open'
-let g:LatexBox_quickfix = 1
+let g:LatexBox_quickfix = 2  " cursor stays in the main window
 let g:LatexBox_autojump = 1
 let g:LatexBox_complete_inlineMath = 1
 let g:LatexBox_Folding = 1
