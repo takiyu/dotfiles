@@ -245,7 +245,7 @@ NeoBundleLazy 'osyo-manga/vim-marching', {
 " 			\ }
 "=== TeX ===
 NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box', {
-			\ 'autoload':{ 'filetypes':[ 'tex' ]}
+			\ 'autoload':{ 'filetypes':[ 'tex', 'plaintex' ]}
 			\ }
 "=== Verilog ===
 NeoBundleLazy 'vim-scripts/verilog.vim', {
@@ -328,6 +328,7 @@ let g:OmniSharp_host = "http://localhost:2000"
 let g:OmniSharp_typeLookupInPreview = 1
 
 "####### Plugin : latex-box #######
+let g:tex_flavor = 'latex'
 let g:tex_conceal=''
 " let g:tex_conceal='abgms'
 " let g:tex_conceal='adbmgs'
@@ -414,6 +415,7 @@ let g:clever_f_smart_case = 1
 " 日本語
 autocmd FileType text let g:clever_f_use_migemo = 1
 autocmd FileType tex let g:clever_f_use_migemo = 1
+autocmd FileType plaintex let g:clever_f_use_migemo = 1
 " 移動方向を修正
 let g:clever_f_fix_key_direction = 1
 " 記号の代用文字
@@ -642,3 +644,5 @@ autocmd InsertLeave *.txt call Fcitx2en()
 autocmd InsertEnter *.txt call Fcitx2zh()
 autocmd InsertLeave *.tex call Fcitx2en()
 autocmd InsertEnter *.tex call Fcitx2zh()
+autocmd InsertLeave *.plaintex call Fcitx2en()
+autocmd InsertEnter *.plaintex call Fcitx2zh()
