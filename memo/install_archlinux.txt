@@ -66,6 +66,7 @@ Others
     pacman -S goldendict
     pacman -S recordmydesktop
     yaourt -S chromium chromium-widevine
+    yaourt -S pepper-flash
 
     pacman -S sane xsane simple-scan
 
@@ -82,7 +83,7 @@ Development
     sudo pip install pyflakes pep8
     sudo npm install jsxhint
 
-    pacman -S texlive-core texlive-langjapanese texlive-latexextra
+    pacman -S texlive-core texlive-langjapanese texlive-latexextra texlive-most
     pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
     pacman -S opencv
     yaourt -S openni2-libfreenect libfeenect2
@@ -126,3 +127,13 @@ Tex allowed command
         repstopdf,\
         extractbb,\  % Add this line
         ```
+
+Intel driver
+    open `/etc/X11/xorg.conf.d/20-intel.conf` and write
+    ```
+        Section "Device"
+           Identifier  "Intel Graphics"
+           Driver      "intel"
+           Option      "TearFree"    "true"
+        EndSection
+    ```
