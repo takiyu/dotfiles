@@ -450,10 +450,10 @@ vmap M <Plug>(quickhl-manual-reset)
 
 "####### Plugin : caw.vim #######
 " コメントアウトのショートカット
-nmap \c <Plug>(caw:I:toggle)
-vmap \c <Plug>(caw:I:toggle)
-nmap \C <Plug>(caw:I:uncomment)
-vmap \C <Plug>(caw:I:uncomment)
+nmap \c <Plug>(caw:zeropos:toggle)
+vmap \c <Plug>(caw:zeropos:toggle)
+nmap \C <Plug>(caw:zeropos:uncomment)
+vmap \C <Plug>(caw:zeropos:uncomment)
 
 "####### Plugin : yankring.vim #######
 let g:yankring_history_dir = $HOME.'/.vim'
