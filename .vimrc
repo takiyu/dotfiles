@@ -50,51 +50,6 @@ autocmd FileType * set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
 autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
-" === Tab Indent Toggle ===
-let s:tab4_flag = 1
-function! g:Tab4_toggle()
-    if s:tab4_flag
-        let s:tab4_flag = 0
-        set tabstop=2 | set shiftwidth=2
-        echomsg string('tab 2')
-    else
-        let s:tab4_flag = 1
-        set tabstop=4 | set shiftwidth=4
-        echomsg string('tab 4')
-    endif
-endfunction
-function! g:Echo_pre_tab4()
-    if !s:tab4_flag
-        echomsg string('tab 2')
-    else
-        echomsg string('tab 4')
-    endif
-endfunction
-nnoremap <F8> :call g:Tab4_toggle()<CR>
-            \ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-            \ :call g:Echo_pre_tab4()<CR>
-" === Soft/Hard tab toggle ===
-let s:tabhard_flag = 1
-function! g:Tabhard_toggle()
-    if s:tabhard_flag
-        let s:tabhard_flag = 0
-        set expandtab
-    else
-        let s:tabhard_flag = 1
-        set noexpandtab
-    endif
-endfunction
-function! g:Echo_pre_tabhard()
-    if !s:tabhard_flag
-        echomsg string('tab soft')
-    else
-        echomsg string('tab hard')
-    endif
-endfunction
-nnoremap <F7> :call g:Tabhard_toggle()<CR>
-            \ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-            \ :call g:Echo_pre_tabhard()<CR>
-"           \ :retab!
 "=== Font Settings ===
 if has('win32') || has('win64')
     set guifont=MS_Gothic:h13 " Windows
@@ -178,36 +133,23 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup()."<Esc>" : "<Esc>"
 " 検索文字列のハイライトが有効なら解除
 " noremap <expr><Esc><Esc> v:hlsearch == 1 ? ":nohlsearch<CR>" : "<Esc>"
 
-"===== Spell =====
-let s:spell_check_flag = 1
-set spell spelllang=en_us
-function! g:Spellcheck_toggle()
-    if s:spell_check_flag
-        let s:spell_check_flag = 0
-        set nospell
-        echomsg string('spell off')
-    else
-        let s:spell_check_flag = 1
-        set spell spelllang=en_us
-        echomsg string('spell on')
-    endif
-endfunction
-nnoremap <F12> :call g:Spellcheck_toggle()<CR>
 
 "===== Plugins =====
 "=== 共通 ===
 NeoBundle 'takiyu/tango-lx'                 " カラースキーム
 NeoBundle 'tyru/caw.vim'                    " コメントアウト補助
 NeoBundle 'scrooloose/nerdtree'             " Filer
-NeoBundle 'scrooloose/syntastic'            " 文法チェック
 NeoBundle 'rhysd/clever-f.vim'              " Clever-f
 NeoBundle 'itchyny/lightline.vim'           " ステータスライン
 NeoBundle 't9md/vim-quickhl'                " ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
+NeoBundle 'scrooloose/syntastic'            " 文法チェック
 NeoBundle 'ujihisa/neco-look'               " 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク
+NeoBundle 'tpope/vim-sleuth'                " インデント自動検出
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
+NeoBundle 'tpope/vim-fugitive'              " Git補助
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -618,15 +560,6 @@ endfunction
 " guitablabelに上の関数を設定
 set guitablabel=%N:\ %{GuiTabLabel()}
 
-"===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
-function! EngDict()
-    sp +enew | put = system('engdict ' . @*)
-    set bufhidden=hide noswapfile noro nomodified
-    normal gg
-endfunction  
-vnoremap <silent> <c-d> :call EngDict()<CR>
-
-
 "==== Auto fcitx ====
 let g:input_toggle = 0
 function! Fcitx2en()
@@ -654,3 +587,29 @@ autocmd InsertLeave *.tex call Fcitx2en()
 autocmd InsertEnter *.tex call Fcitx2zh()
 autocmd InsertLeave *.plaintex call Fcitx2en()
 autocmd InsertEnter *.plaintex call Fcitx2zh()
+
+
+"===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
+function! EngDict()
+    sp +enew | put = system('engdict ' . @*)
+    set bufhidden=hide noswapfile noro nomodified
+    normal gg
+endfunction  
+vnoremap <silent> <c-d> :call EngDict()<CR>
+
+
+"===== Spell check toggle =====
+let s:spell_check_flag = 1
+set spell spelllang=en_us
+function! g:Spellcheck_toggle()
+    if s:spell_check_flag
+        let s:spell_check_flag = 0
+        set nospell
+        echomsg string('spell off')
+    else
+        let s:spell_check_flag = 1
+        set spell spelllang=en_us
+        echomsg string('spell on')
+    endif
+endfunction
+nnoremap <F12> :call g:Spellcheck_toggle()<CR>
