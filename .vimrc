@@ -1,5 +1,5 @@
 if has('vim_starting')
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 call neobundle#begin(expand('~/.vim/bundle/'))
@@ -31,7 +31,7 @@ autocmd FileType python set foldmethod=indent
 autocmd FileType glsl set foldmethod=indent
 autocmd FileType verilog set foldmethod=indent
 autocmd FileType text set foldmethod=indent
-" set nofoldenable "自動では折りたたまない
+set nofoldenable "自動では折りたたまない
 set foldlevel=0
 set foldcolumn=2
 " === PreviewWindow ===
@@ -207,21 +207,20 @@ NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
 NeoBundle 'ujihisa/neco-look'               " 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
-NeoBundle 'Konfekt/FastFold'
+NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'takiyu/my-vim-snippets'
 NeoBundle 'Shougo/vimproc', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make -f make_mac.mak',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
+            \ 'build' : {
+            \     'windows' : 'tools\\update-dll-mingw',
+            \     'cygwin' : 'make -f make_cygwin.mak',
+            \     'mac' : 'make -f make_mac.mak',
+            \     'linux' : 'make',
+            \     'unix' : 'gmake',
+            \    },
+            \ }
 
 "=== GLSL ===
 NeoBundle 'tikhomirov/vim-glsl'
@@ -257,9 +256,9 @@ NeoBundleLazy 'marijnh/tern_for_vim', {
 " NeoBundleLazy 'jelera/vim-javascript-syntax', {
 "              \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'pangloss/vim-javascript', {
-             \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+            \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
-             \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+            \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundleLazy 'othree/html5-syntax.vim', {
 "             \ 'autoload': { 'filetypes': ['html']} }
 " NeoBundle 'hallison/vim-markdown'
@@ -272,10 +271,10 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 " NeoBundleLazy 'tmhedberg/SimpylFold', {
 "             \ 'autoload':{ 'filetypes':[ 'python' ]} }
 NeoBundleLazy 'tell-k/vim-autopep8', {
-      \ 'autoload':{ 'filetypes':[ 'python' ]} }
+            \ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' " filetype認識のため、Lazyにするにはautocmdの必要あり
-                         " :GoInstallBinarys を実行
+" :GoInstallBinarys を実行
 " NeoBundleLazy 'fatih/vim-go', {
 "             \ 'autoload':{ 'filetypes':[ 'go' ]}
 "             \ }
@@ -348,26 +347,26 @@ let g:LatexBox_latexmk_async = 1
 "ステータスライン 
 "       \              [ 'fileencoding', 'filetype' ] ],
 let g:lightline = {
-      \ 'colorscheme': 'Tomorrow_Night_Bright',
-      \ 'active': {
-      \   'left': [ ['mode', 'paste'],
-      \     ['readonly', 'filename', 'modified'] ],
-      \   'right': [ [ 'lineinfo' ],
-      \              [ 'percent' ],
-      \              [ 'fileencoding', 'filetype', 'syntastic'] ]
-      \ },
-      \ 'component': {
-      \   'readonly': '%{&readonly?"R":"W"}',
-      \ },
-      \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag',
-      \ },
-      \ 'component_type': {
-      \   'syntastic': 'error',
-      \ },
-      \ 'separator': {'left': '', 'right': ''},
-      \ 'subseparator': {'left': '|', 'right': '|'},
-      \ }
+            \ 'colorscheme': 'Tomorrow_Night_Bright',
+            \ 'active': {
+            \   'left': [ ['mode', 'paste'],
+            \     ['readonly', 'filename', 'modified'] ],
+            \   'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ],
+            \              [ 'fileencoding', 'filetype', 'syntastic'] ]
+            \ },
+            \ 'component': {
+            \   'readonly': '%{&readonly?"R":"W"}',
+            \ },
+            \ 'component_expand': {
+            \   'syntastic': 'SyntasticStatuslineFlag',
+            \ },
+            \ 'component_type': {
+            \   'syntastic': 'error',
+            \ },
+            \ 'separator': {'left': '', 'right': ''},
+            \ 'subseparator': {'left': '|', 'right': '|'},
+            \ }
 " 保存時にsyntasticでチェックをしてから表示をアップデート
 let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
 " Syntastic Check Toggle
@@ -426,19 +425,19 @@ let g:quickhl_manual_hl_priority = 10 " プライオリティの設定
 " let g:quickhl_cword_enable_at_startup = 1 " カーソル下の単語を一時的にハイライト
 " 色指定(同時に個数も指定)
 let g:quickhl_manual_colors = [
-    \ "gui=bold ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA guifg=Black",
-    \ "gui=bold ctermbg=Green   ctermfg=Black guibg=#A4E57E guifg=Black",
-    \ "gui=bold ctermbg=Yellow  ctermfg=Black guibg=#FFDB72 guifg=Black",
-    \ "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
-    \ "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
-    \ "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
-    \ "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
-    \ "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
-    \ "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
-    \ "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
-    \ "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
-    \ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
-\ ]
+            \ "gui=bold ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA guifg=Black",
+            \ "gui=bold ctermbg=Green   ctermfg=Black guibg=#A4E57E guifg=Black",
+            \ "gui=bold ctermbg=Yellow  ctermfg=Black guibg=#FFDB72 guifg=Black",
+            \ "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
+            \ "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
+            \ "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
+            \ "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
+            \ "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
+            \ "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
+            \ "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
+            \ "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
+            \ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
+            \ ]
 " ハイライトショートカット
 nmap m <Plug>(quickhl-manual-this)
 vmap m <Plug>(quickhl-manual-this)
@@ -461,12 +460,16 @@ let g:yankring_history_dir = $HOME.'/.vim'
 "####### Plugin : vim-indent-guides #######
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
+"####### Plugin : vim-gitgutter #######
+let g:gitgutter_sign_added = '++'
+let g:gitgutter_sign_modified = '-+'
+let g:gitgutter_sign_removed = '__'
+
 "####### Plugin : marching #######
 " let g:marching_clang_command = "clang-3.6"
 let g:marching_clang_command = "clang"
 let g:marching_enable_neocomplete = 1
 set updatetime=200
-" set updatetime=10
 let g:marching_backend = "clang_command" "非同期
 " let g:marching_include_paths = filter(
 "     \    split(glob('/usr/include/c++/*'), '\n') +
@@ -587,6 +590,11 @@ let g:neosnippet#enable_preview = 1
 
 "===== Color Scheme =====
 colorscheme tango_lx
+"== for plugin (vim-gitgutter) ==
+hi GitGutterAdd guifg=#8ae234 gui=bold ctermfg=green cterm=bold
+hi GitGutterChange guifg=#8ae234 gui=bold ctermfg=green cterm=bold
+hi GitGutterDelete guifg=#f92672 gui=bold ctermfg=red cterm=bold
+
 
 "===== GUIタブの表示設定 =====
 function! GuiTabLabel() " 個別に設定
@@ -622,19 +630,19 @@ vnoremap <silent> <c-d> :call EngDict()<CR>
 "==== Auto fcitx ====
 let g:input_toggle = 0
 function! Fcitx2en()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status == 2
-      let g:input_toggle = 1
-      let l:a = system("fcitx-remote -c")
-   endif
+    let s:input_status = system("fcitx-remote")
+    if s:input_status == 2
+        let g:input_toggle = 1
+        let l:a = system("fcitx-remote -c")
+    endif
 endfunction
 
 function! Fcitx2zh()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx-remote -o")
-      let g:input_toggle = 0
-   endif
+    let s:input_status = system("fcitx-remote")
+    if s:input_status != 2 && g:input_toggle == 1
+        let l:a = system("fcitx-remote -o")
+        let g:input_toggle = 0
+    endif
 endfunction
 
 set iminsert=0
