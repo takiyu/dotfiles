@@ -6,25 +6,25 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 
 "NeoBundleFetch 'Shougo/neobundle.vim'
 "
-set synmaxcol=500				" ハイライトする文字数を制限する
-set backspace=indent,eol,start	" インサートモード時にバックスペースを使う
-set whichwrap=b,s,h,l,<,>,[,]	" 行頭から前行文末へ移動可能にする
-" set scrolloff=999				" スクロール時にカーソルを中央へ移動
-set scrolloff=3					" スクロールを開始する行数
-set cindent						" cオートインデント
-set cinoptions=g0				" cppでのpublic宣言を下げる
-" set showtabline=2				" タブ(上部)を常に表示する
-" set mouse=a					" マウス
+set synmaxcol=500                 " ハイライトする文字数を制限する
+set backspace=indent,eol,start    " インサートモード時にバックスペースを使う
+set whichwrap=b,s,h,l,<,>,[,]     " 行頭から前行文末へ移動可能にする
+" set scrolloff=999               " スクロール時にカーソルを中央へ移動
+set scrolloff=3                   " スクロールを開始する行数
+set cindent                       " cオートインデント
+set cinoptions=g0                 " cppでのpublic宣言を下げる
+" set showtabline=2               " タブ(上部)を常に表示する
+" set mouse=a                     " マウス
 " set ttymouse=xterm2
-set number						" 行数を表示する
-" set hlsearch					" 検索文字列を強調
-set ignorecase					" 大文字小文字を無視
-set smartcase					" (ただし大文字入力時のみ考慮)
-set guioptions-=m				" メニューバーを非表示
-set guioptions-=T				" ツールバーを非表示
-" set guioptions-=e				" TabのGUI表示をOFF
-set colorcolumn=80				" 80文字のライン
-set wildmenu                    " コマンドモードの補完方法
+set number                        " 行数を表示する
+" set hlsearch                    " 検索文字列を強調
+set ignorecase                    " 大文字小文字を無視
+set smartcase                     " (ただし大文字入力時のみ考慮)
+set guioptions-=m                 " メニューバーを非表示
+set guioptions-=T                 " ツールバーを非表示
+" set guioptions-=e               " TabのGUI表示をOFF
+set colorcolumn=80                " 80文字のライン
+set wildmenu                      " コマンドモードの補完方法
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
@@ -35,76 +35,75 @@ autocmd FileType text set foldmethod=indent
 set foldlevel=0
 set foldcolumn=2
 " === PreviewWindow ===
-set completeopt=menuone,longest,preview	" プレビューウインドウで表示
+set completeopt=menuone,longest,preview    " プレビューウインドウで表示
 " set completeopt=menuone
-set previewheight=1						" プレビューウインドウの高さ
-set splitbelow							" 下に表示
-set laststatus=2						" ステータスラインを常に表示
-" autocmd BufWritePre * :%s/\s\+$//ge	" 保存時に行末の空白を除去する
+set previewheight=1                        " プレビューウインドウの高さ
+set splitbelow                             " 下に表示
+set laststatus=2                           " ステータスラインを常に表示
+" autocmd BufWritePre * :%s/\s\+$//ge      " 保存時に行末の空白を除去する
 " === Tab Settings ===
 " Hard Tab
 " autocmd FileType * set tabstop=4 | set shiftwidth=4 | set noexpandtab
 " autocmd FileType * set tabstop=2 | set shiftwidth=2 | set expandtab
-                      " タブを挿入幅  タブを表示幅  Hard Tab
-autocmd FileType * set tabstop=4 | set shiftwidth=4 | set expandtab
 " Soft Tab
+autocmd FileType * set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType javascript set tabstop=2 | set shiftwidth=2 | set expandtab
 autocmd FileType python     set tabstop=4 | set shiftwidth=4 | set expandtab
 autocmd FileType neosnippet set noexpandtab "効いていない？
 " === Tab Indent Toggle ===
 let s:tab4_flag = 1
 function! g:Tab4_toggle()
-	if s:tab4_flag
-		let s:tab4_flag = 0
-		set tabstop=2 | set shiftwidth=2
-		echomsg string('tab 2')
-	else
-		let s:tab4_flag = 1
-		set tabstop=4 | set shiftwidth=4
-		echomsg string('tab 4')
-	endif
+    if s:tab4_flag
+        let s:tab4_flag = 0
+        set tabstop=2 | set shiftwidth=2
+        echomsg string('tab 2')
+    else
+        let s:tab4_flag = 1
+        set tabstop=4 | set shiftwidth=4
+        echomsg string('tab 4')
+    endif
 endfunction
 function! g:Echo_pre_tab4()
-	if !s:tab4_flag
-		echomsg string('tab 2')
-	else
-		echomsg string('tab 4')
-	endif
+    if !s:tab4_flag
+        echomsg string('tab 2')
+    else
+        echomsg string('tab 4')
+    endif
 endfunction
 nnoremap <F8> :call g:Tab4_toggle()<CR>
-			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-			\ :call g:Echo_pre_tab4()<CR>
+            \ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
+            \ :call g:Echo_pre_tab4()<CR>
 " === Soft/Hard tab toggle ===
 let s:tabhard_flag = 1
 function! g:Tabhard_toggle()
-	if s:tabhard_flag
-		let s:tabhard_flag = 0
-		set expandtab
-	else
-		let s:tabhard_flag = 1
-		set noexpandtab
-	endif
+    if s:tabhard_flag
+        let s:tabhard_flag = 0
+        set expandtab
+    else
+        let s:tabhard_flag = 1
+        set noexpandtab
+    endif
 endfunction
 function! g:Echo_pre_tabhard()
-	if !s:tabhard_flag
-		echomsg string('tab soft')
-	else
-		echomsg string('tab hard')
-	endif
+    if !s:tabhard_flag
+        echomsg string('tab soft')
+    else
+        echomsg string('tab hard')
+    endif
 endfunction
 nnoremap <F7> :call g:Tabhard_toggle()<CR>
-			\ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
-			\ :call g:Echo_pre_tabhard()<CR>
-" 			\ :retab!
+            \ :IndentGuidesDisable<CR>:IndentGuidesEnable<CR>
+            \ :call g:Echo_pre_tabhard()<CR>
+"           \ :retab!
 "=== Font Settings ===
 if has('win32') || has('win64')
-	set guifont=MS_Gothic:h13 " Windows
+    set guifont=MS_Gothic:h13 " Windows
 else
     " Windows以外
-" 	set guifont=DejaVu\ Sans\ Mono\ 8.7
-	set guifont=DejaVu\ Sans\ Mono\ 9.8
-" 	set guifont=DejaVu\ Sans\ Mono\ 13
-	" set lsp=4 " gvimでの行間
+    " set guifont=DejaVu\ Sans\ Mono\ 8.7
+    set guifont=DejaVu\ Sans\ Mono\ 9.8
+    " set guifont=DejaVu\ Sans\ Mono\ 13
+    " set lsp=4 " gvimでの行間
 endif
 "=== Infinity Undo ===
 if has('persistent_undo')
@@ -162,15 +161,15 @@ au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
 au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " Enterで補完を決定、または次へジャンプ
 imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
-			\ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
+            \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
 " S-Enter,C-Enterで次へジャンプ、または補完を閉じてEnter
 imap <expr><S-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
-			\ (neocomplete#close_popup() ? "\<CR>" :"\<S-CR>")
+            \ (neocomplete#close_popup() ? "\<CR>" :"\<S-CR>")
 imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
-			\ (neocomplete#close_popup() ? "\<CR>" :"\<C-CR>")
+            \ (neocomplete#close_popup() ? "\<CR>" :"\<C-CR>")
 " Tabで選択
 imap <expr><TAB> pumvisible() ?
-			\ "\<C-n>" : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
+            \ "\<C-n>" : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "補完のShift-Tab
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
@@ -183,30 +182,30 @@ inoremap <expr><Esc> pumvisible() ? neocomplete#close_popup()."<Esc>" : "<Esc>"
 let s:spell_check_flag = 1
 set spell spelllang=en_us
 function! g:Spellcheck_toggle()
-	if s:spell_check_flag
-		let s:spell_check_flag = 0
-		set nospell
-		echomsg string('spell off')
-	else
-		let s:spell_check_flag = 1
-		set spell spelllang=en_us
-		echomsg string('spell on')
-	endif
+    if s:spell_check_flag
+        let s:spell_check_flag = 0
+        set nospell
+        echomsg string('spell off')
+    else
+        let s:spell_check_flag = 1
+        set spell spelllang=en_us
+        echomsg string('spell on')
+    endif
 endfunction
 nnoremap <F12> :call g:Spellcheck_toggle()<CR>
 
 "===== Plugins =====
 "=== 共通 ===
-NeoBundle 'takiyu/tango-lx'				    " カラースキーム
-NeoBundle 'tyru/caw.vim'				    " コメントアウト補助
-NeoBundle 'scrooloose/nerdtree'			    " Filer
-NeoBundle 'scrooloose/syntastic'		    " 文法チェック
-NeoBundle 'rhysd/clever-f.vim'			    " Clever-f
-NeoBundle 'itchyny/lightline.vim'		    " ステータスライン
-NeoBundle 't9md/vim-quickhl'			    " ハイライト
-NeoBundle 'vimtaku/hl_matchit.vim'	        " 括弧+αをハイライト
-NeoBundle 'ujihisa/neco-look'			    " 英単語補完
-NeoBundle 'vim-scripts/YankRing.vim'	    " ヤンク
+NeoBundle 'takiyu/tango-lx'                 " カラースキーム
+NeoBundle 'tyru/caw.vim'                    " コメントアウト補助
+NeoBundle 'scrooloose/nerdtree'             " Filer
+NeoBundle 'scrooloose/syntastic'            " 文法チェック
+NeoBundle 'rhysd/clever-f.vim'              " Clever-f
+NeoBundle 'itchyny/lightline.vim'           " ステータスライン
+NeoBundle 't9md/vim-quickhl'                " ハイライト
+NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
+NeoBundle 'ujihisa/neco-look'               " 英単語補完
+NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 NeoBundle 'Konfekt/FastFold'
 "=== 補完 (+luaが必要) ===
@@ -228,67 +227,67 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'tikhomirov/vim-glsl'
 "===C/C++ ===
 NeoBundleLazy 'vim-jp/cpp-vim', {
-			\ 'autoload':{ 'filetypes':[ 'cpp' ]} }
+            \ 'autoload':{ 'filetypes':[ 'cpp' ]} }
 " NeoBundleLazy 'Rip-Rip/clang_complete', {
-" 			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
+"             \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
 NeoBundleLazy 'osyo-manga/vim-marching', {
-			\ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
-			\ 'depends' : ['Shougo/vimproc'] }
+            \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
+            \ 'depends' : ['Shougo/vimproc'] }
 "=== Unity C# ==
 " NeoBundleLazy 'nosami/Omnisharp', {
-" 			\   'autoload': {'filetypes': ['cs']},
-" 			\   'build': {
-" 			\     'mac': 'xbuild server/OmniSharp.sln',
-" 			\     'unix': 'xbuild server/OmniSharp.sln', }}
+"             \   'autoload': {'filetypes': ['cs']},
+"             \   'build': {
+"             \     'mac': 'xbuild server/OmniSharp.sln',
+"             \     'unix': 'xbuild server/OmniSharp.sln', }}
 " NeoBundleLazy 'tpope/vim-dispatch', {
-" 			\   'autoload': {'filetypes': ['cs']},
-" 			\ }
+"             \   'autoload': {'filetypes': ['cs']},
+"             \ }
 "=== TeX ===
 NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box', {
-			\ 'autoload':{ 'filetypes':[ 'tex', 'plaintex' ]}
-			\ }
+            \ 'autoload':{ 'filetypes':[ 'tex', 'plaintex' ]}
+            \ }
 "=== Verilog ===
 NeoBundleLazy 'vim-scripts/verilog.vim', {
-			\ 'autoload':{ 'filetypes':[ 'verilog' ]}
-			\ }
+            \ 'autoload':{ 'filetypes':[ 'verilog' ]}
+            \ }
 "=== JavaScript ===
 NeoBundleLazy 'marijnh/tern_for_vim', {
-			\ 'autoload':{ 'filetypes':[ 'javascript' ]},
-			\ 'build': { 'others': 'npm install' } }
+            \ 'autoload':{ 'filetypes':[ 'javascript' ]},
+            \ 'build': { 'others': 'npm install' } }
 " NeoBundleLazy 'jelera/vim-javascript-syntax', {
-" 		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+"              \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'pangloss/vim-javascript', {
-		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+             \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
-		 	\ 'autoload':{ 'filetypes':[ 'javascript' ]} }
+             \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundleLazy 'othree/html5-syntax.vim', {
-" 			\ 'autoload': { 'filetypes': ['html']} }
+"             \ 'autoload': { 'filetypes': ['html']} }
 " NeoBundle 'hallison/vim-markdown'
 "=== Ruby ===
 " NeoBundleLazy 'cespare/ruby-complete', {
-" 			\'autoload':{'filetypes':[ 'ruby' ]} }
+"             \'autoload':{'filetypes':[ 'ruby' ]} }
 "=== Python ===
 NeoBundleLazy 'davidhalter/jedi-vim', {
-			\ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi pep8 pyflakes autopep8
+            \ 'autoload':{ 'filetypes':[ 'python' ]} } "sudo pip install jedi pep8 pyflakes autopep8
 " NeoBundleLazy 'tmhedberg/SimpylFold', {
-" 			\ 'autoload':{ 'filetypes':[ 'python' ]} }
+"             \ 'autoload':{ 'filetypes':[ 'python' ]} }
 NeoBundleLazy 'tell-k/vim-autopep8', {
       \ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
-NeoBundle 'fatih/vim-go' "filetype認識のため、Lazyにするにはautocmdの必要あり
+NeoBundle 'fatih/vim-go' " filetype認識のため、Lazyにするにはautocmdの必要あり
                          " :GoInstallBinarys を実行
 " NeoBundleLazy 'fatih/vim-go', {
-" 			\ 'autoload':{ 'filetypes':[ 'go' ]}
-" 			\ }
+"             \ 'autoload':{ 'filetypes':[ 'go' ]}
+"             \ }
 " NeoBundle 'google/vim-ft-go' "補完機能等が含まれず
 "=== Lisp ===
 NeoBundleLazy 'luochen1990/rainbow', {
-			\ 'autoload':{ 'filetypes':[ 'lisp' ]}
-			\ }
+            \ 'autoload':{ 'filetypes':[ 'lisp' ]}
+            \ }
 "=== Json ===
 NeoBundleLazy 'elzr/vim-json', {
-			\ 'autoload':{ 'filetypes':[ 'json' ]}
-			\ }
+            \ 'autoload':{ 'filetypes':[ 'json' ]}
+            \ }
 let g:vim_json_syntax_conceal = 0
 
 NeoBundleCheck
@@ -349,46 +348,46 @@ let g:LatexBox_latexmk_async = 1
 "ステータスライン 
 "       \              [ 'fileencoding', 'filetype' ] ],
 let g:lightline = {
-	  \ 'colorscheme': 'Tomorrow_Night_Bright',
+      \ 'colorscheme': 'Tomorrow_Night_Bright',
       \ 'active': {
-	  \   'left': [ ['mode', 'paste'],
-	  \     ['readonly', 'filename', 'modified'] ],
+      \   'left': [ ['mode', 'paste'],
+      \     ['readonly', 'filename', 'modified'] ],
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
       \              [ 'fileencoding', 'filetype', 'syntastic'] ]
       \ },
-	  \ 'component': {
-	  \   'readonly': '%{&readonly?"R":"W"}',
-	  \ },
+      \ 'component': {
+      \   'readonly': '%{&readonly?"R":"W"}',
+      \ },
       \ 'component_expand': {
       \   'syntastic': 'SyntasticStatuslineFlag',
       \ },
       \ 'component_type': {
       \   'syntastic': 'error',
       \ },
-	  \ 'separator': {'left': '', 'right': ''},
-	  \ 'subseparator': {'left': '|', 'right': '|'},
+      \ 'separator': {'left': '', 'right': ''},
+      \ 'subseparator': {'left': '|', 'right': '|'},
       \ }
 " 保存時にsyntasticでチェックをしてから表示をアップデート
 let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
 " Syntastic Check Toggle
 let s:syntastic_check_flag = 1
 function! g:Syntastic_toggle()
-	if s:syntastic_check_flag
-		let s:syntastic_check_flag = 0
-		echomsg string('syntastic on')
-	else
-		let s:syntastic_check_flag = 1
-		echomsg string('syntastic off')
-	endif
+    if s:syntastic_check_flag
+        let s:syntastic_check_flag = 0
+        echomsg string('syntastic on')
+    else
+        let s:syntastic_check_flag = 1
+        echomsg string('syntastic off')
+    endif
 endfunction
 function! s:syntastic_check()
-	if s:syntastic_check_flag
-		SyntasticCheck
-	else
-		SyntasticReset
-	endif
-	call lightline#update()
+    if s:syntastic_check_flag
+        SyntasticCheck
+    else
+        SyntasticReset
+    endif
+    call lightline#update()
 endfunction
 autocmd BufWritePost * call s:syntastic_check()
 nnoremap <F11> :call g:Syntastic_toggle()<CR>
@@ -427,18 +426,18 @@ let g:quickhl_manual_hl_priority = 10 " プライオリティの設定
 " let g:quickhl_cword_enable_at_startup = 1 " カーソル下の単語を一時的にハイライト
 " 色指定(同時に個数も指定)
 let g:quickhl_manual_colors = [
-	\ "gui=bold ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA guifg=Black",
-	\ "gui=bold ctermbg=Green   ctermfg=Black guibg=#A4E57E guifg=Black",
-	\ "gui=bold ctermbg=Yellow  ctermfg=Black guibg=#FFDB72 guifg=Black",
-	\ "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
-	\ "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
-	\ "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
-	\ "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
-	\ "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
-	\ "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
-	\ "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
-	\ "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
-	\ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
+    \ "gui=bold ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA guifg=Black",
+    \ "gui=bold ctermbg=Green   ctermfg=Black guibg=#A4E57E guifg=Black",
+    \ "gui=bold ctermbg=Yellow  ctermfg=Black guibg=#FFDB72 guifg=Black",
+    \ "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
+    \ "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
+    \ "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
+    \ "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
+    \ "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
+    \ "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
+    \ "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
+    \ "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
+    \ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
 \ ]
 " ハイライトショートカット
 nmap m <Plug>(quickhl-manual-this)
@@ -470,10 +469,10 @@ set updatetime=200
 " set updatetime=10
 let g:marching_backend = "clang_command" "非同期
 " let g:marching_include_paths = filter(
-" 	\	split(glob('/usr/include/c++/*'), '\n') +
-" 	\	split(glob('/usr/include/*/c++/*'), '\n') +
-" 	\	split(glob('/usr/include/*/'), '\n'),
-" 	\	'isdirectory(v:val)')
+"     \    split(glob('/usr/include/c++/*'), '\n') +
+"     \    split(glob('/usr/include/*/c++/*'), '\n') +
+"     \    split(glob('/usr/include/*/'), '\n'),
+"     \    'isdirectory(v:val)')
 "####### Plugin : clang_complete #######
 " " let g:clang_library_path = $HOME.'/dotfiles'
 " " let g:clang_library_path = $HOME.'/local/lib'
@@ -509,23 +508,23 @@ let g:tern#command = ["nodejs", expand('$HOME').'/.vim/bundle/tern_for_vim/node_
 " au FileType javascript call JavaScriptFold()
 
 "####### Plugin : neocomplete #######
-let g:neocomplete#enable_at_startup = 1				" neocompleteを有効
-let g:neocomplete#enable_auto_select = 0			" 候補を自動選択しない
-let g:neocomplete#auto_completion_stairt_length = 3	" 補完が自動で開始される文字数
+let g:neocomplete#enable_at_startup = 1                " neocompleteを有効
+let g:neocomplete#enable_auto_select = 0               " 候補を自動選択しない
+let g:neocomplete#auto_completion_stairt_length = 3    " 補完が自動で開始される文字数
 let g:neocomplete#skip_auto_completion_time = "0.5"
-let g:neocomplete#enable_ignore_case = 1			" 大文字小文字を無視
-let g:neocomplete#enable_smart_case = 1				" (ただし大文字入力時のみ考慮)
-let g:neocomplete#enable_underbar_completion = 0	" アンダーバー補完を有効
-let g:neocomplete#sources#syntax#min_keyword_length = 3 " シンタックスをキャッシュするときの最小文字数
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'	" ロックパターン
-call neocomplete#custom#source('_', 'sorters', ['sorter_length']) " ソート
-let g:neocomplete#enable_auto_close_preview = 0			" プレビューウインドウを閉じない
-let g:neocomplete#use_vimproc = 1                   " バックグラウンド実行
+let g:neocomplete#enable_ignore_case = 1               " 大文字小文字を無視
+let g:neocomplete#enable_smart_case = 1                " (ただし大文字入力時のみ考慮)
+let g:neocomplete#enable_underbar_completion = 0       " アンダーバー補完を有効
+let g:neocomplete#sources#syntax#min_keyword_length = 3  " シンタックスをキャッシュするときの最小文字数
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'    " ロックパターン
+call neocomplete#custom#source('_', 'sorters', ['sorter_length'])   " ソート
+let g:neocomplete#enable_auto_close_preview = 0        " プレビューウインドウを閉じない
+let g:neocomplete#use_vimproc = 1                      " バックグラウンド実行
 " 辞書設定
 let g:neocomplete#sources#dictionary#dictionaries = { 'default' : '', 'vimshell' : $HOME.'/.vimshell_hist', 'scheme' : $HOME.'/.gosh_completions' }
 " 補完するためのキーワードパターン
 if !exists('g:neocomplete#keyword_patterns')
-	let g:neocomplete#keyword_patterns = {}
+    let g:neocomplete#keyword_patterns = {}
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*' "日本語を補完候補として取得しない
 
@@ -591,22 +590,22 @@ colorscheme tango_lx
 
 "===== GUIタブの表示設定 =====
 function! GuiTabLabel() " 個別に設定
-	let l:label = ''
-	let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
-	" 表示文字列にバッファ名中のファイル名を追加
-	let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
-	let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
-	let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
-	if l:wincount > 1
-		let l:label .= '[' . l:wincount . ']'
-	endif
-	for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
-		if getbufvar(bufnr, "&modified")
-			let l:label .= '[+]'
-			break
-		endif
-	endfor
-	return l:label
+    let l:label = ''
+    let l:bufnrlist = tabpagebuflist(v:lnum) "タブに含まれるバッファ(ウィンドウ)情報を取得
+    " 表示文字列にバッファ名中のファイル名を追加
+    let l:bufname = fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
+    let l:label .= l:bufname == '' ? 'No title' : l:bufname "バッファ名がなければNo title
+    let l:wincount = tabpagewinnr(v:lnum, '$') "タブ内にウィンドウが複数あるときにはその数を追加
+    if l:wincount > 1
+        let l:label .= '[' . l:wincount . ']'
+    endif
+    for bufnr in l:bufnrlist "変更のあるバッファがるときには '[+]' を追加
+        if getbufvar(bufnr, "&modified")
+            let l:label .= '[+]'
+            break
+        endif
+    endfor
+    return l:label
 endfunction
 " guitablabelに上の関数を設定
 set guitablabel=%N:\ %{GuiTabLabel()}
@@ -615,7 +614,7 @@ set guitablabel=%N:\ %{GuiTabLabel()}
 function! EngDict()
     sp +enew | put = system('engdict ' . @*)
     set bufhidden=hide noswapfile noro nomodified
-	normal gg
+    normal gg
 endfunction  
 vnoremap <silent> <c-d> :call EngDict()<CR>
 
