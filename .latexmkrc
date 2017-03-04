@@ -6,7 +6,7 @@
 # $pdf_mode = 3;  # generates pdf via dvipdfmx
 
 ### pdflatex
-# $pdflatex = 'pdflatex -etex -halt-on-error %O %S';
+# $pdflatex = 'pdflatex -8bit -etex -halt-on-error %O %S';
 # $pdf_mode = 1;
 
 ### lualatex

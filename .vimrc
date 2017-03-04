@@ -335,8 +335,9 @@ let g:tex_conceal=''
 setlocal conceallevel=2
 
 autocmd BufWritePost *.tex :Latexmk
+" autocmd BufWritePost *.tex :!latexmk
 let g:LatexBox_output_type = 'pdf'
-let g:LatexBox_latexmk_options = ''
+" let g:LatexBox_latexmk_options = ''
 let g:LatexBox_viewer = 'xdg-open'
 let g:LatexBox_quickfix = 2  " cursor stays in the main window
 let g:LatexBox_autojump = 0
