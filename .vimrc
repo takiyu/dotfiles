@@ -79,8 +79,8 @@ noremap <Down> g<Down>
 " 高速移動 上下移動は滑らかに
 noremap <C-h> 10h
 noremap <C-l> 10l
-noremap <C-j> 2j2j2j2j2j
-noremap <C-k> 2k2k2k2k2k
+noremap <C-j> 4j4j4j4j4j
+noremap <C-k> 4k4k4k4k4k
 " 行末行頭への移動
 noremap 9 ^
 noremap 0 $
@@ -145,7 +145,8 @@ NeoBundle 't9md/vim-quickhl'                " ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
 NeoBundle 'scrooloose/syntastic'            " 文法チェック
 NeoBundle 'ujihisa/neco-look'               " 英単語補完
-NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク
+NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク履歴
+NeoBundle 'sjl/gundo.vim'                   " undo可視化
 NeoBundle 'tpope/vim-sleuth'                " インデント自動検出
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
@@ -399,6 +400,9 @@ vmap \C <Plug>(caw:zeropos:uncomment)
 "####### Plugin : yankring.vim #######
 let g:yankring_history_dir = $HOME.'/.vim'
 
+"####### Plugin : gundo.vim #######
+nmap U :<C-u>GundoToggle<CR>
+
 "####### Plugin : vim-indent-guides #######
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
@@ -560,6 +564,7 @@ endfunction
 " guitablabelに上の関数を設定
 set guitablabel=%N:\ %{GuiTabLabel()}
 
+
 "==== Auto fcitx ====
 let g:input_toggle = 0
 function! Fcitx2en()
@@ -569,7 +574,6 @@ function! Fcitx2en()
         let l:a = system("fcitx-remote -c")
     endif
 endfunction
-
 function! Fcitx2zh()
     let s:input_status = system("fcitx-remote")
     if s:input_status != 2 && g:input_toggle == 1
@@ -577,7 +581,6 @@ function! Fcitx2zh()
         let g:input_toggle = 0
     endif
 endfunction
-
 set iminsert=0
 set imsearch=0
 set ttimeoutlen=150
