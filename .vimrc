@@ -294,12 +294,13 @@ let g:lightline = {
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'readonly', 'filename', 'modified' ] ],
-            \   'right': [ [ 'lineinfo' ],
-            \              [ 'percent' ],
-            \              [ 'gitstatus', 'fileinfo', 'syntastic'] ],
+            \   'right': [ [ 'percentlineinfo' ],
+            \              [ 'fileinfo' ],
+            \              [ 'gitstatus', 'syntastic' ] ],
             \ },
             \ 'component': {
             \   'readonly': '%{&readonly?"R":"W"}',
+            \   'percentlineinfo': '%3p%% %3l:%-2v',
             \   'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
             \ },
             \ 'component_function': {
@@ -311,7 +312,7 @@ let g:lightline = {
             \ 'component_type': {
             \   'syntastic': 'error',
             \ },
-            \ 'separator': {'left': '', 'right': ''},
+            \ 'separator': {'left': '', 'right': ' '},
             \ 'subseparator': {'left': '|', 'right': '|'},
             \ }
 " Git状態のステータスライン表示
@@ -324,7 +325,7 @@ function! LightlineGitStatus()
         if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
             " 変更行数表示
             if exists('*GitGutterGetHunkSummary') && get(g:, 'gitgutter_enabled', 0)
-                let symbols = ['+', '-+', '-']
+                let symbols = ['++', '-+', '--']
                 let hunks = GitGutterGetHunkSummary()
                 for i in [0, 1, 2]
                     if hunks[i] > 0
