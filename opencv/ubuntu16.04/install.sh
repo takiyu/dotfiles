@@ -49,7 +49,7 @@ sudo apt-get -yV install libvpx-dev
 
 sudo apt-get -yV install unzip
 
-sudo apt-get -yV install libblas-dev liblapack-dev 
+sudo apt-get -yV install libblas-dev liblapack-dev libatlas-dev 
 sudo apt-get -yV install libeigen3-dev
 
 version='3.2.0'
