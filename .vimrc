@@ -105,9 +105,8 @@ map <F1> <Esc>
 " Vimgrep
 nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
-" PreviewWindowの非表示
-nnoremap <C-c> <C-w>z
-inoremap <C-c> <C-w>z
+" Quickfix windowの非表示
+nnoremap <C-c> :cclose<CR>
 " omni補完
 inoremap <C-o> <C-x><C-o>
 " omni補完(marching) オムニ補完時に補完ワードを挿入しない
