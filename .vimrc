@@ -326,7 +326,7 @@ function! LightlineGitStatus()
             if exists('*GitGutterGetHunkSummary') && get(g:, 'gitgutter_enabled', 0)
                 let symbols = ['++', '-+', '--']
                 let hunks = GitGutterGetHunkSummary()
-                for i in [0, 1, 2]
+                for i in range(3)
                     if hunks[i] > 0
                         call add(ret, symbols[i] . hunks[i])
                     endif
