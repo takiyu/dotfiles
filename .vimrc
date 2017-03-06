@@ -289,18 +289,21 @@ let g:LatexBox_latexmk_async = 1
 
 "####### Plugin : lightline #######
 "ステータスライン 
-"       \              [ 'fileencoding', 'filetype' ] ],
 let g:lightline = {
             \ 'colorscheme': 'Tomorrow_Night_Bright',
             \ 'active': {
-            \   'left': [ ['mode', 'paste'],
-            \     ['readonly', 'filename', 'modified'] ],
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'readonly', 'filename', 'modified' ] ],
             \   'right': [ [ 'lineinfo' ],
             \              [ 'percent' ],
-            \              [ 'fileencoding', 'filetype', 'syntastic'] ]
+            \              [ 'gitstatus', 'fileinfo', 'syntastic'] ],
             \ },
             \ 'component': {
             \   'readonly': '%{&readonly?"R":"W"}',
+            \   'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
+            \ },
+            \ 'component_function': {
+            \   'gitstatus': 'LightlineGitStatus',
             \ },
             \ 'component_expand': {
             \   'syntastic': 'SyntasticStatuslineFlag',
@@ -311,6 +314,37 @@ let g:lightline = {
             \ 'separator': {'left': '', 'right': ''},
             \ 'subseparator': {'left': '|', 'right': '|'},
             \ }
+" Git状態のステータスライン表示
+function! LightlineGitStatus()
+    if winwidth('.') <= 60
+        return ''
+    endif
+    let ret = []
+    try
+        if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
+            " 変更行数表示
+            if exists('*GitGutterGetHunkSummary') && get(g:, 'gitgutter_enabled', 0)
+                let symbols = ['+', '-+', '-']
+                let hunks = GitGutterGetHunkSummary()
+                for i in [0, 1, 2]
+                    if hunks[i] > 0
+                        call add(ret, symbols[i] . hunks[i])
+                    endif
+                endfor
+            endif
+            " Branch名
+            let mark = ' '  " edit here for cool mark
+            let branch = fugitive#head()
+            if branch !=# ''
+                call add(ret, mark.branch)
+            endif
+        endif
+    catch
+    endtry
+    return join(ret, ' ')
+endfunction
+autocmd TextChanged * call lightline#update()
+autocmd TextChangedI * call lightline#update()
 " 保存時にsyntasticでチェックをしてから表示をアップデート
 let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
 " Syntastic Check Toggle
@@ -408,9 +442,11 @@ nmap U :<C-u>GundoToggle<CR>
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 "####### Plugin : vim-gitgutter #######
+let g:gitgutter_sign_column_always = 1
 let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '-+'
 let g:gitgutter_sign_removed = '__'
+let g:gitgutter_sign_modified_removed = '+_'
 
 "####### Plugin : marching #######
 " let g:marching_clang_command = "clang-3.6"
@@ -541,6 +577,7 @@ colorscheme tango_lx
 hi GitGutterAdd guifg=#8ae234 gui=bold ctermfg=green cterm=bold
 hi GitGutterChange guifg=#8ae234 gui=bold ctermfg=green cterm=bold
 hi GitGutterDelete guifg=#f92672 gui=bold ctermfg=red cterm=bold
+hi GitGutterChangeDelete guifg=#8ae234 gui=bold ctermfg=green cterm=bold
 
 
 "===== GUIタブの表示設定 =====
