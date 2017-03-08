@@ -94,23 +94,21 @@ main = do
 		normalBorderColor  = "#555577" ,
 		focusedBorderColor = "red" ,
 
-		-- Set Hiragana_Katakana as mod
-		modMask = mod3Mask ,
+		-- Set mod key
+		modMask = modm ,
 
-		-- Add New KeyBinds
-		keys = myKeys,
-
-		-- Mouse Binding
+		-- Set Binds
+		keys = myKeyBindings,
 		mouseBindings = myMouseBindings,
 
-		-- set terminal
+		-- Set terminal
 		terminal = myTerminal
 	}
 
 
 -- Make New Key Binding
-myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
-myKeys conf@(XConfig {XMonad.modMask = a}) = M.fromList $
+myKeyBindings :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			[
 			-- window
 			  ((modm,                  xK_j  ), windows W.focusDown)
