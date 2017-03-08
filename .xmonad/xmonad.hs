@@ -177,18 +177,21 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm.|.shiftMask,      xK_r  ), unsafeSpawn myDisp)
 			, ((mod1Mask.|.shiftMask,  xK_r  ), unsafeSpawn myDisp)
 			]
---			++
---			[((m .|. modm, k), windows $ f i)
---				| (i, k) <- zip myWorkspaces [xK_1 .. xK_8]
---				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
---			++
---			[((m .|. modm, k), windows $ f i)
---				| (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_8]
---				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
---			++
---			[((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
---				| (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
---				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+			-- view mode
+-- 			++
+-- 			[((m .|. modm, k), windows $ f i)
+-- 				| (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
+-- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+			-- greedy view mode
+			++
+			[((m .|. modm, k), windows $ f i)
+				| (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
+				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+			--
+-- 			++
+-- 			[((m .|. modm, k), screenWorkspace sc >>= flip whenJust (windows . f))
+-- 				| (k, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+-- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 
