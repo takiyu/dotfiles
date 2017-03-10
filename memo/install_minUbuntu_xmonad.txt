@@ -1,18 +1,19 @@
-1: Å¬ƒpƒbƒP[ƒW‚Ìubuntu‚ğƒCƒ“ƒXƒg[ƒ‹iƒfƒBƒXƒN—e—Ê‚ª‚S‚OMãj
+1:æœ€å°ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®Ubuntuã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ï¼ˆãƒ‡ã‚£ã‚¹ã‚¯å®¹é‡ãŒ40Må¼±ï¼‰
 sudo apt-get install xinit gnome fcitx fcitx-mozc git firefox vim vim-gtk nemo xinput xmonad
 
 sudo apt-get purge ibus
+
 sudo autoremove
 
 git clone https://github.com/takiyu/dotfiles
 
 # set Nemo as Default File manager+
-xdg-mime default nemo.desktop inode/directory application/x-gnome-saced-search
+xdg-mine default nemo.desktop inode/directory application/x-gnome-saced-search
 
-=====================================================
-2:
-# –{“–‚É•K—v‰»‚Í•s–¾
-sudo apt-get install gnome-network-admin
+===========================================
+kita Ubuntu-16.04-minimal
 
-# —Lüƒlƒbƒgƒ[ƒN‚ª—LŒø‚É‚È‚ç‚È‚¢–â‘è‚Ì‰ğŒˆ
-/etc/network/interfaces ‚Ì p2p1‚Ì€–Ú‚ğƒRƒƒ“ƒgƒAƒEƒg
+sudo apt-get install build-essential
+
+sudo apt-get install xinit fcitx fcitx-mozc git firefox vim vim-gtk nemo xinput xmonad xfce4 lightdm xmobar xfce4-terminal
+
