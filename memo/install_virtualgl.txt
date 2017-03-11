@@ -1,0 +1,74 @@
+#-------------------------------------------------------------------------------
+#
+#  Install Memo for VirtualGL with TurboVNC
+#    * Ubuntu 16.04
+#
+#-------------------------------------------------------------------------------
+
+#------------------------------ Main installation ------------------------------
+# Install packages
+sudo dpkg -i virtualgl_2.5.2_amd64.deb
+sudo dpkg -i turbovnc_2.1.1_amd64.deb
+
+# Stop X
+sudo systemctl stop lightdm.service
+
+# Configure VirtualGL
+sudo /opt/VirtualGL/bin/vglserver_config
+    > 1 (Configure server for use with VirtualGL)
+    > y (Restrict 3D X server access to vglusers group (recommended)?)
+    > y (Restrict framebuffer device access to vglusers group (recommended)?)
+    > y (Disable XTEST extension (recommended)?)
+
+# Add users to VirtualGL group
+sudo usermod -aG vglusers takiyu
+sudo usermod -aG vglusers root
+getent group vglusers  # for check
+
+# Logout and login again to update user groups
+
+# Restart X
+sudo systemctl start lightdm.service
+
+# Sanity Check
+xauth merge /etc/opt/VirtualGL/vgl_xauth_key
+xdpyinfo -display :0
+/opt/VirtualGL/bin/glxinfo -display :0 -c
+
+
+#--------------------------------- Local setup ---------------------------------
+# Add following command to .bashrc for path setting
+```
+    export PATH=$PATH:/opt/TurboVNC/bin:/opt/VirtualGL/bin
+```
+
+# Overwrite `~/.vnc/xstartup.turbovnc` to run normal window manager as following:
+    ```
+#!/bin/sh
+    [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+    [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+    xsetroot -solid grey
+    vncconfig -iconic &
+    x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
+    x-window-manager &
+    ```
+
+# Set vnc password
+vncpasswd
+
+
+#---------------------------------- Run Server ---------------------------------
+# Run VNC server
+vncserver 
+
+# Set display variable
+export DISPLAY=:1
+
+# Run application 
+vglrun <some application>
+
+# Exit
+# vncserver -kill :1
+
+#----------------------------- Connect from client -----------------------------
+vncviewer <ip address>:1
