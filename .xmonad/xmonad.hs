@@ -133,21 +133,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm.|.shiftMask,      xK_n  ), refresh)
 
 			-- workspaces
-			, ((modm,                  xK_h  ), prevWS)
---			, ((modm,                  xK_h  ), prevWS >> logCurrent >>= moveFlashText)
-			, ((modm,                  xK_l  ), nextWS)
-			, ((modm.|.shiftMask,      xK_h  ), shiftToPrev >> prevWS)
-			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS)
-			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
-			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
-			, ((modm.|.shiftMask,      xK_p  ), do
-					t <- findWorkspace getSortByIndex Next EmptyWS 1
-					(windows . W.shift) t
-					(windows . W.greedyView) t)
-			, ((modm.|.shiftMask,      xK_n  ), do
-					t <- findWorkspace getSortByIndex Prev EmptyWS 1
-					(windows . W.shift) t
-					(windows . W.greedyView) t)
+			, ((modm,                  xK_h  ), moveWsNoGreedy Prev AnyWS)
+-- 			, ((modm,                  xK_h  ), moveWsNoGreedy Prev AnyWS >> logCurrent >>= moveFlashText)
+			, ((modm,                  xK_l  ), moveWsNoGreedy Next AnyWS)
+			, ((modm.|.shiftMask,      xK_h  ), shiftWsNoGreedy Prev AnyWS)
+			, ((modm.|.shiftMask,      xK_l  ), shiftWsNoGreedy Next AnyWS)
+			, ((modm,                  xK_n  ), moveWsNoGreedy Prev NonEmptyWS)
+			, ((modm,                  xK_p  ), moveWsNoGreedy Next NonEmptyWS)
+			, ((modm.|.shiftMask,      xK_n  ), shiftWsNoGreedy Prev EmptyWS)
+			, ((modm.|.shiftMask,      xK_p  ), shiftWsNoGreedy Next EmptyWS)
 			-- physical screen
 			, ((modm,                  xK_w  ), nextScreen)
 			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
@@ -186,15 +180,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((mod1Mask.|.shiftMask,  xK_r  ), unsafeSpawn myDisp)
 			]
 			-- view mode
--- 			++
--- 			[((m .|. modm, k), windows $ f i)
--- 				| (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
--- 				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-			-- greedy view mode
 			++
 			[((m .|. modm, k), windows $ f i)
-				| (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
-				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+				| (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
+				, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+			-- greedy view mode
+-- 			++
+-- 			[((m .|. modm, k), windows $ f i)
+-- 				| (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
+-- 				, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 			--
 -- 			++
 -- 			[((m .|. modm, k), screenWorkspace sc >>= flip whenJust (windows . f))
@@ -229,3 +223,12 @@ shellPromptConfig = defaultXPConfig {
 --							, st_bg   = "black"
 --							, st_fg   = "green"
 --							}
+
+moveWsNoGreedy d t = do
+	t <- findWorkspace getSortByIndex d t 1
+	(windows . W.view) t
+
+shiftWsNoGreedy d t = do
+	t <- findWorkspace getSortByIndex d t 1
+	(windows . W.shift) t
+	(windows . W.view) t
