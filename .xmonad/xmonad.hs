@@ -122,8 +122,8 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             -- window alt-tab
             , ((modm,                  xK_Tab), windows W.focusDown)
             , ((modm.|.shiftMask,      xK_Tab), windows W.focusUp  )
---            , ((mod1Mask,              xK_Tab), windows W.focusDown)
---            , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
+--          , ((mod1Mask,              xK_Tab), windows W.focusDown)
+--          , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
 
             -- layout toggle
             , ((modm,                  xK_space), sendMessage NextLayout)
@@ -153,6 +153,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
                 (windows . W.greedyView) "1"
                 screenWorkspace 0 >>= flip whenJust (windows . W.view)  -- first screen
                 (windows . W.greedyView) "3")
+            , ((modm,                  xK_y  ), toggleWS' ["NSP"])
 
             -- shrink, expand
             , ((modm,                  xK_9  ), sendMessage Shrink)
@@ -171,7 +172,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 
             -- run application
             , ((modm.|.shiftMask,      xK_Return), spawn $ XMonad.terminal conf)
-            , ((modm,                  xK_r  ), shellPrompt  shellPromptConfig)
+            , ((modm,                  xK_r  ), shellPrompt shellPromptConfig)
             , ((modm,                  xK_q  ), spawn killCommand)
             , ((modm,                  xK_e  ), unsafeSpawn (myFiler ++ " ~"))
             , ((modm,                  xK_o  ), unsafeSpawn myTerminal)
@@ -185,15 +186,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
                 | (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
                 , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
             -- greedy view mode
---             ++
---             [((m .|. modm, k), windows $ f i)
---                 | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
---                 , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+--           ++
+--          [((m .|. modm, k), windows $ f i)
+--              | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
+--              , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
             --
---             ++
---             [((m .|. modm, k), screenWorkspace sc >>= flip whenJust (windows . f))
---                 | (k, sc) <- zip [xK_w, xK_e, xK_r] [0..]
---                 , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+--          ++
+--          [((m .|. modm, k), screenWorkspace sc >>= flip whenJust (windows . f))
+--              | (k, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+--              , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 
