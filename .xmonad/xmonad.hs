@@ -86,21 +86,17 @@ main = do
                     { ppOutput = hPutStrLn xmproc
                     , ppTitle = xmobarColor "green" "" . shorten 50 })
                 <+> takeTopFocus , -- for android studio(Java)
-
         -- Workspaces
         workspaces =  myWorkspaces,
         -- Border settings
         borderWidth = 3 ,
         normalBorderColor  = "#555577" ,
         focusedBorderColor = "red" ,
-
         -- Set mod key
         modMask = modm ,
-
         -- Set Binds
         keys = myKeyBindings,
         mouseBindings = myMouseBindings,
-
         -- Set terminal
         terminal = myTerminal
     }
@@ -145,7 +141,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             -- physical screen
             , ((modm,                  xK_w  ), nextScreen)
             , ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
---            , ((modm,                  xK_w  ), prevScreen)
+--          , ((modm,                  xK_w  ), prevScreen)
             , ((modm,                  xK_s  ), swapNextScreen)
             -- reset workspaces corresponding to physical screens
             , ((modm,                  xK_d  ), do
