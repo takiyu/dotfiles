@@ -186,7 +186,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
                 | (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
                 , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
             -- greedy view mode
---           ++
+--          ++
 --          [((m .|. modm, k), windows $ f i)
 --              | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
 --              , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
