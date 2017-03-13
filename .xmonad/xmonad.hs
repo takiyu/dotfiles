@@ -140,6 +140,14 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 			, ((modm.|.shiftMask,      xK_l  ), shiftToNext >> nextWS)
 			, ((modm,                  xK_p  ), moveTo Next NonEmptyWS)
 			, ((modm,                  xK_n  ), moveTo Prev NonEmptyWS)
+			, ((modm.|.shiftMask,      xK_p  ), do
+					t <- findWorkspace getSortByIndex Next EmptyWS 1
+					(windows . W.shift) t
+					(windows . W.greedyView) t)
+			, ((modm.|.shiftMask,      xK_n  ), do
+					t <- findWorkspace getSortByIndex Prev EmptyWS 1
+					(windows . W.shift) t
+					(windows . W.greedyView) t)
 			-- physical screen
 			, ((modm,                  xK_w  ), nextScreen)
 			, ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
