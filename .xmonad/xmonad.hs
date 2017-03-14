@@ -177,15 +177,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             , ((mod1Mask.|.shiftMask,  xK_r  ), unsafeSpawn myDisp)
             ]
             -- view mode
-            ++
-            [((m .|. modm, k), windows $ f i)
-                | (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
-                , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-            -- greedy view mode
 --          ++
 --          [((m .|. modm, k), windows $ f i)
---              | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
---              , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+--              | (i, k) <- zip myWorkspaces [xK_F1 .. xK_F12]
+--              , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+            -- greedy view mode
+            ++
+            [((m .|. modm, k), windows $ f i)
+                | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F12]
+                , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
             --
 --          ++
 --          [((m .|. modm, k), screenWorkspace sc >>= flip whenJust (windows . f))
