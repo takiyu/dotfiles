@@ -145,10 +145,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             , ((modm,                  xK_s  ), swapNextScreen)
             -- reset workspaces corresponding to physical screens
             , ((modm,                  xK_d  ), do
-                screenWorkspace 1 >>= flip whenJust (windows . W.view)  -- second screen
-                (windows . W.greedyView) "1"
                 screenWorkspace 0 >>= flip whenJust (windows . W.view)  -- first screen
-                (windows . W.greedyView) "3")
+                (windows . W.greedyView) "3"
+                screenWorkspace 1 >>= flip whenJust (windows . W.view)  -- second screen
+                (windows . W.greedyView) "1")
             , ((modm,                  xK_y  ), toggleWS' ["NSP"])
 
             -- shrink, expand
