@@ -138,6 +138,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             , ((modm,                  xK_p  ), moveWsNoGreedy Next NonEmptyWS)
             , ((modm.|.shiftMask,      xK_n  ), shiftWsNoGreedy Prev EmptyWS)
             , ((modm.|.shiftMask,      xK_p  ), shiftWsNoGreedy Next EmptyWS)
+            , ((modm,                  xK_b  ), toggleWS)
             -- physical screen
             , ((modm,                  xK_w  ), nextScreen)
             , ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
@@ -149,7 +150,6 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
                 (windows . W.greedyView) "3"
                 screenWorkspace 1 >>= flip whenJust (windows . W.view)  -- second screen
                 (windows . W.greedyView) "1")
-            , ((modm,                  xK_y  ), toggleWS' ["NSP"])
 
             -- shrink, expand
             , ((modm,                  xK_9  ), sendMessage Shrink)
