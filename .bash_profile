@@ -32,6 +32,7 @@ export GOPATH=$HOME/Projects/Gocode
 # Android
 # export PATH=$PATH:/home/takiyu/Downloads/Android/android-ndk-r10e
 # export ANDROID_HOME=/home/takiyu/android-sdks
+source /etc/profile.d/android-ndk.sh
 
 # .bashrc
 [[ -f ~/.bashrc ]] && . ~/.bashrc

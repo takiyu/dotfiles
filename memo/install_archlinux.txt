@@ -137,3 +137,10 @@ Intel driver
            Option      "TearFree"    "true"
         EndSection
     ```
+
+Makepkg parallel
+    open `/etc/makepkg.conf`
+    ```
+        # COMPRESSXZ=(xz -c -z -)
+        COMPRESSXZ=(xz -T 0 -c -z -)
+    ```
