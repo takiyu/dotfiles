@@ -144,3 +144,8 @@ Makepkg parallel
         # COMPRESSXZ=(xz -c -z -)
         COMPRESSXZ=(xz -T 0 -c -z -)
     ```
+
+Android Development
+    yaourt -S android-sdk android-sdk-platform-tools android-sdk-build-tools
+    yaourt -S android-platform-25 android-ndk
+    pacman -S pidcat
