@@ -29,10 +29,5 @@ export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.
 # Golang
 export GOPATH=$HOME/Projects/Gocode
 
-# Android
-# export PATH=$PATH:/home/takiyu/Downloads/Android/android-ndk-r10e
-# export ANDROID_HOME=/home/takiyu/android-sdks
-source /etc/profile.d/android-ndk.sh
-
 # .bashrc
 [[ -f ~/.bashrc ]] && . ~/.bashrc
