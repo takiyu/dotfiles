@@ -65,6 +65,8 @@ if has('persistent_undo')
     set undodir=~/.vimundo " ~/.vim/undo
     set undofile
 endif
+"===== Quickfix =====
+autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen  "自動で開く
 
 
 "===== KeyBind =====
