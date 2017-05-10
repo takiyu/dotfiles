@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # TARGETS=.?*
-TARGETS=(.Xmodmap .bash_profile .bashrc .jshintrc .latexmkrc .pep8 \
+TARGETS=(.Xmodmap .bash_profile .bashrc .jshintrc .gitconfig .latexmkrc .pep8 \
          .xinitrc .xmobarrc .xmonad \
          .config/zathura/zathurarc .mplayer/config)
 TARGET_DIRS=(.config/zathura/ .mplayer/)
