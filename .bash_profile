@@ -26,6 +26,13 @@ export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.
 # Duo
 # export DUO_SDK=/home/takiyu/rosbuild_ws/package_dir/DUO-Camera-ROS/build/devel/DUOSDK
 
+# Android
+export PATH=$PATH:/opt/android-sdk/platform-tools  # platform-tools (adb etc...)
+export PATH=$PATH:/opt/android-sdk/tools           # tools (android etc...)
+export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
+export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
+export ANDROID_HOME=/opt/android-sdk
+
 # Golang
 export GOPATH=$HOME/Projects/Gocode
 
