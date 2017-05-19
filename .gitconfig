@@ -1,9 +1,12 @@
 # This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
 	name = takiyu
 	email = takiyu1025.txu.development@gmail.com
 [core]
 	editor = vim
 [alias]
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+[diff]
+	tool = gvimdiff
+[difftool]
+	prompt = true

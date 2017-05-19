@@ -25,6 +25,7 @@ set guioptions-=T                 " ツールバーを非表示
 " set guioptions-=e               " TabのGUI表示をOFF
 set colorcolumn=80                " 80文字のライン
 set wildmenu                      " コマンドモードの補完方法
+set diffopt+=vertical             " diffは縦分割
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
