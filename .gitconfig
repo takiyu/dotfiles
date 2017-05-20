@@ -5,7 +5,8 @@
 [core]
 	editor = vim
 [alias]
-	graph = log --graph --all --pretty=format:'<%an> %C(bold green)%d%Creset %C(bold)%s%Creset (%cr, %ad) [%C(bold blue)%h%Creset]' --abbrev-commit --date=short
+	graph = log --graph --all --pretty=format:'%C(yellow)<%cr>%C(reset) [%an]%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)(%ad)%C(reset) [%C(bold blue)%h%Creset]' --abbrev-commit --date=short
+	tree = forest --all --pretty=format:'%C(yellow)<%cr>%C(reset) [%an] %C(reset)%s%C(reset) %C(green)(%ad)%C(reset) [%C(bold blue)%h%Creset]' --abbrev-commit --date=short
 [diff]
 	tool = gvimdiff
 [difftool]

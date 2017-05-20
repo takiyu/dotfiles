@@ -4,6 +4,8 @@
 
 # $HOME/dotfiles/bin
 export PATH=$HOME/dotfiles/bin:$PATH
+# $HOME/dotfiles/git-scripts
+export PATH=$HOME/dotfiles/git-scripts:$PATH
 # $HOME/bin
 export PATH=$HOME/bin:$PATH
 
