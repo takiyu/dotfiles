@@ -5,7 +5,7 @@
 [core]
 	editor = vim
 [alias]
-	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	graph = log --graph --all --pretty=format:'<%an> %C(bold green)%d%Creset %C(bold)%s%Creset (%cr, %ad) [%C(bold blue)%h%Creset]' --abbrev-commit --date=short
 [diff]
 	tool = gvimdiff
 [difftool]
