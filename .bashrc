@@ -79,3 +79,8 @@ synclient MaxSpeed=3.0 AccelFactor=0.18
 # Caffe 
 # export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
+
+# CUDA
+# export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
+# export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export CUDA_HOME=/usr/local/cuda
