@@ -1,4 +1,4 @@
-##takiyu dotfiles##
+## takiyu dotfiles ##
 
 ```
 ./init-all.sh
