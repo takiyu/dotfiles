@@ -29,7 +29,6 @@ import XMonad.Layout.ImageButtonDecoration
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.GridVariants
 import Data.Maybe (fromMaybe)
-import XMonad.Hooks.ICCCMFocus -- for android studio
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -45,7 +44,8 @@ modm = mod3Mask
 -- workspaces
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
 -- kill command
-killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
+-- killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
+killCommand = "cd /home/takiyu/.xmonad && ./compile.sh && xmonad --restart && xfce4-panel -r"
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
@@ -84,8 +84,7 @@ main = do
         logHook = logHook kdeConfig 
                 <+> (dynamicLogWithPP $ xmobarPP
                     { ppOutput = hPutStrLn xmproc
-                    , ppTitle = xmobarColor "green" "" . shorten 50 })
-                <+> takeTopFocus , -- for android studio(Java)
+                    , ppTitle = xmobarColor "green" "" . shorten 50 }),
         -- Workspaces
         workspaces =  myWorkspaces,
         -- Border settings
@@ -202,7 +201,7 @@ myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
             ]
 
 -- Shell Prompt Config
-shellPromptConfig = defaultXPConfig { 
+shellPromptConfig = greenXPConfig {
         font = "xft:Sans-11"
         , bgColor  = "black"
         , fgColor  = "white"
