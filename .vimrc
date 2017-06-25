@@ -113,9 +113,9 @@ nnoremap <C-c> :cclose<CR>
 " omni補完
 inoremap <C-o> <C-x><C-o>
 " omni補完(marching) オムニ補完時に補完ワードを挿入しない
-au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+" au FileType c,cpp imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
 " omni補完(marching) キャッシュを破棄、再取得
-au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
+" au FileType c,cpp imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 " Enterで補完を決定、または次へジャンプ
 imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
             \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
@@ -174,9 +174,9 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
             \ 'autoload':{ 'filetypes':[ 'cpp' ]} }
 " NeoBundleLazy 'Rip-Rip/clang_complete', {
 "             \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
-NeoBundleLazy 'osyo-manga/vim-marching', {
-            \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
-            \ 'depends' : ['Shougo/vimproc'] }
+" NeoBundleLazy 'osyo-manga/vim-marching', {
+"             \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]},
+"             \ 'depends' : ['Shougo/vimproc'] }
 "=== Unity C# ==
 " NeoBundleLazy 'nosami/Omnisharp', {
 "             \   'autoload': {'filetypes': ['cs']},
