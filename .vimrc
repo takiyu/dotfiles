@@ -148,7 +148,7 @@ NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
 NeoBundle 'scrooloose/syntastic'            " 文法チェック
 NeoBundle 'ujihisa/neco-look'               " 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク履歴
-NeoBundle 'sjl/gundo.vim'                   " undo可視化
+NeoBundle 'mbbill/undotree'                 " undo可視化
 NeoBundle 'tpope/vim-sleuth'                " インデント自動検出
 NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
@@ -439,8 +439,8 @@ autocmd FileType glsl let b:caw_oneline_comment = '//'
 "####### Plugin : yankring.vim #######
 let g:yankring_history_dir = $HOME.'/.vim'
 
-"####### Plugin : gundo.vim #######
-nmap U :<C-u>GundoToggle<CR>
+"####### Plugin : undotree.vim #######
+nmap U :<C-u>UndotreeToggle<CR>
 
 "####### Plugin : vim-indent-guides #######
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
