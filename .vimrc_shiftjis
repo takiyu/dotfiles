@@ -453,7 +453,7 @@ nmap U :<C-u>UndotreeToggle<CR>
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 "####### Plugin : vim-gitgutter #######
-let g:gitgutter_sign_column_always = 1
+set signcolumn=yes
 let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '-+'
 let g:gitgutter_sign_removed = '__'
