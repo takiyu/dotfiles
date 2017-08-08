@@ -15,7 +15,7 @@ do
 	# build default configuration
 	if [ $i -eq 1 ]
 	then
-		default=$default"--output $display --auto "
+		default=$default"--output $display --auto --rotate normal"
 	else
 		default=$default"--output $display --off "
 	fi
@@ -23,7 +23,7 @@ do
 	# build "switching" configuration
 	if [ $switch -eq 1 ]
 	then
-		execute=$execute"--output $display --auto "
+		execute=$execute"--output $display --auto --rotate normal"
 		switch=0
 	else
 		execute=$execute"--output $display --off "
