@@ -24,7 +24,7 @@ Fonts
     (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
 
 Desktop
-    pacman -S xorg xfce4 xmonad xmonad-contrib
+    pacman -S xorg xfce4 xfce4-goodies xmonad xmonad-contrib
     pacman -S fcitx fcitx-mozc fcitx-configtool
     pacman -S fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
     pacman -S xfce4-notifyd xfce4-screenshooter xfce4-taskmanager
