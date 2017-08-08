@@ -26,6 +26,10 @@ set guioptions-=T                 " ツールバーを非表示
 set colorcolumn=80                " 80文字のライン
 set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
+" === Encoding ===
+set encoding=utf-8
+set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8,latin1
+set fileformats=unix,dos,mac
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
 autocmd FileType python set foldmethod=indent
