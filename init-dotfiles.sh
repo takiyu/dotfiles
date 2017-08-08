@@ -2,7 +2,7 @@
 
 # TARGETS=.?*
 TARGETS=(.Xmodmap .bash_profile .bashrc .jshintrc .gitconfig .latexmkrc .pep8 \
-         .xinitrc .xmobarrc .xmonad \
+         .xinitrc .xmobarrc .xmonad .ctags \
          .config/zathura/zathurarc .mplayer/config)
 TARGET_DIRS=(.config/zathura/ .mplayer/)
 
