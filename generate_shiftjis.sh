@@ -1,4 +1,5 @@
 #!/bin/sh
-cat .vimrc | nkf -s > .vimrc_shiftjis
-cat .bashrc | nkf -s > .bashrc_shiftjis
-cat .bash_profile | nkf -s > .bash_profile_shiftjis
+mkdir -p shiftjis
+cat .vimrc | nkf -s > shiftjis/.vimrc
+cat .bashrc | nkf -s > shiftjis/.bashrc
+cat .bash_profile | nkf -s > shiftjis/.bash_profile
