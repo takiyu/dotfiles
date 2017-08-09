@@ -17,7 +17,7 @@ set cinoptions=g0                 " cppでのpublic宣言を下げる
 " set mouse=a                     " マウス
 " set ttymouse=xterm2
 set number                        " 行数を表示する
-" set hlsearch                    " 検索文字列を強調
+set nohlsearch                    " 検索文字列を強調を無効化
 set ignorecase                    " 大文字小文字を無視
 set smartcase                     " (ただし大文字入力時のみ考慮)
 set guioptions-=m                 " メニューバーを非表示
@@ -57,7 +57,7 @@ autocmd FileType python     set tabstop=4 shiftwidth=4 expandtab
 autocmd FileType neosnippet set noexpandtab " 効いていない？
 "=== Font Settings ===
 if has('win32') || has('win64')
-    set guifont=MS_Gothic:h13 " Windows
+    set guifont=MS_Gothic:h10 " Windows
 else
     " Windows以外
     " set guifont=DejaVu\ Sans\ Mono\ 8.7
