@@ -29,7 +29,7 @@ set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
 " === Encoding ===
 set encoding=utf-8
-set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8,latin1
+set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,latin1
 set fileformats=unix,dos,mac
 " === Folding ===
 autocmd FileType * set foldmethod=syntax
