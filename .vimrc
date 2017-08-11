@@ -26,6 +26,7 @@ set guioptions-=T                 " ツールバーを非表示
 set colorcolumn=80                " 80文字のライン
 set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
+set conceallevel=0                " 非表示文字も表示
 " === Encoding ===
 set encoding=utf-8
 set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8,latin1
@@ -287,7 +288,6 @@ let g:tex_flavor = 'latex'
 let g:tex_conceal=''
 " let g:tex_conceal='abgms'
 " let g:tex_conceal='adbmgs'
-setlocal conceallevel=2
 
 autocmd BufWritePost *.tex :Latexmk
 " autocmd BufWritePost *.tex :!latexmk
@@ -592,7 +592,8 @@ let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*f
 let g:neosnippet#disable_runtime_snippets = {'_' : 1 }
 " For snippet_complete marker
 if has('conceal')
-    set conceallevel=2 concealcursor=niv
+    " set conceallevel=2
+    set concealcursor=niv
 endif
 " スニペットファイルの保存ディレクトリのパスを登録
 let g:neosnippet#snippets_directory='~/.vim/bundle/my-vim-snippets/snippets'
