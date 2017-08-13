@@ -101,6 +101,8 @@ nnoremap 3 gt
 nnoremap 2 gT
 nnoremap " :tabm -1 <CR>
 nnoremap # :tabm +1 <CR>
+" Switch letter case
+noremap <S-0> ~
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
