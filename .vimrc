@@ -27,6 +27,7 @@ set colorcolumn=80                " 80文字のライン
 set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
+set nobackup                      " バックアップhoge~を作成しない
 " === Encoding ===
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,latin1
@@ -101,8 +102,6 @@ nnoremap 3 gt
 nnoremap 2 gT
 nnoremap " :tabm -1 <CR>
 nnoremap # :tabm +1 <CR>
-" Switch letter case
-noremap <S-0> ~
 " クリップボードから貼り付け,コピー
 " nnoremap <C-v> "+gp
 inoremap <C-v> <ESC>"+gp
