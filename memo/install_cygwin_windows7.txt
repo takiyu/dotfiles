@@ -1,0 +1,9 @@
+Set HOME to environment variables.
+    HOME: C:\Users\takiyu
+
+Run chgkey and set keyconfigs (create f13).
+
+In IME settings, remove f13 shortcut and set Ctrl-Space with `IME toggle`.
+
+Create bug.n shortcut to startup with an argument of config directiory.
+
