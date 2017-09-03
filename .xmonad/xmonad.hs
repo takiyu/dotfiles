@@ -44,8 +44,7 @@ modm = mod3Mask
 -- workspaces
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
 -- kill command
--- killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
-killCommand = "cd /home/takiyu/.xmonad && ./compile.sh && xmonad --restart && xfce4-panel -r"
+killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
