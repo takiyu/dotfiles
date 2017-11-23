@@ -1,0 +1,40 @@
+/* Multi line tab */
+#titlebar-buttonbox {
+  vertical-align: top !important;
+  display: block !important;
+}
+.tabbrowser-arrowscrollbox scrollbox {
+  overflow: visible !important;
+}
+.tabbrowser-arrowscrollbox scrollbox > box {
+  display: block !important;
+}
+/* Title bar height */
+toolbarbutton.titlebar-button {
+  min-height: 31px !important;
+}
+/* Tab size */
+.tabbrowser-tab:not([pinned]) {
+  min-height: 32px !important;
+  max-height: 32px !important;
+}
+.tabbrowser-tab {
+  width: 150px !important;
+}
+/* Tab alignment */
+.tabbrowser-tabs .tabbrowser-tab {
+  vertical-align: top !important;
+  -moz-box-sizing: border-box !important;
+}
+/* New tab button alignment */
+.tabs-newtab-button {
+  vertical-align: bottom !important;
+  height: 30px !important;
+}
+/* Close button on tabs */
+.tabbrowser-tab:not(:hover) .tab-close-button{
+  display:none;
+}
+.tabbrowser-tab:not([pinned]):hover .tab-close-button{
+  display:block !important;
+}
