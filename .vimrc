@@ -655,6 +655,8 @@ autocmd InsertLeave *.txt call Fcitx2en()
 autocmd InsertEnter *.txt call Fcitx2zh()
 autocmd InsertLeave *.tex call Fcitx2en()
 autocmd InsertEnter *.tex call Fcitx2zh()
+autocmd InsertLeave *.md call Fcitx2en()
+autocmd InsertEnter *.md call Fcitx2zh()
 autocmd InsertLeave *.plaintex call Fcitx2en()
 autocmd InsertEnter *.plaintex call Fcitx2zh()
 
