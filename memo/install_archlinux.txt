@@ -95,6 +95,8 @@ Development
     pacman -S premake4
     yaourt -S premake-git
 
+    yaourt -S ocl-icd intel-opencl-runtime opencl-headers
+
 Fix screen blinking bug for Dell XPS13
     edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
 
