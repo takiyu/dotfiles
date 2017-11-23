@@ -45,6 +45,7 @@ modm = mod3Mask
 myWorkspaces = ["1", "2" ,"3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ]
 -- kill command
 killCommand = "xmonad --recompile && xmonad --restart && xfce4-panel -r"
+-- killCommand = "xmonad --restart && xfce4-panel -r"
 
 -- layoutHook
 myTall = named "Tall" $ ResizableTall 1 (3/100) (1/2) []
@@ -116,7 +117,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             -- window alt-tab
             , ((modm,                  xK_Tab), windows W.focusDown)
             , ((modm.|.shiftMask,      xK_Tab), windows W.focusUp  )
-            , ((mod1Mask,              xK_Tab), windows W.focusDown)
+--             , ((mod1Mask,              xK_Tab), windows W.focusDown)
 --          , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
 
             -- layout toggle
