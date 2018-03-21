@@ -2,6 +2,9 @@
 # ~/.bash_profile
 #
 
+# Disable beep
+set bell-style none
+
 # $HOME/dotfiles/bin
 export PATH=$HOME/dotfiles/bin:$PATH
 # $HOME/bin
@@ -33,10 +36,15 @@ export PATH=$PATH:/opt/android-sdk/platform-tools  # platform-tools (adb etc...)
 export PATH=$PATH:/opt/android-sdk/tools           # tools (android etc...)
 export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
 export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
+export PATH=$PATH:/opt/android-ndk                 # ndk
 export ANDROID_HOME=/opt/android-sdk
+export ANDROID_NDK_HOME=/opt/android-ndk
 
 # Golang
 export GOPATH=$HOME/Projects/Gocode
+
+# Unity
+export PATH=$PATH:/opt/Unity/Editor/
 
 # .bashrc
 [[ -f ~/.bashrc ]] && . ~/.bashrc

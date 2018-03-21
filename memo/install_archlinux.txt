@@ -149,5 +149,8 @@ Makepkg parallel
 
 Android Development
     yaourt -S android-sdk android-sdk-platform-tools android-sdk-build-tools
-    yaourt -S android-platform-25 android-ndk
+    yaourt -S android-platform-26 android-ndk
     pacman -S pidcat
+
+    Fix clang dependence.
+    `sudo ln -s /usr/lib/libncurses.so.5 /usr/lib/libtinfo.so.5`

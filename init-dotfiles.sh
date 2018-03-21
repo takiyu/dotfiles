@@ -3,8 +3,9 @@
 # TARGETS=.?*
 TARGETS=(.Xmodmap .bash_profile .bashrc .jshintrc .gitconfig .latexmkrc .pep8 \
          .xinitrc .xmobarrc .xmonad .ctags \
-         .config/zathura/zathurarc .mplayer/config)
-TARGET_DIRS=(.config/zathura/ .mplayer/)
+         .config/zathura/zathurarc .mplayer/config \
+         .config/matplotlib/matplotlibrc)
+TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
 
 
 # utility functions

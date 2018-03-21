@@ -28,6 +28,7 @@ set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
 set nobackup                      " バックアップhoge~を作成しない
+set belloff=all
 " === Encoding ===
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,latin1
@@ -160,6 +161,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " インデント明示化
 NeoBundle 'bronson/vim-trailing-whitespace' " 行末スペース可視化
 NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
 NeoBundle 'tpope/vim-fugitive'              " Git補助
+NeoBundle 'cohama/agit.vim'                 " Git Graph
 NeoBundle 'takiyu/gtrans-web.vim'           " Google翻訳
 NeoBundle 'daisuzu/translategoogle.vim'           " Google翻訳
 "=== 補完 (+luaが必要) ===
@@ -181,8 +183,8 @@ NeoBundle 'tikhomirov/vim-glsl'
 "===C/C++ ===
 NeoBundleLazy 'vim-jp/cpp-vim', {
             \ 'autoload':{ 'filetypes':[ 'cpp' ]} }
-NeoBundleLazy 'rhysd/vim-clang-format', {
-            \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
+" NeoBundleLazy 'rhysd/vim-clang-format', {
+"             \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
 " NeoBundleLazy 'Rip-Rip/clang_complete', {
 "             \ 'autoload':{ 'filetypes':[ 'c', 'cpp' ]} }
 " NeoBundleLazy 'osyo-manga/vim-marching', {
@@ -209,14 +211,8 @@ NeoBundleLazy 'vim-scripts/verilog.vim', {
 NeoBundleLazy 'marijnh/tern_for_vim', {
             \ 'autoload':{ 'filetypes':[ 'javascript' ]},
             \ 'build': { 'others': 'npm install' } }
-" NeoBundleLazy 'jelera/vim-javascript-syntax', {
-"              \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
-NeoBundleLazy 'pangloss/vim-javascript', {
-            \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
-NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
-            \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
-" NeoBundleLazy 'othree/html5-syntax.vim', {
-"             \ 'autoload': { 'filetypes': ['html']} }
+NeoBundleLazy 'othree/yajs.vim', {
+             \ 'autoload':{ 'filetypes':[ 'javascript' ]} }
 " NeoBundle 'hallison/vim-markdown'
 "=== Ruby ===
 " NeoBundleLazy 'cespare/ruby-complete', {
