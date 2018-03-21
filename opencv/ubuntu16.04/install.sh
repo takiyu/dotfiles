@@ -52,17 +52,19 @@ sudo apt-get -yV install unzip
 sudo apt-get -yV install libblas-dev liblapack-dev libatlas-dev 
 sudo apt-get -yV install libeigen3-dev
 
-version='3.2.0'
+version='3.3.0'
 cd /tmp
 if [ ! -f OpenCV-$version.zip ]; then
-    wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/$version/opencv-$version.zip
-fi 
+    wget -O opencv-$version.zip https://github.com/opencv/opencv/archive/$version.zip
+fi
 
 sudo rm -rf opencv-$version
 unzip /tmp/opencv-$version
 cd opencv-$version
-cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=OFF -DWITH_OPENNI=OFF -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON  .
-# cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=ON -DWITH_OPENNI=ON -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON -D CUDA_GENERATION=Kepler .
+mkdir build
+cd build
+cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=OFF -DWITH_OPENNI=OFF -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON  ..
+# cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON -DWITH_GTK=ON -DWITH_OPENGL=ON -DWITH_QT=ON -DINSTALL_C_EXAMPLES=ON -DWITH_OPENCL=OFF -DWITH_CUDA=ON -DWITH_OPENNI=ON -DWITH_UNICAP=ON -DWITH_V4L=ON -DWITH_XINE=ON -D CUDA_GENERATION=Kepler ..
 make -j4
 sudo make install
 sudo ldconfig
