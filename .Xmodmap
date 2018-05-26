@@ -5,7 +5,7 @@ keycode 100 = Escape
 remove lock = Caps_Lock
 keysym Caps_Lock = Control_L
 keysym Pause = Caps_Lock
-keysym Print = Caps_Lock
+keysym Print = Insert
 add lock = Caps_Lock
 add Control = Control_L
 
