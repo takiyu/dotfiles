@@ -28,7 +28,8 @@ set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
 set nobackup                      " バックアップhoge~を作成しない
-set belloff=all
+set belloff=all                   " ビープ音無効化
+set termguicolors                 " CLIでフルカラー
 " === Encoding ===
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,latin1
@@ -64,7 +65,8 @@ if has('win32') || has('win64')
 else
     " Windows以外
     " set guifont=DejaVu\ Sans\ Mono\ 8.7
-    set guifont=DejaVu\ Sans\ Mono\ 9.8
+    " set guifont=DejaVu\ Sans\ Mono\ 9.8
+    set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
     " set guifont=DejaVu\ Sans\ Mono\ 13
     " set lsp=4 " gvimでの行間
 endif
