@@ -38,7 +38,8 @@ export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
 export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
 export PATH=$PATH:/opt/android-ndk                 # ndk
 export ANDROID_HOME=/opt/android-sdk
-export ANDROID_NDK_HOME=/opt/android-ndk
+export ANDROID_NDK=/opt/android-ndk
+export ANDROID_NDK_HOME=$ANDROID_NDK
 
 # Golang
 export GOPATH=$HOME/Projects/Gocode
