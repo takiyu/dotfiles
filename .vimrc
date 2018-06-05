@@ -368,13 +368,13 @@ autocmd TextChangedI * call lightline#update()
 
 "####### Plugin : ALE #######
 nnoremap <F11> :ALEToggle<CR>
+nnoremap <F9> :ALEFix<CR>
 let b:ale_fixers = {
     \ 'javascript': ['eslint'],
     \ 'python': ['autopep8'],
     \ 'c': ['clang-format'],
     \ 'cpp': ['clang-format'],
     \ }
-map <buffer> <F9> :ALEFix<CR>
 
 "####### Plugin : nerdtree #######
 noremap <C-e> :NERDTreeToggle<CR>
