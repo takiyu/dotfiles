@@ -452,6 +452,8 @@ let g:agit_enable_auto_show_commit = 0
 
 "####### Plugin : deol.nvim #######
 nnoremap <F4> :Deol<CR>
+"tnoremap <F4> <C-\><C-n>:q<CR>
+tnoremap <silent> <ESC> <C-\><C-n>
 
 "####### Plugin : gtransweb.vim #######
 let g:gtransweb_async_mode = 1
