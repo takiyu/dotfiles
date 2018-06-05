@@ -164,8 +164,8 @@ NeoBundle 'bronson/vim-trailing-whitespace' " 行末スペース可視化
 NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
 NeoBundle 'tpope/vim-fugitive'              " Git補助
 NeoBundle 'cohama/agit.vim'                 " Git Graph
+NeoBundle 'will133/vim-dirdiff'             " ディレクトリ差分
 NeoBundle 'takiyu/gtrans-web.vim'           " Google翻訳
-NeoBundle 'daisuzu/translategoogle.vim'           " Google翻訳
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -461,6 +461,9 @@ let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '-+'
 let g:gitgutter_sign_removed = '__'
 let g:gitgutter_sign_modified_removed = '+_'
+
+"####### Plugin : agit.vim #######
+let g:agit_enable_auto_show_commit = 0
 
 "####### Plugin : gtransweb.vim #######
 let g:gtransweb_async_mode = 1
