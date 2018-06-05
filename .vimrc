@@ -166,6 +166,7 @@ NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
 NeoBundle 'tpope/vim-fugitive'              " Git補助
 NeoBundle 'cohama/agit.vim'                 " Git Graph
 NeoBundle 'will133/vim-dirdiff'             " ディレクトリ差分
+NeoBundle 'Shougo/deol.nvim'                " Shell
 NeoBundle 'takiyu/gtrans-web.vim'           " Google翻訳
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
@@ -448,6 +449,9 @@ let g:gitgutter_sign_modified_removed = '+_'
 
 "####### Plugin : agit.vim #######
 let g:agit_enable_auto_show_commit = 0
+
+"####### Plugin : deol.nvim #######
+nnoremap <F4> :Deol<CR>
 
 "####### Plugin : gtransweb.vim #######
 let g:gtransweb_async_mode = 1
