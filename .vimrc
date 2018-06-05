@@ -154,7 +154,8 @@ NeoBundle 'rhysd/clever-f.vim'              " Clever-f
 NeoBundle 'itchyny/lightline.vim'           " ステータスライン
 NeoBundle 't9md/vim-quickhl'                " ハイライト
 NeoBundle 'vimtaku/hl_matchit.vim'          " 括弧+αをハイライト
-NeoBundle 'scrooloose/syntastic'            " 文法チェック
+NeoBundle 'w0rp/ale'                        " 文法チェック
+NeoBundle 'maximbaz/lightline-ale'          " 文法チェックのステータスライン表示
 NeoBundle 'ujihisa/neco-look'               " 英単語補完
 NeoBundle 'vim-scripts/YankRing.vim'        " ヤンク履歴
 NeoBundle 'mbbill/undotree'                 " undo可視化
@@ -225,8 +226,6 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
             \ 'autoload':{ 'filetypes':[ 'python' ]} }
 " NeoBundleLazy 'tmhedberg/SimpylFold', {
 "             \ 'autoload':{ 'filetypes':[ 'python' ]} }
-NeoBundleLazy 'tell-k/vim-autopep8', {
-            \ 'autoload':{ 'filetypes':[ 'python' ]} }
 "=== Golang ===
 NeoBundle 'fatih/vim-go' " filetype認識のため、Lazyにするにはautocmdの必要あり
 " :GoInstallBinarys を実行
@@ -308,7 +307,9 @@ let g:lightline = {
             \             [ 'readonly', 'filename', 'modified' ] ],
             \   'right': [ [ 'percentlineinfo' ],
             \              [ 'fileinfo' ],
-            \              [ 'gitstatus', 'syntastic' ] ],
+            \              [ 'gitstatus'],
+            \              [ 'linter_checking', 'linter_errors',
+            \                'linter_warnings', 'linter_ok' ]],
             \ },
             \ 'component': {
             \   'readonly': '%{&readonly?"R":"W"}',
@@ -319,10 +320,16 @@ let g:lightline = {
             \   'gitstatus': 'LightlineGitStatus',
             \ },
             \ 'component_expand': {
-            \   'syntastic': 'SyntasticStatuslineFlag',
+            \   'linter_checking': 'lightline#ale#checking',
+            \   'linter_warnings': 'lightline#ale#warnings',
+            \   'linter_errors': 'lightline#ale#errors',
+            \   'linter_ok': 'lightline#ale#ok',
             \ },
             \ 'component_type': {
-            \   'syntastic': 'error',
+            \   'linter_checking': 'left',
+            \   'linter_warnings': 'warning',
+            \   'linter_errors': 'error',
+            \   'linter_ok': 'left',
             \ },
             \ 'separator': {'left': '', 'right': ' '},
             \ 'subseparator': {'left': '|', 'right': '|'},
@@ -358,39 +365,16 @@ function! LightlineGitStatus()
 endfunction
 autocmd TextChanged * call lightline#update()
 autocmd TextChangedI * call lightline#update()
-" 保存時にsyntasticでチェックをしてから表示をアップデート
-let g:syntastic_mode_map = { 'mode': 'passive' } "自動的には起動しない
-" Syntastic Check Toggle
-let s:syntastic_check_flag = 1
-function! g:Syntastic_toggle()
-    if s:syntastic_check_flag
-        let s:syntastic_check_flag = 0
-        echomsg string('syntastic on')
-    else
-        let s:syntastic_check_flag = 1
-        echomsg string('syntastic off')
-    endif
-endfunction
-function! s:syntastic_check()
-    if s:syntastic_check_flag
-        SyntasticCheck
-    else
-        SyntasticReset
-    endif
-    call lightline#update()
-endfunction
-autocmd BufWritePost * call s:syntastic_check()
-nnoremap <F11> :call g:Syntastic_toggle()<CR>
-"####### Plugin : syntastic #######
-let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
-" let g:syntastic_auto_jump = 1
-" let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_javascript_checkers = ['jsxhint']
-" let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_checkers = ['pyflakes', 'pep8']
-let g:syntastic_python_pep8_args = "--config=".expand("$HOME")."/.pep8"
-let g:syntastic_error_symbol = ">>"
-let g:syntastic_warning_symbol = ">>"
+
+"####### Plugin : ALE #######
+nnoremap <F11> :ALEToggle<CR>
+let b:ale_fixers = {
+    \ 'javascript': ['eslint'],
+    \ 'python': ['autopep8'],
+    \ 'c': ['clang-format'],
+    \ 'cpp': ['clang-format'],
+    \ }
+map <buffer> <F9> :ALEFix<CR>
 
 "####### Plugin : nerdtree #######
 noremap <C-e> :NERDTreeToggle<CR>
@@ -501,10 +485,6 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#show_call_signatures = 2
 " non-auto close preview window
 let g:jedi#auto_close_doc = 0
-
-"####### Plugin : autopep8 (Python) #######
-autocmd FileType python map <buffer> <F9> :call Autopep8()<CR>
-" let g:autopep8_disable_show_diff=1
 
 "####### Plugin : term_for_vim (JavaScript) #######
 " let g:tern_show_argument_hints = 'on_move'
