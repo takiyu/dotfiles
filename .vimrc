@@ -119,6 +119,10 @@ nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
 " Quickfix windowの非表示
 nnoremap <C-c> :cclose<CR>
+" Terminal
+nnoremap <F4> :terminal ++rows=10<CR>
+tnoremap <F4> <C-\><C-n>>:q!<CR>
+tnoremap <silent> <ESC> <C-\><C-n>
 " omni補完
 inoremap <C-o> <C-x><C-o>
 " omni補完(marching) オムニ補完時に補完ワードを挿入しない
@@ -166,7 +170,7 @@ NeoBundle 'airblade/vim-gitgutter'          " Git差分ガイド
 NeoBundle 'tpope/vim-fugitive'              " Git補助
 NeoBundle 'cohama/agit.vim'                 " Git Graph
 NeoBundle 'will133/vim-dirdiff'             " ディレクトリ差分
-NeoBundle 'Shougo/deol.nvim'                " Shell
+NeoBundle 'embear/vim-localvimrc'           " Local vimrc
 NeoBundle 'takiyu/gtrans-web.vim'           " Google翻訳
 "=== 補完 (+luaが必要) ===
 NeoBundle 'Shougo/neocomplete'
@@ -449,11 +453,6 @@ let g:gitgutter_sign_modified_removed = '+_'
 
 "####### Plugin : agit.vim #######
 let g:agit_enable_auto_show_commit = 0
-
-"####### Plugin : deol.nvim #######
-nnoremap <F4> :Deol<CR>
-"tnoremap <F4> <C-\><C-n>:q<CR>
-tnoremap <silent> <ESC> <C-\><C-n>
 
 "####### Plugin : gtransweb.vim #######
 let g:gtransweb_async_mode = 1
