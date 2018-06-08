@@ -1,0 +1,91 @@
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+on_ft = ['cpp']
+
+[[plugins]]
+repo = 'zchee/deoplete-clang'
+on_ft = ['c', 'cpp', 'cmake']
+depends = ['deoplete.nvim']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'deoplete-clang.vim'
+'''
+
+[[plugins]]
+repo = 'Shougo/neoinclude.vim'
+on_ft = ['c', 'cpp']
+depends = ['deoplete.nvim']
+
+[[plugins]]
+repo = 'zchee/deoplete-jedi'
+on_ft = ['python']
+depends = ['deoplete.nvim']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'deoplete-jedi.vim'
+'''
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = ['python']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'jedi-vim.vim'
+'''
+
+[[plugins]]
+repo = 'tmhedberg/SimpylFold'
+on_ft = ['python']
+
+[[plugins]]
+repo = 'tikhomirov/vim-glsl'
+on_ft = ['glsl']
+
+[[plugins]]
+repo = 'marijnh/tern_for_vim'
+on_ft = ['javascript']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'tern_for_vim.vim'
+'''
+
+[[plugins]]
+repo = 'othree/yajs.vim'
+on_ft = ['javascript']
+
+[[plugins]]
+repo = 'cespare/ruby-complete'
+on_ft = ['ruby']
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-go.vim'
+'''
+
+[[plugins]]
+repo = 'vim-scripts/verilog.vim'
+on_ft = ['verilog']
+
+[[plugins]]
+repo = 'LaTeX-Box-Team/LaTeX-Box'
+on_ft = ['tex', 'plaintex']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'latex-box.vim'
+'''
+
+[[plugins]]
+repo = 'hallison/vim-markdown'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = ['json']
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = ['toml']
+
+[[plugins]]
+repo = 'LeafCage/vimhelpgenerator'
+on_ft = ['vim']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vimhelpgenerator.vim'
+'''

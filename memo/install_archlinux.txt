@@ -32,6 +32,7 @@ Desktop
     pacman -S networkmanager network-manager-applet gnome-keyring
     pacman -S libcanberra libcanberra-pulse
     pacman -S gvfs gvfs-smb sshfs gvfs-mtp mtpfs
+    pacman -S xclip
 
 Bluetooth
     yaourt -S xfce4-pulseaudio-plugin

@@ -1,0 +1,128 @@
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'            # 補完
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'deoplete.vim'
+'''
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'                 # neovim compatibility
+if = '!has("nvim")'
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'        # neovim compatibility
+if = '!has("nvim")'
+
+[[plugins]]
+repo = 'Shougo/neosnippet'               # Snippet
+depends = ['deoplete.nvim']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'neosnippet.vim'
+'''
+
+[[plugins]]
+repo = 'takiyu/my-vim-snippets'          # Snippet
+depends = ['neosnippet.vim']
+
+[[plugins]]
+repo = 'takiyu/tango-lx'                 # カラースキーム
+
+[[plugins]]
+repo = 'tyru/caw.vim'                    # コメントアウト補助
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'caw.vim'
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'             # Filer
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'nerdtree.vim'
+'''
+
+[[plugins]]
+repo = 'rhysd/clever-f.vim'              # Clever-f
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'clever-f.vim'
+'''
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'           # ステータスライン
+depends = ['vim-fugitive', 'lightline-ale']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'lightline.vim'
+'''
+
+[[plugins]]
+repo = 't9md/vim-quickhl'                # ハイライト
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-quickhl.vim'
+'''
+
+[[plugins]]
+repo = 'vimtaku/hl_matchit.vim'          # 括弧+αをハイライト
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'hl_matchit.vim'
+'''
+
+[[plugins]]
+repo = 'w0rp/ale'                        # 文法チェック
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'ale.vim'
+'''
+
+[[plugins]]
+repo = 'maximbaz/lightline-ale'          # 文法チェックのステータスライン表示
+depends = ['ale']
+
+[[plugins]]
+repo = 'vim-scripts/YankRing.vim'        # ヤンク履歴
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'yankring.vim'
+'''
+
+[[plugins]]
+repo = 'mbbill/undotree'                 # undo可視化
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'undotree.vim'
+'''
+
+[[plugins]]
+repo = 'tpope/vim-sleuth'                # インデント自動検出
+
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides' # インデント明示化
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-indent-guides.vim'
+'''
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace' # 行末スペース可視化
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'          # Git差分ガイド
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-gitgutter.vim'
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'              # Git補助
+
+[[plugins]]
+repo = 'cohama/agit.vim'                 # Git Graph
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'agit.vim'
+'''
+
+[[plugins]]
+repo = 'will133/vim-dirdiff'             # ディレクトリ差分
+
+[[plugins]]
+repo = 'embear/vim-localvimrc'           # Local vimrc
+
+[[plugins]]
+repo = 'ujihisa/neco-look'               # 英単語補完
+
+[[plugins]]
+repo = 'takiyu/gtrans-web.vim'           # Google翻訳
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'gtrans-web.vim'
+'''

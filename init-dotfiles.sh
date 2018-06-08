@@ -2,10 +2,11 @@
 
 # TARGETS=.?*
 TARGETS=(.Xmodmap .bash_profile .bashrc .jshintrc .gitconfig .latexmkrc .pep8 \
-         .xinitrc .xmobarrc .xmonad .ctags \
+         .xinitrc .xmobarrc .xmonad .ctags .vimrc \
          .config/zathura/zathurarc .mplayer/config \
-         .config/matplotlib/matplotlibrc)
-TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
+         .config/matplotlib/matplotlibrc \
+         .config/nvim/*.vim .config/nvim/dein)
+TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
 
 
 # utility functions
