@@ -14,6 +14,8 @@ let g:deoplete#max_list = 500
 " Enterで補完を決定、または次へジャンプ
 imap <expr><CR> pumvisible() ? "\<Plug>(neosnippet_expand)" :
               \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :"\<CR>")
+" Ctrl+Enterで次へジャンプ
+imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<CR>"
 " Tabで選択
 imap <expr><TAB> pumvisible() ? "\<C-n>" :
               \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")

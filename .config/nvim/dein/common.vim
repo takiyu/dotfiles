@@ -112,6 +112,8 @@ vnoremap <C-c> "+y
 " inoremap <C-c> <Esc>zc
 " F1のヘルプを無効化
 map <F1> <Esc>
+" 終了(q)を無効化
+map <C-q> <Esc>
 " Vimgrep
 nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>

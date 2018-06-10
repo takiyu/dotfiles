@@ -39,9 +39,9 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'rhysd/clever-f.vim'              # Clever-f
+repo = 'easymotion/vim-easymotion'       # カーソル移動
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'clever-f.vim'
+    execute 'source ' . g:dein_config_dir . 'vim-easymotion.vim'
 '''
 
 [[plugins]]
@@ -49,6 +49,12 @@ repo = 'itchyny/lightline.vim'           # ステータスライン
 depends = ['vim-fugitive', 'lightline-ale']
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'lightline.vim'
+'''
+
+[[plugins]]
+repo = 'simeji/winresizer'               # ウィンドウリサイズ
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'winresizer.vim'
 '''
 
 [[plugins]]
