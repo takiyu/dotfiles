@@ -2,9 +2,6 @@
 # ~/.bash_profile
 #
 
-# Disable beep
-set bell-style none
-
 # $HOME/dotfiles/bin
 export PATH=$HOME/dotfiles/bin:$PATH
 # $HOME/bin
@@ -48,4 +45,8 @@ export GOPATH=$HOME/Projects/Gocode
 export PATH=$PATH:/opt/Unity/Editor/
 
 # .bashrc
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+if [ -n "$BASH_VERSION" ]; then
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+fi
