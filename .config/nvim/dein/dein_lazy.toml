@@ -78,6 +78,9 @@ on_ft = ['markdown']
 [[plugins]]
 repo = 'elzr/vim-json'
 on_ft = ['json']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-json.vim'
+'''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
