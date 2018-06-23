@@ -9,7 +9,7 @@ set whichwrap=b,s,h,l,<,>,[,]     " 行頭から前行文末へ移動可能に�
 set scrolloff=3                   " スクロールを開始する行数
 set cindent                       " cオートインデント
 set cinoptions=g0                 " cppでのpublic宣言を下げる
-" set showtabline=2               " タブ(上部)を常に表示する
+set showtabline=2                 " タブ(上部)を常に表示する
 set number                        " 行数を表示する
 set nohlsearch                    " 検索文字列を強調を無効化
 set ignorecase                    " 大文字小文字を無視
@@ -125,32 +125,6 @@ tnoremap <F4> <C-\><C-n>>:q!<CR>
 tnoremap <silent> <ESC> <C-\><C-n>
 " omni補完
 inoremap <C-o> <C-x><C-o>
-
-"===== GUIタブの表示設定 =====
-function! GuiTabLabel() " 個別に設定
-    let l:label = ''
-    " タブに含まれるバッファ(ウィンドウ)情報を取得
-    let l:bufnrlist = tabpagebuflist(v:lnum)
-    " 表示文字列にバッファ名中のファイル名を追加
-    let l:bufname =
-        \ fnamemodify(bufname(l:bufnrlist[tabpagewinnr(v:lnum) - 1]), ':t')
-    " バッファ名がなければNo title
-    let l:label .= l:bufname == '' ? 'No title' : l:bufname
-    " タブ内にウィンドウが複数あるときにはその数を追加
-    let l:wincount = tabpagewinnr(v:lnum, '$')
-    if l:wincount > 1
-        let l:label .= '[' . l:wincount . ']'
-    endif
-    for bufnr in l:bufnrlist " 変更のあるバッファがるときには '[+]' を追加
-        if getbufvar(bufnr, "&modified")
-            let l:label .= '[+]'
-            break
-        endif
-    endfor
-    return l:label
-endfunction
-" guitablabelに上の関数を設定
-set guitablabel=%N:\ %{GuiTabLabel()}
 
 "==== Auto fcitx ====
 let g:input_toggle = 0
