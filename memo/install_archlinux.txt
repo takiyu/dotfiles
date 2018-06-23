@@ -73,6 +73,8 @@ Others
     pacman -S recordmydesktop
     yaourt -S chromium chromium-widevine
     yaourt -S pepper-flash
+    pacman -S words
+    yaourt -S cmigemo-git
 
     pacman -S sane xsane simple-scan
 
