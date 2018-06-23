@@ -39,7 +39,13 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'easymotion/vim-easymotion'       # カーソル移動
+repo = 'rhysd/clever-f.vim'              # カーソル移動 (f)
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'clever-f.vim'
+'''
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'       # カーソル移動 (s)
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'vim-easymotion.vim'
 '''

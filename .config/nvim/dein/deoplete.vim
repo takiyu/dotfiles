@@ -7,7 +7,7 @@ let g:deoplete#auto_complete_delay = 0
 let g:deoplete#camel_case = 1
 let g:deoplete#ignore_case = 1
 let g:deoplete#smart_case = 1
-" let g:deoplete#refresh_always = 1
+let g:deoplete#refresh_always = 0
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#max_list = 500
 
