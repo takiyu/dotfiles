@@ -1,8 +1,8 @@
 " ==============================================================================
 "                                  vim-gitgutter
 " ==============================================================================
-set signcolumn=yes
-set updatetime=50
+set updatetime=200
+let g:gitgutter_max_signs = 200
 let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '-+'
 let g:gitgutter_sign_removed = '__'

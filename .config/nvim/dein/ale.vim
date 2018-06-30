@@ -7,6 +7,7 @@ let b:ale_fixers = {
     \ 'javascript': ['eslint'],
     \ 'python': ['autopep8'],
     \ 'c': ['clang-format'],
-    \ 'cpp': ['clang-format'],
+    \ 'cpp': ['clang-format']
     \ }
 
+let g:ale_completion_delay = 1000
