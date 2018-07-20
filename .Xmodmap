@@ -4,7 +4,7 @@ keycode 100 = Escape
 ! ----ctrl----
 remove lock = Caps_Lock
 keysym Caps_Lock = Control_L
-keysym Pause = Caps_Lock
+keysym Scroll_Lock = Caps_Lock
 keysym Print = Insert
 add lock = Caps_Lock
 add Control = Control_L
