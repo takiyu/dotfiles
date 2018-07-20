@@ -90,3 +90,6 @@ synclient MaxSpeed=2.0 AccelFactor=0.10
 # export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 # export CUDA_HOME=/usr/local/cuda
 # export CUDA_CUDART_LIBRARY=$CUDA_HOME
+
+# Virtualbox
+VBOX_USB=usbfs
