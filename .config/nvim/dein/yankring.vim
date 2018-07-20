@@ -2,3 +2,4 @@
 "                                  yankring
 " ==============================================================================
 let g:yankring_history_dir = g:dein_cache_path
+let g:yankring_clipboard_monitor = 0
