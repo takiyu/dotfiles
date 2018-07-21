@@ -1,11 +1,21 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
 
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
+esac
+
+# determine the platform
+case "$(uname -s)" in
+    Linux)
+        platform="Linux" ;;
+    CYGWIN*|MINGW32*|MSYS*)
+        platform="Windows" ;;
+    Darwin)
+        platform="Mac" ;;
+    *)
+        echo "Unknown platform" ;;
 esac
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -50,10 +60,10 @@ GIT_PS1_SHOWUPSTREAM=1
 GIT_PS1_SHOWUNTRACKEDFILES=
 GIT_PS1_SHOWSTASHSTATE=
 GIT_PS1_SHOWDIRTYSTATE=
-
-# color prompt
 source ~/dotfiles/git/git-prompt.sh
 source ~/dotfiles/git/git-completion.bash
+
+# color prompt
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
 
 # enable color support of ls and also add handy aliases
@@ -73,6 +83,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
+
 # aliases for git
 alias g='git'
 alias gs='git status'
@@ -88,24 +99,36 @@ alias gf='git fetch'
 alias gpom='git push origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
-# aliases for applications
-alias filer=thunar
-function thunar() { command thunar $1 & &> /dev/null; }  # Redirect everything
-function zathura() { command zathura $1 & &> /dev/null; }
+
 # aliases for editors
 alias v=gvim
 alias vim=nvim
-function gvim() { command nvim-qt $@ 2> /dev/null; }  # Redirect only err
+if [ $platform == 'Linux' ]; then
+    function gvim() { command nvim-qt $@ 2> /dev/null; }
+    EDITOR=vim
+elif [ $platform == 'Windows' ]; then
+    function gvim() { command nvim-qt $@ & 2> /dev/null; }
+    EDITOR=gvim
+fi
 
-EDITOR=vim
+# aliases for applications
+if [ $platform == 'Linux' ]; then
+    alias filer=thunar
+    function thunar() { command thunar $1 & &> /dev/null; }
+    function zathura() { command zathura $1 & &> /dev/null; }
+elif [ $platform == 'Windows' ]; then
+    alias filer=explorer
+fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Synaptics
-synclient VertScrollDelta=-30 HorizScrollDelta=-30
-synclient MaxSpeed=2.0 AccelFactor=0.10
+if [ $platform == 'Linux' ]; then
+    synclient VertScrollDelta=-30 HorizScrollDelta=-30
+    synclient MaxSpeed=2.0 AccelFactor=0.10
+fi
 
 # Caffe
 # export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH

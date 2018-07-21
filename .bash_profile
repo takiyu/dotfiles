@@ -1,5 +1,5 @@
 #
-# ~/.bash_profile
+# ~/.bash_profile for Linux
 #
 
 # $HOME/dotfiles/bin
