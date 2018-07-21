@@ -6,17 +6,14 @@ case $- in
       *) return;;
 esac
 
+# utility scripts
+dotfiles=$HOME/dotfiles
+determ_platform=$dotfiles/utils/determ_platform.sh
+git_prompt=$dotfiles/utils/git/git-prompt.sh
+git_completion=$dotfiles/utils/git/git-completion.bash
+
 # determine the platform
-case "$(uname -s)" in
-    Linux)
-        platform="Linux" ;;
-    CYGWIN*|MINGW32*|MSYS*)
-        platform="Windows" ;;
-    Darwin)
-        platform="Mac" ;;
-    *)
-        echo "Unknown platform" ;;
-esac
+platform=`$determ_platform`
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
@@ -64,8 +61,8 @@ GIT_PS1_SHOWUPSTREAM=1
 GIT_PS1_SHOWUNTRACKEDFILES=
 GIT_PS1_SHOWSTASHSTATE=
 GIT_PS1_SHOWDIRTYSTATE=
-source ~/dotfiles/git/git-prompt.sh
-source ~/dotfiles/git/git-completion.bash
+source $git_prompt
+source $git_completion
 
 # color prompt
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
