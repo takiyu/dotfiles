@@ -38,10 +38,9 @@ if dein#check_install()
     call dein#install()
 endif
 
-" Install Python3 for nvim
+" Check python3
 if has("nvim") && !has("python3")
-    echo 'install neovim python3'
-    call system('sudo pip install neovim')
+    echo 'Python3 and neovim package is needed, but not installed'
 endif
 
 syntax on
