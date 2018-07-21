@@ -61,7 +61,8 @@ autocmd FileType neosnippet set noexpandtab
 "=== Font Settings (for gvim) ===
 if has('win32') || has('win64')
     " Windows
-    set guifont=MS_Gothic:h10
+    set guifont=DejaVu\ Sans\ Mono\ Book\ 10.0
+    " set guifont=MS_Gothic:h10
 else
     " Others
     set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
