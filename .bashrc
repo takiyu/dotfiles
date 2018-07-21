@@ -65,11 +65,14 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
-alias v=gvim
-alias filer=thunar
 
-function zathura() { command zathura $1 & > /dev/null; }
-function thunar() { command thunar $1 & > /dev/null; }
+alias filer=thunar
+function thunar() { command thunar $1 &> /dev/null; }  # Redirect everything
+function zathura() { command zathura $1 & &> /dev/null; }
+
+alias v=gvim
+alias vim=nvim
+function gvim() { command nvim-qt $@ 2> /dev/null; }  # Redirect only err
 
 EDITOR=vim
 
