@@ -90,7 +90,7 @@ alias gr='git reset'
 alias gR='git reset --hard'
 # aliases for applications
 alias filer=thunar
-function thunar() { command thunar $1 &> /dev/null; }  # Redirect everything
+function thunar() { command thunar $1 & &> /dev/null; }  # Redirect everything
 function zathura() { command zathura $1 & &> /dev/null; }
 # aliases for editors
 alias v=gvim
