@@ -110,6 +110,6 @@ elif [ $platform == 'Windows' ]; then
     # Third, create nvim entry for windows
     app_nvim=$HOME/AppData/Local/nvim
     create_dir "$app_nvim"
-    create_link_prompt "$dotfiles/dotfiles/.config/nvim/init.vim" "$app_nvim/"
-    create_link_prompt "$dotfiles/dotfiles/.config/nvim/ginit.vim" "$app_nvim/"
+    create_link_prompt "$dotfiles/dotfiles/.config/nvim/init.vim" "$app_nvim/init.vim"
+    create_link_prompt "$dotfiles/dotfiles/.config/nvim/ginit.vim" "$app_nvim/ginit.vim"
 fi
