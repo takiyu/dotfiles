@@ -76,8 +76,10 @@ if [ $platform == 'Linux' ]; then
     TARGETS=(.Xmodmap .xinitrc .bash_profile .bashrc .xmonad .xmobarrc \
              .wgetrc .gitconfig .latexmkrc .ctags .clang-format .clang-tidy \
              .jshintrc .pep8 .config/zathura/zathurarc .mplayer/config \
-             .config/matplotlib/matplotlibrc .vimrc .config/nvim)
-    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
+             .config/matplotlib/matplotlibrc \
+             .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
+             .config/nvim/dein)
+    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
 
     # First, create directories
     for target_dir in ${TARGET_DIRS[@]}; do
@@ -92,14 +94,20 @@ if [ $platform == 'Linux' ]; then
 elif [ $platform == 'Windows' ]; then
     # Windows setup
     echo "* Setup dotfiles for Windows Environment"
-    TARGETS=(.bashrc .gitconfig .minttyrc .config/nvim)
+    TARGETS=(.bashrc .gitconfig .minttyrc .config/nvim/dein)
+    TARGET_DIRS=(.config/nvim/)
 
-    # First, create links to home folder
+    # First, create directories
+    for target_dir in ${TARGET_DIRS[@]}; do
+        create_dir "$HOME/$target_dir"
+    done
+
+    # Second, create links to home folder
     for target in ${TARGETS[@]}; do
         create_link_prompt "$dotfiles/dotfiles/$target" "$HOME/$target"
     done
 
-    # Second, create nvim entry for windows
+    # Third, create nvim entry for windows
     app_nvim=$HOME/AppData/Local/nvim
     create_dir "$app_nvim"
     cp "$dotfiles/dotfiles/.config/init.vim" "$app_nvim/"
