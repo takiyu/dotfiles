@@ -2,7 +2,7 @@
 case "$(uname -s)" in
     Linux)
         echo "Linux" ;;
-    CYGWIN*|MINGW32*|MSYS*)
+    CYGWIN*|MINGW32*|MINGW64*|MSYS*)
         echo "Windows" ;;
     Darwin)
         echo "Mac" ;;
