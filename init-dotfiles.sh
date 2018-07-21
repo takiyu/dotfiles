@@ -94,7 +94,7 @@ if [ $platform == 'Linux' ]; then
 elif [ $platform == 'Windows' ]; then
     # Windows setup
     echo "* Setup dotfiles for Windows Environment"
-    TARGETS=(.bashrc .gitconfig .minttyrc .config/nvim/dein)
+    TARGETS=(.bash_profile .bashrc .gitconfig .minttyrc .config/nvim/dein)
     TARGET_DIRS=(.config/nvim/)
 
     # First, create directories

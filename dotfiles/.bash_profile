@@ -1,48 +1,59 @@
 #
-# ~/.bash_profile for Linux
+# ~/.bash_profile
 #
+
+# utility scripts
+dotfiles=$HOME/dotfiles
+determ_platform=$dotfiles/utils/determ_platform.sh
+
+# determine the platform
+platform=`$determ_platform`
 
 # $HOME/dotfiles/bin
 export PATH=$HOME/dotfiles/bin:$PATH
 # $HOME/bin
 export PATH=$HOME/bin:$PATH
 
-# Lib
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+if [ $platform == 'Linux' ]; then
+    # Linux setup
 
-# Java
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
-export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
-export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
-# Java anti-alias
-export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+    # Lib
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-# Microchip
-# export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
-# export PATH="$PATH:"/opt/microchip/xc32/v1.40/bin""
+    # Java
+    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+    export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+    export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+    # Java anti-alias
+    export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 
-# ROS
-# source /opt/ros/indigo/setup.bash
-# source ~/rosbuild_ws/setup.bash
+    # Microchip
+    # export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
+    # export PATH="$PATH:"/opt/microchip/xc32/v1.40/bin""
 
-# Duo
-# export DUO_SDK=/home/takiyu/rosbuild_ws/package_dir/DUO-Camera-ROS/build/devel/DUOSDK
+    # ROS
+    # source /opt/ros/indigo/setup.bash
+    # source ~/rosbuild_ws/setup.bash
 
-# Android
-export PATH=$PATH:/opt/android-sdk/platform-tools  # platform-tools (adb etc...)
-export PATH=$PATH:/opt/android-sdk/tools           # tools (android etc...)
-export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
-export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
-export PATH=$PATH:/opt/android-ndk                 # ndk
-export ANDROID_HOME=/opt/android-sdk
-export ANDROID_NDK=/opt/android-ndk
-export ANDROID_NDK_HOME=$ANDROID_NDK
+    # Duo
+    # export DUO_SDK=/home/takiyu/rosbuild_ws/package_dir/DUO-Camera-ROS/build/devel/DUOSDK
 
-# Golang
-export GOPATH=$HOME/Projects/Gocode
+    # Android
+    export PATH=$PATH:/opt/android-sdk/platform-tools  # platform-tools (adb etc...)
+    export PATH=$PATH:/opt/android-sdk/tools           # tools (android etc...)
+    export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
+    export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
+    export PATH=$PATH:/opt/android-ndk                 # ndk
+    export ANDROID_HOME=/opt/android-sdk
+    export ANDROID_NDK=/opt/android-ndk
+    export ANDROID_NDK_HOME=$ANDROID_NDK
 
-# Unity
-export PATH=$PATH:/opt/Unity/Editor/
+    # Golang
+    export GOPATH=$HOME/Projects/Gocode
+
+    # Unity
+    export PATH=$PATH:/opt/Unity/Editor/
+fi
 
 # .bashrc
 if [ -n "$BASH_VERSION" ]; then
