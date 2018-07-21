@@ -2,13 +2,13 @@
 repo = 'vim-jp/cpp-vim'
 on_ft = ['cpp']
 
-[[plugins]]
-repo = 'zchee/deoplete-clang'
-on_ft = ['c', 'cpp', 'cmake']
-depends = ['deoplete.nvim']
-hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'deoplete-clang.vim'
-'''
+# [[plugins]]
+# repo = 'zchee/deoplete-clang'
+# on_ft = ['c', 'cpp', 'cmake']
+# depends = ['deoplete.nvim']
+# hook_add = '''
+#     execute 'source ' . g:dein_config_dir . 'deoplete-clang.vim'
+# '''
 
 [[plugins]]
 repo = 'Shougo/neoinclude.vim'
