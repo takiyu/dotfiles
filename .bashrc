@@ -45,8 +45,15 @@ shopt -s globstar
 # Disable beep
 set bell-style none
 
+# git prompt
+GIT_PS1_SHOWUPSTREAM=1
+GIT_PS1_SHOWUNTRACKEDFILES=
+GIT_PS1_SHOWSTASHSTATE=
+GIT_PS1_SHOWDIRTYSTATE=
+
 # color prompt
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \$\[\033[00m\] '
+source /usr/share/git/git-prompt.sh
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -60,16 +67,19 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
+# aliases for ls
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
-
+# aliases for git
+alias gs='git status'
+alias gg='git graph'
+# aliases for applications
 alias filer=thunar
 function thunar() { command thunar $1 &> /dev/null; }  # Redirect everything
 function zathura() { command zathura $1 & &> /dev/null; }
-
+# aliases for editors
 alias v=gvim
 alias vim=nvim
 function gvim() { command nvim-qt $@ 2> /dev/null; }  # Redirect only err
@@ -84,7 +94,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 synclient VertScrollDelta=-30 HorizScrollDelta=-30
 synclient MaxSpeed=2.0 AccelFactor=0.10
 
-# Caffe 
+# Caffe
 # export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
 
