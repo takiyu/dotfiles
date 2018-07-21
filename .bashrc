@@ -75,6 +75,16 @@ alias sl=ls
 # aliases for git
 alias gs='git status'
 alias gg='git graph'
+alias gd='git diff'
+alias ga='git add'
+alias gau='git add -u'
+alias gcm='git commit'
+alias gcmm='git commit -m'
+alias gco='git checkout'
+alias gp='git push'
+alias gpom='git push origin master'
+alias gr='git reset'
+alias gR='git reset --hard'
 # aliases for applications
 alias filer=thunar
 function thunar() { command thunar $1 &> /dev/null; }  # Redirect everything
