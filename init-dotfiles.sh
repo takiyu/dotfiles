@@ -34,7 +34,7 @@ create_link() {
 }
 
 
-# create directories
+# First, create directories
 for target_dir in ${TARGET_DIRS[@]}; do
     home_target_dir="$HOME/$target_dir"
     if [ ! -e $home_target_dir ]; then
@@ -43,7 +43,7 @@ for target_dir in ${TARGET_DIRS[@]}; do
     fi
 done
 
-# create links
+# Second, create links
 for target in ${TARGETS[@]}; do
     pwd_target="$PWD/$target"
     home_target="$HOME/$target"
@@ -51,12 +51,21 @@ for target in ${TARGETS[@]}; do
     if [ ! -e $pwd_target ]; then
         echo "[Error] not exist $pwd_target"
     elif [ -e $home_target ]; then
-        echo -n "[Ask] $home_target is already exist. Move? [y/n] "
-        ret=`yn_prompt`
-        if [ $ret -eq 0 ]; then
-            echo "mv $home_target $home_backup"
-            mv $home_target $home_backup
-            create_link $pwd_target $home_target
+        # Check difference
+        difference=`diff $pwd_target $home_target`
+        if [ -n $difference ]; then
+            echo "[Skip] already exists, but no difference"
+        else
+            echo "[Ask] $home_target is already exist."
+            echo "$difference"
+            echo -n "Overwrite? [y/n] "
+            ret=`yn_prompt`
+            if [ $ret -eq 0 ]; then
+                # Backup and create new link
+                echo "mv $home_target $home_backup"
+                mv $home_target $home_backup
+                create_link $pwd_target $home_target
+            fi
         fi
     else
         create_link $pwd_target $home_target
