@@ -52,7 +52,8 @@ GIT_PS1_SHOWSTASHSTATE=
 GIT_PS1_SHOWDIRTYSTATE=
 
 # color prompt
-source /usr/share/git/git-prompt.sh
+source ~/dotfiles/git/git-prompt.sh
+source ~/dotfiles/git/git-completion.bash
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
 
 # enable color support of ls and also add handy aliases
@@ -73,15 +74,17 @@ alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
 # aliases for git
+alias g='git'
 alias gs='git status'
 alias gg='git graph'
+alias gb='git branch -a'
 alias gd='git diff'
 alias ga='git add'
 alias gau='git add -u'
-alias gcm='git commit'
-alias gcmm='git commit -m'
+alias gcm='git commit -m'
 alias gco='git checkout'
 alias gp='git push'
+alias gf='git fetch'
 alias gpom='git push origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
