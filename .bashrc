@@ -44,6 +44,10 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
 # auto fix cd path
 shopt -s cdspell
 # append to the history file, don't overwrite it
@@ -107,22 +111,18 @@ if [ $platform == 'Linux' ]; then
     function gvim() { command nvim-qt $@ 2> /dev/null; }
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
-    function gvim() { command nvim-qt $@ & 2> /dev/null; }
+    function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
     EDITOR=gvim
 fi
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
     alias filer=thunar
-    function thunar() { command thunar $1 & &> /dev/null; }
-    function zathura() { command zathura $1 & &> /dev/null; }
+    function thunar() { command thunar $@ & &> /dev/null; }
+    function zathura() { command zathura $@ & &> /dev/null; }
 elif [ $platform == 'Windows' ]; then
-    alias filer=explorer
+    function filer() { command explorer $@ & &> /dev/null; disown; }
 fi
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Synaptics
 if [ $platform == 'Linux' ]; then
@@ -142,3 +142,10 @@ fi
 
 # Virtualbox
 VBOX_USB=usbfs
+
+# Proxy
+#export http_proxy="http://[user]:[pass]@proxyjp.huawei.com:8080"
+#export https_proxy="https://[user]:[pass]@proxyjp.huawei.com:8080"
+#export ftp_proxy="ftp://[user]:[pass]@proxyjp.huawei.com:8080"
+#export NO_PROXY="rnd-dockerhub.huawei.com"
+#export GIT_SSL_NO_VERIFY=1
