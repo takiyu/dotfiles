@@ -117,8 +117,7 @@ fi
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
-    alias filer=thunar
-    function thunar() { command thunar $@ & &> /dev/null; }
+    function filer() { command thunar $@ &> /dev/null; }
     function zathura() { command zathura $@ & &> /dev/null; }
 elif [ $platform == 'Windows' ]; then
     function filer() { command explorer $@ & &> /dev/null; disown; }
