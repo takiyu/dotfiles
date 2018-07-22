@@ -6,3 +6,7 @@ FontHeight=11
 CursorColour=247,247,247
 ForegroundColour=251,251,251
 CursorType=block
+Term=xterm-256color
+CtrlShiftShortcuts=yes
+PgUpDnScroll=yes
+BellType=0
