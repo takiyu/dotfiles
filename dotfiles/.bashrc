@@ -118,6 +118,7 @@ if [ $platform == 'Linux' ]; then
     function zathura() { command zathura $@ & &> /dev/null; }
 elif [ $platform == 'Windows' ]; then
     function filer() { command explorer $@ & &> /dev/null; disown; }
+    alias w=winpty
 fi
 
 # Synaptics
