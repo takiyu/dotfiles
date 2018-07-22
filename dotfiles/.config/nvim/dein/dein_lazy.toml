@@ -30,6 +30,9 @@ hook_add = '''
 [[plugins]]
 repo = 'heavenshell/vim-pydocstring'
 on_ft = ['python']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-pydocstring.vim'
+'''
 
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
