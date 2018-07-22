@@ -1,0 +1,32 @@
+# Download and install the following softwares.
+* msys2
+* git for windows
+* cmake
+
+# Add path
+C:\msys64\mingw64\bin
+
+# Uncomment `C:\\msys64\mingw64.ini`'s `MSYS2_PATH_TYPE=inherit`
+
+# Set `HOME=C:\\Users\takiyu` as environment variable.
+
+pacman -Syu
+pacman -S diffutils
+pacman -S mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-pip
+pacman -S mingw-w64-x86_64-gcc
+
+git clone https://github.com/takiyu/dotfiles
+cd dotfiles && ./init-dotfiles.sh
+
+# Install Dejavu fonts
+
+# Copy bugn shortcut (dotfiles/configs/bugn - shortcut.lnk) to Desktop
+
+# Run `dotfiles/bin_windows/chgkey14/ChgKey.exe`, load file, and register.
+
+# Download neovim, extract, and register the path.
+# C:\Users\takiyu\bin\nvim-win64\Neovim\bin
+
+pip3 install neovim
+
+# Using command prompt (not msys2), run nvim, and dein installation will start.
