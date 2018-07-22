@@ -30,3 +30,6 @@ cd dotfiles && ./init-dotfiles.sh
 pip3 install neovim
 
 # Using command prompt (not msys2), run nvim, and dein installation will start.
+
+# For clipboard, vs2015 runtime is needed.
+https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
