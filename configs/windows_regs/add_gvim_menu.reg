@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Open with gvim]
+@="Edit with nvim-qt"
+
+[HKEY_CLASSES_ROOT\*\shell\Open with gvim\Command]
+@="C:\\users\\takiyu\\bin\\nvim-win64\\Neovim\\bin\\nvim-qt.exe \"%1\""
+; @="C:\\users\\t84085235\\bin\\nvim-win64\\Neovim\\bin\\nvim-qt.exe \"%1\""

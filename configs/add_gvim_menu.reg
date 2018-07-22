@@ -1,7 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_CLASSES_ROOT\*\shell\Open with gvim]
-@="Edit with gVim"
-
-[HKEY_CLASSES_ROOT\*\shell\Open with gvim\Command]
-@="C:\\Users\\t84085235\\bin\\vim80-kaoriya-win64\\gvim.exe \"%1\""
