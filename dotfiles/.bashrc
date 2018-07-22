@@ -105,7 +105,7 @@ alias gR='git reset --hard'
 alias v=gvim
 alias vim=nvim
 if [ $platform == 'Linux' ]; then
-    function gvim() { command nvim-qt $@ 2> /dev/null; }
+    function gvim() { command nvim-qt --no-ext-tabline $@ 2> /dev/null; }
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
     function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
