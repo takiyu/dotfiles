@@ -14,6 +14,7 @@ pacman -Syu
 pacman -S diffutils
 pacman -S mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-pip
 pacman -S mingw-w64-x86_64-gcc
+pacman -S gcc make
 
 git clone https://github.com/takiyu/dotfiles
 cd dotfiles && ./init-dotfiles.sh
@@ -33,3 +34,6 @@ pip3 install neovim
 
 # For clipboard, vs2015 runtime is needed.
 https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
+
+# Build winpty, and put the binary in ~/bin
+https://github.com/rprichard/winpty
