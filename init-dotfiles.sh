@@ -49,7 +49,7 @@ create_link_prompt() {
     elif [ -e $home_target ]; then
         # Check difference
         difference=`diff $dot_target $home_target`
-        if [ -n $difference ]; then
+        if [ "$difference" == "" ]; then
             echo "[Skip] already exists, but no difference ($home_target)"
         else
             echo "[Ask] already exists. ($home_target)"
