@@ -15,6 +15,7 @@ pacman -S diffutils
 pacman -S mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-pip
 pacman -S mingw-w64-x86_64-gcc
 pacman -S gcc make
+pacman -S mingw-w64-x86_64-clang
 
 git clone https://github.com/takiyu/dotfiles
 cd dotfiles && ./init-dotfiles.sh
