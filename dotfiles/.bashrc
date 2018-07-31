@@ -114,8 +114,8 @@ fi
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
-    function filer() { command thunar $@ &> /dev/null; }
-    function zathura() { command zathura $@ & &> /dev/null; }
+    function filer() { command thunar $@ & &> /dev/null; disown; }
+    function zathura() { command zathura $@ & &> /dev/null; disown; }
 elif [ $platform == 'Windows' ]; then
     function filer() { command explorer $@ & &> /dev/null; disown; }
     alias w=winpty
