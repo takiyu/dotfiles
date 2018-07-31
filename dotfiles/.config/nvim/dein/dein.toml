@@ -51,6 +51,12 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'yuttie/comfortable-motion.vim'  # Smooth scroll
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'comfortable-motion.vim'
+'''
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'           # ステータスライン
 depends = ['vim-fugitive', 'lightline-ale']
 hook_add = '''
