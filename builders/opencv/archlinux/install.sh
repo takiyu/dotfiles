@@ -3,21 +3,21 @@
 version='3.4'
 work_dir=$PWD
 
-cd $PWD
+cd $work_dir
 if [ ! -f opencv ]; then
     git clone https://github.com/opencv/opencv
     cd opencv
     git checkout $version
 fi
-opencv_dir=$PWD/opencv
+opencv_dir=$work_dir/opencv
 
-cd $PWD
+cd $work_dir
 if [ ! -f opencv_contrib ]; then
     git clone https://github.com/opencv/opencv_contrib
     cd opencv_contrib
     git checkout $version
 fi
-contrib_dir=$PWD/opencv_contrib
+contrib_dir=$work_dir/opencv_contrib
 
 cd $opencv_dir
 mkdir build
