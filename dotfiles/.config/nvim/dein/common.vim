@@ -25,6 +25,7 @@ set nobackup                      " バックアップhoge~を作成しない
 set belloff=all                   " ビープ音無効化
 set termguicolors                 " CLIでフルカラー
 " set ttimeoutlen=50              " ノーマルモードに戻る時間
+set cursorline                    " カーソル行をハイライト
 
 " === Encoding ===
 set encoding=utf-8
