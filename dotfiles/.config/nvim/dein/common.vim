@@ -90,8 +90,8 @@ noremap <Down> g<Down>
 " 高速移動 上下移動は滑らかに
 noremap <C-h> 10h
 noremap <C-l> 10l
-noremap <C-j> 4j4j4j4j4j
-noremap <C-k> 4k4k4k4k4k
+noremap <C-j> 20j
+noremap <C-k> 20k
 " 行末行頭への移動
 noremap 9 ^
 noremap 0 $
