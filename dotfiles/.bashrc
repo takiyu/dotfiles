@@ -88,13 +88,13 @@ alias sl=ls
 # aliases for git
 alias g='git'
 alias gs='git status'
-alias gg='git graph'
+function gg() { git graph --color=always $* | less -EFRSX; }
 alias gb='git branch -a'
 alias gd='git diff'
 alias ga='git add'
 alias gau='git add -u'
 alias gcm='git commit'
-function gcmm() { mess="$@"; command git commit -m "$mess"; }
+function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
 alias gco='git checkout'
 alias gp='git push'
