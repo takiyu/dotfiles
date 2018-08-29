@@ -75,6 +75,7 @@ Others
     yaourt -S pepper-flash
     pacman -S words
     yaourt -S cmigemo-git
+    trizen -S unzip-iconv
 
     pacman -S sane xsane simple-scan
 
