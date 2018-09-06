@@ -52,6 +52,8 @@ sudo apt-get -yV install unzip
 sudo apt-get -yV install libblas-dev liblapack-dev libatlas-dev 
 sudo apt-get -yV install libeigen3-dev
 
+sudo apt-get -yV install qt5-default
+
 version='3.3.0'
 cd /tmp
 if [ ! -f OpenCV-$version.zip ]; then
