@@ -8,3 +8,4 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#show_call_signatures = 2
 " non-auto close preview window
 let g:jedi#auto_close_doc = 0
+let g:jedi#force_py_version = 3
