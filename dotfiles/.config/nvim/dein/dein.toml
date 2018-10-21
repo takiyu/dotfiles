@@ -134,6 +134,9 @@ repo = 'will133/vim-dirdiff'             # ディレクトリ差分
 
 [[plugins]]
 repo = 'embear/vim-localvimrc'           # Local vimrc
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'vim-localvimrc.vim'
+'''
 
 [[plugins]]
 repo = 'ujihisa/neco-look'               # 英単語補完
