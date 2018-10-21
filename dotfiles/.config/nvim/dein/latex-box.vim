@@ -17,4 +17,4 @@ let g:LatexBox_autojump = 0
 let g:LatexBox_complete_inlineMath = 1
 let g:LatexBox_Folding = 1
 let g:LatexBox_latexmk_async = 1
-let g:LatexBox_build_dir = "build"  " common with .latexmkrc
+" let g:LatexBox_build_dir = "build"  " common with .latexmkrc
