@@ -22,6 +22,7 @@ Fonts
     pacman -S ttf-dejavu
     yaourt -S ttf-ricty
     (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
+    trizen -S ttf-liberation
 
 Desktop
     pacman -S xorg xfce4 xfce4-goodies xmonad xmonad-contrib
