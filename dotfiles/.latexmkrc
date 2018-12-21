@@ -15,4 +15,4 @@ $bibtex = 'pbibtex %O %B';
 $pdf_mode = 1;
 
 $max_repeat = 5;
-# $out_dir = 'build';
+$out_dir = 'build';
