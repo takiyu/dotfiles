@@ -154,8 +154,19 @@ autocmd InsertLeave *.plaintex call Fcitx2en()
 autocmd InsertEnter *.plaintex call Fcitx2zh()
 
 "===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
+function! s:GetVisualSelection() abort
+    try
+        let a_save = @a
+        silent! normal! gv"ay
+        echo @a
+        return @a
+    finally
+        let @a = a_save
+    endtry
+endfunction
 function! EngDict()
-    sp +enew | put = system('engdict ' . @*)
+    let src = s:GetVisualSelection()
+    sp +enew | silent! put = system('engdict ' . src)
     setlocal bufhidden=hide noswapfile noro nomodified
     normal gg
 endfunction
