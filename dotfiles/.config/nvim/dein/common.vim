@@ -162,17 +162,5 @@ endfunction
 vnoremap <silent> <c-d> :call EngDict()<CR>
 
 "===== Spell check toggle =====
-let s:spell_check_flag = 1
-set spell spelllang=en_us
-function! g:Spellcheck_toggle()
-    if s:spell_check_flag
-        let s:spell_check_flag = 0
-        set nospell
-        echomsg string('spell off')
-    else
-        let s:spell_check_flag = 1
-        set spell spelllang=en_us
-        echomsg string('spell on')
-    endif
-endfunction
-nnoremap <F12> :call g:Spellcheck_toggle()<CR>
+set spell spelllang=en_us,cjk  " Enabled by default
+nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
