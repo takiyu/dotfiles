@@ -78,6 +78,9 @@ endif
 "===== Quickfix =====
 autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen  "自動で開く
 
+"===== Wrap with vimdiff =====
+autocmd FilterWritePre * if &diff | setlocal wrap< | endif
+
 "===== KeyBind =====
 " 再描画
 nnoremap <F5> <C-l>
