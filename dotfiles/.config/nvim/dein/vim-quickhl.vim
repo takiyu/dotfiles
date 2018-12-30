@@ -23,7 +23,7 @@ nmap m <Plug>(quickhl-manual-this)
 vmap m <Plug>(quickhl-manual-this)
 " 表示トグル
 nmap <F6> <Plug>(quickhl-manual-toggle)
-nmap <C-m> <Plug>(quickhl-manual-toggle)
+nmap M <Plug>(quickhl-manual-toggle)
 " ハイライトを削除
-nmap MM <Plug>(quickhl-manual-reset)
-vmap MM <Plug>(quickhl-manual-reset)
+nmap <c-M> <Plug>(quickhl-manual-reset)
+vmap <c-M> <Plug>(quickhl-manual-reset)
