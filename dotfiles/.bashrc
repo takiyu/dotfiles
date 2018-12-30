@@ -118,6 +118,8 @@ elif [ $platform == 'Windows' ]; then
     function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
     EDITOR=gvim
 fi
+alias vimdiff="vim -d"
+alias gvimdiff="gvim -- -d"
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
