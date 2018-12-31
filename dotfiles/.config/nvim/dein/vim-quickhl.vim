@@ -19,10 +19,10 @@ let g:quickhl_manual_colors = [
     \ "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
     \ ]
 " ハイライトショートカット
-nmap <silent>m :QuickhlManualUnlock<CR><Plug>(quickhl-manual-this)
-vmap <silent>m :QuickhlManualUnlock<CR><Plug>(quickhl-manual-this)
+nmap m <Plug>(quickhl-manual-this)
+vmap m <Plug>(quickhl-manual-this)
 " 表示トグル
-nmap M <Plug>(quickhl-manual-toggle)
+nmap <F6> <Plug>(quickhl-manual-toggle)
 " ハイライトを削除
-nmap <c-M> <Plug>(quickhl-manual-reset)
-vmap <c-M> <Plug>(quickhl-manual-reset)
+nmap M <Plug>(quickhl-manual-reset)
+vmap M <Plug>(quickhl-manual-reset)
