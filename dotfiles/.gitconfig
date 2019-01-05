@@ -10,3 +10,7 @@
 	tool = gvimdiff
 [difftool]
 	prompt = true
+[merge]
+	tool = gvimdiff
+[mergetool]
+	prompt = true
