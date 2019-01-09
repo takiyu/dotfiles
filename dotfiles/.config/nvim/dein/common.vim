@@ -29,7 +29,7 @@ set cursorline                    " カーソル行をハイライト
 
 " === Encoding ===
 set encoding=utf-8
-set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,latin1
+set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis,big5,latin1
 set fileformats=unix,dos,mac
 
 " === Folding ===
@@ -129,32 +129,41 @@ tnoremap <silent> <ESC> <C-\><C-n>
 " omni補完
 inoremap <C-o> <C-x><C-o>
 
+"==== Incremental search highlight ====
+augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd CmdlineEnter [/\?] :set hlsearch
+    autocmd CmdlineLeave [/\?] :set nohlsearch
+augroup END
+
 "==== Auto fcitx ====
-let g:input_toggle = 0
-function! Fcitx2en()
-    let s:input_status = system("fcitx-remote")
-    if s:input_status == 2
-        let g:input_toggle = 1
-        let l:a = system("fcitx-remote -c")
-    endif
-endfunction
-function! Fcitx2zh()
-    let s:input_status = system("fcitx-remote")
-    if s:input_status != 2 && g:input_toggle == 1
-        let l:a = system("fcitx-remote -o")
-        let g:input_toggle = 0
-    endif
-endfunction
-set iminsert=0
-set imsearch=0
-autocmd InsertLeave *.txt call Fcitx2en()
-autocmd InsertEnter *.txt call Fcitx2zh()
-autocmd InsertLeave *.tex call Fcitx2en()
-autocmd InsertEnter *.tex call Fcitx2zh()
-autocmd InsertLeave *.md call Fcitx2en()
-autocmd InsertEnter *.md call Fcitx2zh()
-autocmd InsertLeave *.plaintex call Fcitx2en()
-autocmd InsertEnter *.plaintex call Fcitx2zh()
+if executable("fcitx-remote")
+    let g:input_toggle = 0
+    function! Fcitx2en()
+        let s:input_status = system("fcitx-remote")
+        if s:input_status == 2
+            let g:input_toggle = 1
+            let l:a = system("fcitx-remote -c")
+        endif
+    endfunction
+    function! Fcitx2zh()
+        let s:input_status = system("fcitx-remote")
+        if s:input_status != 2 && g:input_toggle == 1
+            let l:a = system("fcitx-remote -o")
+            let g:input_toggle = 0
+        endif
+    endfunction
+    set iminsert=0
+    set imsearch=0
+    autocmd InsertLeave *.txt call Fcitx2en()
+    autocmd InsertEnter *.txt call Fcitx2zh()
+    autocmd InsertLeave *.tex call Fcitx2en()
+    autocmd InsertEnter *.tex call Fcitx2zh()
+    autocmd InsertLeave *.md call Fcitx2en()
+    autocmd InsertEnter *.md call Fcitx2zh()
+    autocmd InsertLeave *.plaintex call Fcitx2en()
+    autocmd InsertEnter *.plaintex call Fcitx2zh()
+endif
 
 "===== engdict (http://d.hatena.ne.jp/aki-yam/20080629/1214757485) =====
 function! s:GetVisualSelection() abort
