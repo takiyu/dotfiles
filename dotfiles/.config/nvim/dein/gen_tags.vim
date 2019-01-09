@@ -5,9 +5,9 @@
 let g:gen_tags#ctags_auto_gen = 1
 let g:gen_tags#gtags_auto_gen = 1
 if executable("gtags")
-    autocmd BufWritePost * :GenGTAGS
+    autocmd BufWritePost *.cpp,*.cc,*.c :GenGTAGS
 elseif executable("ctags")
-    autocmd BufWritePost * :GenCtags
+    autocmd BufWritePost *.cpp,*.cc,*.c :GenCtags
 endif
 
 " Key mapping
