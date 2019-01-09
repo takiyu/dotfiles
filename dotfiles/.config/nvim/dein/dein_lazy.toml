@@ -89,6 +89,14 @@ on_ft = ['verilog']
 repo = 'tmhedberg/SimpylFold'
 on_ft = ['python']
 
+# ------------------------------------- Tag ------------------------------------
+[[plugins]]
+repo = 'jsfaint/gen_tags.vim'
+on_ft = ['c', 'cpp']
+hook_add = '''
+    execute 'source ' . g:dein_config_dir . 'gen_tags.vim'
+'''
+
 # ---------------------------- Document Generation -----------------------------
 [[plugins]]
 repo = 'vim-scripts/DoxygenToolkit.vim'
