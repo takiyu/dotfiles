@@ -6,21 +6,21 @@ Run `./fifo` and reboot
     Installing grub2 was failed, so use systemd
 Login as root and run ./lilo
 
-Yaourt
+trizen
     Edit `/etc/pacman.conf` and append following.
     ```
         [archlinuxfr]
         SigLevel = Never
         Server = http://repo.archlinux.fr/$arch
     ```
-    and `pacman --sync --refresh yaourt`
+    and `pacman --sync --refresh trizen`
 
 My environment
     `git clone https://github.com/takiyu/dotfiles` and run scripts.
 
 Fonts
     pacman -S ttf-dejavu
-    yaourt -S ttf-ricty
+    trizen -S ttf-ricty
     (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
     trizen -S ttf-liberation
 
@@ -36,9 +36,9 @@ Desktop
     pacman -S xclip
 
 Bluetooth
-    yaourt -S xfce4-pulseaudio-plugin
-    yaourt -S pulseaudio-bluetooth
-    yaourt -S blueman
+    trizen -S xfce4-pulseaudio-plugin
+    trizen -S pulseaudio-bluetooth
+    trizen -S blueman
 
     Set `xmonad --replace` to run automatically
 
@@ -48,7 +48,7 @@ Stop samba daemon
 
 VPN
     pacman -S openvpn networkmanager-openvpn
-    yaourt private-internet-access-vpn
+    trizen private-internet-access-vpn
 
     edit `/etc/private-internet-access/login.conf`
 
@@ -67,15 +67,15 @@ Others
     pacman -S smplayer mcomix
     pacman -S gnome-calculator
     pacman -S w3m
-    yaourt -S nkf lv
+    trizen -S nkf lv
     pacman -S phantomjs
     pacman -S slack-desktop
     pacman -S goldendict
     pacman -S recordmydesktop
-    yaourt -S chromium chromium-widevine
-    yaourt -S pepper-flash
+    trizen -S chromium chromium-widevine
+    trizen -S pepper-flash
     pacman -S words
-    yaourt -S cmigemo-git
+    trizen -S cmigemo-git
     trizen -S unzip-iconv
 
     pacman -S sane xsane simple-scan
@@ -97,16 +97,18 @@ Development
     pacman -S texlive-core texlive-langjapanese texlive-latexextra texlive-most
     pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
     pacman -S opencv
-    yaourt -S openni2-libfreenect libfeenect2
-    yaourt -S pcl
-    yaourt -S intel-opencl-runtime
+    trizen -S openni2-libfreenect libfeenect2
+    trizen -S pcl
+    trizen -S intel-opencl-runtime
 
     pacman -S paraview
 
     pacman -S premake4
-    yaourt -S premake-git
+    trizen -S premake-git
 
-    yaourt -S ocl-icd intel-opencl-runtime opencl-headers
+    trizen -S ocl-icd intel-opencl-runtime opencl-headers
+
+    trizen -S ctags global
 
 Fix screen blinking bug for Dell XPS13
     edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
@@ -120,7 +122,7 @@ Fix "ALSA lib pcm.c:7843:(snd_pcm_recover) underrun occurred"
 
 Fix broadcom driver
     Install b43 driver
-        yaourt -S b43-firmware
+        trizen -S b43-firmware
     Disable default drivers
         sudo gvim /etc/modprobe.d/nobeep.conf
         ```
@@ -161,8 +163,8 @@ Makepkg parallel
 Android Development
     gpg --keyserver pgp.mit.edu --recv-keys F7E48EDB # for `ncurses5-compat-libs`
 
-    yaourt -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
-    yaourt -S android-platform-26 android-ndk
+    trizen -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
+    trizen -S android-platform-26 android-ndk
     pacman -S pidcat
 
     Fix clang dependence.

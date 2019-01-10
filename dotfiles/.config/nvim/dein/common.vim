@@ -59,14 +59,16 @@ autocmd FileType javascript set tabstop=2 shiftwidth=2 expandtab
 autocmd FileType python     set tabstop=4 shiftwidth=4 expandtab
 autocmd FileType neosnippet set noexpandtab
 
-"=== Font Settings (for gvim) ===
-if has('win32') || has('win64')
-    " Windows
-    set guifont=DejaVu\ Sans\ Mono\ Book\ 10.0
-    " set guifont=MS_Gothic:h10
-else
-    " Others
-    set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
+"=== Font Settings (for gvim, not for nvim) ===
+if !has('nvim')
+    if has('win32') || has('win64')
+        " Windows
+        set guifont=DejaVu\ Sans\ Mono\ Book\ 10.0
+        " set guifont=MS_Gothic:h10
+    else
+        " Others
+        set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
+    endif
 endif
 
 "=== Infinity Undo ===

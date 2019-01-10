@@ -29,7 +29,8 @@ cd dotfiles && ./init-dotfiles.sh
 # Download neovim, extract, and register the path.
 # C:\Users\takiyu\bin\nvim-win64\Neovim\bin
 
-pip3 install neovim
+pip3 install pynvim
+(or pip3 install neovim)
 
 # Using command prompt (not msys2), run nvim, and dein installation will start.
 # (If some proxy exists, use `set HTTP_PROXY=...`)
