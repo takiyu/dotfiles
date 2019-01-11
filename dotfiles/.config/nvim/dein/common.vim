@@ -26,6 +26,11 @@ set belloff=all                   " ビープ音無効化
 set termguicolors                 " CLIでフルカラー
 " set ttimeoutlen=50              " ノーマルモードに戻る時間
 set cursorline                    " カーソル行をハイライト
+if has('win32') || has('win64')
+    set shellcmdflag=--login\ -s  " Linux-likeなシェルを想定
+    set shellxquote=\"            " コマンドを囲う引用符
+    set shellslash                " ファイルパスに\の代わりに/を使用
+endif
 
 " === Encoding ===
 set encoding=utf-8
