@@ -8,7 +8,7 @@ let g:ref_source_webdict_sites = {
 \     'url': 'https://eow.alc.co.jp/search?q=%s',
 \   },
 \   'longman': {
-\     'url': 'http://www.ldoceonline.com/dictionary/%s',
+\     'url': 'http://www.ldoceonline.com/search/?q=%s',
 \   },
 \   'wiki': {
 \     'url': 'http://ja.wikipedia.org/wiki/%s',
@@ -25,13 +25,7 @@ function! g:ref_source_webdict_sites.alc.filter(output)
   return join(split(a:output, "\n")[35 :], "\n")
 endfunction
 function! g:ref_source_webdict_sites.longman.filter(output)
-  let para_c = ' '
-  let text = a:output
-  let text = s:replace(text, "\n\n", para_c)
-  let text = s:replace(text, "\n", " ")
-  let text = s:replace(text, para_c, "\n\n")
-  let text = s:replace(text, " \n", "\n")
-  return join(split(text, "\n")[2 :], "\n")
+  return join(split(a:output, "\n")[10 :], "\n")
 endfunction
 function! g:ref_source_webdict_sites.wiki.filter(output)
   return join(split(a:output, "\n")[17 :], "\n")
