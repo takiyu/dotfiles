@@ -86,6 +86,7 @@ endif
 autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen  "自動で開く
 
 "===== Wrap with vimdiff =====
+set diffopt-=internal  " internalではFilterWritePreが発生しない
 autocmd FilterWritePre * if &diff | setlocal wrap< | endif
 
 "===== KeyBind =====
