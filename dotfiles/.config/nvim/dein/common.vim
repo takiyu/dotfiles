@@ -11,7 +11,7 @@ set cindent                       " cオートインデント
 set cinoptions=g0                 " cppでのpublic宣言を下げる
 set showtabline=2                 " タブ(上部)を常に表示する
 set number                        " 行数を表示する
-set nohlsearch                    " 検索文字列を強調を無効化
+" set nohlsearch                  " 検索文字列を強調を無効化
 set ignorecase                    " 大文字小文字を無視
 set smartcase                     " (ただし大文字入力時のみ考慮)
 set guioptions-=m                 " メニューバーを非表示
@@ -133,16 +133,11 @@ nnoremap <C-c> :cclose<CR>
 " Terminal
 nnoremap <F4> :terminal ++rows=10<CR>
 tnoremap <F4> <C-\><C-n>>:q!<CR>
-tnoremap <silent> <ESC> <C-\><C-n>
+tnoremap <silent><ESC> <C-\><C-n>
 " omni補完
 inoremap <C-o> <C-x><C-o>
-
-"==== Incremental search highlight ====
-augroup vimrc-incsearch-highlight
-    autocmd!
-    autocmd CmdlineEnter [/\?] :set hlsearch
-    autocmd CmdlineLeave [/\?] :set nohlsearch
-augroup END
+" 検索ハイライトのクリア
+nmap <silent><Esc> :noh<CR>
 
 "==== Auto fcitx ====
 if executable("fcitx-remote")
