@@ -2,7 +2,7 @@
 "                                      Common
 " ==============================================================================
 
-set synmaxcol=500                 " ハイライトする文字数を制限する
+set synmaxcol=100                 " ハイライトする文字数を制限する
 set backspace=indent,eol,start    " インサートモード時にバックスペースを使う
 set whichwrap=b,s,h,l,<,>,[,]     " 行頭から前行文末へ移動可能にする
 " set scrolloff=999               " スクロール時にカーソルを中央へ移動
@@ -26,6 +26,8 @@ set belloff=all                   " ビープ音無効化
 set termguicolors                 " CLIでフルカラー
 " set ttimeoutlen=50              " ノーマルモードに戻る時間
 set cursorline                    " カーソル行をハイライト
+set incsearch                     " 入力しながら検索
+set breakindent                   " 折り返し時にインデントを考慮
 if has('win32') || has('win64')
     set shellcmdflag=--login\ -s  " Linux-likeなシェルを想定
     set shellxquote=\"            " コマンドを囲う引用符
