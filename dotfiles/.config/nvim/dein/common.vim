@@ -2,7 +2,7 @@
 "                                      Common
 " ==============================================================================
 
-set synmaxcol=100                 " ハイライトする文字数を制限する
+set synmaxcol=300                 " ハイライトする文字数を制限する
 set backspace=indent,eol,start    " インサートモード時にバックスペースを使う
 set whichwrap=b,s,h,l,<,>,[,]     " 行頭から前行文末へ移動可能にする
 " set scrolloff=999               " スクロール時にカーソルを中央へ移動
@@ -160,14 +160,8 @@ if executable("fcitx-remote")
     endfunction
     set iminsert=0
     set imsearch=0
-    autocmd InsertLeave *.txt call Fcitx2en()
-    autocmd InsertEnter *.txt call Fcitx2zh()
-    autocmd InsertLeave *.tex call Fcitx2en()
-    autocmd InsertEnter *.tex call Fcitx2zh()
-    autocmd InsertLeave *.md call Fcitx2en()
-    autocmd InsertEnter *.md call Fcitx2zh()
-    autocmd InsertLeave *.plaintex call Fcitx2en()
-    autocmd InsertEnter *.plaintex call Fcitx2zh()
+    autocmd InsertLeave * call Fcitx2en()
+    autocmd InsertEnter * call Fcitx2zh()
 endif
 
 "===== Spell check toggle =====
