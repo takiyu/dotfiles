@@ -10,12 +10,13 @@ let g:lightline = {
             \              [ 'fileinfo' ],
             \              [ 'gitstatus'],
             \              [ 'linter_checking', 'linter_errors',
-            \                'linter_warnings', 'linter_ok' ]],
+            \                'linter_warnings', 'linter_ok' ], ['asyncrun']],
             \ },
             \ 'component': {
             \   'readonly': '%{&readonly?"R":"W"}',
             \   'percentlineinfo': '%3p%% %3l:%-2v',
             \   'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
+            \   'asyncrun': '%{g:asyncrun_status}',
             \ },
             \ 'component_function': {
             \   'gitstatus': 'LightlineGitStatus',
