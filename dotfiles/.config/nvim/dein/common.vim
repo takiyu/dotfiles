@@ -2,7 +2,7 @@
 "                                      Common
 " ==============================================================================
 
-set synmaxcol=300                 " ハイライトする文字数を制限する
+set synmaxcol=400                 " ハイライトする文字数を制限する
 set backspace=indent,eol,start    " インサートモード時にバックスペースを使う
 set whichwrap=b,s,h,l,<,>,[,]     " 行頭から前行文末へ移動可能にする
 " set scrolloff=999               " スクロール時にカーソルを中央へ移動
@@ -11,7 +11,7 @@ set cindent                       " cオートインデント
 set cinoptions=g0                 " cppでのpublic宣言を下げる
 set showtabline=2                 " タブ(上部)を常に表示する
 set number                        " 行数を表示する
-" set nohlsearch                  " 検索文字列を強調を無効化
+set hlsearch                      " 検索文字列を強調
 set ignorecase                    " 大文字小文字を無視
 set smartcase                     " (ただし大文字入力時のみ考慮)
 set guioptions-=m                 " メニューバーを非表示

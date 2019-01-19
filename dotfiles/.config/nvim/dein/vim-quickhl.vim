@@ -1,7 +1,7 @@
 " ==============================================================================
 "                                  quickhl
 " ==============================================================================
-let g:quickhl_manual_hl_priority = 10       " プライオリティの設定
+let g:quickhl_manual_hl_priority = 0       " プライオリティの設定
 " let g:quickhl_cword_enable_at_startup = 1 " カーソル下の単語をハイライト
 " 色指定(同時に個数も指定)
 let g:quickhl_manual_colors = [
