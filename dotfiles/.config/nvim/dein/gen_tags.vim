@@ -1,6 +1,9 @@
 " ==============================================================================
 "                                    gtags
 " ==============================================================================
+let g:gen_tags#use_cache_dir = 0  " Create tag files in .git directory
+let g:gen_tags#blacklist = ['$HOME']
+
 " Tag generation
 let g:gen_tags#ctags_auto_gen = 1
 let g:gen_tags#gtags_auto_gen = 1
