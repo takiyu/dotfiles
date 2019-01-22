@@ -15,7 +15,7 @@ sources="Class \
 
 
 # argc < 2 -> exit
-if [ $# -lt 2 ]; then  
+if [ $# -lt 2 ]; then
 	echo 'argv[0] == l/g'
 	echo 'argv[1] == up/down'
 	exit 1
