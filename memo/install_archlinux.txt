@@ -169,3 +169,6 @@ Android Development
 
     Fix clang dependence.
     `sudo ln -s /usr/lib/libncurses.so.5 /usr/lib/libtinfo.so.5`
+
+Bash Profile for Desktop
+    ln -s ~/.bash_profile ~/.profile
