@@ -27,12 +27,12 @@ hook_add = '''
     execute 'source ' . g:dein_config_dir . 'jedi-vim.vim'
 '''
 
-[[plugins]]
-repo = 'marijnh/tern_for_vim'
-on_ft = ['javascript']
-hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'tern_for_vim.vim'
-'''
+# [[plugins]]
+# repo = 'marijnh/tern_for_vim'
+# on_ft = ['javascript']
+# hook_add = '''
+#     execute 'source ' . g:dein_config_dir . 'tern_for_vim.vim'
+# '''
 
 [[plugins]]
 repo = 'cespare/ruby-complete'
