@@ -1,4 +1,4 @@
 " ==============================================================================
 "                                    AsyncRun
 " ==============================================================================
-autocmd User AsyncRunStart call asyncrun#quickfix_toggle(6)
+autocmd User AsyncRunStart call asyncrun#quickfix_toggle(6, 1)
