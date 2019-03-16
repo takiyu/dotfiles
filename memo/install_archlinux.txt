@@ -52,6 +52,7 @@ Common software
     trizen -S pepper-flash
     trizen -S cmigemo-git
     trizen -S unzip-iconv
+    pacman -S virtualbox
 
     pacman -S sane xsane simple-scan
 
