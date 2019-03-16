@@ -133,7 +133,7 @@ fi
 
 # Synaptics and Game pad
 if [ $platform == 'Linux' ]; then
-    if [ `$exist_command synclient` == 'exist' ]; then
+    if [ "`$exist_command synclient`" == 'exist' ]; then
         synclient VertScrollDelta=-30 HorizScrollDelta=-30
         synclient MaxSpeed=2.0 AccelFactor=0.10
     fi
