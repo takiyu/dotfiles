@@ -33,5 +33,5 @@ Config {
         , sepChar = "%"
         , alignSep = "}{"
         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %wlp2s0%  <fc=#ffffff>||</fc>  %battery%"
---         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp8s0%"
+--         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp8s0%  "
 }
