@@ -53,10 +53,12 @@ Common software
     trizen -S cmigemo-git
     trizen -S unzip-iconv
     pacman -S virtualbox
+    pacman -S gimp inkscape
 
     pacman -S sane xsane simple-scan
 
 Development
+    pacman -S clang
     trizen -S ctags global
 
     pacman -S jdk8-openjdk
