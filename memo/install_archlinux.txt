@@ -104,6 +104,9 @@ VPN
 
     sudo pacman -S resolvconf
 
+Change directories' names in the home to English (It requires a display)
+    LANG=C xdg-user-dirs-gtk-update
+
 Disable Histry
     `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
     configure smplayer and mcomix setting
