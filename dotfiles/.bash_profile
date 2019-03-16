@@ -26,6 +26,8 @@ if [ $platform == 'Linux' ]; then
     export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
     # Java anti-alias
     export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+    # For xmonad
+    export _JAVA_AWT_WM_NONREPARENTING=1
 
     # Microchip
     # export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
