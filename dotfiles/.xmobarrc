@@ -1,14 +1,11 @@
 Config {
           font = "xft:ricty-11.4:bold"
---           font = "xft:Sans-13:bold"
+--           font = "xft:ricty-13:bold"
         , borderColor = "gray"
         , border = TopB
         , bgColor = "black"
         , fgColor = "grey"
---         , position = Bottom
         , position = Static { xpos = 0 , ypos = 28, width = 1920, height = 18 }
---         , position = Static { xpos = 0 , ypos = 30, width = 3840, height = 23 }
---         , position = Static { xpos = 1920 , ypos =  0, width = 1920, height = 21 }
         , lowerOnStart = False
         , persistent = True
         , hideOnStart = False
@@ -22,10 +19,8 @@ Config {
                             , "-L", "40", "-H", "60"
                             , "-l", "lightblue", "-n", "gray90", "-h", "red"] 50
             , Run Memory ["-t", "Mem:<usedratio>%"] 50
---             , Run Network "enp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32" , "--normal", "green", "--high", "red"] 20
---             , Run Network "wlp58s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
---             , Run Network "wlp0s20f0u1" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
             , Run Network "wlp2s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
+--             , Run Network "enp8s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
             , Run BatteryP ["BAT0"]    ["-t", "<acstatus> (<left>%)"
                             , "-L", "10", "-H", "80", "-p", "3"
                             , "-l", "red", "-h", "green"
@@ -37,6 +32,6 @@ Config {
         ]
         , sepChar = "%"
         , alignSep = "}{"
-    --    , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp0s20f0u1%/%wlp58s0%/%wlp0s20f0u1%  <fc=#ffffff>||</fc>  %battery%"
         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %wlp2s0%  <fc=#ffffff>||</fc>  %battery%"
+--         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp8s0%"
 }
