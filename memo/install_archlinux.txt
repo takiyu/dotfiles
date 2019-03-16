@@ -3,42 +3,84 @@ Boot Arch CD and download AUI script.
     tar xzf aui.tar
 Run `./fifo` and reboot
     https://wiki.archlinuxjp.org/index.php/%E3%83%93%E3%82%AE%E3%83%8A%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%A4%E3%83%89
-    Installing grub2 was failed, so use systemd
+    Installing grub2 (systemd was failed by automatic configuration)
 Login as root and run ./lilo
-
-trizen
-    Edit `/etc/pacman.conf` and append following.
-    ```
-        [archlinuxfr]
-        SigLevel = Never
-        Server = http://repo.archlinux.fr/$arch
-    ```
-    and `pacman --sync --refresh trizen`
+    install trizen and common software
 
 My environment
     `git clone https://github.com/takiyu/dotfiles` and run scripts.
 
 Fonts
-    pacman -S ttf-dejavu
+    pacman -S ttf-dejavu noto-fonts-cjk
     trizen -S ttf-ricty
     (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
-    trizen -S ttf-liberation
+    pacman -S ttf-liberation
 
 Desktop
-    pacman -S xorg xfce4 xfce4-goodies xmonad xmonad-contrib
-    pacman -S fcitx fcitx-mozc fcitx-configtool
-    pacman -S fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
-    pacman -S xfce4-notifyd xfce4-screenshooter xfce4-taskmanager
-    pacman -S xscreensaver-arch-logo
+    pacman -S xmonad xmonad-contrib xmobar
+    pacman -S xfce4 xfce4-goodies xfce4-notifyd xfce4-screenshooter xfce4-taskmanager
+    pacman -S fcitx fcitx-mozc fcitx-configtool fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
+    pacman -S xscreensaver
     pacman -S networkmanager network-manager-applet gnome-keyring
     pacman -S libcanberra libcanberra-pulse
     pacman -S gvfs gvfs-smb sshfs gvfs-mtp mtpfs
     pacman -S xclip
 
 Bluetooth
-    trizen -S xfce4-pulseaudio-plugin
-    trizen -S pulseaudio-bluetooth
-    trizen -S blueman
+    pacman -S xfce4-pulseaudio-plugin
+    pacman -S pulseaudio-bluetooth
+    pacman -S blueman
+
+Common software
+    pacman -S neovim neovim-qt
+    pacman -S linux-headers
+    pacman -S pkgfile
+    pacman -S net-tools
+    pacman -S words
+    pacman -S w3m
+    trizen -S nkf lv
+    pacman -S htop
+    pacman -S alsa-firmware pavucontrol
+    pacman -S zathura zathura-pdf-poppler poppler-data
+    pacman -S smplayer mcomix
+    pacman -S firefox
+    pacman -S gnome-calculator
+    trizen -S slack-desktop
+    pacman -S goldendict
+    pacman -S simplescreenrecorder
+    trizen -S chromium chromium-widevine
+    trizen -S pepper-flash
+    trizen -S cmigemo-git
+    trizen -S unzip-iconv
+
+    pacman -S sane xsane simple-scan
+
+Development
+    trizen -S ctags global
+
+    pacman -S jdk8-openjdk
+    sudo archlinux-java set java-8-openjdk
+
+    pacman -S python python-pip python2 python2-pip
+    pacman -S nodejs npm
+
+    sudo pip install pyflakes pep8
+    sudo npm install -g jsxhint
+
+    pacman -S texlive-core texlive-langjapanese texlive-latexextra texlive-most
+    pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
+    pacman -S opencv
+    pacman -S paraview
+
+    trizen -S openni2-libfreenect libfeenect2
+    trizen -S pcl
+
+    pacman -S cmake
+    pacman -S premake4
+    trizen -S premake-git
+
+    trizen -S ocl-icd intel-opencl-runtime opencl-headers
+
 
     Set `xmonad --replace` to run automatically
 
@@ -58,57 +100,9 @@ VPN
 
     sudo pacman -S resolvconf
 
-Others
-    pacman -S alsa-firmware pavucontrol
-    pacman -S linux-headers
-    pacman -S zathura zathura-pdf-poppler poppler-data
-    pacman -S pkgfile
-    pacman -S net-tools
-    pacman -S smplayer mcomix
-    pacman -S gnome-calculator
-    pacman -S w3m
-    trizen -S nkf lv
-    pacman -S phantomjs
-    pacman -S slack-desktop
-    pacman -S goldendict
-    pacman -S recordmydesktop
-    trizen -S chromium chromium-widevine
-    trizen -S pepper-flash
-    pacman -S words
-    trizen -S cmigemo-git
-    trizen -S unzip-iconv
-
-    pacman -S sane xsane simple-scan
-
 Disable Histry
     `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
     configure smplayer and mcomix setting
-
-Development
-    pacman -S jdk8-openjdk
-    sudo archlinux-java set java-8-openjdk
-
-    pacman -S python python-pip python2 python2-pip
-    pacman -S nodejs npm
-
-    sudo pip install pyflakes pep8
-    sudo npm install jsxhint
-
-    pacman -S texlive-core texlive-langjapanese texlive-latexextra texlive-most
-    pacman -S texlive-fontsextra texlive-formatsextra texlive-pictures texlive-genericextra
-    pacman -S opencv
-    trizen -S openni2-libfreenect libfeenect2
-    trizen -S pcl
-    trizen -S intel-opencl-runtime
-
-    pacman -S paraview
-
-    pacman -S premake4
-    trizen -S premake-git
-
-    trizen -S ocl-icd intel-opencl-runtime opencl-headers
-
-    trizen -S ctags global
 
 Fix screen blinking bug for Dell XPS13
     edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
@@ -130,19 +124,6 @@ Fix broadcom driver
             blacklist brcmsmac
         ```
 
-Tex allowed command
-    open `/usr/share/texmf-dist/web2c/texmf.cnf` and add `extract.bb` to
-    `/usr/share/texmf-dist/web2c`.
-        ```
-        shell_escape_commands = \
-        bibtex,bibtex8,\
-        kpsewhich,\
-        makeindex,\
-        mpost,\
-        repstopdf,\
-        extractbb,\  % Add this line
-        ```
-
 Intel driver
     open `/etc/X11/xorg.conf.d/20-intel.conf` and write
     ```
@@ -161,14 +142,9 @@ Makepkg parallel
     ```
 
 Android Development
-    gpg --keyserver pgp.mit.edu --recv-keys F7E48EDB # for `ncurses5-compat-libs`
-
     trizen -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
-    trizen -S android-platform-26 android-ndk
-    pacman -S pidcat
-
-    Fix clang dependence.
-    `sudo ln -s /usr/lib/libncurses.so.5 /usr/lib/libtinfo.so.5`
+    trizen -S android-platform android-ndk
+    trizen -S pidcat
 
 Bash Profile for Desktop
     ln -s ~/.bash_profile ~/.profile
