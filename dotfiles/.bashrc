@@ -151,11 +151,11 @@ fi
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
 
 # CUDA
-# export CUDA_HOME=/usr/local/cuda
+# export CUDA_HOME=/opt/cuda
 # export CUDA_PATH=$CUDA_HOME
 # export CUDA_CUDART_LIBRARY=$CUDA_HOME
-# export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
-# export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export PATH=$PATH:$CUDA_HOME/bin
+# export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
 
 # Virtualbox
 VBOX_USB=usbfs
