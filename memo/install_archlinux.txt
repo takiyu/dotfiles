@@ -53,6 +53,7 @@ Common software
     trizen -S cmigemo-git
     trizen -S unzip-iconv
     pacman -S virtualbox
+    trizen -S virtualbox-ext-oracle
     pacman -S gimp inkscape
 
     pacman -S sane xsane simple-scan
