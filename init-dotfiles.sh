@@ -60,8 +60,8 @@ create_link_prompt() {
                 # Backup and create new link
                 home_backup="$home_target"_
                 if [ -e $home_backup ]; then
-                    echo "rm $home_backup"
-                    rm $home_backup
+                    echo "rm -r $home_backup"
+                    rm -r $home_backup
                 fi
                 echo "mv $home_target $home_backup"
                 mv $home_target $home_backup
