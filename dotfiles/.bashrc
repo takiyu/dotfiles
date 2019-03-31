@@ -116,7 +116,7 @@ if [ $platform == 'Linux' ]; then
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
     alias vim=nvim
-    function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
+    function gvim() { command nvim-qt --no-ext-tabline $@ & 2> /dev/null; disown; }
     EDITOR=gvim
 fi
 alias vimdiff="vim -d"
@@ -151,11 +151,13 @@ fi
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
 
 # CUDA
-# export CUDA_HOME=/opt/cuda
-# export CUDA_PATH=$CUDA_HOME
-# export CUDA_CUDART_LIBRARY=$CUDA_HOME
-# export PATH=$PATH:$CUDA_HOME/bin
-# export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
+if [ -e /opt/cuda ]; then
+    export CUDA_HOME=/opt/cuda
+    export CUDA_PATH=$CUDA_HOME
+    export CUDA_CUDART_LIBRARY=$CUDA_HOME
+    export PATH=$PATH:$CUDA_HOME/bin
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
+fi
 
 # Virtualbox
 VBOX_USB=usbfs
