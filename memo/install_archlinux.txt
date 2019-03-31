@@ -42,6 +42,7 @@ Common software
     pacman -S htop
     pacman -S alsa-firmware pavucontrol
     pacman -S zathura zathura-pdf-poppler poppler-data
+    pacman -S evince
     pacman -S smplayer mcomix
     pacman -S firefox
     pacman -S gnome-calculator
