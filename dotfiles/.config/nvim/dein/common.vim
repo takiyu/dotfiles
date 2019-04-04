@@ -33,7 +33,8 @@ if has('win32') || has('win64')
     " set shell=C:/msys64/usr/bin/bash
     set shellcmdflag=-c
 else
-    set shellcmdflag=--login\ -s  " Linux-likeなシェル
+    set shellcmdflag=-c
+    " set shellcmdflag=--login\ -s  " Linux-likeなシェル
 endif
 set shellxquote=\"                " コマンドを囲う引用符
 set shellslash                    " ファイルパスに\の代わりに/を使用
