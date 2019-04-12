@@ -176,6 +176,6 @@ VBOX_USB=usbfs
 # export NO_PROXY="rnd-dockerhub.huawei.com"
 # export GIT_SSL_NO_VERIFY=1
 
-# export HTTP_PROXY=$http_proxy
-# export HTTPS_PROXY=$https_proxy
-# export FTP_PROXY=$ftp_proxy
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+export ftp_proxy=$FTP_PROXY
