@@ -4,4 +4,4 @@ Windows Registry Editor Version 5.00
 @="Edit with nvim-qt"
 
 [HKEY_CLASSES_ROOT\*\shell\Open with gvim\Command]
-@="C:\\users\\takiyu\\bin\\nvim-win64\\Neovim\\bin\\nvim-qt.exe --no-ext-tabline \"%1\""
+@="C:\\users\\t00490584\\bin\\nvim-win64\\Neovim\\bin\\nvim-qt.exe --no-ext-tabline \"%1\""
