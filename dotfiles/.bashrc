@@ -116,7 +116,7 @@ if [ $platform == 'Linux' ]; then
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
     alias vim=nvim
-    function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
+    function gvim() { command nvim-qt --no-ext-tabline $@ & 2> /dev/null; disown; }
     EDITOR=gvim
 fi
 alias vimdiff="vim -d"
@@ -151,11 +151,13 @@ fi
 # export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
 
 # CUDA
-# export CUDA_HOME=/usr/local/cuda
-# export CUDA_PATH=$CUDA_HOME
-# export CUDA_CUDART_LIBRARY=$CUDA_HOME
-# export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
-# export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+if [ -e /opt/cuda ]; then
+    export CUDA_HOME=/opt/cuda
+    export CUDA_PATH=$CUDA_HOME
+    export CUDA_CUDART_LIBRARY=$CUDA_HOME
+    export PATH=$PATH:$CUDA_HOME/bin
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
+fi
 
 # Virtualbox
 VBOX_USB=usbfs
@@ -174,6 +176,6 @@ VBOX_USB=usbfs
 # export NO_PROXY="rnd-dockerhub.huawei.com"
 # export GIT_SSL_NO_VERIFY=1
 
-# export HTTP_PROXY=$http_proxy
-# export HTTPS_PROXY=$https_proxy
-# export FTP_PROXY=$ftp_proxy
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+export ftp_proxy=$FTP_PROXY

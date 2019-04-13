@@ -42,6 +42,7 @@ Common software
     pacman -S htop
     pacman -S alsa-firmware pavucontrol
     pacman -S zathura zathura-pdf-poppler poppler-data
+    pacman -S evince
     pacman -S smplayer mcomix
     pacman -S firefox
     pacman -S gnome-calculator
@@ -53,10 +54,13 @@ Common software
     trizen -S cmigemo-git
     trizen -S unzip-iconv
     pacman -S virtualbox
+    trizen -S virtualbox-ext-oracle
+    pacman -S gimp inkscape
 
     pacman -S sane xsane simple-scan
 
 Development
+    pacman -S clang
     trizen -S ctags global
 
     pacman -S jdk8-openjdk

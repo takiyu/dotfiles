@@ -4,4 +4,4 @@ Windows Registry Editor Version 5.00
 @="Open MSYS2 here"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\msys2_bash\command]
-@="c:\\msys64\\usr\\bin\\mintty.exe /bin/sh -lc 'cd \"$(cygpath \"%V\")\"; exec bash'"
+@="c:\\msys64\\mingw64.exe /bin/sh -lc 'cd \"$(cygpath \"%V\")\"; exec bash'"

@@ -29,10 +29,15 @@ set cursorline                    " カーソル行をハイライト
 set incsearch                     " 入力しながら検索
 set breakindent                   " 折り返し時にインデントを考慮
 if has('win32') || has('win64')
-    set shellcmdflag=--login\ -s  " Linux-likeなシェルを想定
-    set shellxquote=\"            " コマンドを囲う引用符
-    set shellslash                " ファイルパスに\の代わりに/を使用
+    set shell=cmd.exe             " コマンドプロンプト bashではPATH形式が異なる
+    " set shell=C:/msys64/usr/bin/bash
+    set shellcmdflag=-c
+else
+    set shellcmdflag=-c
+    " set shellcmdflag=--login\ -s  " Linux-likeなシェル
 endif
+set shellxquote=\"                " コマンドを囲う引用符
+set shellslash                    " ファイルパスに\の代わりに/を使用
 
 " === Encoding ===
 set encoding=utf-8

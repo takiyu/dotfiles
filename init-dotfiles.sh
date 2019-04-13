@@ -59,6 +59,10 @@ create_link_prompt() {
             if [ $ret -eq 0 ]; then
                 # Backup and create new link
                 home_backup="$home_target"_
+                if [ -e $home_backup ]; then
+                    echo "rm -r $home_backup"
+                    rm -r $home_backup
+                fi
                 echo "mv $home_target $home_backup"
                 mv $home_target $home_backup
                 create_link $dot_target $home_target
