@@ -58,15 +58,20 @@ shopt -s globstar
 set bell-style none
 
 # git prompt
-GIT_PS1_SHOWUPSTREAM=1
-GIT_PS1_SHOWUNTRACKEDFILES=
-GIT_PS1_SHOWSTASHSTATE=
-GIT_PS1_SHOWDIRTYSTATE=
-source $git_prompt
-source $git_completion
+if [ $platform == 'Linux' ]; then
+    GIT_PS1_SHOWUPSTREAM=1
+    GIT_PS1_SHOWUNTRACKEDFILES=
+    GIT_PS1_SHOWSTASHSTATE=
+    GIT_PS1_SHOWDIRTYSTATE=
+    source $git_prompt
+    source $git_completion
 
-# color prompt
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
+    # color prompt
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
+elif [ $platform == 'Windows' ]; then
+    # color prompt
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \[\033[01;34m\]\$ \[\033[00m\]'
+fi
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
