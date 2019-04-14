@@ -10,7 +10,7 @@ let g:ale_fixers = {
     \ 'cpp': ['clang-format'],
     \ }
 let g:ale_linters = {
-    \ 'cpp': ['clangcheck'],
+    \ 'cpp': ['clangcheck', 'clang'],
     \ }
 
 let g:ale_lint_on_text_changed = 0
