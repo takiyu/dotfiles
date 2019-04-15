@@ -85,7 +85,7 @@ endif
 
 "=== Infinity Undo ===
 if has('persistent_undo')
-    set undodir=~/.vimundo  " ~/.vim/undo
+    set undodir=~/.cache/nvim/.vimundo
     set undofile
 endif
 
