@@ -128,6 +128,10 @@ fi
 alias vimdiff="vim -d"
 alias gvimdiff="gvim -- -d"
 
+# aliases for fzy
+function gvimf() { gvim `find | fzy`; }
+function cdf() { cd `find | fzy`; }
+
 # aliases for applications
 if [ $platform == 'Linux' ]; then
     function filer() { command thunar $@ & &> /dev/null; disown; }
