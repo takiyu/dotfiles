@@ -124,7 +124,12 @@ hook_add = '''
 repo = 'tpope/vim-fugitive'              # Git補助
 
 [[plugins]]
+repo = 'Shougo/vimproc.vim'             # agitが依存
+build = 'make'
+
+[[plugins]]
 repo = 'cohama/agit.vim'                 # Git Graph
+depends = ['vimproc.vim']
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'agit.vim'
 '''
