@@ -131,6 +131,7 @@ alias gvimdiff="gvim -- -d"
 # aliases for fzy
 function gvimf() { gvim `find | fzy`; }
 function cdf() { cd `find | fzy`; }
+function lsf() { find | fzy; }
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
