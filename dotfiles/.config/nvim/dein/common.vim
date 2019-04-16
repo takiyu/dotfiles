@@ -173,3 +173,9 @@ endif
 "===== Spell check toggle =====
 set spell spelllang=en_us,cjk  " Enabled by default
 nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
+173
+
+"===== Python path for conda on Windows =====
+if has('win32') || has('win64')
+    let g:python3_host_prog = 'C:/ProgramData/Miniconda3/python'
+endif
