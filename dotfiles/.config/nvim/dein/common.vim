@@ -125,6 +125,7 @@ nnoremap # :tabm +1 <CR>
 " クリップボードから貼り付け,コピー
 inoremap <C-v> <ESC>"+gp
 vnoremap <C-c> "+y
+cnoremap <C-v> <C-r>+
 " 折り込み
 " nnoremap <C-c> zc
 " inoremap <C-c> <Esc>zc
