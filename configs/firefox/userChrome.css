@@ -1,14 +1,56 @@
 /* Multi line tab */
-#titlebar-buttonbox {
-  vertical-align: top !important;
-  display: block !important;
+:root{
+    --multirow-n-rows: 3;
+    --multirow-tab-min-width: 100px;
+    --multirow-tab-dynamic-width: 1; /* Change to 0 for fixed-width tabs using the above width. */
 }
-.tabbrowser-arrowscrollbox scrollbox {
-  overflow: visible !important;
+#tabbrowser-tabs{
+  min-height: unset !important;
+  padding-inline-start: 0px !important
 }
-.tabbrowser-arrowscrollbox scrollbox > box {
-  display: block !important;
+@supports (inset-block:auto){ /* Test for Firefox > 66 */
+  #tabbrowser-tabs > .tabbrowser-arrowscrollbox > .arrowscrollbox-scrollbox{
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    max-height: calc(var(--tab-min-height) * var(--multirow-n-rows));
+    scrollbar-color: var(--toolbar-bgcolor) var(--lwt-accent-color);
+    scrollbar-width: thin;
+  }
+  #tabbrowser-tabs > .tabbrowser-arrowscrollbox {
+    overflow: -moz-hidden-unscrollable;
+    display: block;
+  }
 }
+@supports not (inset-block:auto){ /* Test for Firefox < 66 */
+  #tabbrowser-tabs > .tabbrowser-arrowscrollbox{
+    min-height: unset !important;
+  }
+  #tabbrowser-tabs .scrollbox-innerbox{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #tabbrowser-tabs .arrowscrollbox-scrollbox {
+    overflow: -moz-hidden-unscrollable;
+    display: block;
+  }
+}
+.tabbrowser-tab{ height: var(--tab-min-height); }
+#tabbrowser-tabs .tabbrowser-tab[pinned]{
+  position: static !important;
+  margin-inline-start: 0px !important;
+}
+.tabbrowser-tab[fadein]:not([pinned]){
+  min-width: var(--multirow-tab-min-width) !important;
+  flex-grow: var(--multirow-tab-dynamic-width);
+}
+.tabbrowser-tab > stack{ width: 100%; height: 100% }
+#tabbrowser-tabs .scrollbutton-up,
+#tabbrowser-tabs .scrollbutton-down,
+#alltabs-button,
+:root:not([customizing]) #TabsToolbar #new-tab-button,
+#tabbrowser-tabs spacer,
+.tabbrowser-tab::after{ display: none !important }
 /* Title bar height */
 toolbarbutton.titlebar-button {
   min-height: 31px !important;
