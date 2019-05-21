@@ -168,6 +168,7 @@ if [ -e /opt/cuda ]; then
     export CUDA_CUDART_LIBRARY=$CUDA_HOME
     export PATH=$PATH:$CUDA_HOME/bin
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/targets/x86_64-linux/lib
 fi
 
 # Virtualbox
