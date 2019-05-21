@@ -139,10 +139,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             , ((modm.|.shiftMask,      xK_p  ), shiftWsNoGreedy Next EmptyWS)
             , ((modm,                  xK_b  ), toggleWS)
             -- physical screen
-            , ((modm,                  xK_w  ), nextScreen)
-            , ((modm.|.shiftMask,      xK_w  ), shiftNextScreen >> nextScreen)
---          , ((modm,                  xK_w  ), prevScreen)
-            , ((modm,                  xK_s  ), swapNextScreen)
+            , ((modm,                           xK_s  ), nextScreen)
+            , ((modm.|.shiftMask,               xK_s  ), shiftNextScreen >> nextScreen)
+--          , ((modm,                           xK_s  ), prevScreen)
+            , ((modm.|.shiftMask.|.controlMask, xK_s  ), swapNextScreen)
             -- reset workspaces corresponding to physical screens
             , ((modm,                  xK_d  ), do
                 screenWorkspace 1 >>= flip whenJust (windows . W.view)  -- second screen
