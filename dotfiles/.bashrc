@@ -153,9 +153,9 @@ if [ $platform == 'Linux' ]; then
 fi
 
 # Python path
-if [ $platform == 'Linux' ]; then
-    export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
-fi
+# if [ $platform == 'Linux' ]; then
+#     export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
+# fi
 
 # Caffe
 # export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH
