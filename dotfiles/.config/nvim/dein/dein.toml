@@ -124,7 +124,7 @@ hook_add = '''
 repo = 'tpope/vim-fugitive'              # Git補助
 
 [[plugins]]
-repo = 'Shougo/vimproc.vim'             # agitが依存
+repo = 'Shougo/vimproc.vim'              # agitが依存
 build = 'make'
 
 [[plugins]]
@@ -133,9 +133,6 @@ depends = ['vimproc.vim']
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'agit.vim'
 '''
-
-[[plugins]]
-repo = 'will133/vim-dirdiff'             # ディレクトリ差分
 
 [[plugins]]
 repo = 'skywind3000/asyncrun.vim'        # 非同期実行
@@ -156,10 +153,4 @@ repo = 'ujihisa/neco-look'               # 英単語補完
 repo = 'thinca/vim-ref'                  # 英語オンライン辞書
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'vim-ref.vim'
-'''
-
-[[plugins]]
-repo = 'takiyu/gtrans-web.vim'           # Google翻訳
-hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'gtrans-web.vim'
 '''
