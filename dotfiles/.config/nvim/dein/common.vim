@@ -38,6 +38,8 @@ else
 endif
 set shellxquote=\"                " コマンドを囲う引用符
 set shellslash                    " ファイルパスに\の代わりに/を使用
+" 改行時のコメントアウト継続を無効化
+autocmd BufNewFile,BufRead * setlocal formatoptions-=ro
 
 " === Encoding ===
 set encoding=utf-8
