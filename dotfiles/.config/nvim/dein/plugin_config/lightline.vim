@@ -21,6 +21,12 @@ let g:lightline = {
             \ 'component_function': {
             \   'gitstatus': 'LightlineGitStatus',
             \ },
+            \ 'component_expand': {
+            \   'linter_checking': 'lightline#lsc#checking',
+            \   'linter_warnings': 'lightline#lsc#warnings',
+            \   'linter_errors': 'lightline#lsc#errors',
+            \   'linter_ok': 'lightline#lsc#ok',
+            \ },
             \ 'component_type': {
             \   'linter_checking': 'left',
             \   'linter_warnings': 'warning',

@@ -58,10 +58,13 @@ hook_add = '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'           # ステータスライン
-depends = ['vim-fugitive']
+depends = ['vim-fugitive', 'lightline-lsc-nvim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''
+
+[[plugins]]
+repo = 'takiyu/lightline-lsc-nvim'       # ステータスライン with LSP (custom)
 
 [[plugins]]
 repo = 'simeji/winresizer'               # ウィンドウリサイズ
