@@ -4,8 +4,8 @@
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_serverCommands = {
-    \ 'c': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'],
-    \ 'cpp': ['clangd', '-compile-commands-dir=' . getcwd() . '/build'],
+    \ 'c': ['clangd'],
+    \ 'cpp': ['clangd'],
 \ }
 let g:LanguageClient_rootMarkers = ['build', '.git']
 
