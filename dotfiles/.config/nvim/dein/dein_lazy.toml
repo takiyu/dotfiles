@@ -4,14 +4,6 @@ repo = 'Shougo/neoinclude.vim'
 on_ft = ['c', 'cpp']
 depends = ['deoplete.nvim']
 
-# [[plugins]]
-# repo = 'zchee/deoplete-clang'
-# on_ft = ['c', 'cpp', 'cmake']
-# depends = ['deoplete.nvim']
-# hook_add = '''
-#     execute 'source ' . g:dein_config_dir . 'deoplete-clang.vim'
-# '''
-
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 on_ft = ['python']
@@ -26,17 +18,6 @@ on_ft = ['python']
 hook_add = '''
     execute 'source ' . g:dein_config_dir . 'jedi-vim.vim'
 '''
-
-# [[plugins]]
-# repo = 'marijnh/tern_for_vim'
-# on_ft = ['javascript']
-# hook_add = '''
-#     execute 'source ' . g:dein_config_dir . 'tern_for_vim.vim'
-# '''
-
-[[plugins]]
-repo = 'cespare/ruby-complete'
-on_ft = ['ruby']
 
 [[plugins]]
 repo = 'fatih/vim-go'
@@ -88,14 +69,6 @@ on_ft = ['verilog']
 [[plugins]]
 repo = 'tmhedberg/SimpylFold'
 on_ft = ['python']
-
-# ------------------------------------- Tag ------------------------------------
-[[plugins]]
-repo = 'jsfaint/gen_tags.vim'
-on_ft = ['c', 'cpp']
-hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'gen_tags.vim'
-'''
 
 # ---------------------------- Document Generation -----------------------------
 [[plugins]]
