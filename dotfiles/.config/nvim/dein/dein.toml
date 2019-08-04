@@ -58,7 +58,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'           # ステータスライン
-depends = ['vim-fugitive', 'lightline-ale']
+depends = ['vim-fugitive']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''
@@ -80,16 +80,6 @@ repo = 'vimtaku/hl_matchit.vim'          # 括弧+αをハイライト
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'hl_matchit.vim'
 '''
-
-[[plugins]]
-repo = 'w0rp/ale'                        # 文法チェック
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'ale.vim'
-'''
-
-[[plugins]]
-repo = 'maximbaz/lightline-ale'          # 文法チェックのステータスライン表示
-depends = ['ale']
 
 [[plugins]]
 repo = 'vim-scripts/YankRing.vim'        # ヤンク履歴

@@ -116,10 +116,6 @@ noremap <C-k> 20k
 noremap 9 ^
 noremap 0 $
 " タブ移動
-nnoremap <F3> gt
-inoremap <F3> <Esc>gt
-nnoremap <F2> gT
-inoremap <F2> <Esc>gT
 nnoremap 3 gt
 nnoremap 2 gT
 nnoremap " :tabm -1 <CR>
