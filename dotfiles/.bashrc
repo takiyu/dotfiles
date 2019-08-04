@@ -113,6 +113,8 @@ alias gPom='git push origin master'
 alias gpom='git pull origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
+alias grom='git reset origin/master'
+alias gRom='git reset --hard origin/master'
 
 # aliases for editors
 alias v=gvim
