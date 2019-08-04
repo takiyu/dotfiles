@@ -8,6 +8,7 @@ filetype on
 " Set dein cache path and dein config dir
 let g:dein_cache_path = expand('~/.cache/nvim/dein/')
 let g:dein_config_dir = expand('~/.config/nvim/dein/')
+let g:dein_plugin_config_dir = expand('~/.config/nvim/dein/plugin_config/')
 
 " Set dein.vim directory
 let s:dein_dir = g:dein_cache_path . 'repos/github.com/Shougo/dein.vim'

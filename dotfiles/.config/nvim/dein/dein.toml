@@ -1,7 +1,7 @@
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'            # 補完
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'deoplete.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'deoplete.vim'
 '''
 
 [[plugins]]
@@ -16,7 +16,7 @@ if = '!has("nvim")'
 repo = 'Shougo/neosnippet'               # Snippet
 depends = ['deoplete.nvim']
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'neosnippet.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
 
 [[plugins]]
@@ -29,62 +29,62 @@ repo = 'takiyu/tango-lx'                 # カラースキーム
 [[plugins]]
 repo = 'tyru/caw.vim'                    # コメントアウト補助
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'caw.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'caw.vim'
 '''
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'             # Filer
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'nerdtree.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'nerdtree.vim'
 '''
 
 [[plugins]]
 repo = 'rhysd/clever-f.vim'              # カーソル移動 (f)
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'clever-f.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'clever-f.vim'
 '''
 
 [[plugins]]
 repo = 'easymotion/vim-easymotion'       # カーソル移動 (s)
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-easymotion.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-easymotion.vim'
 '''
 
 [[plugins]]
 repo = 'yuttie/comfortable-motion.vim'   # Smooth scroll
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'comfortable-motion.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'comfortable-motion.vim'
 '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'           # ステータスライン
 depends = ['vim-fugitive', 'lightline-ale']
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'lightline.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''
 
 [[plugins]]
 repo = 'simeji/winresizer'               # ウィンドウリサイズ
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'winresizer.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'winresizer.vim'
 '''
 
 [[plugins]]
 repo = 't9md/vim-quickhl'                # ハイライト
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-quickhl.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-quickhl.vim'
 '''
 
 [[plugins]]
 repo = 'vimtaku/hl_matchit.vim'          # 括弧+αをハイライト
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'hl_matchit.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'hl_matchit.vim'
 '''
 
 [[plugins]]
 repo = 'w0rp/ale'                        # 文法チェック
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'ale.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'ale.vim'
 '''
 
 [[plugins]]
@@ -94,13 +94,13 @@ depends = ['ale']
 [[plugins]]
 repo = 'vim-scripts/YankRing.vim'        # ヤンク履歴
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'yankring.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'yankring.vim'
 '''
 
 [[plugins]]
 repo = 'mbbill/undotree'                 # undo可視化
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'undotree.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'undotree.vim'
 '''
 
 [[plugins]]
@@ -109,7 +109,7 @@ repo = 'tpope/vim-sleuth'                # インデント自動検出
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides' # インデント明示化
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-indent-guides.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-indent-guides.vim'
 '''
 
 [[plugins]]
@@ -118,7 +118,7 @@ repo = 'bronson/vim-trailing-whitespace' # 行末スペース可視化
 [[plugins]]
 repo = 'airblade/vim-gitgutter'          # Git差分ガイド
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-gitgutter.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-gitgutter.vim'
 '''
 [[plugins]]
 repo = 'tpope/vim-fugitive'              # Git補助
@@ -131,19 +131,19 @@ build = 'make'
 repo = 'cohama/agit.vim'                 # Git Graph
 depends = ['vimproc.vim']
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'agit.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'agit.vim'
 '''
 
 [[plugins]]
 repo = 'skywind3000/asyncrun.vim'        # 非同期実行
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'asyncrun.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
 [[plugins]]
 repo = 'embear/vim-localvimrc'           # Local vimrc
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-localvimrc.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-localvimrc.vim'
 '''
 
 [[plugins]]
@@ -152,5 +152,5 @@ repo = 'ujihisa/neco-look'               # 英単語補完
 [[plugins]]
 repo = 'thinca/vim-ref'                  # 英語オンライン辞書
 hook_add = '''
-    execute 'source ' . g:dein_config_dir . 'vim-ref.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-ref.vim'
 '''
