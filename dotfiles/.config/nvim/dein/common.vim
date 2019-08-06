@@ -175,5 +175,8 @@ nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
 
 "===== Python path for conda on Windows =====
 if has('win32') || has('win64')
-    let g:python3_host_prog = 'C:/ProgramData/Miniconda3/python'
+    let s:miniconda_python_prog = 'C:/ProgramData/Miniconda3/python'
+    if executable(s:miniconda_python_prog)
+        let g:python3_host_prog = s:miniconda_python_prog
+    endif
 endif
