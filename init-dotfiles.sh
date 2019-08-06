@@ -20,8 +20,8 @@ create_link() {
     local dot_target=$1
     local home_target=$2
     if [ $platform == 'Windows' ]; then
-        echo "ln $dot_target $home_target"  # Hard link
-        ln $dot_target $home_target
+        echo "cp -r $dot_target $home_target"  # Copy
+        cp -r $dot_target $home_target
     else
         echo "ln -s $dot_target $home_target"  # Soft link
         ln -s $dot_target $home_target
