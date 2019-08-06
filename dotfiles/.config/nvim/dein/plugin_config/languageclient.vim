@@ -10,13 +10,19 @@ let g:LanguageClient_selectionUI = "Quickfix"       " Disable fzf selection
 let g:LanguageClient_fzfContextMenu = 0             " Disable fzf menu
 let g:LanguageClient_rootMarkers = ['build', '.git', 'build_*']
 
+" Set LSP server
+if !executable('cquery')
+    echoerr 'cquery is not installed'
+endif
 let g:LanguageClient_serverCommands = {
     \ 'c': ['cquery',
     \       '--log-file=/tmp/cquery/cq.log',
-    \       '--init={"cacheDirectory":"/tmp/cquery/", "completion": {"filterAndSort": false}}'],
+    \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
+    \       '        "completion": {"filterAndSort": false}}'],
     \ 'cpp': ['cquery',
     \         '--log-file=/tmp/cquery/cq.log',
-    \         '--init={"cacheDirectory":"/tmp/cquery/", "completion": {"filterAndSort": false}}']
+    \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
+    \         '        "completion": {"filterAndSort": false}}'],
 \ }
 
 " Enable syntax check
