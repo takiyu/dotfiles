@@ -41,3 +41,7 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 
 # Build winpty, and put the binary in ~/bin
 https://github.com/rprichard/winpty
+
+# Prepare `/usr/share/dict/words` for `look` command
+mkdir -p /usr/share/dict
+wget https://raw.githubusercontent.com/dwyl/english-words/master/words.txt -o /usr/share/dict/words

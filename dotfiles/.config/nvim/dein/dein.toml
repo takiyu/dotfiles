@@ -10,7 +10,7 @@ on_ft = ['c', 'cpp']
 depends = ['deoplete.nvim']
 hook_post_update = '''
     if dein#util#_is_windows()
-        let g:dein#plugin.build = 'powershell.exe .\install.ps1'  " For windows
+        let g:dein#plugin.build = 'powershell -executionpolicy bypass -File install.ps1'  " For windows
     else
         let g:dein#plugin.build = 'bash ./install.sh'  " For linux
     endif
