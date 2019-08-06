@@ -53,7 +53,7 @@ create_link_prompt() {
         echo "[Error] not exist $dot_target"
     elif [ -e $home_target ]; then
         # Check difference
-        difference=`diff $dot_target $home_target`
+        difference=`diff -r $dot_target $home_target`
         if [ "$difference" == "" ]; then
             echo "[Skip] already exists, but no difference ($home_target)"
         else
