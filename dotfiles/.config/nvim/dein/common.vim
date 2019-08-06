@@ -32,11 +32,12 @@ if has('win32') || has('win64')
     set shell=cmd.exe             " コマンドプロンプト bashではPATH形式が異なる
     " set shell=C:/msys64/usr/bin/bash
     set shellcmdflag=-c
+    set shellxquote=\"            " コマンドを囲う引用符
 else
+    " set shell=bash
     set shellcmdflag=-c
     " set shellcmdflag=--login\ -s  " Linux-likeなシェル
 endif
-set shellxquote=\"                " コマンドを囲う引用符
 set shellslash                    " ファイルパスに\の代わりに/を使用
 " 改行時のコメントアウト継続を無効化
 autocmd BufNewFile,BufRead * setlocal formatoptions-=ro
@@ -146,7 +147,7 @@ inoremap <C-o> <C-x><C-o>
 nmap <silent><Esc> :noh<CR>
 
 "==== Auto fcitx ====
-if executable("fcitx-remote")
+if !has('win32') && executable("fcitx-remote")
     let g:input_toggle = 0
     function! Fcitx2en()
         let s:input_status = system("fcitx-remote")
