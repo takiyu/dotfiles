@@ -19,8 +19,13 @@ create_dir() {
 create_link() {
     local dot_target=$1
     local home_target=$2
-    echo "ln -s $dot_target $home_target"
-    ln -s $dot_target $home_target
+    if [ $platform == 'Windows' ]; then
+        echo "ln $dot_target $home_target"  # Hard link
+        ln $dot_target $home_target
+    else
+        echo "ln -s $dot_target $home_target"  # Soft link
+        ln -s $dot_target $home_target
+    fi
 }
 
 yn_prompt() {
