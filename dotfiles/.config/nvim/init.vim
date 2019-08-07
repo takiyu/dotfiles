@@ -5,6 +5,8 @@
 filetype on
 
 " ===== Dein settings =====
+let g:dein#auto_recache = 1  " Enable auto re-cache
+
 " Set dein cache path and dein config dir
 let g:dein_cache_path = expand('~/.cache/nvim/dein/')
 let g:dein_config_dir = expand('~/.config/nvim/dein/')
