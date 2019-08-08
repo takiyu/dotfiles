@@ -51,25 +51,25 @@ nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
 
 " Set LSP server
 " ----------------------------------- clangd -----------------------------------
-" if !executable('clangd')
-"     echoerr 'clangd is not installed'
-" endif
-" let g:LanguageClient_serverCommands = {
-"    \ 'c': ['clangd'],
-"    \ 'cpp': ['clangd'],
-"\ }
-
-" ----------------------------------- cquery -----------------------------------
-if !executable('cquery')
-    echoerr 'cquery is not installed'
+if !executable('clangd')
+    echoerr 'clangd is not installed'
 endif
 let g:LanguageClient_serverCommands = {
-   \ 'c': ['cquery',
-   \       '--log-file=/tmp/cquery/cq.log',
-   \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
-   \       '        "completion": {"filterAndSort": false}}'],
-   \ 'cpp': ['cquery',
-   \         '--log-file=/tmp/cquery/cq.log',
-   \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
-   \         '        "completion": {"filterAndSort": false}}'],
+   \ 'c': ['clangd'],
+   \ 'cpp': ['clangd'],
 \ }
+
+" ----------------------------------- cquery -----------------------------------
+" if !executable('cquery')
+"     echoerr 'cquery is not installed'
+" endif
+" let g:LanguageClient_serverCommands = {
+"   \ 'c': ['cquery',
+"   \       '--log-file=/tmp/cquery/cq.log',
+"   \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
+"   \       '        "completion": {"filterAndSort": false}}'],
+"   \ 'cpp': ['cquery',
+"   \         '--log-file=/tmp/cquery/cq.log',
+"   \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
+"   \         '        "completion": {"filterAndSort": false}}'],
+"\ }
