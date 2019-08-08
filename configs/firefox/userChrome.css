@@ -1,6 +1,6 @@
 /* Multi line tab */
 :root{
-    --multirow-n-rows: 3;
+    --multirow-n-rows: 6;
     --multirow-tab-min-width: 100px;
     --multirow-tab-dynamic-width: 1; /* Change to 0 for fixed-width tabs using the above width. */
 }
