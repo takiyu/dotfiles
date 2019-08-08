@@ -10,21 +10,6 @@ let g:LanguageClient_selectionUI = "Quickfix"       " Disable fzf selection
 let g:LanguageClient_fzfContextMenu = 0             " Disable fzf menu
 let g:LanguageClient_rootMarkers = ['build', '.git', 'build_*']
 
-" Set LSP server
-if !executable('cquery')
-    echoerr 'cquery is not installed'
-endif
-let g:LanguageClient_serverCommands = {
-    \ 'c': ['cquery',
-    \       '--log-file=/tmp/cquery/cq.log',
-    \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
-    \       '        "completion": {"filterAndSort": false}}'],
-    \ 'cpp': ['cquery',
-    \         '--log-file=/tmp/cquery/cq.log',
-    \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
-    \         '        "completion": {"filterAndSort": false}}'],
-\ }
-
 " Enable syntax check
 let g:LanguageClient_diagnosticsEnable = 1
 let g:LanguageClient_diagnosticsDisplay = {
@@ -63,3 +48,28 @@ nnoremap <leader>i :call LanguageClient#textDocument_implementation()<CR>
 nnoremap <leader>r :call LanguageClient#textDocument_references()<CR>
 nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
+
+" Set LSP server
+" ----------------------------------- clangd -----------------------------------
+if !executable('clangd')
+    echoerr 'clangd is not installed'
+endif
+let g:LanguageClient_serverCommands = {
+    \ 'c': ['clangd'],
+    \ 'cpp': ['clangd'],
+\ }
+
+" ----------------------------------- cquery -----------------------------------
+" if !executable('cquery')
+"     echoerr 'cquery is not installed'
+" endif
+" let g:LanguageClient_serverCommands = {
+"    \ 'c': ['cquery',
+"    \       '--log-file=/tmp/cquery/cq.log',
+"    \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
+"    \       '        "completion": {"filterAndSort": false}}'],
+"    \ 'cpp': ['cquery',
+"    \         '--log-file=/tmp/cquery/cq.log',
+"    \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
+"    \         '        "completion": {"filterAndSort": false}}'],
+"\ }
