@@ -98,6 +98,7 @@ function gl() { git log --color=always --graph $* | less -EFRX; }
 function gla() { git log --color=always --graph --all $* | less -EFRX; }
 alias gb='git branch -a'
 alias gd='git diff'
+alias gdc='git diff --cached'
 alias ga='git add'
 alias gau='git add -u'
 alias gcm='git commit'
