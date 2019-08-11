@@ -50,26 +50,31 @@ nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
 
 " Set LSP server
-" ----------------------------------- clangd -----------------------------------
-if !executable('clangd')
-    echoerr 'clangd is not installed'
-endif
-let g:LanguageClient_serverCommands = {
-   \ 'c': ['clangd'],
-   \ 'cpp': ['clangd'],
-\ }
+let g:LanguageClient_serverCommands = {}
 
-" ----------------------------------- cquery -----------------------------------
-" if !executable('cquery')
-"     echoerr 'cquery is not installed'
-" endif
-" let g:LanguageClient_serverCommands = {
-"   \ 'c': ['cquery',
-"   \       '--log-file=/tmp/cquery/cq.log',
-"   \       '--init={"cacheDirectory":"/tmp/cquery/", ' .
-"   \       '        "completion": {"filterAndSort": false}}'],
-"   \ 'cpp': ['cquery',
-"   \         '--log-file=/tmp/cquery/cq.log',
-"   \         '--init={"cacheDirectory":"/tmp/cquery/", ' .
-"   \         '        "completion": {"filterAndSort": false}}'],
-"\ }
+" ------------------------------------ C++ -------------------------------------
+if executable('clangd')
+    let g:LanguageClient_serverCommands['c'] = ['clangd']
+    let g:LanguageClient_serverCommands['cpp'] = ['clangd']
+elseif executable('cquery')
+    let l:cquery_cmd =
+        \ ['cquery',
+        \  '--log-file=/tmp/cquery/cq.log',
+        \  '--init={"cacheDirectory":"/tmp/cquery/", ' .
+        \  '        "completion": {"filterAndSort": false}}']
+    let g:LanguageClient_serverCommands['c'] = l:cquery_cmd
+    let g:LanguageClient_serverCommands['cpp'] = l:cquery_cmd
+else
+    echomsg 'Neither clangd nor cquery is not installed'
+endif
+
+" ----------------------------------- Python -----------------------------------
+" Install commands
+" ```
+" pip install python-language-server
+" pip install 'python-language-server[pycodestyle]'
+" pip install 'python-language-server[yapf]'
+" ```
+if executable('pyls')
+    let g:LanguageClient_serverCommands['python'] = ['pyls']
+endif
