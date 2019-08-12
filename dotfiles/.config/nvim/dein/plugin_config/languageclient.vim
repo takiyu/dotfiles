@@ -69,13 +69,13 @@ else
     echomsg 'Neither clangd nor cquery is not installed'
 endif
 
-" ----------------------------------- Python -----------------------------------
-" Install commands
-" ```
-" pip install python-language-server
-" pip install 'python-language-server[pycodestyle]'
-" pip install 'python-language-server[yapf]'
-" ```
-if executable('pyls')
-    let g:LanguageClient_serverCommands['python'] = ['pyls']
-endif
+" " ----------------------------------- Python -----------------------------------
+" " Install commands
+" " ```
+" " pip install python-language-server
+" " pip install 'python-language-server[pycodestyle]'
+" " pip install 'python-language-server[yapf]'
+" " ```
+" if executable('pyls')
+"     let g:LanguageClient_serverCommands['python'] = ['pyls']
+" endif
