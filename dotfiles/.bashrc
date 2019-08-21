@@ -117,6 +117,12 @@ alias gR='git reset --hard'
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 
+# aliases for make
+alias amke=make
+alias mkae=make
+alias asmk=make
+alias amek=make
+
 # aliases for editors
 alias v=gvim
 if [ $platform == 'Linux' ]; then
