@@ -122,6 +122,8 @@ alias amke=make
 alias mkae=make
 alias asmk=make
 alias amek=make
+alias maek=make
+alias amke=make
 
 # aliases for editors
 alias v=gvim
