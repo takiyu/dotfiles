@@ -73,9 +73,8 @@ endif
 " " Install commands
 " " ```
 " " pip install python-language-server
-" " pip install 'python-language-server[pycodestyle]'
-" " pip install 'python-language-server[yapf]'
+" " pip install 'python-language-server[all]'
 " " ```
-" if executable('pyls')
-"     let g:LanguageClient_serverCommands['python'] = ['pyls']
-" endif
+if executable('pyls')
+    let g:LanguageClient_serverCommands['python'] = ['pyls']
+endif
