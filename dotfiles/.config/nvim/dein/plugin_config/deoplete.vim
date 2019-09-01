@@ -21,7 +21,13 @@ imap <expr><TAB> pumvisible() ? "\<C-n>" :
               \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
               \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"補完のShift-Tab
+" 補完のShift-Tab
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Escで補完ポップアップを閉じて標準モード
 inoremap <expr><Esc> pumvisible() ? deoplete#close_popup()."<Esc>" : "<Esc>"
+
+" Order of sources
+call deoplete#custom#source('neosnippet', 'rank', 9999)
+call deoplete#custom#source('LanguageClient-neovim', 'rank', 1000)
+call deoplete#custom#source('buffer', 'rank', 100)
+call deoplete#custom#source('deoplete-tabnine', 'rank', 10)
