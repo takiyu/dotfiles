@@ -153,6 +153,7 @@ Android Development
     trizen -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
     trizen -S android-platform android-ndk
     trizen -S pidcat
+    trizen -S android-studio
 
 Bash Profile for Desktop
     ln -s ~/.bash_profile ~/.profile

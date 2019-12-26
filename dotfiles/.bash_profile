@@ -41,14 +41,13 @@ if [ $platform == 'Linux' ]; then
     # export DUO_SDK=/home/takiyu/rosbuild_ws/package_dir/DUO-Camera-ROS/build/devel/DUOSDK
 
     # Android
-    export PATH=$PATH:/opt/android-sdk/platform-tools  # platform-tools (adb etc...)
-    export PATH=$PATH:/opt/android-sdk/tools           # tools (android etc...)
-    export PATH=$PATH:/opt/android-sdk/tools/bin       # tools (sdkmanager etc...)
-    export PATH=$PATH:/opt/android-sdk/ndk-bundle      # ndk
-    export PATH=$PATH:/opt/android-ndk                 # ndk
     export ANDROID_HOME=/opt/android-sdk
     export ANDROID_NDK=/opt/android-ndk
     export ANDROID_NDK_HOME=$ANDROID_NDK
+    export PATH=$PATH:$ANDROID_HOME/platform-tools  # platform-tools (adb etc...)
+    export PATH=$PATH:$ANDROID_HOME/tools           # tools (android etc...)
+    export PATH=$PATH:$ANDROID_HOME/tools/bin       # tools (sdkmanager etc...)
+    export PATH=$PATH:$ANDROID_NDK                  # ndk
 
     # Golang
     export GOPATH=$HOME/Projects/Gocode
