@@ -55,21 +55,32 @@ let g:LanguageClient_serverCommands = {}
 
 " ------------------------------------ C++ -------------------------------------
 if executable('clangd')
-    let g:LanguageClient_serverCommands['c'] = ['clangd']
-    let g:LanguageClient_serverCommands['cpp'] = ['clangd']
-elseif executable('cquery')
-    let l:cquery_cmd =
-        \ ['cquery',
-        \  '--log-file=/tmp/cquery/cq.log',
-        \  '--init={"cacheDirectory":"/tmp/cquery/", ' .
+    let clangd_cmd =
+        \ ['clangd',
+        \  '--compile-commands-dir=./build']
+    let g:LanguageClient_serverCommands['c'] = clangd_cmd
+    let g:LanguageClient_serverCommands['cpp'] = clangd_cmd
+elseif executable('ccls')
+    let ccls_cmd =
+        \ ['ccls',
+        \  '--log-file=/tmp/ccls.log',
+        \  '--init={"compilationDatabaseDirectory": "./build", ' .
         \  '        "completion": {"filterAndSort": false}}']
-    let g:LanguageClient_serverCommands['c'] = l:cquery_cmd
-    let g:LanguageClient_serverCommands['cpp'] = l:cquery_cmd
+    let g:LanguageClient_serverCommands['c'] = ccls_cmd
+    let g:LanguageClient_serverCommands['cpp'] = ccls_cmd
+elseif executable('cquery')
+    let cquery_cmd =
+        \ ['cquery',
+        \  '--log-file=/tmp/cq.log',
+        \  '--init={"cacheDirectory":"/tmp/", ' .
+        \  '        "completion": {"filterAndSort": false}}']
+    let g:LanguageClient_serverCommands['c'] = cquery_cmd
+    let g:LanguageClient_serverCommands['cpp'] = cquery_cmd
 else
     echomsg 'Neither clangd nor cquery is not installed'
 endif
 
-" " ----------------------------------- Python -----------------------------------
+" ----------------------------------- Python -----------------------------------
 " " Install commands
 " " ```
 " " pip install python-language-server
