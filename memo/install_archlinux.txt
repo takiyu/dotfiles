@@ -68,6 +68,7 @@ Development
     trizen -S jdtls
 
     pacman -S python python-pip python2 python2-pip
+    trizen -S python-language-server
     pacman -S nodejs npm
 
     sudo pip install pyflakes pep8
