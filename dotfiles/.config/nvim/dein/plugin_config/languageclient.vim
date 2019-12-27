@@ -89,3 +89,9 @@ endif
 if executable('pyls')
     let g:LanguageClient_serverCommands['python'] = ['pyls']
 endif
+
+" ------------------------------------ Java ------------------------------------
+if executable('pyls')
+    let g:LanguageClient_serverCommands['java'] =
+        \ ['jdtls', '-data', getcwd()]
+endif

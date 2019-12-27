@@ -7,7 +7,7 @@ depends = ['deoplete.nvim']
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 rev = 'next'
-on_ft = ['c', 'cpp', 'python']
+on_ft = ['c', 'cpp', 'python', 'java']
 depends = ['deoplete.nvim']
 build = 'bash install.sh'
 hook_add = '''

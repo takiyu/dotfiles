@@ -65,6 +65,7 @@ Development
 
     pacman -S jdk8-openjdk
     sudo archlinux-java set java-8-openjdk
+    trizen -S jdtls
 
     pacman -S python python-pip python2 python2-pip
     pacman -S nodejs npm
