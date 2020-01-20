@@ -4,7 +4,7 @@
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_hasSnippetSupport = 0          " No snippets
-let g:LanguageClient_useVirtualText = 0             " Not use inline texts
+let g:LanguageClient_useVirtualText = "No"          " Not use inline texts
 let g:LanguageClient_diagnosticsList = "Disabled"   " Escape location list break
 let g:LanguageClient_selectionUI = "Quickfix"       " Disable fzf selection
 let g:LanguageClient_fzfContextMenu = 0             " Disable fzf menu
