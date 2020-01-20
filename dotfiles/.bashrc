@@ -202,3 +202,4 @@ VBOX_USB=usbfs
 export http_proxy=$HTTP_PROXY
 export https_proxy=$HTTPS_PROXY
 export ftp_proxy=$FTP_PROXY
+export no_proxy=$NO_PROXY
