@@ -61,6 +61,7 @@ Common software
 
 Development
     pacman -S clang
+    trizen -S ccls
     trizen -S ctags global
 
     pacman -S jdk8-openjdk
