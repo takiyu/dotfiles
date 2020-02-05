@@ -160,3 +160,6 @@ Android Development
 
 Bash Profile for Desktop
     ln -s ~/.bash_profile ~/.profile
+
+For virtualbox guest
+    trizen -S virtualbox-guest-utils virtualbox-guest-modules-arch
