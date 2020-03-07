@@ -22,10 +22,10 @@ endfunction
 
 " Filtering functions for viewing
 function! g:ref_source_webdict_sites.alc.filter(output)
-  return join(split(a:output, "\n")[35 :], "\n")
+  return join(split(a:output, "\n")[66 :], "\n")
 endfunction
 function! g:ref_source_webdict_sites.longman.filter(output)
-  return join(split(a:output, "\n")[10 :], "\n")
+  return join(split(a:output, "\n")[8 :], "\n")
 endfunction
 function! g:ref_source_webdict_sites.wiki.filter(output)
   return join(split(a:output, "\n")[17 :], "\n")
