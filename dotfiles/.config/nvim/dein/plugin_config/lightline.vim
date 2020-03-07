@@ -1,41 +1,54 @@
 " ==============================================================================
 "                                  lightline
 " ==============================================================================
+" Global configuration
 let g:lightline = {
-            \ 'colorscheme': 'Tomorrow_Night_Bright',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'readonly', 'filename', 'modified' ] ],
-            \   'right': [ [ 'percentlineinfo' ],
-            \              [ 'fileinfo' ],
-            \              [ 'gitstatus'],
-            \              [ 'linter_checking', 'linter_errors',
-            \                'linter_warnings', 'linter_ok' ], ['asyncrun']],
-            \ },
-            \ 'component': {
-            \   'readonly': '%{&readonly?"R":"W"}',
-            \   'percentlineinfo': '%3p%% %3l:%-2v',
-            \   'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
-            \   'asyncrun': '%{g:asyncrun_status}',
-            \ },
-            \ 'component_function': {
-            \   'gitstatus': 'LightlineGitStatus',
-            \ },
-            \ 'component_expand': {
-            \   'linter_checking': 'lightline#lsc#checking',
-            \   'linter_warnings': 'lightline#lsc#warnings',
-            \   'linter_errors': 'lightline#lsc#errors',
-            \   'linter_ok': 'lightline#lsc#ok',
-            \ },
-            \ 'component_type': {
-            \   'linter_checking': 'left',
-            \   'linter_warnings': 'warning',
-            \   'linter_errors': 'error',
-            \   'linter_ok': 'left',
-            \ },
-            \ 'separator': {'left': '', 'right': ' '},
-            \ 'subseparator': {'left': '|', 'right': '|'},
-            \ }
+    \   'enable': {
+    \     'statusline': 1,
+    \     'tabline': 1
+    \   },
+    \   'colorscheme': 'Tomorrow_Night_Bright',
+    \   'component': {
+    \     'readonly': '%{&readonly ? "R" : "W"}',
+    \     'percentlineinfo': '%3p%% %3l:%-2v',
+    \     'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
+    \     'asyncrun': '%{g:asyncrun_status}',
+    \   },
+    \   'component_function': {
+    \     'gitstatus': 'LightlineGitStatus',
+    \   },
+    \   'component_expand': {
+    \     'linter_checking': 'lightline#lsc#checking',
+    \     'linter_warnings': 'lightline#lsc#warnings',
+    \     'linter_errors': 'lightline#lsc#errors',
+    \     'linter_ok': 'lightline#lsc#ok',
+    \   },
+    \   'component_type': {
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left',
+    \   },
+    \   'separator': {'left': '', 'right': ' '},
+    \   'subseparator': {'left': '|', 'right': '|'},
+    \ }
+
+" Status line configuration
+let g:lightline.active = {
+    \   'left': [ [ 'mode' ],
+    \             [ 'readonly', 'filename', 'modified' ] ],
+    \   'right': [ [ 'percentlineinfo' ],
+    \              [ 'fileinfo' ],
+    \              [ 'gitstatus'],
+    \              [ 'linter_checking', 'linter_errors',
+    \                'linter_warnings', 'linter_ok' ], ['asyncrun']],
+    \ }
+
+" Tab line configuration
+let g:lightline.tabline = {
+    \   'left': [ [ 'tabs' ] ],
+    \   'right': []
+    \ }
 
 " Git状態のステータスライン表示
 function! LightlineGitStatus()
