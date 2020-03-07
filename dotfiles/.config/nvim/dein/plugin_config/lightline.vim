@@ -57,7 +57,7 @@ function! LightlineGitStatus()
     endif
     let ret = []
     try
-        if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
+        if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler'
             " 変更行数表示
             if exists('*GitGutterGetHunkSummary') && get(g:, 'gitgutter_enabled', 0)
                 let symbols = ['++', '-+', '--']
