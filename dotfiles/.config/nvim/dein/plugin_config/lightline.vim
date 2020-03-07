@@ -10,7 +10,7 @@ let g:lightline = {
     \   'colorscheme': 'Tomorrow_Night_Bright',
     \   'component': {
     \     'readonly': '%{&readonly ? "R" : "W"}',
-    \     'percentlineinfo': '%3p%% %3l:%-2v',
+    \     'percentlineinfo': '[%3p%% %3l:%-2v]',
     \     'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
     \     'asyncrun': '%{g:asyncrun_status}',
     \   },
@@ -29,8 +29,8 @@ let g:lightline = {
     \     'linter_errors': 'error',
     \     'linter_ok': 'left',
     \   },
-    \   'separator': {'left': '', 'right': ' '},
-    \   'subseparator': {'left': '|', 'right': '|'},
+    \ 'separator': { 'left': '', 'right': '' },
+    \ 'subseparator': { 'left': '', 'right': '' }
     \ }
 
 " Status line configuration
@@ -69,13 +69,14 @@ function! LightlineGitStatus()
                 endfor
             endif
             " Branch名
-            let mark = ' '  " edit here for cool mark
+            let mark = ''  " edit here for cool mark
             let branch = fugitive#head()
             if branch !=# ''
-                call add(ret, mark.branch)
+                call add(ret, mark.'['.branch.']')
             endif
         endif
     catch
+        echohl 'Error in generating git status line string.'
     endtry
     return join(ret, ' ')
 endfunction

@@ -124,6 +124,7 @@ repo = 'airblade/vim-gitgutter'          # Git差分ガイド
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-gitgutter.vim'
 '''
+
 [[plugins]]
 repo = 'tpope/vim-fugitive'              # Git補助
 
