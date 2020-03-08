@@ -41,6 +41,8 @@ endif
 set shellslash                    " ファイルパスに\の代わりに/を使用
 " 改行時のコメントアウト継続を無効化
 autocmd BufNewFile,BufRead * setlocal formatoptions-=ro
+" 保存時に行末の空白を除去
+" autocmd BufWritePre * :%s/\s\+$//ge
 
 " === Encoding ===
 set encoding=utf-8
@@ -62,7 +64,6 @@ set completeopt=menuone,longest,preview    " プレビューウインドウで�
 set previewheight=1                        " プレビューウインドウの高さ
 set splitbelow                             " 下に表示
 set laststatus=2                           " ステータスラインを常に表示
-" autocmd BufWritePre * :%s/\s\+$//ge      " 保存時に行末の空白を除去
 
 " === Tab Settings ===
 " Hard Tab
