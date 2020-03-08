@@ -4,7 +4,7 @@
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_hasSnippetSupport = 0          " No snippets
-let g:LanguageClient_useVirtualText = "All"         " Use inline texts
+let g:LanguageClient_useVirtualText = "No"          " Disable inline texts
 let g:LanguageClient_diagnosticsList = "Disabled"   " Escape location list break
 let g:LanguageClient_selectionUI = "Quickfix"       " Disable fzf selection
 let g:LanguageClient_fzfContextMenu = 0             " Disable fzf menu
@@ -42,13 +42,22 @@ let g:LanguageClient_diagnosticsDisplay = {
 
 " Key mappings
 nnoremap <F8> :call LanguageClient_contextMenu()<CR>
-nnoremap K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
+nnoremap <leader>k :call LanguageClient#textDocument_hover()<CR>
+nnoremap <leader>e :call LanguageClient#explainErrorAtPoint()<CR>
 nnoremap <leader>d :call LanguageClient#textDocument_definition()<CR>
 nnoremap <leader>t :call LanguageClient#textDocument_typeDefinition()<CR>
 nnoremap <leader>i :call LanguageClient#textDocument_implementation()<CR>
 nnoremap <leader>r :call LanguageClient#textDocument_references()<CR>
-nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
-nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
+
+nmap H <F8>
+nmap K <leader>k
+nmap E <leader>e
+nmap gd <leader>d
+nmap gt <leader>t
+nmap gi <leader>i
+nmap gr <leader>r
 
 " Set LSP server
 let g:LanguageClient_serverCommands = {}
