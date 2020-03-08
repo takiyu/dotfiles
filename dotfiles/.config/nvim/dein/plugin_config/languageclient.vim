@@ -9,7 +9,8 @@ let g:LanguageClient_diagnosticsList = "Disabled"   " Escape location list break
 let g:LanguageClient_selectionUI = "Quickfix"       " Disable fzf selection
 let g:LanguageClient_fzfContextMenu = 0             " Disable fzf menu
 let g:LanguageClient_rootMarkers = ['build', '.git', 'build_*']
-let g:LanguageClient_useFloatingHover = 1
+let g:LanguageClient_useFloatingHover = 1  " Neovim
+let g:LanguageClient_usePopupHover = 1     " Vim 8.2
 
 " Enable syntax check
 let g:LanguageClient_diagnosticsEnable = 1

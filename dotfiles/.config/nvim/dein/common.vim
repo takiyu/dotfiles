@@ -135,8 +135,8 @@ map <C-q> <Esc>
 " Vimgrep
 nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
-" Quickfix windowの非表示
-nnoremap <C-c> :cclose<CR>
+" Quickfix/Preview/Location windowの非表示
+nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
 " Terminal
 nnoremap <F4> :terminal ++rows=10<CR>
 tnoremap <F4> <C-\><C-n>>:q!<CR>

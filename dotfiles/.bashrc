@@ -129,11 +129,11 @@ alias amke=make
 alias v=gvim
 if [ $platform == 'Linux' ]; then
     alias vim=nvim
-    function gvim() { command nvim-qt --no-ext-tabline $@ 2> /dev/null; }
+    function gvim() { command nvim-qt $@ 2> /dev/null; }
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
     alias vim=nvim
-    function gvim() { command nvim-qt --no-ext-tabline $@ & 2> /dev/null; disown; }
+    function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
     EDITOR=gvim
 fi
 alias vimdiff="vim -d"
