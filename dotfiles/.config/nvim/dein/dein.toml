@@ -69,7 +69,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'                 # ステータスライン
-depends = ['vim-fugitive', 'lightline-lsc-nvim']
+depends = ['vim-fugitive', 'lightline-languageclient.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''
