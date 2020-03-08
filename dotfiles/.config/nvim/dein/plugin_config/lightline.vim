@@ -18,8 +18,8 @@ let g:lightline = {
     \     'gitstatus': 'LightlineGitStatus',
     \   },
     \   'component_expand': {
-    \     'linter_errors': 'lightline#lsc#errors',
-    \     'linter_ok': 'lightline#lsc#ok',
+    \     'linter_errors': 'lightline#languageclient#errors',
+    \     'linter_ok': 'lightline#languageclient#ok',
     \   },
     \   'component_type': {
     \     'linter_errors': 'error',
