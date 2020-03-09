@@ -2,6 +2,7 @@
 # ~/.bash_profile
 #
 
+
 # utility scripts
 dotfiles=$HOME/dotfiles
 determ_platform=$dotfiles/utils/determ_platform.sh
@@ -16,6 +17,11 @@ export PATH=$HOME/bin:$PATH
 
 if [ $platform == 'Linux' ]; then
     # Linux setup
+
+    # IME
+    export GTK_IM_MODULE=fcitx
+    export QT_IM_MODULE=fcitx
+    export XMODIFIERS=@im=fcitx
 
     # Lib
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
