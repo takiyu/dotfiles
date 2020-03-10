@@ -11,7 +11,7 @@ add Control = Control_L
 
 ! ----mod3----
 clear mod3
-remove mod4 = Super_R
-keysym Muhenkan = Super_R
-keysym Hiragana_Katakana = Super_R
-add mod3 = Super_R
+remove mod1 = Alt_R
+keysym Muhenkan = Alt_R
+keysym Hiragana_Katakana = Alt_R
+add mod3 = Alt_R
