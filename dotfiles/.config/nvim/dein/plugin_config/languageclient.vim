@@ -80,6 +80,7 @@ for name in g:cpp_language_server_priority
         let s:cmd = g:cpp_language_server_cmds[name]
         let g:LanguageClient_serverCommands['c'] = s:cmd
         let g:LanguageClient_serverCommands['cpp'] = s:cmd
+        break
     endif
 endfor
 
