@@ -71,7 +71,7 @@ function! LightlineGitStatus()
             endif
         endif
     catch
-        echohl 'Error in generating git status line string.'
+        echohl '[takiyu] Error in generating git status line string.'
     endtry
     return join(ret, ' ')
 endfunction
