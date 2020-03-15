@@ -14,21 +14,6 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'languageclient.vim'
 '''
 
-# [[plugins]]
-# repo = 'zchee/deoplete-jedi'
-# on_ft = ['python']
-# depends = ['deoplete.nvim']
-# hook_add = '''
-#     execute 'source ' . g:dein_plugin_config_dir . 'deoplete-jedi.vim'
-# '''
-
-# [[plugins]]
-# repo = 'davidhalter/jedi-vim'
-# on_ft = ['python']
-# hook_add = '''
-#     execute 'source ' . g:dein_plugin_config_dir . 'jedi-vim.vim'
-# '''
-
 [[plugins]]
 repo = 'fatih/vim-go'
 on_ft = ['go']
