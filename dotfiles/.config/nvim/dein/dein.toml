@@ -5,15 +5,16 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'tbodt/deoplete-tabnine'                # All-language autocompleter
+repo = 'takiyu/deoplete-tabnine'                # All-language autocompleter
+rev = 'binary'
 depends = ['deoplete.nvim']
-hook_post_update = '''
-    if dein#util#_is_windows()
-        let g:dein#plugin.build = 'powershell -executionpolicy bypass -File install.ps1'  " For windows
-    else
-        let g:dein#plugin.build = 'bash ./install.sh'  " For linux
-    endif
-'''
+# hook_post_update = '''
+#     if dein#util#_is_windows()
+#         let g:dein#plugin.build = 'powershell -executionpolicy bypass -File install.ps1'  " For windows
+#     else
+#         let g:dein#plugin.build = 'bash ./install.sh'  " For linux
+#     endif
+# '''
 
 [[plugins]]
 repo = 'roxma/nvim-yarp'                       # neovim compatibility
