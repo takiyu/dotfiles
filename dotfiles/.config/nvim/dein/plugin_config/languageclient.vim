@@ -99,3 +99,12 @@ endif
 if executable('jdtls')
     let g:LanguageClient_serverCommands['java'] = ['jdtls']
 endif
+
+" ------------------------------------ GLSL ------------------------------------
+" " Install commands
+" " ```
+" " trizen -S glsl-language-server
+" " ```
+if executable('glslls')
+    let g:LanguageClient_serverCommands['glsl'] = ['glslls', '--stdin', '--log', '~/a/log.txt', '-v']
+endif
