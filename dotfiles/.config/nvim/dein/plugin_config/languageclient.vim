@@ -106,5 +106,5 @@ endif
 " " trizen -S glsl-language-server
 " " ```
 if executable('glslls')
-    let g:LanguageClient_serverCommands['glsl'] = ['glslls', '--stdin', '--log', '~/a/log.txt', '-v']
+    let g:LanguageClient_serverCommands['glsl'] = ['glslls', '--stdin']
 endif
