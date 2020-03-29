@@ -1,7 +1,7 @@
 #!/bin/sh
-if [ $# -lt 1 ]; then  
+if [ $# -lt 1 ]; then
     echo 'invalid output file (argv[0])'
-	exit 1
+    exit 1
 fi
 output=$1.mp4
 echo "out: $output"

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -lt 2 ]; then  
+if [ $# -lt 2 ]; then
 	echo '[usage]: ./pdfsplit [in_file] [out_basename]'
 	exit 0
 fi

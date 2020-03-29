@@ -1,0 +1,1 @@
+SUBSYSTEM=="input", ACTION=="add", RUN="/home/takiyu/dotfiles/bin/load_xmodmap_async.sh"

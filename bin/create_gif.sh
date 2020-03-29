@@ -1,15 +1,15 @@
 #!/bin/sh
 
-if [ $# -lt 2 ]; then  
-	echo 'argv[1] == input movie filename'
-	echo 'argv[2] == output gif filename'
+if [ $# -lt 2 ]; then
+    echo 'argv[1] == input movie filename'
+    echo 'argv[2] == output gif filename'
     echo 'argv[3] == palette image filename (optional)'
-	exit 1
+    exit 1
 fi
 in_filename=$1
 out_filename=$2
 
-if [ $# -lt 3 ]; then  
+if [ $# -lt 3 ]; then
     # Using ffmpeg
     ffmpeg -i $in_filename -y $out_filename
 else
