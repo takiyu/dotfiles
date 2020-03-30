@@ -151,6 +151,10 @@ Makepkg parallel
         # COMPRESSXZ=(xz -c -z -)
         COMPRESSXZ=(xz -T 0 -c -z -)
     ```
+    ```
+        # MAKEFLAGS="-j2"
+        MAKEFLAGS="-j8"
+    ```
 
 Android Development
     trizen -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
@@ -163,3 +167,9 @@ Bash Profile for Desktop
 
 For virtualbox guest
     trizen -S virtualbox-guest-utils virtualbox-guest-modules-arch
+
+Switch kernel
+    pacman -S linux-lts  # linux-lts419 or something
+    ls -lsha /boot
+    pacman -R linux
+    grub-mkconfig -o /boot/grub/grub.cfg
