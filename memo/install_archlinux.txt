@@ -115,34 +115,11 @@ Disable Histry
     `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
     configure smplayer and mcomix setting
 
-Fix screen blinking bug for Dell XPS13
-    edit `/boot/loader/entries/arch.conf` and add option `i915.enable_rc6=0`
-
 Fix "ALSA lib pcm.c:7843:(snd_pcm_recover) underrun occurred"
     edit `/etc/pulse/daemon.conf` and uncomment or add the following lines.
     ```
     default-fragments = 8
     default-fragment-size-msec = 5
-    ```
-
-Fix broadcom driver
-    Install b43 driver
-        trizen -S b43-firmware
-    Disable default drivers
-        sudo gvim /etc/modprobe.d/nobeep.conf
-        ```
-            blacklist brcmfmac
-            blacklist brcmsmac
-        ```
-
-Intel driver
-    open `/etc/X11/xorg.conf.d/20-intel.conf` and write
-    ```
-        Section "Device"
-           Identifier  "Intel Graphics"
-           Driver      "intel"
-           Option      "TearFree"    "true"
-        EndSection
     ```
 
 Makepkg parallel
