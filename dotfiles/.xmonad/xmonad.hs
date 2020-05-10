@@ -120,7 +120,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             , ((mod1Mask,              xK_Tab), windows W.focusDown)
             , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
             -- window alt-ctrl-tab
-            , ((mod1Mask.|.controlMask, xK_Tab), moveWsNoGreedy Next AnyWS)  -- move to next WS
+            , ((mod1Mask.|.controlMask, xK_Tab), moveWsNoGreedy Next NonEmptyWS)  -- move to next WS
 
             -- layout toggle
             , ((modm,                  xK_space), sendMessage NextLayout)
