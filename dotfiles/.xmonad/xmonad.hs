@@ -81,7 +81,7 @@ main = do
         manageHook = myManageHook ,
         handleEventHook = myHandleEventHook ,
         -- Send to xmobar
-        logHook = logHook kdeConfig 
+        logHook = logHook kdeConfig
                 <+> (dynamicLogWithPP $ xmobarPP
                     { ppOutput = hPutStrLn xmproc
                     , ppTitle = xmobarColor "green" "" . shorten 50 }),
@@ -117,8 +117,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
             -- window alt-tab
             , ((modm,                  xK_Tab), windows W.focusDown)
             , ((modm.|.shiftMask,      xK_Tab), windows W.focusUp  )
---             , ((mod1Mask,              xK_Tab), windows W.focusDown)
---          , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
+            , ((mod1Mask,              xK_Tab), windows W.focusDown)
+            , ((mod1Mask.|.shiftMask,  xK_Tab), windows W.swapDown )
+            -- window alt-ctrl-tab
+            , ((mod1Mask.|.controlMask, xK_Tab), moveWsNoGreedy Next AnyWS)  -- move to next WS
 
             -- layout toggle
             , ((modm,                  xK_space), sendMessage NextLayout)
