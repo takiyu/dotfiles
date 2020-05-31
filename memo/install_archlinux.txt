@@ -15,6 +15,7 @@ Fonts
     trizen -S ttf-ricty
     (To disable visible zenkaku space, `pkgbuild` edit and add `-z` to `./ricty_generator.sh`
     pacman -S ttf-liberation
+    trizen -S noto-fonts-emoji
 
 Desktop
     pacman -S xmonad xmonad-contrib xmobar
