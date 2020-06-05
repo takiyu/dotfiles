@@ -114,6 +114,8 @@ alias gPom='git push origin master'
 alias gpom='git pull origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
+function gro() { git reset origin/"$*"; }
+function gRo() { git reset origin/"$*" --hard; }
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 
@@ -191,12 +193,10 @@ VBOX_USB=usbfs
 # export http_proxy="http://$USER:$PASS@proxyjp.huawei.com:8080"
 # export https_proxy="https://$USER:$PASS@proxyjp.huawei.com:8080"
 # export ftp_proxy="ftp://$USER:$PASS@proxyjp.huawei.com:8080"
-# export NO_PROXY="rnd-dockerhub.huawei.com"
-# export GIT_SSL_NO_VERIFY=1
 # export http_proxy="http://$USER:$PASS@localhost:8888"
 # export https_proxy="https://$USER:$PASS@localhost:8888"
 # export ftp_proxy="ftp://$USER:$PASS@localhost:8888"
-# export NO_PROXY="rnd-dockerhub.huawei.com"
+# export NO_PROXY="huawei.com"
 # export GIT_SSL_NO_VERIFY=1
 
 export http_proxy=$HTTP_PROXY
