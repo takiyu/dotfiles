@@ -2,14 +2,16 @@
 "                                  deoplete
 " ==============================================================================
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete = 1
-let g:deoplete#auto_complete_delay = 0
-let g:deoplete#camel_case = 1
-let g:deoplete#ignore_case = 1
-let g:deoplete#smart_case = 1
-let g:deoplete#refresh_always = 0
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#max_list = 500
+call deoplete#custom#option({
+    \ 'auto_complete': v:true,
+    \ 'auto_complete_delay': 0,
+    \ 'ignore_case': v:true,
+    \ 'smart_case': v:true,
+    \ 'refresh_always': v:false,
+    \ 'enable_buffer_path': v:true,
+    \ 'max_list': 500,
+    \ 'skip_multibyte': v:true,
+    \ })
 
 " Enterで次へジャンプ、または補完を決定
 imap <expr><CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
