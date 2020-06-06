@@ -127,6 +127,18 @@ alias amek=make
 alias maek=make
 alias amke=make
 
+# aliases for cd
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+alias cd..="cd .."
+alias cd...="cd ../.."
+alias cd....="cd ../../.."
+alias cd.....="cd ../../../.."
+alias cd......="cd ../../../../.."
+
 # aliases for editors
 alias v=gvim
 if [ $platform == 'Linux' ]; then
