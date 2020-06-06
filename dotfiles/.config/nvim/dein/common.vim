@@ -17,7 +17,6 @@ set smartcase                     " (ただし大文字入力時のみ考慮)
 set guioptions-=m                 " メニューバーを非表示
 set guioptions-=T                 " ツールバーを非表示
 set guioptions-=e                 " TabのGUI表示をOFF
-set colorcolumn=80                " 80文字のライン
 set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
@@ -169,6 +168,24 @@ if !has('win32') && executable("fcitx-remote")
     autocmd InsertLeave * call Fcitx2en()
     autocmd InsertEnter * call Fcitx2zh()
 endif
+
+"===== Custom line limits =====
+let s:colorcolumn_mode = 0
+function! NextColorColumn()
+    let s:colorcolumn_mode = (s:colorcolumn_mode + 1) % 3
+    if s:colorcolumn_mode == 0
+        set colorcolumn=-1
+        return 'No line limit'
+    elseif s:colorcolumn_mode == 1
+        set colorcolumn=80
+        return 'Line limit: 80'
+    elseif s:colorcolumn_mode == 2
+        set colorcolumn=100
+        return 'Line limit: 100'
+    endif
+endfunction
+call NextColorColumn()  " Initial call
+nnoremap <silent><F11> :echo NextColorColumn()<CR>
 
 "===== Spell check toggle =====
 set spell spelllang=en_us,cjk  " Enabled by default
