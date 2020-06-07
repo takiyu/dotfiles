@@ -172,7 +172,7 @@ endif
 "===== Custom line limits =====
 let s:colorcolumn_mode = 0
 function! NextColorColumn()
-    let s:colorcolumn_mode = (s:colorcolumn_mode + 1) % 3
+    let s:colorcolumn_mode = (s:colorcolumn_mode + 1) % 4
     if s:colorcolumn_mode == 0
         set colorcolumn=-1
         return 'No line limit'
@@ -182,6 +182,9 @@ function! NextColorColumn()
     elseif s:colorcolumn_mode == 2
         set colorcolumn=100
         return 'Line limit: 100'
+    elseif s:colorcolumn_mode == 3
+        set colorcolumn=120
+        return 'Line limit: 120'
     endif
 endfunction
 call NextColorColumn()  " Initial call
