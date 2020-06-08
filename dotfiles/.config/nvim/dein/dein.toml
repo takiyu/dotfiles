@@ -45,6 +45,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'takiyu/split_commenter.nvim'           # 分割コメント補助
+depends = ['caw.vim']
+
+[[plugins]]
 repo = 'scrooloose/nerdtree'                   # Filer
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nerdtree.vim'

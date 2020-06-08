@@ -177,8 +177,13 @@ function! NextColorColumn()
         set colorcolumn=-1
         return 'No line limit'
     elseif s:colorcolumn_mode == 1
-        set colorcolumn=80
-        return 'Line limit: 80'
+        if &filetype == 'python'
+            set colorcolumn=79
+            return 'Line limit: 79'
+        else
+            set colorcolumn=80
+            return 'Line limit: 80'
+        endif
     elseif s:colorcolumn_mode == 2
         set colorcolumn=100
         return 'Line limit: 100'
@@ -187,7 +192,7 @@ function! NextColorColumn()
         return 'Line limit: 120'
     endif
 endfunction
-call NextColorColumn()  " Initial call
+autocmd VimEnter * call NextColorColumn()  " Initial call
 nnoremap <silent><F11> :echo NextColorColumn()<CR>
 
 "===== Spell check toggle =====
