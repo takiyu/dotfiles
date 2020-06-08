@@ -128,6 +128,7 @@ alias maek=make
 alias amke=make
 
 # aliases for cd
+alias cd-="cd -"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
