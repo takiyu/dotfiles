@@ -43,7 +43,7 @@ let g:LanguageClient_diagnosticsDisplay = {
 
 " Key mappings
 nnoremap <F8> :call LanguageClient_contextMenu()<CR>
-nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <F3> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
 nnoremap <leader>k :call LanguageClient#textDocument_hover()<CR>
 nnoremap <leader>e :call LanguageClient#explainErrorAtPoint()<CR>

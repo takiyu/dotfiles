@@ -121,6 +121,8 @@ nnoremap 3 gt
 nnoremap 2 gT
 nnoremap " :tabm -1 <CR>
 nnoremap # :tabm +1 <CR>
+nnoremap <C-2> :tabm -1 <CR>
+nnoremap <C-3> :tabm +1 <CR>
 " クリップボードから貼り付け,コピー
 inoremap <C-v> <ESC>"+gp
 vnoremap <C-c> "+y
@@ -135,6 +137,8 @@ map <C-q> <Esc>
 " Vimgrep
 nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
+nmap <C-9> :cN<CR>
+nmap <C-0> :cn<CR>
 " Quickfix/Preview/Location windowの非表示
 nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
 " Terminal
@@ -145,6 +149,9 @@ tnoremap <silent><ESC> <C-\><C-n>
 inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
 nmap <silent><Esc> :noh<CR>
+" 置換
+nnoremap <F2> :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+nmap <leader>s <F2>
 
 "==== Auto fcitx ====
 if !has('win32') && executable("fcitx-remote")
