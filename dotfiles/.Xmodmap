@@ -1,5 +1,6 @@
 ! ----esc----
-keycode 100 = Escape
+! keycode 100 = Escape
+keysym Henkan_Mode = Escape
 
 ! ----ctrl----
 remove lock = Caps_Lock
