@@ -23,7 +23,7 @@ CheckOptions:
   - key:          readability-identifier-naming.EnumConstantCase
     value:        UPPER_CASE
   - key:          readability-identifier-naming.FunctionCase
-    value:        camelBack
+    value:        CamelBack
   - key:          readability-identifier-naming.GlobalConstantCase
     value:        UPPER_CASE
   - key:          readability-identifier-naming.GlobalFunctionCase
@@ -35,7 +35,7 @@ CheckOptions:
   - key:          readability-identifier-naming.InlineNamespaceCase
     value:        lower_case
   - key:          readability-identifier-naming.LocalConstantCase
-    value:        lower_case
+    value:        aNy_CasE
   - key:          readability-identifier-naming.LocalVariableCase
     value:        lower_case
   - key:          readability-identifier-naming.MemberCase
