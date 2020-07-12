@@ -120,6 +120,16 @@ function gro() { git reset origin/"$*"; }
 function gRo() { git reset origin/"$*" --hard; }
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
+alias gbis='git bisect'
+function gbis_start() { git bisect start HEAD "$1"; }  # $1: bad
+alias gbis_run_script='git bisect run'
+function gbis_start_with_script() { gbis_start "$1" && gbis_run_script "$2"; }
+alias gbis_mark_good='git bisect good'
+alias gbis_mark_bad='git bisect bad'
+alias gbis_reset='git bisect reset'
+alias gbis_exit=gbis_reset
+alias gbis_log='git bisect log'
+alias gbis_view='git bisect view'
 
 # aliases for make
 alias maek=make
