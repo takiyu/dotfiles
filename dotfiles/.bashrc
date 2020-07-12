@@ -104,14 +104,16 @@ alias gau='git add -u'
 alias gcm='git commit'
 function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
+function gcmma() { git commit --amend -m "$*"; }
+function gcmam() { git commit --amend -m "$*"; }
 alias gco='git checkout'
-alias gP='git push'
-alias gp='git pull'
 alias gf='git fetch'
-alias gPo='git push origin'
+alias gp='git pull'
+alias gP='git push'
 alias gpo='git pull origin'
-alias gPom='git push origin master'
+alias gPo='git push origin'
 alias gpom='git pull origin master'
+alias gPom='git push origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
 function gro() { git reset origin/"$*"; }
@@ -120,12 +122,29 @@ alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 
 # aliases for make
-alias amke=make
-alias mkae=make
-alias asmk=make
-alias amek=make
 alias maek=make
+alias mkae=make
+alias mkea=make
+alias meak=make
+alias meka=make
 alias amke=make
+alias amek=make
+alias akme=make
+alias akem=make
+alias aemk=make
+alias aekm=make
+alias kmae=make
+alias kmea=make
+alias kame=make
+alias kaem=make
+alias kema=make
+alias keam=make
+alias emak=make
+alias emka=make
+alias eamk=make
+alias eakm=make
+alias ekma=make
+alias ekam=make
 
 # aliases for cd
 alias cd-="cd -"

@@ -3,14 +3,18 @@
 	name = takiyu
 	email = takiyu1025.txu.development@gmail.com
 [core]
-	editor = nvim-qt --no-ext-tabline
+	editor = gvim
 [alias]
 	graph = log --graph --all --pretty=format:'%C(yellow)<%cr>%C(reset) [%an]%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)(%ad)%C(reset) [%C(bold blue)%h%Creset]' --abbrev-commit --date=format-local:'%Y/%m/%d'
 [diff]
-	tool = nvim-qt --no-ext-tabline -- -d
+	tool = gvim -- -d
 [difftool]
 	prompt = true
 [merge]
-	tool = nvim-qt --no-ext-tabline -- -d
+	tool = gvim -- -d
+	ff = false
 [mergetool]
 	prompt = true
+[pull]
+	rebase = false
+	ff = only
