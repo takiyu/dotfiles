@@ -155,6 +155,8 @@ alias eamk=make
 alias eakm=make
 alias ekma=make
 alias ekam=make
+alias mk=make
+alias km=make
 
 # aliases for cd
 alias cd-="cd -"
