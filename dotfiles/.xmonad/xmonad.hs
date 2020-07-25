@@ -37,7 +37,7 @@ import qualified Data.Map        as M
 -- my apps
 myFiler = "thunar"
 myTerminal = "xfce4-terminal"
-myXmodmap = "xmodmap ~/.Xmodmap"
+myXmodmap = "load_xmodmap.sh"
 myDisp = "rot-xrandr.sh"
 -- mod mask key
 modm = mod3Mask
