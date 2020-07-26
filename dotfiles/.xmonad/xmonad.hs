@@ -200,6 +200,10 @@ myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
             [ ((modm,                           button1), (\w -> focus w))
             , ((modm.|.shiftMask,               button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
             , ((modm.|.shiftMask.|.controlMask, button1), (\w -> focus w >> mouseResizeWindow w))
+            , ((modm,                           button4), (\w -> moveWsNoGreedy Prev NonEmptyWS))
+            , ((modm,                           button5), (\w -> moveWsNoGreedy Next NonEmptyWS))
+            , ((modm.|.shiftMask,               button4), (\w -> shiftWsNoGreedy Prev AnyWS))
+            , ((modm.|.shiftMask,               button5), (\w -> shiftWsNoGreedy Next AnyWS))
             ]
 
 -- Shell Prompt Config
