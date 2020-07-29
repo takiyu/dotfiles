@@ -240,16 +240,18 @@ fi
 VBOX_USB=usbfs
 
 # Proxy
-# USER='<Set user here>'
-# PASS='<Set pass here>'
-# PROXY='proxyjp.huawei.com:8080'
-# PROXY='localhost:8888'
-# export HTTP_PROXY="http://$USER:$PASS@$PROXY"
-# export HTTPS_PROXY="https://$USER:$PASS@$PROXY"
-# export HTTPS_PROXY="$HTTP_PROXY"
-# export FTP_PROXY="ftp://$USER:$PASS@$PROXY"
-# export NO_PROXY="huawei.com,localhost"
-# export GIT_SSL_NO_VERIFY=1
+PROXY_USER=''
+PROXY_PASS=''
+PROXY_MODE=''
+if [ $PROXY_MODE == 'Huawei_linux' ]; then
+    PROXY_HOST='proxyjp.huawei.com:8080'
+    # PROXY_HOST='localhost:8888'
+    export HTTP_PROXY="http://$USER:$PASS@$PROXY_HOST"
+    export HTTPS_PROXY="$HTTP_PROXY"
+    export FTP_PROXY="$HTTP_PROXY"
+    export NO_PROXY="huawei.com,localhost"
+    export GIT_SSL_NO_VERIFY=1
+fi
 
 export http_proxy=$HTTP_PROXY
 export https_proxy=$HTTPS_PROXY
