@@ -246,7 +246,7 @@ PROXY_MODE=''
 if [ $PROXY_MODE == 'Huawei_linux' ]; then
     PROXY_HOST='proxyjp.huawei.com:8080'
     # PROXY_HOST='localhost:8888'
-    export HTTP_PROXY="http://$USER:$PASS@$PROXY_HOST"
+    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
     export HTTPS_PROXY="$HTTP_PROXY"
     export FTP_PROXY="$HTTP_PROXY"
     export NO_PROXY="huawei.com,localhost"
