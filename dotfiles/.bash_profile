@@ -14,6 +14,8 @@ platform=`$determ_platform`
 export PATH=$HOME/dotfiles/bin:$PATH
 # $HOME/bin
 export PATH=$HOME/bin:$PATH
+# $HOME/local/bin
+export PATH=$HOME/local/bin:$PATH
 
 if [ $platform == 'Linux' ]; then
     # Linux setup
@@ -25,6 +27,7 @@ if [ $platform == 'Linux' ]; then
 
     # Lib
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$HOME/local/lib:$LD_LIBRARY_PATH
 
     # Java
     export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
