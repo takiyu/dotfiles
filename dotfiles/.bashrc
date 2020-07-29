@@ -174,12 +174,20 @@ alias cd......="cd ../../../../.."
 # aliases for editors
 alias v=gvim
 if [ $platform == 'Linux' ]; then
-    alias vim=nvim
-    function gvim() { command nvim-qt $@ 2> /dev/null; }
+    if [ "`$exist_command nvim`" == 'exist' ]; then
+        alias vim=nvim
+    fi
+    if [ "`$exist_command nvim-qt`" == 'exist' ]; then
+        function gvim() { command nvim-qt $@ 2> /dev/null; }
+    fi
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
-    alias vim=nvim
-    function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
+    if [ "`$exist_command nvim`" == 'exist' ]; then
+        alias vim=nvim
+    fi
+    if [ "`$exist_command nvim-qt`" == 'exist' ]; then
+        function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
+    fi
     EDITOR=gvim
 fi
 alias vimdiff="vim -d"
