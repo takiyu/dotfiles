@@ -240,8 +240,8 @@ fi
 VBOX_USB=usbfs
 
 # Proxy
-PROXY_USER=''
-PROXY_PASS=''
+# PROXY_USER=''
+# PROXY_PASS=''
 PROXY_MODE='None'
 if [ $PROXY_MODE == 'Huawei_linux' ]; then
     PROXY_HOST='proxyjp.huawei.com:8080'
