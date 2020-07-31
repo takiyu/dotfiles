@@ -233,7 +233,7 @@ fi
 if [ -e /opt/cuda ]; then
     export CUDA_HOME=/opt/cuda
 fi
-if [ "$CUDA_HOME" != "" ];
+if [ "$CUDA_HOME" != "" ]; then
     export CUDA_PATH=$CUDA_HOME
     export CUDA_CUDART_LIBRARY=$CUDA_HOME
     export PATH=$PATH:$CUDA_HOME/bin
