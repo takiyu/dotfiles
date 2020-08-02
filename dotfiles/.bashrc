@@ -1,4 +1,6 @@
+#
 # ~/.bashrc: executed by bash(1) for non-login shells.
+#
 
 # If not running interactively, don't do anything
 case $- in
@@ -172,24 +174,21 @@ alias cd.....="cd ../../../.."
 alias cd......="cd ../../../../.."
 
 # aliases for editors
-alias v=gvim
+if [ "`$exist_command nvim`" == 'exist' ]; then
+    alias vim=nvim
+fi
 if [ $platform == 'Linux' ]; then
-    if [ "`$exist_command nvim`" == 'exist' ]; then
-        alias vim=nvim
-    fi
     if [ "`$exist_command nvim-qt`" == 'exist' ]; then
         function gvim() { command nvim-qt $@ 2> /dev/null; }
     fi
     EDITOR=vim
 elif [ $platform == 'Windows' ]; then
-    if [ "`$exist_command nvim`" == 'exist' ]; then
-        alias vim=nvim
-    fi
     if [ "`$exist_command nvim-qt`" == 'exist' ]; then
         function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
     fi
     EDITOR=gvim
 fi
+alias v="gvim"
 alias vimdiff="vim -d"
 alias gvimdiff="gvim -- -d"
 
@@ -229,8 +228,7 @@ fi
 # CUDA
 if [ -e /usr/local/cuda ]; then
     export CUDA_HOME=/usr/local/cuda
-fi
-if [ -e /opt/cuda ]; then
+elif [ -e /opt/cuda ]; then
     export CUDA_HOME=/opt/cuda
 fi
 if [ "$CUDA_HOME" != "" ]; then
@@ -256,6 +254,7 @@ if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
     export FTP_PROXY="$HTTP_PROXY"
     export NO_PROXY="huawei.com,localhost"
     export GIT_SSL_NO_VERIFY=1
+    export CURL_SSL_NO_VERIFY=1
 fi
 
 export http_proxy=$HTTP_PROXY
