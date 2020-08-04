@@ -37,9 +37,9 @@ on_ft = ['cpp']
 repo = 'tikhomirov/vim-glsl'
 on_ft = ['glsl']
 
-[[plugins]]
-repo = 'hallison/vim-markdown'
-on_ft = ['markdown']
+# [[plugins]]
+# repo = 'hallison/vim-markdown'
+# on_ft = ['markdown']
 
 [[plugins]]
 repo = 'elzr/vim-json'
