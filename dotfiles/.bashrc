@@ -98,7 +98,9 @@ alias gs='git status'
 function gg() { git graph --color=always $* | less -EFRSX; }
 function gl() { git log --color=always --graph $* | less -EFRX; }
 function gla() { git log --color=always --graph --all $* | less -EFRX; }
-alias gb='git branch -a'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gurl='git remote -v'
 alias gd='git diff'
 alias gdc='git diff --cached'
 alias ga='git add'
@@ -132,6 +134,37 @@ alias gbis_reset='git bisect reset'
 alias gbis_exit=gbis_reset
 alias gbis_log='git bisect log'
 alias gbis_view='git bisect view'
+# Git completion
+__git_complete g __git_main
+__git_complete gs _git_status
+__git_complete gg _git_log
+__git_complete gl _git_log
+__git_complete gla _git_log
+__git_complete gb _git_branch
+__git_complete gba _git_branch
+__git_complete gurl __git_remotes
+__git_complete gd _git_diff
+__git_complete gdc _git_diff
+__git_complete ga _git_add
+__git_complete gau _git_add
+__git_complete gcm _git_commit
+__git_complete gcmm _git_commit
+__git_complete gcma _git_commit
+__git_complete gcmma _git_commit
+__git_complete gcmam _git_commit
+__git_complete gco _git_checkout
+__git_complete gf _git_fetch
+__git_complete gp _git_pull
+__git_complete gP _git_push
+__git_complete gpo _git_branch
+__git_complete gPo _git_branch
+__git_complete gr _git_reset
+__git_complete gR _git_reset
+__git_complete gro _git_branch
+__git_complete gRo _git_branch
+__git_complete gbis _git_bisect
+__git_complete gbis_start _git_branch
+__git_complete gbis_start_with_script _git_branch
 
 # aliases for make
 alias maek=make
