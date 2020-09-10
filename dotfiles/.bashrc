@@ -99,7 +99,10 @@ function gg() { git graph --color=always $* | less -EFRSX; }
 function gl() { git log --color=always --graph $* | less -EFRX; }
 function gla() { git log --color=always --graph --all $* | less -EFRX; }
 alias gb='git branch'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
 alias gba='git branch -a'
+alias gbc='git branch --show-current'
 alias gurl='git remote -v'
 alias gd='git diff'
 alias gdc='git diff --cached'
@@ -110,12 +113,23 @@ function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
 function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
+alias gch='git checkout'
 alias gco='git checkout'
+alias gcho='git checkout'
 alias gf='git fetch'
+alias gfp='git fetch -p'
 alias gp='git pull'
 alias gP='git push'
 alias gpo='git pull origin'
 alias gPo='git push origin'
+alias gpoc='git pull origin `gbc`'
+alias gPoc='git push origin `gbc`'
+function gPoA() { git push origin :"$*"; git push origin "$*"; }
+function gPoR() { git push origin :"$*"; git push origin "$*"; }
+function gPoAc() { git push origin :`gbc`; git push origin `gbc`; }
+function gPoRc() { git push origin :`gbc`; git push origin `gbc`; }
+function gPocA() { git push origin :`gbc`; git push origin `gbc`; }
+function gPocR() { git push origin :`gbc`; git push origin `gbc`; }
 alias gpom='git pull origin master'
 alias gPom='git push origin master'
 alias gr='git reset'
@@ -141,6 +155,8 @@ __git_complete gg _git_log
 __git_complete gl _git_log
 __git_complete gla _git_log
 __git_complete gb _git_branch
+__git_complete gbd _git_branch
+__git_complete gbD _git_branch
 __git_complete gba _git_branch
 __git_complete gurl __git_remotes
 __git_complete gd _git_diff
@@ -152,12 +168,17 @@ __git_complete gcmm _git_commit
 __git_complete gcma _git_commit
 __git_complete gcmma _git_commit
 __git_complete gcmam _git_commit
+__git_complete gch _git_checkout
 __git_complete gco _git_checkout
+__git_complete gcho _git_checkout
 __git_complete gf _git_fetch
+__git_complete gfp _git_fetch
 __git_complete gp _git_pull
 __git_complete gP _git_push
 __git_complete gpo _git_branch
 __git_complete gPo _git_branch
+__git_complete gPoA _git_branch
+__git_complete gPoR _git_branch
 __git_complete gr _git_reset
 __git_complete gR _git_reset
 __git_complete gro _git_branch
