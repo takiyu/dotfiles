@@ -149,8 +149,8 @@ tnoremap <silent><ESC> <C-\><C-n>
 inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
 nmap <silent><Esc> :noh<CR>
-" 置換
-nnoremap <F2> :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+" 置換 (start from current cursor)
+nnoremap <F2> :,$s/\<<C-r><C-w>\>//gc\|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 nmap <leader>s <F2>
 
 "==== Auto fcitx ====
