@@ -17,6 +17,9 @@ hook_add = '''
 [[plugins]]
 repo = 'takiyu/fast_clang_format.nvim'
 on_ft = ['c', 'cpp', 'java', 'javascript']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'fast_clang_format.nvim'
+'''
 
 [[plugins]]
 repo = 'fatih/vim-go'
