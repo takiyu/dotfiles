@@ -15,6 +15,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'takiyu/fast_clang_format.nvim'
+on_ft = ['c', 'cpp', 'java', 'javascript']
+
+[[plugins]]
 repo = 'fatih/vim-go'
 on_ft = ['go']
 hook_add = '''

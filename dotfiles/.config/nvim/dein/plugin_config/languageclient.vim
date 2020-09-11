@@ -44,7 +44,7 @@ let g:LanguageClient_diagnosticsDisplay = {
 " Key mappings
 nnoremap <F8> :call LanguageClient_contextMenu()<CR>
 nnoremap <F3> :call LanguageClient#textDocument_rename()<CR>
-nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
+" nnoremap <F9> :call LanguageClient#textDocument_formatting()<CR>
 nnoremap <leader>k :call LanguageClient#textDocument_hover()<CR>
 nnoremap <leader>e :call LanguageClient#explainErrorAtPoint()<CR>
 nnoremap <leader>d :call LanguageClient#textDocument_definition()<CR>
@@ -64,7 +64,7 @@ nmap gr <leader>r
 let g:LanguageClient_serverCommands = {}
 
 " ------------------------------------ C++ -------------------------------------
-let g:cpp_language_server_priority = ['clangd', 'ccls', 'cquery']
+let g:cpp_language_server_priority = ['ccls', 'clangd', 'cquery']
 let g:cpp_language_server_cmds = {
     \   'clangd': ['clangd', '--compile-commands-dir=./build'],
     \   'ccls': ['ccls', '--log-file=/tmp/ccls.log',
