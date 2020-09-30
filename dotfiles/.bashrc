@@ -113,9 +113,10 @@ function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
 function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
-alias gch='git checkout'
+alias gcl='git clone'
 alias gco='git checkout'
-alias gcho='git checkout'
+alias gm='git merge'
+alias grb='git rebase'
 alias gf='git fetch'
 alias gfp='git fetch -p'
 alias gp='git pull'
@@ -138,6 +139,10 @@ function gro() { git reset origin/"$*"; }
 function gRo() { git reset origin/"$*" --hard; }
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
+alias gsub='git submodule'
+alias gsb='git submodule'
+alias gsuburi='git submodule update --init --recursive'
+alias gsburi='git submodule update --init --recursive'
 alias gbis='git bisect'
 function gbis_start() { git bisect start HEAD "$1"; }  # $1: bad
 alias gbis_run_script='git bisect run'
@@ -168,9 +173,10 @@ __git_complete gcmm _git_commit
 __git_complete gcma _git_commit
 __git_complete gcmma _git_commit
 __git_complete gcmam _git_commit
-__git_complete gch _git_checkout
+__git_complete gcl _git_clone
 __git_complete gco _git_checkout
-__git_complete gcho _git_checkout
+__git_complete gm _git_merge
+__git_complete grb _git_rebase
 __git_complete gf _git_fetch
 __git_complete gfp _git_fetch
 __git_complete gp _git_pull
@@ -183,6 +189,8 @@ __git_complete gr _git_reset
 __git_complete gR _git_reset
 __git_complete gro _git_branch
 __git_complete gRo _git_branch
+__git_complete gsub _git_submodule
+__git_complete gsb _git_submodule
 __git_complete gbis _git_bisect
 __git_complete gbis_start _git_branch
 __git_complete gbis_start_with_script _git_branch
