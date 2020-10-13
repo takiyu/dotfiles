@@ -103,6 +103,8 @@ function cd { pushd "$@" && ls -CF; }
 pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
 popd () { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
+alias d=dirs
+alias c=cd
 
 # aliases for git
 alias g='git'
@@ -266,6 +268,7 @@ elif [ $platform == 'Windows' ]; then
     function filer() { command explorer $@ & &> /dev/null; disown; }
     alias w=winpty
 fi
+alias f=filer
 
 # Synaptics and Game pad
 if [ $platform == 'Linux' ]; then
