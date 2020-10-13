@@ -99,7 +99,10 @@ alias sl=ls
 
 # aliases for cd
 alias cd-="cd -"
-function cd { builtin cd "$@" && ls -CF; }
+function cd { pushd "$@" && ls -CF; }
+pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
+popd () { command popd "$@" > /dev/null; }    # silent `popd`
+alias dirs='dirs -v'  # enumerating directory stack with numbers
 
 # aliases for git
 alias g='git'
