@@ -48,16 +48,21 @@ fi
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# auto fix cd path
-shopt -s cdspell
-# append to the history file, don't overwrite it
-shopt -s histappend
-# check the window size after each command
-shopt -s checkwinsize
-# enable **
-shopt -s globstar
-# Disable beep
-set bell-style none
+shopt -s cdspell       # auto fix cd path
+shopt -s dirspell      # auto fix dir path
+shopt -s histappend    # append to the history file, don't overwrite it
+shopt -s checkwinsize  # check the window size after each command
+shopt -s globstar      # enable **
+shopt -s autocd        # enable change directory without `cd`
+set bell-style none    # Disable beep
+
+# bash key bindings
+bind '"\C-j": menu-complete'
+bind '"\C-k": menu-complete-backward'
+bind '"\C-l": forward-char'
+bind '"\C-h": backward-char'
+bind '"\C-f": forward-word'
+bind '"\C-b": backward-word'
 
 # git prompt
 source $git_completion
@@ -91,6 +96,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl=ls
+
+# aliases for cd
+alias cd-="cd -"
+function cd { builtin cd "$@" && ls -CF; }
 
 # aliases for git
 alias g='git'
@@ -221,19 +230,6 @@ alias ekma=make
 alias ekam=make
 alias mk=make
 alias km=make
-
-# aliases for cd
-alias cd-="cd -"
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias ......="cd ../../../../.."
-alias cd..="cd .."
-alias cd...="cd ../.."
-alias cd....="cd ../../.."
-alias cd.....="cd ../../../.."
-alias cd......="cd ../../../../.."
 
 # aliases for editors
 if [ "`$exist_command nvim`" == 'exist' ]; then
