@@ -59,6 +59,8 @@ set bell-style none    # Disable beep
 # bash key bindings
 bind '"\C-j": menu-complete'
 bind '"\C-k": menu-complete-backward'
+# bind '"\C-j": history-search-backward'
+# bind '"\C-k": history-search-forward'
 bind '"\C-l": forward-char'
 bind '"\C-h": backward-char'
 bind '"\C-f": forward-word'
@@ -105,6 +107,25 @@ popd () { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
 alias d=dirs
 alias c=cd
+
+# Command Hook (Previous)
+function pre_cmd_handler() {
+    if [ -z "$__cmd_handler_at_prompt" ]; then return; fi
+    unset __cmd_handler_at_prompt
+
+    # Command handling
+    if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
+        dirs  # If empty input, print directory stack
+    fi
+}
+trap "pre_cmd_handler" DEBUG
+
+# Command Hook (Post)
+function post_cmd_handler() {
+    __cmd_handler_at_prompt=1
+    # Nothing to do
+}
+PROMPT_COMMAND="post_cmd_handler"
 
 # aliases for git
 alias g='git'
