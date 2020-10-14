@@ -101,7 +101,7 @@ alias sl=ls
 
 # aliases for cd
 alias cd-="cd -"
-function cd { pushd "$@" && ls -CF; }
+function cd { pushd "$@" && ls; }
 pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
 popd () { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
