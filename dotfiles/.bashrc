@@ -103,7 +103,7 @@ alias sl=ls
 alias cd-="cd -"
 function cd {
     if [ $# -eq 0 ]; then
-        cd ~ && ls;
+        builtin cd ~ && ls;
     else
         pushd "$@" && ls;
     fi
