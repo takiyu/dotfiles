@@ -101,12 +101,22 @@ alias sl=ls
 
 # aliases for cd
 alias cd-="cd -"
-function cd { pushd "$@" && ls; }
+function cd {
+    if [ $# -eq 0 ]; then
+        cd ~ && ls;
+    else
+        pushd "$@" && ls;
+    fi
+}
 pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
 popd () { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
 alias d=dirs
 alias c=cd
+for i in {0..10}; do
+    alias "$i"="cd +$i"
+    alias cd"$i"="cd +$i"
+done
 
 # Command Hook (Previous)
 function pre_cmd_handler() {
