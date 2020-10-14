@@ -153,6 +153,11 @@ function gro() { git reset origin/"$*"; }
 function gRo() { git reset origin/"$*" --hard; }
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
+alias gst='git stash'
+alias gstl='git stash list'
+alias gstp='git stash pop'
+alias gsta='git stash apply'
+alias gstc='git stash clear'
 alias gsub='git submodule'
 alias gsb='git submodule'
 alias gsuburi='git submodule update --init --recursive'
@@ -203,6 +208,7 @@ __git_complete gr _git_reset
 __git_complete gR _git_reset
 __git_complete gro _git_branch
 __git_complete gRo _git_branch
+__git_complete gs _git_stash
 __git_complete gsub _git_submodule
 __git_complete gsb _git_submodule
 __git_complete gbis _git_bisect
