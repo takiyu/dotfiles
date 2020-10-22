@@ -64,7 +64,7 @@ nmap gr <leader>r
 let g:LanguageClient_serverCommands = {}
 
 " ------------------------------------ C++ -------------------------------------
-let g:cpp_language_server_priority = ['ccls', 'clangd', 'cquery']
+let g:cpp_language_server_priority = ['clangd', 'ccls', 'cquery']
 let g:cpp_language_server_cmds = {
     \   'clangd': ['clangd', '--compile-commands-dir=./build'],
     \   'ccls': ['ccls', '--log-file=/tmp/ccls.log',
