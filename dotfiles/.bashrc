@@ -160,10 +160,12 @@ function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
 alias gcl='git clone'
 alias gco='git checkout'
+alias gcob='git checkout -b'
+function gcof() { b="$*"; git branch -d $b && git checkout -b $b; }
+function gcoF() { b="$*"; git branch -D $b && git checkout -b $b; }
 alias gm='git merge'
 alias grb='git rebase'
-alias gf='git fetch'
-alias gfp='git fetch -p'
+alias gf='git fetch -p'
 alias gp='git pull'
 alias gP='git push'
 alias gpo='git pull origin'
@@ -225,10 +227,12 @@ __git_complete gcmma _git_commit
 __git_complete gcmam _git_commit
 __git_complete gcl _git_clone
 __git_complete gco _git_checkout
+__git_complete gcob _git_checkout
+__git_complete gcof _git_checkout
+__git_complete gcoF _git_checkout
 __git_complete gm _git_merge
 __git_complete grb _git_rebase
 __git_complete gf _git_fetch
-__git_complete gfp _git_fetch
 __git_complete gp _git_pull
 __git_complete gP _git_push
 __git_complete gpo _git_branch
@@ -281,16 +285,18 @@ if [ $platform == 'Linux' ]; then
     if [ "`$exist_command nvim-qt`" == 'exist' ]; then
         function gvim() { command nvim-qt $@ 2> /dev/null; }
     fi
-    EDITOR=vim
 elif [ $platform == 'Windows' ]; then
     if [ "`$exist_command nvim-qt`" == 'exist' ]; then
         function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
     fi
-    EDITOR=gvim
 fi
 alias v="gvim"
 alias vimdiff="vim -d"
 alias gvimdiff="gvim -- -d"
+function gvim_nofork() { command nvim-qt --nofork $@ 2> /dev/null; }
+alias gvimdiff_nofork="gvim_nofork -- -d"
+export EDITOR=gvim
+export GIT_EDITOR=gvim_nofork  # Blocking command
 
 # aliases for fzy
 function gvimf() { gvim `find | fzy`; }

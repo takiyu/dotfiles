@@ -5,11 +5,11 @@
 [alias]
 	graph = log --graph --all --pretty=format:'%C(yellow)<%cr>%C(reset) [%an]%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)(%ad)%C(reset) [%C(bold blue)%h%Creset]' --abbrev-commit --date=format-local:'%Y/%m/%d'
 [diff]
-	tool = gvimdiff
+	tool = gvimdiff_nofork
 [difftool]
 	prompt = true
 [merge]
-	tool = gvimdiff
+	tool = gvimdiff_nofork
 	ff = false
 [mergetool]
 	prompt = true
