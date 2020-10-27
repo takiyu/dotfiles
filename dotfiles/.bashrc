@@ -296,7 +296,7 @@ alias gvimdiff="gvim -- -d"
 function gvim_nofork() { command nvim-qt --nofork $@ 2> /dev/null; }
 alias gvimdiff_nofork="gvim_nofork -- -d"
 export EDITOR=gvim
-export GIT_EDITOR=gvim_nofork  # Blocking command
+export GIT_EDITOR="nvim-qt --nofork"  # Blocking command
 
 # aliases for fzy
 function gvimf() { gvim `find | fzy`; }
