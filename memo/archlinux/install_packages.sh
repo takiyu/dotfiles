@@ -1,23 +1,5 @@
 #!/bin/bash
 
-# Fonts
-pacman -S ttf-dejavu noto-fonts-cjk
-echo "Note: To disable visible zenkaku space,"
-echo "      `pkgbuild` edit and add `-z` to `./ricty_generator.sh`"
-trizen -S ttf-ricty
-pacman -S ttf-liberation
-trizen -S noto-fonts-emoji
-
-# Desktop
-pacman -S xmonad xmonad-contrib xmobar
-pacman -S xfce4 xfce4-goodies xfce4-notifyd xfce4-screenshooter xfce4-taskmanager
-pacman -S fcitx fcitx-mozc fcitx-configtool fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
-pacman -S xscreensaver
-pacman -S networkmanager network-manager-applet gnome-keyring
-pacman -S libcanberra libcanberra-pulse
-pacman -S gvfs gvfs-smb sshfs gvfs-mtp mtpfs
-pacman -S xclip
-
 # Common software
 pacman -S neovim neovim-qt
 pacman -S linux-headers
@@ -43,7 +25,6 @@ trizen -S unzip-iconv
 pacman -S virtualbox
 trizen -S virtualbox-ext-oracle
 pacman -S gimp inkscape
-
 pacman -S sane xsane simple-scan
 
 # Development
@@ -63,6 +44,24 @@ pacman -S paraview
 # trizen -S pcl
 trizen -S cmake premake4 premake-git
 # trizen -S ocl-icd intel-opencl-runtime opencl-headers
+
+# Fonts
+pacman -S ttf-dejavu noto-fonts-cjk
+echo "Note: To disable visible zenkaku space,"
+echo "      `pkgbuild` edit and add `-z` to `./ricty_generator.sh`"
+trizen -S ttf-ricty
+pacman -S ttf-liberation
+trizen -S noto-fonts-emoji
+
+# Desktop
+pacman -S xmonad xmonad-contrib xmobar
+pacman -S xfce4 xfce4-goodies xfce4-notifyd xfce4-screenshooter xfce4-taskmanager
+pacman -S fcitx fcitx-mozc fcitx-configtool fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
+pacman -S xscreensaver
+pacman -S networkmanager network-manager-applet gnome-keyring
+pacman -S libcanberra libcanberra-pulse
+pacman -S gvfs gvfs-smb sshfs gvfs-mtp mtpfs
+pacman -S xclip
 
 # Android Development
 trizen -S android-sdk android-sdk-platform-tools android-sdk-build-tools android-sdk-cmake
