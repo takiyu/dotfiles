@@ -158,7 +158,8 @@ function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
 function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
-alias gcl='git clone'
+alias gclo='git clone'
+alias gcl='git clean -i'
 alias gco='git checkout'
 alias gcob='git checkout -b'
 function gcof() { b="$*"; git branch -d $b && git checkout -b $b; }
@@ -225,7 +226,7 @@ __git_complete gcmm _git_commit
 __git_complete gcma _git_commit
 __git_complete gcmma _git_commit
 __git_complete gcmam _git_commit
-__git_complete gcl _git_clone
+__git_complete gclo _git_clone
 __git_complete gco _git_checkout
 __git_complete gcob _git_checkout
 __git_complete gcof _git_checkout
