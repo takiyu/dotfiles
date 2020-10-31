@@ -153,6 +153,7 @@ alias gd='git diff'
 alias gdc='git diff --cached'
 alias ga='git add'
 alias gau='git add -u'
+alias gaup='git add -u -p'
 alias gcm='git commit'
 function gcmm() { git commit -m "$*"; }
 alias gcma='git commit --amend'
@@ -179,6 +180,8 @@ function gPoAc() { git push origin :`gbc`; git push origin `gbc`; }
 function gPoRc() { git push origin :`gbc`; git push origin `gbc`; }
 function gPocA() { git push origin :`gbc`; git push origin `gbc`; }
 function gPocR() { git push origin :`gbc`; git push origin `gbc`; }
+function gPoD() { git push origin :"$*"; }
+alias gPocD='git push origin :`gbc`'
 alias gpom='git pull origin master'
 alias gPom='git push origin master'
 alias gr='git reset'
@@ -221,6 +224,7 @@ __git_complete gd _git_diff
 __git_complete gdc _git_diff
 __git_complete ga _git_add
 __git_complete gau _git_add
+__git_complete gaup _git_add
 __git_complete gcm _git_commit
 __git_complete gcmm _git_commit
 __git_complete gcma _git_commit
@@ -240,6 +244,7 @@ __git_complete gpo _git_branch
 __git_complete gPo _git_branch
 __git_complete gPoA _git_branch
 __git_complete gPoR _git_branch
+__git_complete gPoD _git_branch
 __git_complete gr _git_reset
 __git_complete gR _git_reset
 __git_complete gro _git_branch
