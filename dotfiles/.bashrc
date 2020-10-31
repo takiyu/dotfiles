@@ -374,3 +374,10 @@ export http_proxy=$HTTP_PROXY
 export https_proxy=$HTTPS_PROXY
 export ftp_proxy=$FTP_PROXY
 export no_proxy=$NO_PROXY
+
+# Swift-Shader
+# export SWIFTSHADER_LIB_PATH=''
+if [ "$SWIFTSHADER_LIB_PATH" != "" ]; then
+    export VK_ICD_FILENAMES=$SWIFTSHADER_LIB_PATH/vk_swiftshader_icd.json
+    export LD_LIBRARY_PATH=$SWIFTSHADER_LIB_PATH:$LD_LIBRARY_PATH
+fi
