@@ -17,15 +17,12 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout
 import XMonad.Layout.Named
-import XMonad.Layout.Maximize
 import XMonad.Layout.NoBorders
 import XMonad.Layout.BorderResize
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ResizableTile
-import XMonad.Layout.SimplestFloat
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.StackTile
-import XMonad.Layout.ImageButtonDecoration
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.GridVariants
 import Data.Maybe (fromMaybe)
@@ -186,7 +183,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 -- Mouse Binding
 myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
     [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-    , ((modm, button2), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
     , ((modm,             button4), (\w -> moveWsNoGreedy Prev NonEmptyWS))
     , ((modm,             button5), (\w -> moveWsNoGreedy Next NonEmptyWS))
     , ((modm.|.shiftMask, button4), (\w -> shiftWsNoGreedy Prev AnyWS))

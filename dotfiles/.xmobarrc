@@ -1,37 +1,39 @@
 Config {
---           font = "xft:ricty-11.4:bold"
-          font = "xft:ricty-13:bold"
-        , borderColor = "gray"
-        , border = TopB
-        , bgColor = "black"
-        , fgColor = "grey"
-        , position = Static { xpos = 0 , ypos = 28, width = 1920, height = 18 }
-        , lowerOnStart = False
-        , persistent = True
-        , hideOnStart = False
-        , commands =
-            [ Run MultiCpu ["-t", "CPU:[<autototal>]%", "-L", "4", "-H", "50"
-                            , "--normal", "green", "--high", "red"] 20
-            , Run CpuFreq ["-t", "<cpu0>/<cpu1>/<cpu2>/<cpu3>]"
-                            , "-L", "1", "-H", "2"
-                            , "-l", "lightblue", "-n","orange", "-h", "red"] 50
-            , Run CoreTemp ["-t", "[<core0>|<core1>]C"
-                            , "-L", "40", "-H", "60"
-                            , "-l", "lightblue", "-n", "gray90", "-h", "red"] 50
-            , Run Memory ["-t", "Mem:<usedratio>%"] 50
---             , Run Network "wlp2s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
-            , Run Network "enp8s0" ["-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000" , "--normal", "green", "--high", "red"] 20
-            , Run BatteryP ["BAT0"]    ["-t", "<acstatus> (<left>%)"
-                            , "-L", "10", "-H", "80", "-p", "3"
-                            , "-l", "red", "-h", "green"
-                            , "--", "-O", "AC: <fc=orange>Charging</fc>"
-                            , "-i", "AC: <fc=green>Idle</fc>"
-                            , "-o", "Battery"
-                            , "-L", "-15", "-H", "-5"] 300
-            , Run StdinReader
-        ]
-        , sepChar = "%"
-        , alignSep = "}{"
---         , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %wlp2s0%  <fc=#ffffff>||</fc>  %battery%"
-        , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp8s0%  "
+--    font = "xft:ricty-11.4:bold"
+      font = "xft:ricty-13:bold"
+    , borderColor = "black"
+    , border = TopB
+    , bgColor = "#353535"
+    , fgColor = "white"
+    , position = Static { xpos = 0 , ypos = 28, width = 1920, height = 18 }
+    , lowerOnStart = False
+    , persistent = True
+    , hideOnStart = False
+    , commands =
+        [ Run MultiCpu ["-t", "CPU:[<autototal>]%", "-L", "4", "-H", "50",
+                        "--normal", "green", "--high", "red"] 20
+        , Run CpuFreq ["-t", "<cpu0>/<cpu1>/<cpu2>/<cpu3>]",
+                       "-L", "1", "-H", "2",
+                       "-l", "lightblue", "-n","orange", "-h", "red"] 50
+        , Run CoreTemp ["-t", "[<core0>|<core1>]C",
+                        "-L", "40", "-H", "60",
+                        "-l", "lightblue", "-n", "gray90", "-h", "red"] 50
+        , Run Memory ["-t", "Mem:<usedratio>%"] 50
+--      , Run Network "wlp2s0" [
+        , Run Network "enp8s0" [
+                        "-t", "<dev>:[<rx>KB|<tx>KB]", "-L", "0", "-H", "32000",
+                        "--normal", "green", "--high", "red"] 20
+        , Run BatteryP ["BAT0"]    ["-t", "<acstatus> (<left>%)"
+                        , "-L", "10", "-H", "80", "-p", "3"
+                        , "-l", "red", "-h", "green"
+                        , "--", "-O", "AC: <fc=orange>Charging</fc>"
+                        , "-i", "AC: <fc=green>Idle</fc>"
+                        , "-o", "Battery"
+                        , "-L", "-15", "-H", "-5"] 300
+        , Run StdinReader
+    ]
+    , sepChar = "%"
+    , alignSep = "}{"
+--  , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %wlp2s0%  <fc=#ffffff>||</fc>  %battery%"
+    , template = "%StdinReader% }{ %multicpu% %cpufreq%  <fc=#ffffff>||</fc>  %coretemp%  <fc=#ffffff>||</fc>  %memory%  <fc=#ffffff>||</fc>  %enp8s0%  "
 }
