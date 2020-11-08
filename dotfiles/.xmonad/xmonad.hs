@@ -185,9 +185,8 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 
 -- Mouse Binding
 myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
-    [ ((modm,             button1), (\w -> focus w))
-    , ((modm.|.shiftMask, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-    , ((modm.|.shiftMask.|.controlMask, button1), (\w -> focus w >> mouseResizeWindow w))
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
+    , ((modm, button2), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
     , ((modm,             button4), (\w -> moveWsNoGreedy Prev NonEmptyWS))
     , ((modm,             button5), (\w -> moveWsNoGreedy Next NonEmptyWS))
     , ((modm.|.shiftMask, button4), (\w -> shiftWsNoGreedy Prev AnyWS))
