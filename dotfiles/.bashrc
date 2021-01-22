@@ -167,7 +167,8 @@ function gcof() { b="$*"; git branch -d $b && git checkout -b $b; }
 function gcoF() { b="$*"; git branch -D $b && git checkout -b $b; }
 alias gm='git merge'
 alias grb='git rebase'
-alias gf='git fetch -p --recurse-submodules -j8'
+alias gf='git fetch'
+alias gfr='git fetch -p --recurse-submodules -j8'
 alias gp='git pull'
 alias gP='git push'
 alias gpo='git pull origin'
@@ -238,6 +239,7 @@ __git_complete gcoF _git_checkout
 __git_complete gm _git_merge
 __git_complete grb _git_rebase
 __git_complete gf _git_fetch
+__git_complete gfr _git_fetch
 __git_complete gp _git_pull
 __git_complete gP _git_push
 __git_complete gpo _git_branch
