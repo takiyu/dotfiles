@@ -10,28 +10,28 @@ rev = 'next'
 on_ft = ['c', 'cpp', 'python', 'java', 'glsl']
 depends = ['deoplete.nvim']
 build = 'bash install.sh'
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'languageclient.vim'
 '''
 
 [[plugins]]
 repo = 'takiyu/fast_clang_format.nvim'
 on_ft = ['c', 'cpp', 'java', 'javascript']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'fast_clang_format.vim'
 '''
 
 [[plugins]]
 repo = 'fatih/vim-go'
 on_ft = ['go']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-go.vim'
 '''
 
 [[plugins]]
 repo = 'LaTeX-Box-Team/LaTeX-Box'
 on_ft = ['tex', 'plaintex']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'latex-box.vim'
 '''
 
@@ -51,7 +51,7 @@ on_ft = ['glsl']
 [[plugins]]
 repo = 'elzr/vim-json'
 on_ft = ['json']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-json.vim'
 '''
 
@@ -84,13 +84,13 @@ on_ft = ['c', 'cpp']
 [[plugins]]
 repo = 'heavenshell/vim-pydocstring'
 on_ft = ['python']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-pydocstring.vim'
 '''
 
 [[plugins]]
 repo = 'LeafCage/vimhelpgenerator'
 on_ft = ['vim']
-hook_add = '''
+hook_post_source = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vimhelpgenerator.vim'
 '''
