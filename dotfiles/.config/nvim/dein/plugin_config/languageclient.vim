@@ -17,24 +17,28 @@ let g:LanguageClient_diagnosticsEnable = 1
 let g:LanguageClient_diagnosticsDisplay = {
     \ 1: {
     \     "name": "Error",
+    \     "texthl": "LanguageClientError",
     \     "signText": ">>",
     \     "signTexthl": "Error",
     \     "virtualTexthl": "Error",
     \ },
     \ 2: {
     \     "name": "Warning",
+    \     "texthl": "LanguageClientWarning",
     \     "signText": ">>",
     \     "signTexthl": "Todo",
     \     "virtualTexthl": "Todo",
     \ },
     \ 3: {
     \     "name": "Information",
+    \     "texthl": "LanguageClientInfo",
     \     "signText": "i",
     \     "signTexthl": "Keyword",
     \     "virtualTexthl": "Keyword",
     \ },
     \ 4: {
     \     "name": "Hint",
+    \     "texthl": "LanguageClientInfo",
     \     "signText": "?",
     \     "signTexthl": "Keyword",
     \     "virtualTexthl": "Keyword",
