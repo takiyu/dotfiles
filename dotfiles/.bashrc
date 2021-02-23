@@ -139,6 +139,7 @@ PROMPT_COMMAND="post_cmd_handler"
 
 # aliases for git
 alias g='git'
+alias ginit='git init && git commit --allow-empty -m "First commit"'
 alias gs='git status'
 function gg() { git graph --color=always $* | less -EFRSX; }
 function gl() { git log --color=always --graph $* | less -EFRX; }
