@@ -141,10 +141,6 @@ nmap <C-9> :cN<CR>
 nmap <C-0> :cn<CR>
 " Quickfix/Preview/Location windowの非表示
 nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
-" Terminal
-nnoremap <F4> :terminal ++rows=10<CR>
-tnoremap <F4> <C-\><C-n>>:q!<CR>
-tnoremap <silent><ESC> <C-\><C-n>
 " omni補完
 inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
@@ -205,6 +201,28 @@ nnoremap <silent><F11> :echo NextColorColumn()<CR>
 "===== Spell check toggle =====
 set spell spelllang=en_us,cjk  " Enabled by default
 nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
+
+"===== Terminal =====
+nnoremap <F4> :new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>
+tnoremap <silent><ESC> <C-\><C-n>
+let g:terminal_color_0  = "#aaaaaa" "black
+let g:terminal_color_1  = "#ed5f67" "red
+let g:terminal_color_2  = "#9ac895" "green
+let g:terminal_color_3  = "#fbc963" "yellow
+let g:terminal_color_4  = "#669acd" "blue
+let g:terminal_color_5  = "#c695c6" "magenta
+let g:terminal_color_6  = "#5fb4b4" "cyan
+let g:terminal_color_7  = "#c1c6cf" "white
+let g:terminal_color_8  = "#65737e" "bright black
+let g:terminal_color_9  = "#fa9257" "bright red
+let g:terminal_color_10 = "#343d46" "bright green
+let g:terminal_color_11 = "#4f5b66" "bright yellow
+let g:terminal_color_12 = "#a8aebb" "bright blue
+let g:terminal_color_13 = "#ced4df" "bright magenta
+let g:terminal_color_14 = "#ac7967" "bright cyan
+let g:terminal_color_15 = "#d9dfea" "bright white
+let g:terminal_color_background="#aaaaaa" "background
+let g:terminal_color_foreground="#c1c6cf" "foreground
 
 "===== Python path for conda on Windows =====
 if has('win32') || has('win64')
