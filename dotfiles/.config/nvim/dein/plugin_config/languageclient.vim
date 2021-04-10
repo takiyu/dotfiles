@@ -81,7 +81,7 @@ let g:cpp_language_server_cmds = {
 
 for name in g:cpp_language_server_priority
     if executable(name)
-        echomsg '[takiyu] Language Server for C++: ' . name
+        " echomsg '[takiyu] Language Server for C++: ' . name
         let s:cmd = g:cpp_language_server_cmds[name]
         let g:LanguageClient_serverCommands['c'] = s:cmd
         let g:LanguageClient_serverCommands['cpp'] = s:cmd
