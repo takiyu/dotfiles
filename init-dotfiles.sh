@@ -55,9 +55,9 @@ create_link_prompt() {
         # Check difference
         difference=`diff -r $dot_target $home_target`
         if [ "$difference" == "" ]; then
-            echo "[Skip] already exists, but no difference ($home_target)"
+            echo "[Skip] Already exists. No difference ($home_target)"
         else
-            echo "[Ask] already exists. ($home_target)"
+            echo "[Ask] Already exists. ($home_target)"
             echo "$difference"
             echo -n "Overwrite? [y/n] "
             ret=`yn_prompt`
@@ -85,7 +85,7 @@ if [ $platform == 'Linux' ]; then
     TARGETS=(.Xmodmap .xinitrc .bash_profile .bashrc .xmonad .xmobarrc \
              .wgetrc .gitconfig .latexmkrc .ctags .clang-format .clang-tidy \
              .jshintrc .pep8 .config/zathura/zathurarc .mplayer/config \
-             .config/matplotlib/matplotlibrc \
+             .config/matplotlib/matplotlibrc .lesskey \
              .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
              .config/nvim/dein)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)

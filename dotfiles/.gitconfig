@@ -3,7 +3,7 @@
 	name = takiyu
 	email = takiyu1025.txu.development@gmail.com
 [alias]
-	graph = log --graph --all --pretty=format:'%C(yellow)<%cr>%C(reset) [%an]%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)(%ad)%C(reset) [%C(bold blue)%h%Creset]' --abbrev-commit --date=format-local:'%Y/%m/%d'
+	graph = log --graph --all --pretty=format:'%C(green)(%ad)%C(reset)[%C(bold blue)%h%Creset](%an)%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(yellow)<%cr>%C(reset)' --abbrev-commit --date=format-local:'%Y/%m/%d'
 [diff]
 	tool = nvim-qt_nofork
 [difftool "nvim-qt_nofork"]
