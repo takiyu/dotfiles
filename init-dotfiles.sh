@@ -85,9 +85,9 @@ if [ $platform == 'Linux' ]; then
     TARGETS=(.Xmodmap .xinitrc .bash_profile .bashrc .xmonad .xmobarrc \
              .wgetrc .gitconfig .latexmkrc .ctags .clang-format .clang-tidy \
              .jshintrc .pep8 .config/zathura/zathurarc .mplayer/config \
-             .config/matplotlib/matplotlibrc .lesskey \
+             .config/matplotlib/matplotlibrc \
              .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
-             .config/nvim/dein)
+             .config/nvim/dein .lesskey)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
 
     # First, create directories
@@ -103,7 +103,8 @@ if [ $platform == 'Linux' ]; then
 elif [ $platform == 'Windows' ]; then
     # Windows setup
     echo "* Setup dotfiles for Windows Environment"
-    TARGETS=(.bash_profile .bashrc .gitconfig .minttyrc .config/nvim/dein)
+    TARGETS=(.bash_profile .bashrc .gitconfig .minttyrc .config/nvim/dein \
+             .lesskey)
     TARGET_DIRS=(.config/nvim/)
 
     # First, create directories
