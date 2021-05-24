@@ -323,6 +323,10 @@ elif [ $platform == 'Windows' ]; then
 fi
 alias f=filer
 
+if [ "`$exist_command trizen`" == 'exist' ]; then
+    alias trizen-noconfirm="trizen -Syu -y --noconfirm"
+fi
+
 # Synaptics and Game pad
 if [ $platform == 'Linux' ]; then
     if [ "`$exist_command synclient`" == 'exist' ]; then
