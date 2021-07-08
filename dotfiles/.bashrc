@@ -1,14 +1,15 @@
-#
-# ~/.bashrc: executed by bash(1) for non-login shells.
-#
-
+# ------------------------------------------------------------------------------
+# ---------------------------------- .bashrc -----------------------------------
+# ------------------------------------------------------------------------------
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# utility scripts
+# ------------------------------------------------------------------------------
+# ------------------------------ Utility scripts -------------------------------
+# ------------------------------------------------------------------------------
 dotfiles=$HOME/dotfiles
 determ_platform=$dotfiles/utils/determ_platform.sh
 exist_command=$dotfiles/utils/exist_command.sh
@@ -18,6 +19,9 @@ git_completion=$dotfiles/utils/git/git-completion.bash
 # determine the platform
 platform=`$determ_platform`
 
+# ------------------------------------------------------------------------------
+# --------------------------- Linux Default Settings ---------------------------
+# ------------------------------------------------------------------------------
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
 
@@ -44,10 +48,9 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
+# ------------------------------------------------------------------------------
+# ------------------------------- Bash Settings --------------------------------
+# ------------------------------------------------------------------------------
 shopt -s cdspell       # auto fix cd path
 shopt -s dirspell      # auto fix dir path
 shopt -s histappend    # append to the history file, don't overwrite it
@@ -66,7 +69,9 @@ bind '"\C-h": backward-char'
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
 
-# git prompt
+# ------------------------------------------------------------------------------
+# ----------------------------------- Prompt -----------------------------------
+# ------------------------------------------------------------------------------
 source $git_completion
 if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWUPSTREAM=1
@@ -75,18 +80,21 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
     # color prompt
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1) \[\033[01;34m\]\$ \[\033[00m\]'
+    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput sgr0)'
 elif [ $platform == 'Windows' ]; then
     # color prompt
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \[\033[01;34m\]\$ \[\033[00m\]'
 fi
 
+# ------------------------------------------------------------------------------
+# ------------------------------- Basic Aliases --------------------------------
+# ------------------------------------------------------------------------------
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    # alias dir='dir --color=auto'
+    # alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto -i'
     alias fgrep='fgrep --color=auto -i'
@@ -112,33 +120,64 @@ pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
 popd () { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
 alias d=dirs
-alias c=cd
 for i in {0..10}; do
     alias "$i"="cd +$i"
     alias cd"$i"="cd +$i"
 done
 
-# Command Hook (Previous)
+# aliases for clear
+alias cl=clear
+alias c=clear
+
+# Alart (ex: `sleep 10; alert`)
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Horizontal line
+function hline {
+    printf -- "─%.0s" $(seq $(tput cols))
+}
+
+# ------------------------------------------------------------------------------
+# ------------------------------- Command Hooks --------------------------------
+# ------------------------------------------------------------------------------
+# Previous
 function pre_cmd_handler() {
+    # Escape non-after post_cmd_handler
     if [ -z "$__cmd_handler_at_prompt" ]; then return; fi
     unset __cmd_handler_at_prompt
 
     # Command handling
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
-        ls  # If empty input, print `ls`
         # dirs  # If empty input, print directory stack
+        ls  # If empty input, print `ls`
+        unset __cmd_handler_begin
+    else
+        __cmd_handler_begin=1
     fi
 }
 trap "pre_cmd_handler" DEBUG
 
-# Command Hook (Post)
+# Post
 function post_cmd_handler() {
+    # Capture exit code
+    __prev_exit_code=$?
+
+    # Escape initial prompt
+    if [ -n "$__cmd_handler_begin" ]; then
+        # Print exit code
+        if [  $__prev_exit_code != 0 ]; then
+            echo "$(tput setaf 1)[Exit code: $__prev_exit_code]$(tput sgr0)"
+        fi
+        # Print horizontal line
+        hline
+    fi
     __cmd_handler_at_prompt=1
-    # Nothing to do
 }
 PROMPT_COMMAND="post_cmd_handler"
 
-# aliases for git
+# ------------------------------------------------------------------------------
+# --------------------------------- Git Alias ----------------------------------
+# ------------------------------------------------------------------------------
 alias g='git'
 alias ginit='git init && git commit --allow-empty -m "First commit"'
 alias gs='git status'
@@ -213,7 +252,10 @@ alias gbis_reset='git bisect reset'
 alias gbis_exit=gbis_reset
 alias gbis_log='git bisect log'
 alias gbis_view='git bisect view'
-# Git completion
+
+# ------------------------------------------------------------------------------
+# ------------------------------- Git Completion -------------------------------
+# ------------------------------------------------------------------------------
 __git_complete g __git_main
 __git_complete gs _git_status
 __git_complete gg _git_log
@@ -261,6 +303,9 @@ __git_complete gbis _git_bisect
 __git_complete gbis_start _git_branch
 __git_complete gbis_start_with_script _git_branch
 
+# ------------------------------------------------------------------------------
+# ----------------------------- Additional Aliases -----------------------------
+# ------------------------------------------------------------------------------
 # aliases for make
 alias maek=make
 alias mkae=make
@@ -327,6 +372,7 @@ elif [ $platform == 'Windows' ]; then
 fi
 alias f=filer
 
+# Trizen
 if [ "`$exist_command trizen`" == 'exist' ]; then
     alias trizen-noconfirm="trizen -Syu -y --noconfirm"
 fi
@@ -341,15 +387,9 @@ if [ $platform == 'Linux' ]; then
     export SDL_GAMECONTROLLERCONFIG='030000008f0e00000300000010010000,GreenAsia Inc.    USB Joystick,platform:Linux,a:b1,b:b2,x:b3,y:b0,back:b8,start:b9,leftstick:b10,rightstick:b11,leftshoulder:b6,rightshoulder:b7,dpup:h0.1,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,leftx:a0,lefty:a1,rightx:a3,righty:a2,lefttrigger:b4,righttrigger:b5,'  # Generated by `controllermap 0`
 fi
 
-# Python path
-# if [ $platform == 'Linux' ]; then
-#     export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
-# fi
-
-# Caffe
-# export LD_LIBRARY_PATH=~/Projects/caffe/.build_release/lib:$LD_LIBRARY_PATH
-# export PYTHONPATH=~/Projects/caffe/python:$PYTHONPATH
-
+# ------------------------------------------------------------------------------
+# -------------------------------- Applications --------------------------------
+# ------------------------------------------------------------------------------
 # CUDA
 if [ -e /usr/local/cuda ]; then
     export CUDA_HOME=/usr/local/cuda
@@ -364,10 +404,24 @@ if [ "$CUDA_HOME" != "" ]; then
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/targets/x86_64-linux/lib
 fi
 
+# Python path
+# if [ $platform == 'Linux' ]; then
+#     export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
+# fi
+
 # Virtualbox
 VBOX_USB=usbfs
 
-# Proxy
+# Swift-Shader
+# export SWIFTSHADER_LIB_PATH="$HOME/tmp/swiftshader/build/Linux"
+if [ "$SWIFTSHADER_LIB_PATH" != "" ]; then
+    export VK_ICD_FILENAMES=$SWIFTSHADER_LIB_PATH/vk_swiftshader_icd.json
+    export LD_LIBRARY_PATH=$SWIFTSHADER_LIB_PATH:$LD_LIBRARY_PATH
+fi
+
+# ------------------------------------------------------------------------------
+# ----------------------------------- Proxy ------------------------------------
+# ------------------------------------------------------------------------------
 # export PROXY_USER=''
 # export PROXY_PASS=''
 # export PROXY_MODE=''
@@ -387,9 +441,6 @@ export https_proxy=$HTTPS_PROXY
 export ftp_proxy=$FTP_PROXY
 export no_proxy=$NO_PROXY
 
-# Swift-Shader
-# export SWIFTSHADER_LIB_PATH="$HOME/tmp/swiftshader/build/Linux"
-if [ "$SWIFTSHADER_LIB_PATH" != "" ]; then
-    export VK_ICD_FILENAMES=$SWIFTSHADER_LIB_PATH/vk_swiftshader_icd.json
-    export LD_LIBRARY_PATH=$SWIFTSHADER_LIB_PATH:$LD_LIBRARY_PATH
-fi
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
