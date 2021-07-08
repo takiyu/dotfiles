@@ -143,17 +143,18 @@ function hline {
 # Previous
 function pre_cmd_handler() {
     # Escape non-after post_cmd_handler
-    if [ -z "$__cmd_handler_at_prompt" ]; then return; fi
-    unset __cmd_handler_at_prompt
+    if [ -z "$__cmd_handler_post" ]; then return; fi
+    unset __cmd_handler_post
 
-    # Command handling
+    # Empty command handling
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
         # dirs  # If empty input, print directory stack
         ls  # If empty input, print `ls`
-        unset __cmd_handler_begin
+        __cmd_handler_empty=1
     else
-        __cmd_handler_begin=1
+        unset __cmd_handler_empty
     fi
+    __cmd_handler_pre=1
 }
 trap "pre_cmd_handler" DEBUG
 
@@ -162,16 +163,20 @@ function post_cmd_handler() {
     # Capture exit code
     __prev_exit_code=$?
 
-    # Escape initial prompt
-    if [ -n "$__cmd_handler_begin" ]; then
+    # Escape empty commanding
+    if [ -z "$__cmd_handler_empty" ]; then
         # Print exit code
         if [  $__prev_exit_code != 0 ]; then
             echo "$(tput setaf 1)[Exit code: $__prev_exit_code]$(tput sgr0)"
         fi
+    fi
+
+    # Escape initial prompt
+    if [ -n "$__cmd_handler_pre" ]; then
         # Print horizontal line
         hline
     fi
-    __cmd_handler_at_prompt=1
+    __cmd_handler_post=1
 }
 PROMPT_COMMAND="post_cmd_handler"
 
