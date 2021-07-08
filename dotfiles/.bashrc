@@ -68,6 +68,17 @@ bind '"\C-l": forward-char'
 bind '"\C-h": backward-char'
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
+bind 'TAB: menu-complete'
+bind '"\e[Z": menu-complete-backward'
+bind 'set show-all-if-ambiguous on'
+bind 'set show-all-if-unmodified on'
+bind 'set completion-ignore-case on'
+bind 'set completion-map-case on'
+bind 'set menu-complete-display-prefix on'
+bind 'set skip-completed-text on'
+bind 'set visible-stats on'
+bind 'set colored-stats on'
+bind 'set colored-completion-prefix on'
 
 # ------------------------------------------------------------------------------
 # ----------------------------------- Prompt -----------------------------------
@@ -148,8 +159,8 @@ function pre_cmd_handler() {
 
     # Empty command handling
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
-        # dirs  # If empty input, print directory stack
-        ls  # If empty input, print `ls`
+        # dirs  # Print directory stack
+        ls
         __cmd_handler_empty=1
     else
         unset __cmd_handler_empty
