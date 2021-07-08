@@ -81,26 +81,6 @@ bind 'set colored-stats on'
 bind 'set colored-completion-prefix on'
 
 # ------------------------------------------------------------------------------
-# ----------------------------------- Prompt -----------------------------------
-# ------------------------------------------------------------------------------
-source $git_completion
-PROMPT_DIRTRIM=2
-if [ $platform == 'Linux' ]; then
-    GIT_PS1_SHOWUPSTREAM=1
-    GIT_PS1_SHOWUNTRACKEDFILES=
-    GIT_PS1_SHOWSTASHSTATE=
-    GIT_PS1_SHOWDIRTYSTATE=
-    source $git_prompt
-    # color prompt
-    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 0; tput setab 149)\u $(tput setaf 149; tput setab 241)$(tput setaf 7; tput setab 241) \w $(tput setaf 241; tput setab 239)$(tput setaf 1; tput setab 239)$(__git_ps1 " %s ")$(tput setaf 239; tput setab 0)$(tput init) '
-    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput init)'
-elif [ $platform == 'Windows' ]; then
-    # color prompt
-    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 0; tput setab 149)\u $(tput setaf 149; tput setab 241)$(tput setaf 7; tput setab 241) \w $(tput setaf 241; tput setab 239)$(tput setaf 239; tput setab 0)$(tput init) '
-    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \[\033[01;34m\]\$ \[\033[00m\]'
-fi
-
-# ------------------------------------------------------------------------------
 # ------------------------------- Basic Aliases --------------------------------
 # ------------------------------------------------------------------------------
 # enable color support of ls and also add handy aliases
@@ -150,6 +130,34 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 function hline {
     printf -- "─%.0s" $(seq $(tput cols))
 }
+
+# Color
+function colorfb {
+    f_col=$1
+    b_col=$2
+    tput setaf $f_col
+    tput setab $b_col
+}
+
+# ------------------------------------------------------------------------------
+# ----------------------------------- Prompt -----------------------------------
+# ------------------------------------------------------------------------------
+source $git_completion
+PROMPT_DIRTRIM=2
+if [ $platform == 'Linux' ]; then
+    GIT_PS1_SHOWUPSTREAM=1
+    GIT_PS1_SHOWUNTRACKEDFILES=
+    GIT_PS1_SHOWSTASHSTATE=
+    GIT_PS1_SHOWDIRTYSTATE=
+    source $git_prompt
+    # color prompt
+    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(colorfb 0 149)\u $(colorfb 149 241)$(colorfb 7 241) \w $(colorfb 241 239)$(colorfb 1 239)$(__git_ps1 " %s ")$(colorfb 239 0)$(tput init) '
+    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput init)'
+elif [ $platform == 'Windows' ]; then
+    # color prompt (without git)
+    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(colorfb 0 149)\u $(colorfb 149 241)$(colorfb 7 241) \w $(colorfb 241 0)$(tput init) '
+    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w $(tput setaf 4)\$ $(tput init)'
+fi
 
 # ------------------------------------------------------------------------------
 # ------------------------------- Command Hooks --------------------------------
