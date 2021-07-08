@@ -84,6 +84,7 @@ bind 'set colored-completion-prefix on'
 # ----------------------------------- Prompt -----------------------------------
 # ------------------------------------------------------------------------------
 source $git_completion
+PROMPT_DIRTRIM=2
 if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWUPSTREAM=1
     GIT_PS1_SHOWUNTRACKEDFILES=
@@ -91,10 +92,12 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
     # color prompt
-    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput sgr0)'
+    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 0; tput setab 149)\u $(tput setaf 149; tput setab 241)$(tput setaf 7; tput setab 241) \w $(tput setaf 241; tput setab 239)$(tput setaf 1; tput setab 239)$(__git_ps1 " %s ")$(tput setaf 239; tput setab 0)$(tput init) '
+    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput init)'
 elif [ $platform == 'Windows' ]; then
     # color prompt
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \[\033[01;34m\]\$ \[\033[00m\]'
+    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 0; tput setab 149)\u $(tput setaf 149; tput setab 241)$(tput setaf 7; tput setab 241) \w $(tput setaf 241; tput setab 239)$(tput setaf 239; tput setab 0)$(tput init) '
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[01;34m\] \w \[\033[01;34m\]\$ \[\033[00m\]'
 fi
 
 # ------------------------------------------------------------------------------
@@ -183,10 +186,10 @@ function post_cmd_handler() {
     fi
 
     # Escape initial prompt
-    if [ -n "$__cmd_handler_pre" ]; then
-        # Print horizontal line
-        hline
-    fi
+    # if [ -n "$__cmd_handler_pre" ]; then
+    #     # Print horizontal line
+    #     hline
+    # fi
     __cmd_handler_post=1
 }
 PROMPT_COMMAND="post_cmd_handler"
