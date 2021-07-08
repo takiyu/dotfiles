@@ -125,7 +125,8 @@ function pre_cmd_handler() {
 
     # Command handling
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
-        dirs  # If empty input, print directory stack
+        ls  # If empty input, print `ls`
+        # dirs  # If empty input, print directory stack
     fi
 }
 trap "pre_cmd_handler" DEBUG
@@ -165,7 +166,7 @@ alias gcl='git clean -i'
 alias gco='git checkout'
 alias gcob='git checkout -b'
 function gcof() { b="$*"; git branch -d $b && git checkout -b $b; }
-function gcoF() { b="$*"; git branch -D $b && git checkout -b $b; }
+function gcoF() { b="$*"; git branch -D $b; git checkout -b $b; }
 alias gm='git merge'
 alias grb='git rebase'
 alias gf='git fetch -p'
@@ -286,6 +287,9 @@ alias ekma=make
 alias ekam=make
 alias mk=make
 alias km=make
+# aliases for ninja
+alias nin=ninja
+alias ni=ninja
 
 # aliases for editors
 if [ "`$exist_command nvim`" == 'exist' ]; then
