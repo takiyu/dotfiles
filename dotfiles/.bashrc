@@ -230,12 +230,12 @@ function post_cmd_handler() {
         if [  $__prev_exit_code != 0 ]; then
             echo "$(color_FB 7 1) [Exit code: $__prev_exit_code] $(color_end)"
         fi
-    # else
-    #     # Clear with continuous Enter
-    #     if [ 2 -le $__cmd_handler_empty_cnt ]; then
-    #         clear -x
-    #         __cmd_handler_empty_cnt=
-    #     fi
+    else
+        # Clear with continuous Enter
+        if [ 2 -le $__cmd_handler_empty_cnt ]; then
+            clear -x
+            __cmd_handler_empty_cnt=
+        fi
     fi
 
     # Escape initial prompt
