@@ -51,15 +51,15 @@ fi
 # ------------------------------------------------------------------------------
 # ------------------------------- Bash Settings --------------------------------
 # ------------------------------------------------------------------------------
+# Bash base settings
 shopt -s cdspell       # auto fix cd path
 shopt -s dirspell      # auto fix dir path
 shopt -s histappend    # append to the history file, don't overwrite it
 shopt -s checkwinsize  # check the window size after each command
 shopt -s globstar      # enable **
 shopt -s autocd        # enable change directory without `cd`
-set bell-style none    # Disable beep
 
-# bash key bindings
+# Bash key bindings
 bind '"\C-j": menu-complete'
 bind '"\C-k": menu-complete-backward'
 # bind '"\C-j": history-search-backward'
@@ -70,6 +70,8 @@ bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
 bind 'TAB: menu-complete'
 bind '"\e[Z": menu-complete-backward'
+
+# Bash additional settings
 bind 'set show-all-if-ambiguous on'
 bind 'set show-all-if-unmodified on'
 bind 'set completion-ignore-case on'
@@ -79,6 +81,7 @@ bind 'set skip-completed-text on'
 bind 'set visible-stats on'
 bind 'set colored-stats on'
 bind 'set colored-completion-prefix on'
+bind 'set bell-style none'    # Disable beep
 
 # ------------------------------------------------------------------------------
 # ------------------------------- Basic Aliases --------------------------------
@@ -110,8 +113,8 @@ function cd {
         pushd "$@" && ls;
     fi
 }
-pushd () { command pushd "$@" > /dev/null; }  # silent `pushd`
-popd () { command popd "$@" > /dev/null; }    # silent `popd`
+function pushd() { command pushd "$@" > /dev/null; }  # silent `pushd`
+function popd() { command popd "$@" > /dev/null; }    # silent `popd`
 alias dirs='dirs -v'  # enumerating directory stack with numbers
 alias d=dirs
 for i in {0..10}; do
@@ -127,36 +130,68 @@ alias c=clear
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Horizontal line
-function hline {
-    printf -- "─%.0s" $(seq $(tput cols))
-}
-
+function hline() { printf -- "─%.0s" $(seq $(tput cols)); }
 # Color
-function colorfb {
-    printf "$(tput setaf $1)$(tput setab $2)"
-}
-function colorfb_bold {
-    printf "$(colorfb $1 $2)$(tput bold)"
-}
+function colorfb() { printf "$(tput setaf $1)$(tput setab $2)"; }
+function colorfb_bold() { printf "$(colorfb $1 $2)$(tput bold)"; }
 
 # ------------------------------------------------------------------------------
 # ----------------------------------- Prompt -----------------------------------
 # ------------------------------------------------------------------------------
-source $git_completion
+# PS1 styles
+function set_ps1_base() {
+    # ```takiyu ~/dotfiles (master>) $ ```
+    local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
+    local USER='\[$(tput bold)$(tput setaf 2)\]\u'
+    local DIRNAME='\[$(tput setaf 4)\]\w'
+    local GIT='\[$(tput setaf 1)\]$(__git_ps1)'
+    local PROMPT='\[$(tput setaf 4)\$\]'
+    local LAST='\[$(tput init)\]'
+    PS1="$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $LAST"
+}
+function set_ps1_rich() {
+    # ``` takiyu  ~/dotfiles  master>  ```
+    BG_COLOR_1=149
+    BG_COLOR_2=241
+    BG_COLOR_3=239
+    FG_COLOR_1=16  # 0
+    FG_COLOR_2=7
+    FG_COLOR_3=1  # 176
+    local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
+    local USER='\[$(colorfb_bold $FG_COLOR_1 $BG_COLOR_1)\] \u'
+    local SEP_1='\[$(colorfb_bold $BG_COLOR_1 $BG_COLOR_2)\]'
+    local DIRNAME='\[$(colorfb_bold $FG_COLOR_2 $BG_COLOR_2)\]\w'
+    local SEP_2='\[$(colorfb_bold $BG_COLOR_2 $BG_COLOR_3)\]'
+    local GIT='\[$(colorfb_bold $FG_COLOR_3 $BG_COLOR_3)\]$(__git_ps1 " %s ")'
+    local SEP_3='\[$(colorfb_bold $BG_COLOR_3 0)\]'
+    local LAST='\[$(tput init)\]'
+    PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$GIT$SEP_3$LAST "
+}
+function set_ps1_rich_nogit() {
+    # ``` takiyu  ~/dotfiles  master>  ```
+    local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
+    local USER='\[$(colorfb_bold 0 149)\] \u'
+    local SEP1='\[$(colorfb_bold 149 241)\]'
+    local DIRNAME='\[$(colorfb_bold 7 241)\]\w'
+    local SEP2='\[$(colorfb_bold 241 0)\]'
+    local LAST='\[$(tput init)\]'
+    PS1="$DEBIAN_CHROOT$USER $SEP1 $DIRNAME $SEP2$LAST "
+}
+
+# Set
 PROMPT_DIRTRIM=2
+source $git_completion
 if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWUPSTREAM=1
     GIT_PS1_SHOWUNTRACKEDFILES=
     GIT_PS1_SHOWSTASHSTATE=
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
-    # color prompt
-    PS1='${debian_chroot:+$debian_chroot }\[$(colorfb_bold 0 149)\]\u \[$(colorfb_bold 149 241)\]\[$(colorfb_bold 7 241)\] \w \[$(colorfb_bold 241 239)\]\[$(colorfb_bold 1 239)\]$(__git_ps1 " %s ")\[$(colorfb_bold 239 0)\]\[$(tput init)\] '
-    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput init)'
+    # Color prompt
+    set_ps1_rich
 elif [ $platform == 'Windows' ]; then
-    # color prompt (without git)
-    PS1='${debian_chroot:+$debian_chroot }\[$(colorfb_bold 0 149)\]\u \[$(colorfb_bold 149 241)\]\[$(colorfb_bold 7 241)\] \w \[$(colorfb_bold 241 0)\]\[$(tput init)\] '
-    # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w $(tput setaf 4)\$ $(tput init)'
+    # Color prompt (without git)
+    set_ps1_rich_nogit
 fi
 
 # ------------------------------------------------------------------------------
@@ -166,7 +201,7 @@ fi
 function pre_cmd_handler() {
     # Escape non-after post_cmd_handler
     if [ -z "$__cmd_handler_post" ]; then return; fi
-    unset __cmd_handler_post
+    __cmd_handler_post=
 
     # Empty command handling
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
@@ -174,7 +209,7 @@ function pre_cmd_handler() {
         ls
         __cmd_handler_empty=1
     else
-        unset __cmd_handler_empty
+        __cmd_handler_empty=
     fi
     __cmd_handler_pre=1
 }

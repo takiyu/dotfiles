@@ -16,9 +16,11 @@ def rgb_to_xterm(r, g, b):
     return 16 + 36 * N[r] + 6 * N[g] + N[b]
 
 print('Convert RGB to XTerm Color')
-r = int(input('R: 0x'), base=16)
-g = int(input('G: 0x'), base=16)
-b = int(input('B: 0x'), base=16)
+rgb = int(input('RGB: 0x'), base=16)
+
+r = (rgb & 0xff0000) >> 16
+g = (rgb & 0x00ff00) >> 8
+b = (rgb & 0x0000ff)
 
 col = rgb_to_xterm(r, g, b)
-print('color: ' + str(col))
+print('Term color: ' + str(col))
