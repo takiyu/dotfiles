@@ -132,8 +132,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Horizontal line
 function hline() { printf -- "─%.0s" $(seq $(tput cols)); }
 # Color
-function colorfb() { printf "$(tput setaf $1)$(tput setab $2)"; }
-function colorfb_bold() { printf "$(colorfb $1 $2)$(tput bold)"; }
+function color_fb() { printf "$(tput setaf $1)$(tput setab $2)"; }
+function color_FB() { printf "$(tput bold)$(color_fb $1 $2)"; }
+function color_end() { printf "$(tput sgr0)"; }
 
 # ------------------------------------------------------------------------------
 # ----------------------------------- Prompt -----------------------------------
@@ -146,36 +147,32 @@ function set_ps1_base() {
     local DIRNAME='\[$(tput setaf 4)\]\w'
     local GIT='\[$(tput setaf 1)\]$(__git_ps1)'
     local PROMPT='\[$(tput setaf 4)\$\]'
-    local LAST='\[$(tput init)\]'
-    PS1="$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $LAST"
+    local END='\[$(color_end)\]'
+    PS1="$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $END"
 }
 function set_ps1_rich() {
     # ``` takiyu  ~/dotfiles  master>  ```
-    BG_COLOR_1=149
-    BG_COLOR_2=241
-    BG_COLOR_3=239
-    FG_COLOR_1=16  # 0
-    FG_COLOR_2=7
-    FG_COLOR_3=1  # 176
+    use_git=$1
+    BG_COL_1=149
+    BG_COL_2=241
+    BG_COL_3=239
+    FG_COL_1=16  # 0
+    FG_COL_2=7
+    FG_COL_3=1  # 176
     local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
-    local USER='\[$(colorfb_bold $FG_COLOR_1 $BG_COLOR_1)\] \u'
-    local SEP_1='\[$(colorfb_bold $BG_COLOR_1 $BG_COLOR_2)\]'
-    local DIRNAME='\[$(colorfb_bold $FG_COLOR_2 $BG_COLOR_2)\]\w'
-    local SEP_2='\[$(colorfb_bold $BG_COLOR_2 $BG_COLOR_3)\]'
-    local GIT='\[$(colorfb_bold $FG_COLOR_3 $BG_COLOR_3)\]$(__git_ps1 " %s ")'
-    local SEP_3='\[$(colorfb_bold $BG_COLOR_3 0)\]'
-    local LAST='\[$(tput init)\]'
-    PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$GIT$SEP_3$LAST "
-}
-function set_ps1_rich_nogit() {
-    # ``` takiyu  ~/dotfiles  master>  ```
-    local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
-    local USER='\[$(colorfb_bold 0 149)\] \u'
-    local SEP1='\[$(colorfb_bold 149 241)\]'
-    local DIRNAME='\[$(colorfb_bold 7 241)\]\w'
-    local SEP2='\[$(colorfb_bold 241 0)\]'
-    local LAST='\[$(tput init)\]'
-    PS1="$DEBIAN_CHROOT$USER $SEP1 $DIRNAME $SEP2$LAST "
+    local USER='\[$(color_FB $FG_COL_1 $BG_COL_1)\] \u'
+    local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
+    local DIRNAME='\[$(color_FB $FG_COL_2 $BG_COL_2)\]\w'
+    local END='\[$(color_end)\]'
+    if [ "$use_git" ]; then
+        local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
+        local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
+        local SEP_3='\[$(color_FB $BG_COL_3 0)\]'
+        PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$GIT$SEP_3$END "
+    else
+        local SEP_2='\[$(color_FB $BG_COL_2 0)\]'
+        PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$END "
+    fi
 }
 
 # Set
@@ -187,11 +184,11 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWSTASHSTATE=
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
-    # Color prompt
-    set_ps1_rich
+    # Color prompt (with git)
+    set_ps1_rich true
 elif [ $platform == 'Windows' ]; then
     # Color prompt (without git)
-    set_ps1_rich_nogit
+    set_ps1_rich false
 fi
 
 # ------------------------------------------------------------------------------

@@ -84,8 +84,8 @@ if [ $platform == 'Linux' ]; then
     echo "* Setup dotfiles for Linux Environment"
     TARGETS=(.Xmodmap .xinitrc .bash_profile .bashrc .xmonad .xmobarrc \
              .wgetrc .gitconfig .latexmkrc .ctags .clang-format .clang-tidy \
-             .jshintrc .pep8 .config/zathura/zathurarc .mplayer/config \
-             .config/matplotlib/matplotlibrc \
+             .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
+             .mplayer/config .config/matplotlib/matplotlibrc \
              .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
              .config/nvim/dein .lesskey)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
