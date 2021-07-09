@@ -107,7 +107,6 @@ alias l='ls'
 alias sl=ls
 
 # aliases for cd
-alias cd-="cd -"
 function cd {
     if [ $# -eq 0 ]; then
         builtin cd ~ && ls;
@@ -123,10 +122,12 @@ for i in {0..10}; do
     alias "$i"="cd +$i"
     alias cd"$i"="cd +$i"
 done
+alias c=cd
+alias cd-="cd -"
+alias c-="cd -"
 
 # aliases for clear
 alias cl=clear
-alias c=clear
 
 # Alart (ex: `sleep 10; alert`)
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
