@@ -132,7 +132,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Horizontal line
 function hline() { printf -- "─%.0s" $(seq $(tput cols)); }
 # Color
-function color_fb() { printf "$(tput setaf $1)$(tput setab $2)"; }
+function color_f() { printf "$(tput setaf $1)"; }
+function color_b() { printf "$(tput setab $1)"; }
+function color_fb() { printf "$(color_f $1)$(color_b $2)"; }
+function color_F() { printf "$(tput bold)$(color_f $1)"; }
 function color_FB() { printf "$(tput bold)$(color_fb $1 $2)"; }
 function color_end() { printf "$(tput sgr0)"; }
 
@@ -167,15 +170,15 @@ function set_ps1_rich() {
     if [ "$use_git" ]; then
         local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
-        local SEP_3='\[$(color_FB $BG_COL_3 0)\]'
+        local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
         PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$GIT$SEP_3$END "
     else
-        local SEP_2='\[$(color_FB $BG_COL_2 0)\]'
+        local SEP_2='\[$(color_end)$(color_F $BG_COL_2)\]'
         PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$END "
     fi
 }
 
-# Set
+# Set PS1
 PROMPT_DIRTRIM=2
 source $git_completion
 if [ $platform == 'Linux' ]; then
