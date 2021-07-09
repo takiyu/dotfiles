@@ -68,6 +68,7 @@ bind '"\C-l": forward-char'
 bind '"\C-h": backward-char'
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
+bind '"\C-w": unix-filename-rubout'
 bind 'TAB: menu-complete'
 bind '"\e[Z": menu-complete-backward'
 
@@ -82,6 +83,7 @@ bind 'set visible-stats on'
 bind 'set colored-stats on'
 bind 'set colored-completion-prefix on'
 bind 'set bell-style none'    # Disable beep
+bind "set bind-tty-special-chars off"  # No overwrite of Ctrl-W
 
 # ------------------------------------------------------------------------------
 # ------------------------------- Basic Aliases --------------------------------
