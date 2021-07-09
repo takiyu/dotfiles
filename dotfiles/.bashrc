@@ -228,7 +228,7 @@ function post_cmd_handler() {
     else
         # Clear with continuous Enter
         if [ 2 -le $__cmd_handler_empty_cnt ]; then
-            clear
+            clear -x
             __cmd_handler_empty_cnt=
         fi
     fi
