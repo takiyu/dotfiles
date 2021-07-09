@@ -158,7 +158,7 @@ function set_ps1_base() {
 function set_ps1_rich() {
     # ``` takiyu  ~/dotfiles  master>  ```
     use_git=$1
-    BG_COL_1=149
+    BG_COL_1=110  # 149
     BG_COL_2=241
     BG_COL_3=239
     FG_COL_1=16  # 0
