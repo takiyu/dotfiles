@@ -207,9 +207,9 @@ function pre_cmd_handler() {
     if [ "$BASH_COMMAND" == "post_cmd_handler" ]; then
         # dirs  # Print directory stack
         ls
-        __cmd_handler_empty=1
+        __cmd_handler_empty_cnt=$((__cmd_handler_empty_cnt+1))
     else
-        __cmd_handler_empty=
+        __cmd_handler_empty_cnt=
     fi
     __cmd_handler_pre=1
 }
@@ -220,11 +220,16 @@ function post_cmd_handler() {
     # Capture exit code
     __prev_exit_code=$?
 
-    # Escape empty commanding
-    if [ -z "$__cmd_handler_empty" ]; then
+    if [ -z "$__cmd_handler_empty_cnt" ]; then
         # Print exit code
         if [  $__prev_exit_code != 0 ]; then
             echo "$(tput setaf 1)[Exit code: $__prev_exit_code]$(tput sgr0)"
+        fi
+    else
+        # Clear with continuous Enter
+        if [ 2 -le $__cmd_handler_empty_cnt ]; then
+            clear
+            __cmd_handler_empty_cnt=
         fi
     fi
 
@@ -433,6 +438,8 @@ elif [ $platform == 'Windows' ]; then
     alias w=winpty
 fi
 alias f=filer
+alias f.='filer .'
+alias f..='filer ..'
 
 # Trizen
 if [ "`$exist_command trizen`" == 'exist' ]; then
