@@ -133,10 +133,10 @@ function hline {
 
 # Color
 function colorfb {
-    f_col=$1
-    b_col=$2
-    tput setaf $f_col
-    tput setab $b_col
+    printf "$(tput setaf $1)$(tput setab $2)"
+}
+function colorfb_bold {
+    printf "$(colorfb $1 $2)$(tput bold)"
 }
 
 # ------------------------------------------------------------------------------
@@ -151,11 +151,11 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
     # color prompt
-    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(colorfb 0 149)\u $(colorfb 149 241)$(colorfb 7 241) \w $(colorfb 241 239)$(colorfb 1 239)$(__git_ps1 " %s ")$(colorfb 239 0)$(tput init) '
+    PS1='${debian_chroot:+$debian_chroot }\[$(colorfb_bold 0 149)\]\u \[$(colorfb_bold 149 241)\]\[$(colorfb_bold 7 241)\] \w \[$(colorfb_bold 241 239)\]\[$(colorfb_bold 1 239)\]$(__git_ps1 " %s ")\[$(colorfb_bold 239 0)\]\[$(tput init)\] '
     # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w$(tput setaf 1)$(__git_ps1) $(tput setaf 4)\$ $(tput init)'
 elif [ $platform == 'Windows' ]; then
     # color prompt (without git)
-    PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(colorfb 0 149)\u $(colorfb 149 241)$(colorfb 7 241) \w $(colorfb 241 0)$(tput init) '
+    PS1='${debian_chroot:+$debian_chroot }\[$(colorfb_bold 0 149)\]\u \[$(colorfb_bold 149 241)\]\[$(colorfb_bold 7 241)\] \w \[$(colorfb_bold 241 0)\]\[$(tput init)\] '
     # PS1='${debian_chroot:+$debian_chroot }$(tput bold)$(tput setaf 2)\u$(tput setaf 4) \w $(tput setaf 4)\$ $(tput init)'
 fi
 
