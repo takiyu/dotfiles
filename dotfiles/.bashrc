@@ -196,6 +196,8 @@ elif [ $platform == 'Windows' ]; then
     # Color prompt (without git)
     set_ps1_rich false
 fi
+# Set prompt at the bottom
+PS1='\[$(tput cup "$LINES")\]'$PS1
 
 # ------------------------------------------------------------------------------
 # ------------------------------- Command Hooks --------------------------------
@@ -226,14 +228,14 @@ function post_cmd_handler() {
     if [ -z "$__cmd_handler_empty_cnt" ]; then
         # Print exit code
         if [  $__prev_exit_code != 0 ]; then
-            echo "$(tput setaf 1)[Exit code: $__prev_exit_code]$(tput sgr0)"
+            echo "$(color_FB 7 1) [Exit code: $__prev_exit_code] $(color_end)"
         fi
-    else
-        # Clear with continuous Enter
-        if [ 2 -le $__cmd_handler_empty_cnt ]; then
-            clear -x
-            __cmd_handler_empty_cnt=
-        fi
+    # else
+    #     # Clear with continuous Enter
+    #     if [ 2 -le $__cmd_handler_empty_cnt ]; then
+    #         clear -x
+    #         __cmd_handler_empty_cnt=
+    #     fi
     fi
 
     # Escape initial prompt
@@ -420,6 +422,7 @@ elif [ $platform == 'Windows' ]; then
     fi
 fi
 alias v="gvim"
+alias gv="gvim"
 alias vimdiff="vim -d"
 alias gvimdiff="gvim -- -d"
 function gvim_nofork() { command nvim-qt --nofork $@ 2> /dev/null; }
