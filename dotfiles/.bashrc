@@ -166,7 +166,7 @@ function set_ps1_rich() {
     FG_COL_2=7
     FG_COL_3=1  # 176
     local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
-    local USER='\[$(color_FB $FG_COL_1 $BG_COL_1)\] \u'
+    local USER='\[$(color_fb $FG_COL_1 $BG_COL_1)\] \u'
     local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
     local DIRNAME='\[$(color_FB $FG_COL_2 $BG_COL_2)\]\w'
     local END='\[$(color_end)\]'
