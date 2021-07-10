@@ -225,12 +225,23 @@ function post_cmd_handler() {
     # Capture exit code
     __prev_exit_code=$?
 
+    # With non-empty command
     if [ -z "$__cmd_handler_empty_cnt" ]; then
         # Print exit code
         if [  $__prev_exit_code != 0 ]; then
             echo "$(color_FB 7 1) [Exit code: $__prev_exit_code] $(color_end)"
         fi
-    else
+    fi
+
+    # Escape initial prompt
+    if [ -n "$__cmd_handler_pre" ]; then
+        # Print per-prompt spacing
+        # hline
+        echo ''
+    fi
+
+    # With empty command
+    if [ -n "$__cmd_handler_empty_cnt" ]; then
         # Clear with continuous Enter
         if [ 2 -le $__cmd_handler_empty_cnt ]; then
             clear -x
@@ -238,11 +249,6 @@ function post_cmd_handler() {
         fi
     fi
 
-    # Escape initial prompt
-    # if [ -n "$__cmd_handler_pre" ]; then
-    #     # Print horizontal line
-    #     hline
-    # fi
     __cmd_handler_post=1
 }
 PROMPT_COMMAND="post_cmd_handler"
