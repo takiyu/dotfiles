@@ -234,11 +234,11 @@ function post_cmd_handler() {
     fi
 
     # Escape initial prompt
-    if [ -n "$__cmd_handler_pre" ]; then
-        # Print per-prompt spacing
-        # hline
-        echo ''
-    fi
+    # if [ -n "$__cmd_handler_pre" ]; then
+    #     # Print per-prompt spacing
+    #     # hline
+    #     echo ''
+    # fi
 
     # With empty command
     if [ -n "$__cmd_handler_empty_cnt" ]; then
