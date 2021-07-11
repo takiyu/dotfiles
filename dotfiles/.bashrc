@@ -443,10 +443,10 @@ function lsf() { find | fzy; }
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
-    function filer() { command thunar $@ & &> /dev/null; disown; }
-    function zathura() { command zathura $@ & &> /dev/null; disown; }
+    function filer() { command thunar $@ & 2> /dev/null; disown; }
+    function zathura() { command zathura $@ & 2> /dev/null; disown; }
 elif [ $platform == 'Windows' ]; then
-    function filer() { command explorer $@ & &> /dev/null; disown; }
+    function filer() { command explorer $@ & 2> /dev/null; disown; }
     alias w=winpty
 fi
 alias f=filer
@@ -462,7 +462,7 @@ fi
 if [ $platform == 'Linux' ]; then
     if [ "`$exist_command synclient`" == 'exist' ]; then
         # bg for speed up
-        function synclient_bg() { command synclient $@ & &> /dev/null; disown; }
+        function synclient_bg() { command synclient $@ & 2> /dev/null; disown; }
         synclient_bg VertScrollDelta=-30 HorizScrollDelta=-30
         synclient_bg MaxSpeed=2.0 AccelFactor=0.10
     fi
