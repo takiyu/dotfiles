@@ -124,7 +124,17 @@ for i in {0..10}; do
 done
 alias c=cd
 alias cd-="cd -"
+alias cd..="cd .."
+alias cd...="cd ../.."
+alias cd....="cd ../../.."
+alias cd.....="cd ../../../.."
+alias cd......="cd ../../../../.."
 alias c-="cd -"
+alias c..="cd .."
+alias c...="cd ../.."
+alias c...="cd ../../.."
+alias c....="cd ../../../.."
+alias c.....="cd ../../../../.."
 
 # Aliases for clear
 alias cl=clear
