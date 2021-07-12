@@ -158,7 +158,7 @@ function set_ps1_base() {
 }
 function set_ps1_rich() {
     # ``` takiyu  ~/dotfiles  master>  ```
-    use_git=$1
+    use_full=$1
     BG_COL_1=110  # 149
     BG_COL_2=241
     BG_COL_3=239
@@ -167,17 +167,20 @@ function set_ps1_rich() {
     FG_COL_3=1  # 176
     local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
     local USER='\[$(color_fb $FG_COL_1 $BG_COL_1)\] \u'
-    local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
-    local DIRNAME='\[$(color_FB $FG_COL_2 $BG_COL_2)\]\w'
+    local DIRNAME='\[$(color_FB $FG_COL_2 $BG_COL_2)\] \w'
     local END='\[$(color_end)\]'
-    if [ "$use_git" ]; then
+    if [ "$use_full" == 1 ]; then
+        # Full
+        # ``` takiyu  ~/dotfiles  master>  ```
+        local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
         local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
         local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
-        PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$GIT$SEP_3$END "
+        PS1="$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$GIT$SEP_3$END "
     else
-        local SEP_2='\[$(color_end)$(color_F $BG_COL_2)\]'
-        PS1="$DEBIAN_CHROOT$USER $SEP_1 $DIRNAME $SEP_2$END "
+        # No git. No font
+        # ``` takiyu  ~/dotfiles  ```
+        PS1="$DEBIAN_CHROOT$USER $DIRNAME $END "
     fi
 }
 
@@ -190,11 +193,11 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWSTASHSTATE=
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
-    # Color prompt (with git)
-    set_ps1_rich true
+    # Color prompt (with git and font)
+    set_ps1_rich 1
 elif [ $platform == 'Windows' ]; then
-    # Color prompt (without git)
-    set_ps1_rich false
+    # Color prompt (without git nor font)
+    set_ps1_rich 0
 fi
 # Set prompt at the bottom
 # PS1='\[$(tput cup "$LINES")\]'$PS1
