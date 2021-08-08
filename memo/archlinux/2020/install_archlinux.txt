@@ -1,0 +1,65 @@
+1. Boot Arch CD and download AUI script.
+    `wget https://github.com/helmuthdu/aui/tarball/master -O aui.tar && tar xzf aui.tar`
+2. Run `./fifo` and reboot
+    - https://wiki.archlinuxjp.org/index.php/%E3%83%93%E3%82%AE%E3%83%8A%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%A4%E3%83%89
+    - Installing grub2 (systemd was failed by automatic configuration)
+3. Login as root and run ./lilo
+    - install trizen and common software
+    `sudo pacman -Sy --needed base-devel git`
+    `git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si`
+
+My environment
+    `git clone https://github.com/takiyu/dotfiles` and run scripts.
+
+Bash Profile for Desktop
+    ln -s ~/.bash_profile ~/.profile
+
+Xfce4
+    Set `xmonad --replace` to run automatically
+
+Change directories' names in the home to English (It requires a display)
+    LANG=C xdg-user-dirs-gtk-update
+
+Disable Histry
+    `rm ~/.local/share/recently-used.xbel && mkdir ~/.local/share/recently-used.xbel`
+    configure smplayer and mcomix setting
+
+Makepkg parallel
+    open `/etc/makepkg.conf`
+    ```
+        # COMPRESSXZ=(xz -c -z -)
+        COMPRESSXZ=(xz -T 0 -c -z -)
+    ```
+    ```
+        # MAKEFLAGS="-j2"
+        MAKEFLAGS="-j8"
+    ```
+
+Stop samba daemon
+    sudo systemctl disable smbd
+    etc...
+
+VPN
+    pacman -S openvpn networkmanager-openvpn
+
+    sudo pia -a
+    sudo systemctl stop NetworkManager.service
+    sudo systemctl start NetworkManager.service
+
+    sudo pacman -S resolvconf
+
+Fix "ALSA lib pcm.c:7843:(snd_pcm_recover) underrun occurred"
+    edit `/etc/pulse/daemon.conf` and uncomment or add the following lines.
+    ```
+    default-fragments = 8
+    default-fragment-size-msec = 5
+    ```
+
+For virtualbox guest
+    trizen -S virtualbox-guest-utils virtualbox-guest-modules-arch
+
+Switch kernel
+    pacman -S linux-lts  # linux-lts419 or something
+    ls -lsha /boot
+    pacman -R linux
+    grub-mkconfig -o /boot/grub/grub.cfg
