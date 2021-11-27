@@ -156,7 +156,8 @@ function color_end() { printf "$(tput sgr0)"; }
 # ----------------------------------- Prompt -----------------------------------
 # ------------------------------------------------------------------------------
 # PS1 styles
-function set_ps1_base() {
+PS1_PREFIX=""
+function set_ps1_pure() {
     # ```takiyu ~/dotfiles (master>) $ ```
     local DEBIAN_CHROOT='${debian_chroot:+$debian_chroot }'
     local USER='\[$(tput bold)$(tput setaf 2)\]\u'
@@ -164,7 +165,7 @@ function set_ps1_base() {
     local GIT='\[$(tput setaf 1)\]$(__git_ps1)'
     local PROMPT='\[$(tput setaf 4)\$\]'
     local END='\[$(color_end)\]'
-    PS1="$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $END"
+    PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $END"
 }
 function set_ps1_rich() {
     # ``` takiyu  ~/dotfiles  master>  ```
@@ -186,11 +187,11 @@ function set_ps1_rich() {
         local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
         local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
-        PS1="$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$GIT$SEP_3$END "
+        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$GIT$SEP_3$END "
     else
         # No git. No font
         # ``` takiyu  ~/dotfiles  ```
-        PS1="$DEBIAN_CHROOT$USER $DIRNAME $END "
+        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $DIRNAME $END "
     fi
 }
 
