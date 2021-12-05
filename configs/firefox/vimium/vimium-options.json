@@ -1,21 +1,26 @@
 {
-  "settingsVersion": "1.66",
-  "exclusionRules": [],
+  "settingsVersion": "1.67",
+  "exclusionRules": [
+    {
+      "pattern": "https?://10.126.75.127:3000/*",
+      "passKeys": ""
+    }
+  ],
   "filterLinkHints": false,
   "waitForEnterForFilteredHints": true,
   "hideHud": false,
-  "keyMappings": "unmapAll\n\nmap j scrollDown\nmap k scrollUp\nmap gg scrollToTop\nmap G scrollToBottom\nmap <c-j> scrollFullPageDown\nmap <c-k> scrollFullPageUp\nmap h scrollLeft\nmap l scrollRight\nmap r reload\nmap yy copyCurrentUrl\nmap p openCopiedUrlInCurrentTab\nmap P openCopiedUrlInNewTab\nmap gu goUp\nmap gU goToRoot\nmap i enterInsertMode\nmap v enterVisualMode\nmap V enterVisualLineMode\nmap gi focusInput\nmap f LinkHints.activateMode\nmap F LinkHints.activateModeToOpenInNewForegroundTab\nmap <c-h> goPrevious\nmap <c-l> goNext\nmap gf nextFrame\nmap gF mainFrame\nmap O Vomnibar.activate\nmap o Vomnibar.activateInNewTab\nmap b Vomnibar.activateBookmarks\nmap B Vomnibar.activateBookmarksInNewTab\nmap s Vomnibar.activateEditUrl\nmap / enterFindMode\nmap n performFind\nmap N performBackwardsFind\nmap u goBack\nmap <c-r> goForward\nmap t createTab\nmap 2 previousTab\nmap 3 nextTab\nmap g9 firstTab\nmap g0 lastTab\nmap <c-p> togglePinTab\nmap <c-m> toggleMuteTab\nmap x removeTab\nmap X restoreTab\nmap <c-2> moveTabLeft\nmap \" moveTabLeft\nmap <c-3> moveTabRight\nmap # moveTabRight\nmap ? showHelp\nmap gs toggleViewSource",
+  "keyMappings": "unmapAll\n\nmap j scrollDown\nmap k scrollUp\nmap gg scrollToTop\nmap G scrollToBottom\nmap <c-j> scrollFullPageDown\nmap <c-k> scrollFullPageUp\nmap h scrollLeft\nmap l scrollRight\nmap r reload\nmap yy copyCurrentUrl\nmap p openCopiedUrlInCurrentTab\nmap P openCopiedUrlInNewTab\nmap gu goUp\nmap gU goToRoot\nmap i enterInsertMode\nmap v enterVisualMode\nmap V enterVisualLineMode\nmap gi focusInput\nmap f LinkHints.activateMode\nmap F LinkHints.activateModeToOpenInNewForegroundTab\nmap mf LinkHints.activateModeWithQueue\nmap gh goPrevious\nmap gl goNext\nmap <c-h> goPrevious\nmap <c-l> goNext\nmap gf nextFrame\nmap gF mainFrame\nmap O Vomnibar.activate\nmap o Vomnibar.activateInNewTab\nmap b Vomnibar.activateBookmarks\nmap B Vomnibar.activateBookmarksInNewTab\nmap s Vomnibar.activateEditUrl\nmap / enterFindMode\nmap n performFind\nmap N performBackwardsFind\nmap u goBack\nmap <c-r> goForward\nmap t createTab\nmap 2 previousTab\nmap 3 nextTab\nmap g9 firstTab\nmap g0 lastTab\nmap <c-p> togglePinTab\nmap <c-m> toggleMuteTab\nmap x removeTab\nmap X restoreTab\nmap <c-2> moveTabLeft\nmap \" moveTabLeft\nmap <c-3> moveTabRight\nmap # moveTabRight\nmap ? showHelp\nmap gs toggleViewSource",
   "linkHintCharacters": "sadfjklewcmpgh",
   "linkHintNumbers": "0123456789",
   "newTabUrl": "about:newtab",
-  "nextPatterns": "next,more,newer,>,›,→,»,≫,>>",
-  "previousPatterns": "prev,previous,back,older,<,‹,←,«,≪,<<",
+  "nextPatterns": "next,more,newer,>,›,→,»,≫,>>,次,進む",
+  "previousPatterns": "prev,previous,back,older,<,‹,←,«,≪,<<,前,戻る",
   "regexFindMode": false,
   "ignoreKeyboardLayout": false,
   "scrollStepSize": 70,
   "smoothScroll": true,
   "grabBackFocus": true,
   "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\n\n# More examples.\n#\n# (Vimium supports search completion Wikipedia, as\n# above, and for these.)\n#\n# g: https://www.google.com/search?q=%s Google\n# l: https://www.google.com/search?q=%s&btnI I'm feeling lucky...\n# y: https://www.youtube.com/results?search_query=%s Youtube\n# gm: https://www.google.com/maps?q=%s Google maps\n# b: https://www.bing.com/search?q=%s Bing\n# d: https://duckduckgo.com/?q=%s DuckDuckGo\n# az: https://www.amazon.com/s/?field-keywords=%s Amazon\n# qw: https://www.qwant.com/?q=%s Qwant",
-  "searchUrl": "https://www.google.co.jp/search?q=",
+  "searchUrl": "https://www.google.com/search?q=",
   "userDefinedLinkHintCss": "/* Arc Dark theme */\n\n/* Link hint boxes */\ndiv > .vimiumHintMarker {\n  background: #383c4a;\n  font-size: 12px;\n  border: 0.25em solid #383c4a;\n  border-radius: 0.68em;\n  box-shadow: 0em 0.1em 0.6em 0.1em rgba(0, 0, 0, 0.4);\n}\n\n/* Link hint text */\ndiv > .vimiumHintMarker span {\n  color: #e2e3e7;\n  font-size: inherit;\n  text-shadow: none;\n}\n\n/* Link hint matching characters */\ndiv > .vimiumHintMarker > .matchingCharacter {\n  color: #5294e2;\n}\n\ninput#vomnibarInput.vimiumReset {\n\tcolor: #FFF !important;\n  background-color: #111 !important;\n}\n\n#vomnibar {\n   border-color: black;\n   background-color: black;\n}\n\n#vomnibar .vomnibarSearchArea {\n   background-color: #222;\n   border-bottom: #3f3f3f;\n}\n\n#vomnibar input {\n   border-color: #393939;\n}\n\n#vomnibar ul {\n    background-color: #222;\n}\n\n#vomnibar li {\n   border-bottom: #3f3f3f;\n}\n\n#vomnibar li .vomnibarUrl {\n   color: #5294e2;\n}\n\n#vomnibar li .vomnibarMatch {\n   color: white;\n}\n\n#vomnibar li.vomnibarSelected {\n    background-color: #181D24;\n}\n\n#vomnibar li em .vomnibarMatch, #vomnibar li .vomnibarTitle .vomnibarMatch {\n   color: white;\n}\n\n#vomnibar li em, #vomnibar li .vomnibarTitle {\n   color: #ddd;\n}"
 }
