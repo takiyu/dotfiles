@@ -79,11 +79,13 @@ autocmd FileType neosnippet set noexpandtab
 if !has('nvim')
     if has('win32') || has('win64')
         " Windows
-        set guifont=DejaVu\ Sans\ Mono\ Book\ 10.0
+        set guifont=DejavuNotoNerdPowerline
+        " set guifont=DejaVu\ Sans\ Mono\ Book\ 10.0
         " set guifont=MS_Gothic:h10
     else
         " Others
-        set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
+        set guifont=DejavuNotoNerdPowerline
+        " set guifont=DejaVu\ Sans\ Mono\ Book\ 11.0
     endif
 endif
 

@@ -15,7 +15,8 @@ endif
 
 " Font
 let s:gui_font_size = 11
-let s:gui_font_name = "DejaVu Sans Mono"
+let s:gui_font_name = "DejavuNotoNerdPowerline"
+" let s:gui_font_name = "DejaVu Sans Mono"
 function! SetGuiFont()
     :execute "Guifont! " . s:gui_font_name . ":h" . s:gui_font_size
     GuiLinespace 1
