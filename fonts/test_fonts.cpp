@@ -1,19 +1,13 @@
-#include <iostream>
-
-
-template <typename T>
-void Print(T&& t) {
-    std::cout << t << std::endl;
-}
+#include <cstdio>
 
 int main(int argc, char const* argv[]) {
-    Print("Hello World");
-    Print("0123456789");
-    Print("あいうえお");
-    Print("アイウエオ");
-    Print("日本語");
-    Print("☃ 1⃣ ↔ ☺");
-    Print("🌀⏪🌝😊😖😣😄🙆");
-    Print("      ");
+    printf("Hello World");
+    printf("0123456789");
+    printf("あいうえお");
+    printf("アイウエオ");
+    printf("日本語");
+    printf("☃ 1⃣ ↔ ☺");
+    printf("🌀⏪🌝😊😖😣😄🙆");
+    printf("      ");
     return 0;
 }
