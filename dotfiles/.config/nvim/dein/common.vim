@@ -17,6 +17,7 @@ set smartcase                     " (ただし大文字入力時のみ考慮)
 set guioptions-=m                 " メニューバーを非表示
 set guioptions-=T                 " ツールバーを非表示
 set guioptions-=e                 " TabのGUI表示をOFF
+set mouse=a                       " マウスをすべてのモードで使用する
 set wildmenu                      " コマンドモードの補完方法
 set diffopt+=vertical             " diffは縦分割
 set conceallevel=0                " 非表示文字も表示
