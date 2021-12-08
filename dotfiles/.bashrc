@@ -192,7 +192,7 @@ function set_ps1_rich() {
         # No git
         # ``` takiyu  ~/dotfiles   ```
         local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
-        local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\'
+        local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
         PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$SEP_3$END "
     else
