@@ -190,11 +190,10 @@ function set_ps1_rich() {
         PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$GIT$SEP_3$END "
     elif [ "$ps1_mode" == 1 ]; then
         # No git
-        # ``` takiyu  ~/dotfiles   ```
+        # ``` takiyu  ~/dotfiles  ```
         local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
-        local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
-        local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
-        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$SEP_3$END "
+        local SEP_2='\[$(color_end)$(color_F $BG_COL_2)\]'
+        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$END "
     else
         # No git. No font
         # ``` takiyu  ~/dotfiles  ```
@@ -212,7 +211,7 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
     # Color prompt (with git and font)
-    set_ps1_rich 0
+    set_ps1_rich 1
 elif [ $platform == 'Windows' ]; then
     # Color prompt (without git, with font)
     set_ps1_rich 1

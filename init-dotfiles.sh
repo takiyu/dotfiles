@@ -3,6 +3,7 @@
 # utility scripts
 dotfiles=$HOME/dotfiles
 determ_platform=$dotfiles/utils/determ_platform.sh
+exist_command=$dotfiles/utils/exist_command.sh
 
 # determine the platform
 platform=`$determ_platform`
@@ -99,6 +100,11 @@ if [ $platform == 'Linux' ]; then
     for target in ${TARGETS[@]}; do
         create_link_prompt "$dotfiles/dotfiles/$target" "$HOME/$target"
     done
+
+    # Install fonts
+    if [ "`$exist_command fc-cache`" == 'exist' ]; then
+        ./fonts/install-font-linux.sh
+    fi
 
 elif [ $platform == 'Windows' ]; then
     # Windows setup
