@@ -183,17 +183,17 @@ function set_ps1_rich() {
     if [ "$ps1_mode" == 0 ]; then
         # Full
         # ``` takiyu  ~/dotfiles  master=  ```
-        local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
-        local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
+        local SEP1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
+        local SEP2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
-        local SEP_3='\[$(color_end)$(color_F $BG_COL_3)\]'
-        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$GIT$SEP_3$END "
+        local SEP3='\[$(color_end)$(color_F $BG_COL_3)\]'
+        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP1$DIRNAME $SEP2$GIT$SEP3$END "
     elif [ "$ps1_mode" == 1 ]; then
         # No git
         # ``` takiyu  ~/dotfiles  ```
-        local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
-        local SEP_2='\[$(color_end)$(color_F $BG_COL_2)\]'
-        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP_1$DIRNAME $SEP_2$END "
+        local SEP1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
+        local SEP2='\[$(color_end)$(color_F $BG_COL_2)\]'
+        PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $SEP1$DIRNAME $SEP2$END "
     else
         # No git. No font
         # ``` takiyu  ~/dotfiles  ```
@@ -211,7 +211,7 @@ if [ $platform == 'Linux' ]; then
     GIT_PS1_SHOWDIRTYSTATE=
     source $git_prompt
     # Color prompt (with git and font)
-    set_ps1_rich 1
+    set_ps1_rich 0
 elif [ $platform == 'Windows' ]; then
     # Color prompt (without git, with font)
     set_ps1_rich 1
