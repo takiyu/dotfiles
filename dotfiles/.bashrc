@@ -182,7 +182,7 @@ function set_ps1_rich() {
     local END='\[$(color_end)\]'
     if [ "$ps1_mode" == 0 ]; then
         # Full
-        # ``` takiyu  ~/dotfiles  master>  ```
+        # ``` takiyu  ~/dotfiles  master=  ```
         local SEP_1='\[$(color_FB $BG_COL_1 $BG_COL_2)\]'
         local SEP_2='\[$(color_FB $BG_COL_2 $BG_COL_3)\]'
         local GIT='\[$(color_FB $FG_COL_3 $BG_COL_3)\]$(__git_ps1 " %s ")'
