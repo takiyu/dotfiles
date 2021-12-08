@@ -168,7 +168,7 @@ function set_ps1_pure() {
     PS1="$PS1_PREFIX$DEBIAN_CHROOT$USER $DIRNAME$GIT $PROMPT $END"
 }
 function set_ps1_rich() {
-    # ``` takiyu  ~/dotfiles  master>  ```
+    # ``` takiyu  ~/dotfiles  master=  ```
     ps1_mode=$1
     BG_COL_1=110  # 149
     BG_COL_2=241
