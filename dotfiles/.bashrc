@@ -106,6 +106,12 @@ alias la='ls -A'
 alias l='ls'
 alias sl=ls
 
+# Aliases for lsd
+if [ "`$exist_command lsd`" == 'exist' ]; then
+    alias ls=lsd
+    alias lst=lsd --tree
+fi
+
 # Aliases for cd
 function cd {
     if [ $# -eq 0 ]; then
