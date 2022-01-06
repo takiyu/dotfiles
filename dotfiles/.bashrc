@@ -109,7 +109,7 @@ alias sl=ls
 # Aliases for lsd
 if [ "`$exist_command lsd`" == 'exist' ]; then
     alias ls=lsd
-    alias lst=lsd --tree
+    alias lst='lsd --tree'
 fi
 
 # Aliases for cd
