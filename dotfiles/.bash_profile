@@ -54,8 +54,8 @@ if [ $platform == 'Linux' ]; then
         export CUDA_PATH=$CUDA_HOME
         export CUDA_CUDART_LIBRARY=$CUDA_HOME
         export PATH=$PATH:$CUDA_HOME/bin
-        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/lib64
-        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/targets/x86_64-linux/lib
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_HOME/lib64
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_HOME/targets/x86_64-linux/lib
     fi
 
     # Microchip
@@ -68,13 +68,16 @@ if [ $platform == 'Linux' ]; then
 
     # Android
     if [ -e /opt/android-sdk ]; then
-        export ANDROID_HOME=/opt/android-sdk
+        export ANDROID_SDK=/opt/android-sdk
         export ANDROID_NDK=/opt/android-ndk
+        export ANDROID_HOME=$ANDROID_SDK
+        export ANDROID_SDK_ROOT=$ANDROID_SDK
         export ANDROID_NDK_HOME=$ANDROID_NDK
-        export PATH=$PATH:$ANDROID_HOME/platform-tools  # platform-tools (adb etc...)
-        export PATH=$PATH:$ANDROID_HOME/tools           # tools (android etc...)
-        export PATH=$PATH:$ANDROID_HOME/tools/bin       # tools (sdkmanager etc...)
-        export PATH=$PATH:$ANDROID_NDK                  # ndk
+        export ANDROID_NDK_ROOT=$ANDROID_NDK
+        export PATH=$PATH:$ANDROID_SDK/platform-tools  # platform-tools (adb etc...)
+        export PATH=$PATH:$ANDROID_SDK/tools           # tools (android etc...)
+        export PATH=$PATH:$ANDROID_SDK/tools/bin       # tools (sdkmanager etc...)
+        export PATH=$PATH:$ANDROID_NDK                 # ndk
     fi
 
     # Golang
