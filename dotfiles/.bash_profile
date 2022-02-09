@@ -69,14 +69,16 @@ if [ $platform == 'Linux' ]; then
     # Android
     if [ -e /opt/android-sdk ]; then
         export ANDROID_SDK=/opt/android-sdk
-        export ANDROID_NDK=/opt/android-ndk
         export ANDROID_HOME=$ANDROID_SDK
         export ANDROID_SDK_ROOT=$ANDROID_SDK
-        export ANDROID_NDK_HOME=$ANDROID_NDK
-        export ANDROID_NDK_ROOT=$ANDROID_NDK
         export PATH=$PATH:$ANDROID_SDK/platform-tools  # platform-tools (adb etc...)
         export PATH=$PATH:$ANDROID_SDK/tools           # tools (android etc...)
         export PATH=$PATH:$ANDROID_SDK/tools/bin       # tools (sdkmanager etc...)
+    fi
+    if [ -e /opt/android-ndk ]; then
+        export ANDROID_NDK=/opt/android-ndk
+        export ANDROID_NDK_HOME=$ANDROID_NDK
+        export ANDROID_NDK_ROOT=$ANDROID_NDK
         export PATH=$PATH:$ANDROID_NDK                 # ndk
     fi
 
