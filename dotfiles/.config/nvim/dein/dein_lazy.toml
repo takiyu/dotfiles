@@ -65,6 +65,10 @@ repo = 'gutenye/json5.vim'
 on_ft = ['json5']
 
 [[plugins]]
+repo = 'neoclide/jsonc.vim'
+on_ft = ['jsonc']
+
+[[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = ['toml']
 
