@@ -36,9 +36,9 @@ if [ $platform == 'Linux' ]; then
     export XMODIFIERS=@im=fcitx
 
     # Java
-    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
-    export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
-    export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+    export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-11-openjdk/lib/libawt.so
+    export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-11-openjdk/lib/server/libjvm.so
     # Java anti-alias
     export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
     # For xmonad
