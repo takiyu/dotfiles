@@ -1,2 +1,2 @@
 #!/bin/bash
-mogrify -resize 2000x2000 -define preserve-timestamp=true -quality 90 $@
+mogrify -resize 1500x1500 -define preserve-timestamp=true -quality 80 $@
