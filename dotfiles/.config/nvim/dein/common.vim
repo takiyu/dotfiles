@@ -29,8 +29,8 @@ set cursorline                    " カーソル行をハイライト
 set incsearch                     " 入力しながら検索
 set breakindent                   " 折り返し時にインデントを考慮
 if has('win32') || has('win64')
-    set shell=cmd.exe             " コマンドプロンプト bashではPATH形式が異なる
-    " set shell=C:/msys64/usr/bin/bash
+    " set shell=cmd.exe             " コマンドプロンプト bashではPATH形式が異なる
+    set shell=C:/msys64/usr/bin/bash
     set shellcmdflag=-c
     set shellxquote=\"            " コマンドを囲う引用符
 else
