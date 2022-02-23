@@ -10,4 +10,3 @@ endif
 " スニペットファイルの保存ディレクトリのパスを登録
 let g:neosnippet#snippets_directory =
     \ g:dein_cache_path . 'repos/github.com/takiyu/my-vim-snippets/snippets'
-let g:neosnippet#enable_preview = 1
