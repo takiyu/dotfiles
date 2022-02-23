@@ -1,34 +1,11 @@
 # ------------------------------------------------------------------------------
-# --------------------------------- Completion ---------------------------------
+# ---------------------------------- Language ----------------------------------
 # ------------------------------------------------------------------------------
-# Note: Loading config when plugins are loaded, to apply autocmd for filetype.
-[[plugins]]
-repo = 'Shougo/neoinclude.vim'
-on_ft = ['c', 'cpp']
-depends = ['deoplete.nvim']
-
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-rev = 'next'
-on_ft = ['c', 'cpp', 'python', 'java', 'glsl']
-depends = ['deoplete.nvim']
-build = 'bash install.sh'
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'languageclient.vim'
-'''
-
 [[plugins]]
 repo = 'takiyu/fast_clang_format.nvim'
 on_ft = ['c', 'cpp', 'java', 'javascript']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'fast_clang_format.vim'
-'''
-
-[[plugins]]
-repo = 'fatih/vim-go'
-on_ft = ['go']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'vim-go.vim'
 '''
 
 [[plugins]]

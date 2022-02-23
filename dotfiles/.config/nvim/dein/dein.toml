@@ -48,6 +48,12 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-ref.vim'
 '''
 
+[[plugins]]
+repo = 'skywind3000/asyncrun.vim'              # 非同期実行
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
+'''
+
 # ------------------------------------------------------------------------------
 # ----------------------------------- Visual -----------------------------------
 # ------------------------------------------------------------------------------
@@ -59,13 +65,10 @@ repo = 'bronson/vim-trailing-whitespace'       # 行末スペース可視化
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'                 # ステータスライン
-depends = ['vim-fugitive', 'lightline-languageclient.vim']
+depends = ['vim-fugitive']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''
-
-# [[plugins]]
-# repo = 'takiyu/lightline-languageclient.vim'   # lightline with LanguageClient
 
 [[plugins]]
 repo = 'vimtaku/hl_matchit.vim'                # 括弧+αをハイライト
@@ -129,36 +132,58 @@ hook_add = '''
 # --------------------------------- Completion ---------------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'                  # 補完
+repo = 'neovim/nvim-lspconfig'  # LSP configuration
 hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'deoplete.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'nvim-lspconfig.vim'
 '''
 
 [[plugins]]
-repo = 'takiyu/deoplete-tabnine'                # All-language autocompleter
-rev = 'binary'
-depends = ['deoplete.nvim']
-# hook_post_update = '''
-#     if dein#util#_is_windows()
-#         let g:dein#plugin.build = 'powershell -executionpolicy bypass -File install.ps1'  " For windows
-#     else
-#         let g:dein#plugin.build = 'bash ./install.sh'  " For linux
-#     endif
-# '''
+repo = 'williamboman/nvim-lsp-installer'  # LSP installer (:LSPInstallInfo)
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'nvim-lsp-installer.vim'
+'''
+
+[[plugins]]
+repo = 'vim-denops/denops.vim'  # ddc depends
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'  # ddc plugin
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-file'
+
+[[plugins]]
+repo = 'Shougo/ddc-around'
+
+[[plugins]]
+repo = 'matsui54/ddc-dictionary'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-tabnine'
+
+[[plugins]]
+repo = 'Shougo/ddc-nvim-lsp'
+
+[[plugins]]
+repo = 'takiyu/my-vim-snippets'
 
 [[plugins]]
 repo = 'Shougo/neosnippet'                     # Snippet
-depends = ['deoplete.nvim']
+depends = ['my-vim-snippets']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
 
 [[plugins]]
-repo = 'takiyu/my-vim-snippets'                # Snippet
-depends = ['neosnippet.vim']
-
-[[plugins]]
-repo = 'ujihisa/neco-look'                     # 英単語補完
+repo = 'Shougo/ddc.vim'
+depends = ['denops.vim', 'ddc-around', 'ddc-matcher_head', 'ddc-sorter_rank',
+           'ddc-nvim-lsp', 'ddc-file', 'neosnippet']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'ddc.vim'
+'''
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ Git -------------------------------------
@@ -181,12 +206,6 @@ repo = 'cohama/agit.vim'                       # Git Graph
 depends = ['vimproc.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'agit.vim'
-'''
-
-[[plugins]]
-repo = 'skywind3000/asyncrun.vim'              # 非同期実行
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
 # ------------------------------------------------------------------------------

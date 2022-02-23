@@ -145,7 +145,7 @@ nmap <C-0> :cn<CR>
 " Quickfix/Preview/Location windowの非表示
 nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
 " omni補完
-inoremap <C-o> <C-x><C-o>
+" inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
 nmap <silent><Esc> :noh<CR>
 " 置換 (start from current cursor)
