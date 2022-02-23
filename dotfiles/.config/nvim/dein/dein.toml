@@ -144,37 +144,46 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'vim-denops/denops.vim'
+repo = 'vim-denops/denops.vim'  # ddc depends
 
 [[plugins]]
-repo = 'Shougo/ddc-around'
-[[plugins]]
-repo = 'Shougo/ddc-matcher_head'
+repo = 'Shougo/ddc-matcher_head'  # ddc plugin
+
 [[plugins]]
 repo = 'Shougo/ddc-sorter_rank'
-[[plugins]]
-repo = 'Shougo/ddc-nvim-lsp'
+
 [[plugins]]
 repo = 'LumaKernel/ddc-file'
 
 [[plugins]]
+repo = 'Shougo/ddc-around'
+
+[[plugins]]
+repo = 'matsui54/ddc-dictionary'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-tabnine'
+
+[[plugins]]
+repo = 'Shougo/ddc-nvim-lsp'
+
+[[plugins]]
+repo = 'takiyu/my-vim-snippets'
+
+[[plugins]]
 repo = 'Shougo/neosnippet'                     # Snippet
-# depends = ['deoplete.nvim']
+depends = ['my-vim-snippets']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
-[[plugins]]
-repo = 'takiyu/my-vim-snippets'
-depends = ['neosnippet.vim']
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
+depends = ['denops.vim', 'ddc-around', 'ddc-matcher_head', 'ddc-sorter_rank',
+           'ddc-nvim-lsp', 'ddc-file', 'neosnippet']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'ddc.vim'
 '''
-
-[[plugins]]
-repo = 'ujihisa/neco-look'                     # 英単語補完
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ Git -------------------------------------

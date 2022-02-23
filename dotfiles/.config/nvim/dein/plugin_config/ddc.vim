@@ -3,7 +3,8 @@
 " ==============================================================================
 " Sources
 call ddc#custom#patch_global('sources',
-    \                        ['file', 'neosnippet', 'nvim-lsp', 'around'])
+    \                        ['file', 'neosnippet', 'nvim-lsp', 'tabnine',
+    \                         'dictionary', 'around'])
 " Global設定
 call ddc#custom#patch_global('sourceOptions', {
     \     '_': {
@@ -12,12 +13,15 @@ call ddc#custom#patch_global('sourceOptions', {
     \     },
     \     'around': {
     \         'mark': 'around',
-    \         'maxSize': 500,
+    \         'maxSize': 100,
     \     },
     \     'file': {
-    \       'mark': 'file',
-    \       'isVolatile': v:true,
-    \       'forceCompletionPattern': '\S/\S*',
+    \         'mark': 'file',
+    \         'isVolatile': v:true,
+    \         'forceCompletionPattern': '\S/\S*',
+    \     },
+	\     'dictionary': {
+    \         'mark': 'dict',
     \     },
     \     'neosnippet': {
     \         'mark': 'ns',
@@ -27,20 +31,33 @@ call ddc#custom#patch_global('sourceOptions', {
     \         'mark': 'lsp',
     \         'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \     },
+    \     'tabnine': {
+    \         'mark': 'tabnine',
+    \         'maxCandidates': 5,
+    \         'isVolatile': v:true,
+    \     },
     \ })
 
 " File for Windows files
 call ddc#custom#patch_filetype(['ps1', 'dosbatch', 'autohotkey', 'registry'], {
-   \ 'sourceOptions': {
-   \     'file': {
-   \         'forceCompletionPattern': '\S\\\S*',
-   \     },
-   \ },
-   \ 'sourceParams': {
-   \     'file': {
-   \         'mode': 'win32',
-   \     },
-   \ }})
+    \ 'sourceOptions': {
+    \     'file': {
+    \         'forceCompletionPattern': '\S\\\S*',
+    \     },
+    \ },
+    \ 'sourceParams': {
+    \     'file': {
+    \         'mode': 'win32',
+    \     },
+    \ }})
+
+" Dictionary
+setlocal dictionary+=/usr/share/dict/words
+call ddc#custom#patch_global('sourceParams', {
+    \ 'dictionary': {'dictPaths':
+    \     ['/usr/share/dict/words'],
+    \     'smartCase': v:true,
+    \ }})
 
 " ddc有効化
 call ddc#enable()
@@ -60,4 +77,5 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 " Shift-Tabで逆向き選択
 inoremap <expr><S-TAB>  ddc#map#pum_visible() ? "\<C-p>" : "\<S-TAB>"
 " Ctrl+Oで手動補完 (file補完を除外)
-imap <expr><C-o> ddc#map#manual_complete(['nvim-lsp', 'neosnippet', 'around'])
+imap <expr><C-o> ddc#map#manual_complete(['nvim-lsp', 'neosnippet',
+              \                           'dictionary', 'around'])
