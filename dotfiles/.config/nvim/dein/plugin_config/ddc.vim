@@ -42,7 +42,7 @@ call ddc#custom#patch_filetype(['ps1', 'dosbatch', 'autohotkey', 'registry'], {
    \     },
    \ }})
 
-# ddc有効化
+" ddc有効化
 call ddc#enable()
 
 

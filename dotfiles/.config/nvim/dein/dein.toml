@@ -48,6 +48,12 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-ref.vim'
 '''
 
+[[plugins]]
+repo = 'skywind3000/asyncrun.vim'              # 非同期実行
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
+'''
+
 # ------------------------------------------------------------------------------
 # ----------------------------------- Visual -----------------------------------
 # ------------------------------------------------------------------------------
@@ -127,6 +133,9 @@ hook_add = '''
 # ------------------------------------------------------------------------------
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'  # LSP configuration
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'nvim-lspconfig.vim'
+'''
 
 [[plugins]]
 repo = 'williamboman/nvim-lsp-installer'  # LSP installer (:LSPInstallInfo)
@@ -155,7 +164,7 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
 [[plugins]]
-repo = 'takiyu/my-vim-snippets'                # Snippet
+repo = 'takiyu/my-vim-snippets'
 depends = ['neosnippet.vim']
 
 [[plugins]]
@@ -163,17 +172,6 @@ repo = 'Shougo/ddc.vim'
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'ddc.vim'
 '''
-
-# [[plugins]]
-# repo = 'hrsh7th/nvim-cmp'
-# [[plugins]]
-# repo = 'hrsh7th/cmp-nvim-lsp'
-# [[plugins]]
-# repo = 'hrsh7th/cmp-vsnip'
-# [[plugins]]
-# repo = 'hrsh7th/cmp-buffer'
-# [[plugins]]
-# repo = 'hrsh7th/vim-vsnip'
 
 [[plugins]]
 repo = 'ujihisa/neco-look'                     # 英単語補完
@@ -199,12 +197,6 @@ repo = 'cohama/agit.vim'                       # Git Graph
 depends = ['vimproc.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'agit.vim'
-'''
-
-[[plugins]]
-repo = 'skywind3000/asyncrun.vim'              # 非同期実行
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
 # ------------------------------------------------------------------------------
