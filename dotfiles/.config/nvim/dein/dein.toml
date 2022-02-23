@@ -145,6 +145,10 @@ hook_add = '''
 
 [[plugins]]
 repo = 'vim-denops/denops.vim'  # ddc depends
+# hook_add = '''  # Ignore SSL certificate for non-free regions
+# let g:denops#server#deno_args = ['-q', '--no-check', '--unstable', '-A',
+#                               \  '--unsafely-ignore-certificate-errors']
+# '''
 
 [[plugins]]
 repo = 'Shougo/ddc-matcher_head'  # ddc plugin
