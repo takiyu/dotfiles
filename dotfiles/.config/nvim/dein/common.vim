@@ -28,6 +28,7 @@ set termguicolors                 " CLIでフルカラー
 set cursorline                    " カーソル行をハイライト
 set incsearch                     " 入力しながら検索
 set breakindent                   " 折り返し時にインデントを考慮
+set updatetime=700                " CursorHoldイベントの発生タイミング
 if has('win32') || has('win64')
     " set shell=cmd.exe             " コマンドプロンプト bashではPATH形式が異なる
     set shell=C:/msys64/usr/bin/bash
