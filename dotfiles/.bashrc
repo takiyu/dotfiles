@@ -42,9 +42,9 @@ fi
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
-      . /usr/share/bash-completion/bash_completion
+        . /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
-      . /etc/bash_completion
+        . /etc/bash_completion
     fi
 fi
 
@@ -123,6 +123,7 @@ for i in {0..10}; do
     alias cd"$i"="cd +$i"
 done
 alias c=cd
+alias -- -='cd -'
 alias cd-="cd -"
 alias cd..="cd .."
 alias cd...="cd ../.."
@@ -288,10 +289,13 @@ alias gbD='git branch -D'
 alias gba='git branch -a'
 alias gbc='git branch --show-current'
 alias gurl='git remote -v'
+alias gurlset='git remote set-url'
+alias gurlseto='git remote set-url origin'
 alias gd='git diff'
 alias gdw='git diff --color-words'
 alias gdc='git diff --cached'
 alias gdcw='git diff --color-words --cached'
+alias grm='git remove'
 alias ga='git add'
 alias ga.='git add .'
 alias ga..='git add ..'
@@ -303,6 +307,7 @@ alias gcma='git commit --amend'
 function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
 alias gclo='git clone'
+alias gclone='git clone'
 alias gcl='git clean -i'
 alias gco='git checkout'
 alias gcob='git checkout -b'
@@ -332,6 +337,8 @@ alias gr='git reset'
 alias gR='git reset --hard'
 function gro() { git reset origin/"$*"; }
 function gRo() { git reset origin/"$*" --hard; }
+alias groc='git reset `gbc`'
+alias gRoc='git reset --hard `gbc`'
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 alias gst='git stash'
@@ -368,8 +375,10 @@ __git_complete gbd _git_branch
 __git_complete gbD _git_branch
 __git_complete gba _git_branch
 __git_complete gurl __git_remotes
+__git_complete gurlset __git_remotes
 __git_complete gd _git_diff
 __git_complete gdc _git_diff
+__git_complete grm _git_remove
 __git_complete ga _git_add
 __git_complete gau _git_add
 __git_complete gaup _git_add
@@ -379,6 +388,7 @@ __git_complete gcma _git_commit
 __git_complete gcmma _git_commit
 __git_complete gcmam _git_commit
 __git_complete gclo _git_clone
+__git_complete gclone _git_clone
 __git_complete gco _git_checkout
 __git_complete gcob _git_checkout
 __git_complete gcof _git_checkout
