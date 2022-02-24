@@ -17,14 +17,6 @@ let g:lightline = {
     \   'component_function': {
     \     'gitstatus': 'LightlineGitStatus',
     \   },
-    \   'component_expand': {
-    \     'linter_errors': 'lightline#languageclient#errors',
-    \     'linter_ok': 'lightline#languageclient#ok',
-    \   },
-    \   'component_type': {
-    \     'linter_errors': 'error',
-    \     'linter_ok': 'left',
-    \   },
     \ 'separator': { 'left': '', 'right': '' },
     \ 'subseparator': { 'left': '', 'right': '' }
     \ }
@@ -36,7 +28,7 @@ let g:lightline.active = {
     \   'right': [ [ 'percentlineinfo' ],
     \              [ 'fileinfo' ],
     \              [ 'gitstatus'],
-    \              [ 'linter_errors', 'linter_ok' ], ['asyncrun']],
+    \              ['asyncrun']],
     \ }
 
 " Tab line configuration
