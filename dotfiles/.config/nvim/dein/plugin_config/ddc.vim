@@ -66,7 +66,7 @@ call ddc#enable()
 " Enterで次へジャンプ、または補完を決定
 imap <expr><CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
               \ neosnippet#expandable() ? "\<Plug>(neosnippet_expand)" :
-              \ ddc#map#pum_visible() ? "<ESC>" : "\<CR>"
+              \ ddc#map#pum_visible() ? "\<ESC>" : "\<CR>"
 " Ctrl+Enterで次へジャンプ
 imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<CR>"
 " Tabで選択

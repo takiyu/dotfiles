@@ -143,8 +143,8 @@ nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
 nmap <C-9> :cN<CR>
 nmap <C-0> :cn<CR>
-" Quickfix/Preview/Location windowの非表示
-nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
+" Quickfix/Preview/Location window/float windowの非表示
+nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>:close<CR>
 " omni補完
 " inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア

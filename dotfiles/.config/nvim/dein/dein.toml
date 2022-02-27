@@ -144,7 +144,7 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'vim-denops/denops.vim'  # ddc depends
+repo = 'vim-denops/denops.vim'  # deno operators
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'denops.vim'
 '''
@@ -153,40 +153,55 @@ hook_add = '''
 repo = 'Shougo/ddc-matcher_head'  # ddc plugin
 
 [[plugins]]
-repo = 'Shougo/ddc-sorter_rank'
+repo = 'Shougo/ddc-sorter_rank'   # ddc plugin
 
 [[plugins]]
-repo = 'LumaKernel/ddc-file'
+repo = 'LumaKernel/ddc-file'      # ddc plugin
 
 [[plugins]]
-repo = 'Shougo/ddc-around'
+repo = 'Shougo/ddc-around'        # ddc plugin
 
 [[plugins]]
-repo = 'matsui54/ddc-dictionary'
+repo = 'matsui54/ddc-dictionary'  # ddc plugin
 
 [[plugins]]
-repo = 'LumaKernel/ddc-tabnine'
+repo = 'LumaKernel/ddc-tabnine'   # ddc plugin
 
 [[plugins]]
-repo = 'Shougo/ddc-nvim-lsp'
+repo = 'Shougo/ddc-nvim-lsp'      # ddc plugin
 
 [[plugins]]
-repo = 'takiyu/my-vim-snippets'
+repo = 'takiyu/my-vim-snippets'   # ddc plugin
 
 [[plugins]]
-repo = 'Shougo/neosnippet'                     # Snippet
+repo = 'Shougo/neosnippet'        # snippet
 depends = ['my-vim-snippets']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
 
 [[plugins]]
-repo = 'Shougo/ddc.vim'
+repo = 'Shougo/ddc.vim'  # ddc
 depends = ['denops.vim', 'ddc-around', 'ddc-matcher_head', 'ddc-sorter_rank',
            'ddc-nvim-lsp', 'ddc-file', 'neosnippet']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'ddc.vim'
 '''
+
+[[plugins]]
+repo = 'matsui54/denops-signature_help'     # lsp enhancer
+depends = ['denops.vim', 'ddc.vim']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'denops-signature_help.vim'
+'''
+
+[[plugins]]
+repo = 'matsui54/denops-popup-preview.vim'  # lsp enhancer
+depends = ['denops.vim', 'ddc.vim']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'denops-popup-preview.vim'
+'''
+
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ Git -------------------------------------
