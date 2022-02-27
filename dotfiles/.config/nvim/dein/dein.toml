@@ -64,8 +64,11 @@ repo = 'takiyu/tango-lx'                       # カラースキーム
 repo = 'bronson/vim-trailing-whitespace'       # 行末スペース可視化
 
 [[plugins]]
+repo = 'josa42/nvim-lightline-lsp'             # ステータスライン for lsp
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'                 # ステータスライン
-depends = ['vim-fugitive']
+depends = ['vim-fugitive', 'nvim-lightline-lsp']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
 '''

@@ -28,7 +28,10 @@ let g:lightline.active = {
     \   'right': [ [ 'percentlineinfo' ],
     \              [ 'fileinfo' ],
     \              [ 'gitstatus'],
-    \              ['asyncrun']],
+    \              [ 'lsp_status' ],
+    \              [ 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings',
+    \                'lsp_ok' ],
+    \              [ 'asyncrun' ]],
     \ }
 
 " Tab line configuration
@@ -36,6 +39,9 @@ let g:lightline.tabline = {
     \   'left': [ [ 'tabs' ] ],
     \   'right': []
     \ }
+
+" Neovim-LSP components
+call lightline#lsp#register()
 
 " Git状態のステータスライン表示
 function! LightlineGitStatus()
@@ -68,5 +74,8 @@ function! LightlineGitStatus()
     return join(ret, ' ')
 endfunction
 
+" Update events
 autocmd TextChanged * call lightline#update()
 autocmd TextChangedI * call lightline#update()
+autocmd CursorHold * call lightline#update()
+autocmd CursorHoldI * call lightline#update()
