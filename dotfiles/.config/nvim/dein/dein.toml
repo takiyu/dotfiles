@@ -171,17 +171,17 @@ repo = 'LumaKernel/ddc-tabnine'   # ddc plugin
 repo = 'Shougo/ddc-nvim-lsp'      # ddc plugin
 
 [[plugins]]
-repo = 'takiyu/my-vim-snippets'   # ddc plugin
+repo = 'takiyu/my-vim-snippets'   # snippet for ddc plugin
 
 [[plugins]]
-repo = 'Shougo/neosnippet'        # snippet
+repo = 'Shougo/neosnippet'        # ddc plugin
 depends = ['my-vim-snippets']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
 '''
 
 [[plugins]]
-repo = 'Shougo/ddc.vim'  # ddc
+repo = 'Shougo/ddc.vim'           # ddc body
 depends = ['denops.vim', 'ddc-around', 'ddc-matcher_head', 'ddc-sorter_rank',
            'ddc-nvim-lsp', 'ddc-file', 'neosnippet']
 hook_add = '''
@@ -201,7 +201,6 @@ depends = ['denops.vim', 'ddc.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'denops-popup-preview.vim'
 '''
-
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ Git -------------------------------------

@@ -52,12 +52,14 @@ call ddc#custom#patch_filetype(['ps1', 'dosbatch', 'autohotkey', 'registry'], {
     \ }})
 
 " Dictionary
-setlocal dictionary+=/usr/share/dict/words
-call ddc#custom#patch_global('sourceParams', {
-    \ 'dictionary': {'dictPaths':
-    \     ['/usr/share/dict/words'],
-    \     'smartCase': v:true,
-    \ }})
+if filereadable('/usr/share/dict/words')
+    setlocal dictionary+=/usr/share/dict/words
+    call ddc#custom#patch_global('sourceParams', {
+        \ 'dictionary': {'dictPaths':
+        \     ['/usr/share/dict/words'],
+        \     'smartCase': v:true,
+        \ }})
+endif
 
 " ddc有効化
 call ddc#enable()
