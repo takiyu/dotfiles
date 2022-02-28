@@ -65,6 +65,7 @@ repo = 'bronson/vim-trailing-whitespace'       # 行末スペース可視化
 
 [[plugins]]
 repo = 'josa42/nvim-lightline-lsp'             # ステータスライン for lsp
+depends = ['nvim-lspconfig']
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'                 # ステータスライン
