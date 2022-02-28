@@ -512,13 +512,19 @@ fi
 # export PROXY_MODE=''
 if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
     export PROXY_HOST='proxyjp.huawei.com:8080'
-    # PROXY_HOST='localhost:8888'
+    # export PROXY_HOST='localhost:8888'
     export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
     export HTTPS_PROXY="$HTTP_PROXY"
     export FTP_PROXY="$HTTP_PROXY"
     export NO_PROXY="huawei.com,localhost"
     export GIT_SSL_NO_VERIFY=1
     export CURL_SSL_NO_VERIFY=1
+elif [ "$PROXY_MODE" == 'Huawei_linux_vbox' ]; then
+    export PROXY_HOST='192.168.56.1:8888'
+    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
+    export HTTPS_PROXY="$HTTP_PROXY"
+    export FTP_PROXY="$HTTP_PROXY"
+    export NO_PROXY="huawei.com,localhost"
 fi
 
 export http_proxy=$HTTP_PROXY
