@@ -511,16 +511,18 @@ fi
 # export PROXY_PASS=''
 # export PROXY_MODE=''
 if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
+    # Global proxy
     export PROXY_HOST='proxyjp.huawei.com:8080'
     # export PROXY_HOST='localhost:8888'
-    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
-    export HTTPS_PROXY="$HTTP_PROXY"
-    export FTP_PROXY="$HTTP_PROXY"
-    export NO_PROXY="huawei.com,localhost"
     export GIT_SSL_NO_VERIFY=1
     export CURL_SSL_NO_VERIFY=1
 elif [ "$PROXY_MODE" == 'Huawei_linux_vbox' ]; then
+    # Proxy forwarding
     export PROXY_HOST='192.168.56.1:8888'
+fi
+
+if [ "$PROXY_MODE" == Huawei* ]; then
+    # Huawei common settings
     export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
     export HTTPS_PROXY="$HTTP_PROXY"
     export FTP_PROXY="$HTTP_PROXY"
