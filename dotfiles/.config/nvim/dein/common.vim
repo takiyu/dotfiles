@@ -226,11 +226,3 @@ let g:terminal_color_14 = "#ac7967" "bright cyan
 let g:terminal_color_15 = "#d9dfea" "bright white
 let g:terminal_color_background="#aaaaaa" "background
 let g:terminal_color_foreground="#c1c6cf" "foreground
-
-"===== Python path for conda on Windows =====
-if has('win32') || has('win64')
-    let s:miniconda_python_prog = 'C:/ProgramData/Miniconda3/python'
-    if executable(s:miniconda_python_prog)
-        let g:python3_host_prog = s:miniconda_python_prog
-    endif
-endif
