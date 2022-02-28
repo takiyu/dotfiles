@@ -75,12 +75,14 @@ hook_add = '''
 # ------------------------------------------------------------------------------
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'  # LSP configuration
+if = 'has("nvim")'  # Neovim only
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-lspconfig.vim'
 '''
 
 [[plugins]]
 repo = 'williamboman/nvim-lsp-installer'  # LSP installer (:LSPInstallInfo)
+if = 'has("nvim")'  # Neovim only
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-lsp-installer.vim'
 '''
