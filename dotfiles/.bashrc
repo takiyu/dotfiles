@@ -510,6 +510,7 @@ fi
 # export PROXY_USER=''
 # export PROXY_PASS=''
 # export PROXY_MODE=''
+
 if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
     # Global proxy
     export PROXY_HOST='proxyjp.huawei.com:8080'
