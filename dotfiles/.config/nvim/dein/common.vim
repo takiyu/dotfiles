@@ -143,15 +143,14 @@ nmap <A-[> :cN<CR>
 nmap <A-]> :cn<CR>
 nmap <C-9> :cN<CR>
 nmap <C-0> :cn<CR>
-" Quickfix/Preview/Location windowの非表示
-nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>
+" Quickfix/Preview/Location window/Float windowの非表示
+nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>
 " omni補完
 " inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
 nmap <silent><Esc> :noh<CR>
 " 置換 (start from current cursor)
 nnoremap <F2> :,$s/\<<C-r><C-w>\>//gc\|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-nmap <leader>s <F2>
 
 "==== Auto fcitx ====
 if !has('win32') && executable("fcitx-remote")
