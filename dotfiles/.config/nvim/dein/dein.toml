@@ -118,6 +118,7 @@ repo = 'LumaKernel/ddc-tabnine'   # ddc plugin
 
 [[plugins]]
 repo = 'Shougo/ddc-nvim-lsp'      # ddc plugin
+depends = ['nvim-lspconfig']
 
 [[plugins]]
 repo = 'takiyu/my-vim-snippets'   # snippet for ddc plugin
