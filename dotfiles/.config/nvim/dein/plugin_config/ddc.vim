@@ -78,8 +78,8 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
               \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 " Shift-Tabで逆向き選択
 inoremap <expr><S-TAB>  ddc#map#pum_visible() ? "\<C-p>" : "\<S-TAB>"
-" Ctrl+Oで手動補完 (file補完を除外)
+" Ctrl+oで手動補完 (file補完を除外)
 imap <expr><C-o> ddc#map#manual_complete(['nvim-lsp', 'neosnippet', 'tabnine',
               \                           'dictionary', 'around'])
-" Ctrl+mで半自動補完
-imap <expr><C-m> ddc#map#manual_complete(['tabnine'])
+" Ctrl+iで半自動補完
+imap <expr><C-i> ddc#map#manual_complete(['tabnine'])
