@@ -1,5 +1,14 @@
 # ------------------------------------------------------------------------------
-# ---------------------------- NeoVim compatibility ----------------------------
+# ----------------------------------- Basic ------------------------------------
+# ------------------------------------------------------------------------------
+[[plugins]]
+repo = 'vim-denops/denops.vim'  # deno operators
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'denops.vim'
+'''
+
+# ------------------------------------------------------------------------------
+# ---------------------------- Neovim compatibility ----------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
 repo = 'roxma/nvim-yarp'
@@ -10,7 +19,7 @@ repo = 'roxma/vim-hug-neovim-rpc'
 if = '!has("nvim")'
 
 # ------------------------------------------------------------------------------
-# ------------------------------ Basic Functions -------------------------------
+# ------------------------------ Extra Functions -------------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
 repo = 'embear/vim-localvimrc'                 # Local vimrc
@@ -54,83 +63,9 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
-# ------------------------------------------------------------------------------
-# ----------------------------------- Visual -----------------------------------
-# ------------------------------------------------------------------------------
 [[plugins]]
-repo = 'takiyu/tango-lx'                       # カラースキーム
-
-[[plugins]]
-repo = 'bronson/vim-trailing-whitespace'       # 行末スペース可視化
-
-[[plugins]]
-repo = 'josa42/nvim-lightline-lsp'             # ステータスライン for lsp
-depends = ['nvim-lspconfig']
-
-[[plugins]]
-repo = 'itchyny/lightline.vim'                 # ステータスライン
-depends = ['vim-fugitive', 'nvim-lightline-lsp']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
-'''
-
-[[plugins]]
-repo = 'vimtaku/hl_matchit.vim'                # 括弧+αをハイライト
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'hl_matchit.vim'
-'''
-
-[[plugins]]
-repo = 't9md/vim-quickhl'                      # ハイライト
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'vim-quickhl.vim'
-'''
-
-# ------------------------------------------------------------------------------
-# ----------------------------- Indent Assistance ------------------------------
-# ------------------------------------------------------------------------------
-[[plugins]]
-repo = 'tpope/vim-sleuth'                      # インデント自動検出
-
-[[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'       # インデント明示化
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'vim-indent-guides.vim'
-'''
-
-# ------------------------------------------------------------------------------
-# ----------------------------- Comment Assistance -----------------------------
-# ------------------------------------------------------------------------------
-[[plugins]]
-repo = 'tyru/caw.vim'                          # コメントアウト補助
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'caw.vim'
-'''
-
-[[plugins]]
-repo = 'takiyu/split_commenter.nvim'           # 分割コメント補助
-depends = ['caw.vim']
-
-# ------------------------------------------------------------------------------
-# ----------------------------- Cursor Assistance ------------------------------
-# ------------------------------------------------------------------------------
-[[plugins]]
-repo = 'rhysd/clever-f.vim'                    # カーソル移動 (f)
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'clever-f.vim'
-'''
-
-[[plugins]]
-repo = 'easymotion/vim-easymotion'             # カーソル移動 (s)
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'vim-easymotion.vim'
-'''
-
-[[plugins]]
-repo = 'yuttie/comfortable-motion.vim'         # Smooth scroll
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'comfortable-motion.vim'
-'''
+repo = 'yukimemi/dps-asyngrep'                 # 非同期検索
+depends = ['denops.vim']
 
 # ------------------------------------------------------------------------------
 # --------------------------------- Completion ---------------------------------
@@ -145,12 +80,6 @@ hook_add = '''
 repo = 'williamboman/nvim-lsp-installer'  # LSP installer (:LSPInstallInfo)
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-lsp-installer.vim'
-'''
-
-[[plugins]]
-repo = 'vim-denops/denops.vim'  # deno operators
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'denops.vim'
 '''
 
 [[plugins]]
@@ -227,6 +156,84 @@ repo = 'cohama/agit.vim'                       # Git Graph
 depends = ['vimproc.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'agit.vim'
+'''
+
+# ------------------------------------------------------------------------------
+# ----------------------------- Indent Assistance ------------------------------
+# ------------------------------------------------------------------------------
+[[plugins]]
+repo = 'tpope/vim-sleuth'                      # インデント自動検出
+
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'       # インデント明示化
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-indent-guides.vim'
+'''
+
+# ------------------------------------------------------------------------------
+# ----------------------------- Comment Assistance -----------------------------
+# ------------------------------------------------------------------------------
+[[plugins]]
+repo = 'tyru/caw.vim'                          # コメントアウト補助
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'caw.vim'
+'''
+
+[[plugins]]
+repo = 'takiyu/split_commenter.nvim'           # 分割コメント補助
+depends = ['caw.vim']
+
+# ------------------------------------------------------------------------------
+# ----------------------------- Cursor Assistance ------------------------------
+# ------------------------------------------------------------------------------
+[[plugins]]
+repo = 'rhysd/clever-f.vim'                    # カーソル移動 (f)
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'clever-f.vim'
+'''
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'             # カーソル移動 (s)
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-easymotion.vim'
+'''
+
+[[plugins]]
+repo = 'yuttie/comfortable-motion.vim'         # Smooth scroll
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'comfortable-motion.vim'
+'''
+
+# ------------------------------------------------------------------------------
+# --------------------------------- Appearance ---------------------------------
+# ------------------------------------------------------------------------------
+[[plugins]]
+repo = 'takiyu/tango-lx'                       # カラースキーム
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'       # 行末スペース可視化
+
+[[plugins]]
+repo = 'josa42/nvim-lightline-lsp'             # ステータスライン for lsp
+depends = ['nvim-lspconfig']
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'                 # ステータスライン
+depends = ['vim-fugitive', 'nvim-lightline-lsp']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
+'''
+
+[[plugins]]
+repo = 'vimtaku/hl_matchit.vim'                # 括弧+αをハイライト
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'hl_matchit.vim'
+'''
+
+[[plugins]]
+repo = 't9md/vim-quickhl'                      # ハイライト
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'vim-quickhl.vim'
 '''
 
 # ------------------------------------------------------------------------------
