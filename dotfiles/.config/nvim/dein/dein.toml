@@ -63,6 +63,13 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
+[[plugins]]
+repo = 'yukimemi/dps-asyngrep'                 # 非同期検索
+depends = ['denops.vim']
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'dps-asyngrep.vim'
+'''
+
 # ------------------------------------------------------------------------------
 # --------------------------------- Completion ---------------------------------
 # ------------------------------------------------------------------------------
