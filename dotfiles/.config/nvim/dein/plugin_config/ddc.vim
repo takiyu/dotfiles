@@ -9,7 +9,9 @@ call ddc#custom#patch_global('sources',
 call ddc#custom#patch_global('sourceOptions', {
     \     '_': {
     \         'matchers': ['matcher_head'],
-    \         'sorters': ['sorter_rank']
+    \         'sorters': ['sorter_rank'],
+    \         'converters': ['converter_remove_overlap'],
+    \         'minAutoCompleteLength': 1,
     \     },
     \     'around': {
     \         'mark': 'around',
@@ -20,7 +22,7 @@ call ddc#custom#patch_global('sourceOptions', {
     \         'isVolatile': v:true,
     \         'forceCompletionPattern': '\S/\S*',
     \     },
-	\     'dictionary': {
+    \     'dictionary': {
     \         'mark': 'dict',
     \     },
     \     'neosnippet': {
