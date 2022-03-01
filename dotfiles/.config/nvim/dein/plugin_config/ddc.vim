@@ -81,5 +81,5 @@ inoremap <expr><S-TAB>  ddc#map#pum_visible() ? "\<C-p>" : "\<S-TAB>"
 " Ctrl+oで手動補完 (file補完を除外)
 imap <expr><C-o> ddc#map#manual_complete(['nvim-lsp', 'neosnippet', 'tabnine',
               \                           'dictionary', 'around'])
-" Ctrl+iで半自動補完
-imap <expr><C-i> ddc#map#manual_complete(['tabnine'])
+" Ctrl+lで半自動補完
+imap <expr><C-l> ddc#map#manual_complete(['tabnine'])
