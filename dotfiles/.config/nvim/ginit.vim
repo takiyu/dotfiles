@@ -30,3 +30,5 @@ endfunction
 noremap <C-+> :call ChangeGuiFontSize(1)<CR>
 noremap <C--> :call ChangeGuiFontSize(-1)<CR>
 noremap <C-=> :call ChangeGuiFontSize(1)<CR>
+noremap <F7> :call ChangeGuiFontSize(-1)<CR>
+noremap <F8> :call ChangeGuiFontSize(1)<CR>
