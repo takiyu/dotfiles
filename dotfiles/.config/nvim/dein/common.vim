@@ -208,6 +208,7 @@ nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
 "===== Terminal =====
 nnoremap <F4> :new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>
 tnoremap <silent><ESC> <C-\><C-n>
+autocmd TermOpen * startinsert
 let g:terminal_color_0  = "#aaaaaa" "black
 let g:terminal_color_1  = "#ed5f67" "red
 let g:terminal_color_2  = "#9ac895" "green
