@@ -522,7 +522,11 @@ if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
 elif [ "$PROXY_MODE" == 'Huawei_linux_vbox' ]; then
     # Proxy forwarding
     export PROXY_HOST='192.168.56.1:8888'
-    # export PROXY_HOST='localhost:8888'
+elif [ "$PROXY_MODE" == 'Huawei_wsl' ]; then
+    # Proxy forwarding
+    HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
+    export PROXY_HOST="$HOST_IP:8888"
+    export DISPLAY="$HOST_IP:0"
 fi
 
 case "$PROXY_MODE" in Huawei*)
