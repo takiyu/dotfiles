@@ -127,6 +127,14 @@ inoremap < <><ESC>ha
 inoremap " ""<ESC>ha
 inoremap ' ''<ESC>ha
 inoremap ` ``<ESC>ha
+" 括弧補完 (キャンセル)
+inoremap {} {}<ESC>ha
+inoremap () ()<ESC>ha
+inoremap [] []<ESC>ha
+inoremap <> <><ESC>ha
+inoremap "" ""<ESC>ha
+inoremap '' ''<ESC>ha
+inoremap `` ``<ESC>ha
 " タブ移動
 nnoremap 3 gt
 nnoremap 2 gT
