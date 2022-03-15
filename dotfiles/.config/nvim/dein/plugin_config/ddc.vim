@@ -72,12 +72,12 @@ call ddc#enable()
 " Enterで次へジャンプ、または補完を決定
 imap <expr><CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" :
               \ neosnippet#expandable() ? "\<Plug>(neosnippet_expand)" :
-              \ ddc#map#pum_visible() ? "\<ESC>" : "\<CR>"
+              \ ddc#map#pum_visible() ? "\<ESC>a" : "\<CR>"
 " Ctrl+Enterで次へジャンプ
 imap <expr><C-CR> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<CR>"
 " Tabで選択
 imap <expr><TAB> ddc#map#pum_visible() ? "\<C-n>" :
-              \ (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>")
+              \ neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
               \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 " Shift-Tabで逆向き選択
@@ -86,4 +86,5 @@ inoremap <expr><S-TAB>  ddc#map#pum_visible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-o> ddc#map#manual_complete(['nvim-lsp', 'neosnippet', 'tabnine',
               \                           'dictionary', 'around'])
 " Ctrl+lで半自動補完
-imap <expr><C-l> ddc#map#manual_complete(['tabnine'])
+imap <expr><C-l> ddc#map#pum_visible() ? "\<ESC>a" :
+              \  ddc#map#manual_complete(['tabnine'])
