@@ -12,6 +12,8 @@ call ddc#custom#patch_global('sourceOptions', {
     \         'sorters': ['sorter_rank'],
     \         'converters': ['converter_remove_overlap'],
     \         'minAutoCompleteLength': 1,
+    \         'smartCase': v:true,
+    \         'ignoreCase': v:true,
     \     },
     \     'around': {
     \         'mark': 'around',
