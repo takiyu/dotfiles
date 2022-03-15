@@ -119,6 +119,14 @@ noremap <C-k> 20k
 " 行末行頭への移動
 noremap 9 ^
 noremap 0 $
+" 括弧補完
+inoremap { {}<ESC>ha
+inoremap ( ()<ESC>ha
+inoremap [ []<ESC>ha
+inoremap < <><ESC>ha
+inoremap " ""<ESC>ha
+inoremap ' ''<ESC>ha
+inoremap ` ``<ESC>ha
 " タブ移動
 nnoremap 3 gt
 nnoremap 2 gT
