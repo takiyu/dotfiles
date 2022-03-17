@@ -214,7 +214,7 @@ function! NextColorColumn()
     endif
 endfunction
 autocmd VimEnter * call NextColorColumn()  " Initial call
-nnoremap <silent><F10> :echo NextColorColumn()<CR>
+nnoremap <silent><F11> :echo NextColorColumn()<CR>
 
 "===== Spell check toggle =====
 set spell spelllang=en_us,cjk  " Enabled by default

@@ -21,8 +21,6 @@ let g:quickhl_manual_colors = [
 " ハイライトショートカット
 nmap m <Plug>(quickhl-manual-this)
 vmap m <Plug>(quickhl-manual-this)
-" 表示トグル
-nmap <F11> <Plug>(quickhl-manual-toggle)
 " ハイライトを削除
 nmap M <Plug>(quickhl-manual-reset)
 vmap M <Plug>(quickhl-manual-reset)
