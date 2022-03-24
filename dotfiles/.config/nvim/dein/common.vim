@@ -120,21 +120,21 @@ noremap <C-k> 20k
 noremap 9 ^
 noremap 0 $
 " 括弧補完
-inoremap { {}<Left>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap < <><Left>
-inoremap " ""<Left>
-inoremap ' ''<Left>
-inoremap ` ``<Left>
+"inoremap { {}<Left>
+"inoremap ( ()<Left>
+"inoremap [ []<Left>
+"inoremap < <><Left>
+"inoremap " ""<Left>
+"inoremap ' ''<Left>
+"inoremap ` ``<Left>
 " 括弧補完 (手動入力時)
-inoremap {} {}<Left>
-inoremap () ()<Left>
-inoremap [] []<Left>
-inoremap <> <><Left>
-inoremap "" ""<Left>
-inoremap '' ''<Left>
-inoremap `` ``<Left>
+"inoremap {} {}<Left>
+"inoremap () ()<Left>
+"inoremap [] []<Left>
+"inoremap <> <><Left>
+"inoremap "" ""<Left>
+"inoremap '' ''<Left>
+"inoremap `` ``<Left>
 " 括弧補完 (改行)
 inoremap {<CR> {<CR><CR>}<UP>
 inoremap (<CR> (<CR><CR>)<UP>
@@ -144,8 +144,8 @@ inoremap "<CR> "<CR><CR>"<UP>
 inoremap '<CR> '<CR><CR>'<UP>
 inoremap `<CR> `<CR><CR>`<UP>
 " 括弧補完 (英文)
-inoremap 's 's
-inoremap '<Space> '<Space>
+"inoremap 's 's
+"inoremap '<Space> '<Space>
 " タブ移動
 nnoremap 3 gt
 nnoremap 2 gT
