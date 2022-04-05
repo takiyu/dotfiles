@@ -520,7 +520,7 @@ if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
     # Global proxy
     export PROXY_HOST='proxyjp.huawei.com:8080'
     export GIT_SSL_NO_VERIFY=1
-    # export CURL_SSL_NO_VERIFY=1
+    export CURL_SSL_NO_VERIFY=1
 elif [ "$PROXY_MODE" == 'Huawei_linux_vbox' ]; then
     # Proxy forwarding
     export PROXY_HOST='192.168.56.1:8888'
