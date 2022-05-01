@@ -1,6 +1,5 @@
 ! ---- Standard Japanese Keyboard ----
 ! Thumb Esc
-! keycode 100 = Escape
 keysym Henkan_Mode = Escape
 ! Left Ctrl
 remove lock = Caps_Lock
