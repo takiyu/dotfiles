@@ -1,18 +1,56 @@
-! ----esc----
+! ---- Standard Japanese Keyboard ----
+! Thumb Esc
 ! keycode 100 = Escape
 keysym Henkan_Mode = Escape
-
-! ----ctrl----
+! Left Ctrl
 remove lock = Caps_Lock
 keysym Caps_Lock = Control_L
 keysym Scroll_Lock = Caps_Lock
 keysym Print = Insert
 add lock = Caps_Lock
 add Control = Control_L
-
-! ----mod3----
+! Mod3 for Xmonad
 clear mod3
 remove mod1 = Alt_R
 keysym Muhenkan = Alt_R
 keysym Hiragana_Katakana = Alt_R
 add mod3 = Alt_R
+
+! ---- EN -> JP ----
+! keycode  21 = Zenkaku_Hankaku Kanji Zenkaku_Hankaku Kanji
+! keycode  51 = at grave at grave
+! keycode  34 = bracketright braceright bracketright braceright
+! keycode  49 = asciicircum asciitilde asciicircum asciitilde
+! keycode  94 = backslash bar backslash bar
+! keycode  62 = backslash underscore backslash underscore
+! clear shift
+! add shift = Shift_L
+
+! ---- Kinesis ----
+! ! Clear modifiers
+! clear mod3
+! clear Control
+! clear mod1
+! clear lock
+! ! Swap up and down arrows
+! keycode 111 = Down NoSymbol Down
+! keycode 116 = Up NoSymbol Up
+! ! Thumb (left)
+! keycode 22 = space NoSymbol space
+! keycode 119 = Alt_R Meta_R Alt_R Meta_R
+! keycode 37 = BackSpace BackSpace BackSpace BackSpace NoSymbol NoSymbol Terminate_Server
+! keycode 64 = Delete NoSymbol Delete
+! keycode 110 = Control_L NoSymbol Control_L
+! keycode 115 = Alt_L Meta_L Alt_L Meta_L
+! ! Thumb (right)
+! keycode 36 = Alt_R Meta_R Alt_R Meta_R
+! keycode 65 = Escape NoSymbol Escape
+! keycode 105 = Return NoSymbol Return
+! keycode 134 = Super_R NoSymbol Super_R
+! keycode 112 = Control_R NoSymbol Control_R
+! keycode 117 = Alt_L Meta_L Alt_L Meta_L
+! ! Update modifiers
+! add mod3 = Alt_R
+! add Control = Control_L Control_R
+! add mod1 = Alt_L
+! add lock = Caps_Lock

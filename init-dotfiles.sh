@@ -83,9 +83,9 @@ create_link_prompt() {
 if [ $platform == 'Linux' ]; then
     # Linux setup
     echo "* Setup dotfiles for Linux Environment"
-    TARGETS=(.Xmodmap .xinitrc .bash_profile .bashrc .xmonad .xmobarrc \
-             .wgetrc .gitconfig .latexmkrc .ctags .clang-format .clang-tidy \
-             .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
+    TARGETS=(.Xmodmap_default .Xmodmap .xinitrc .bash_profile .bashrc .xmonad \
+             .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
+             .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
              .mplayer/config .config/matplotlib/matplotlibrc \
              .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
              .config/nvim/dein .config/pycodestyle .lesskey)
