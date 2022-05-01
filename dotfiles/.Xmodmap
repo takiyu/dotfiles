@@ -16,13 +16,13 @@ keysym Hiragana_Katakana = Alt_R
 add mod3 = Alt_R
 
 ! ---- EN -> JP ----
+! clear shift
 ! keycode  21 = Zenkaku_Hankaku Kanji Zenkaku_Hankaku Kanji
 ! keycode  51 = at grave at grave
 ! keycode  34 = bracketright braceright bracketright braceright
 ! keycode  49 = asciicircum asciitilde asciicircum asciitilde
 ! keycode  94 = backslash bar backslash bar
 ! keycode  62 = backslash underscore backslash underscore
-! clear shift
 ! add shift = Shift_L
 
 ! ---- Kinesis (EN) ----
@@ -31,6 +31,10 @@ add mod3 = Alt_R
 ! clear Control
 ! clear mod1
 ! clear lock
+! remove lock = Caps_Lock
+! remove mod1 = Alt_R
+! ! Caps lock > ntrol
+! keycode 66 = Control_L NoSymbol Control_L
 ! ! Swap up and down arrows
 ! keycode 111 = Down NoSymbol Down
 ! keycode 116 = Up NoSymbol Up
@@ -52,4 +56,3 @@ add mod3 = Alt_R
 ! add mod3 = Alt_R
 ! add Control = Control_L Control_R
 ! add mod1 = Alt_L
-! add lock = Caps_Lock
