@@ -288,6 +288,7 @@ alias g='git'
 alias ginit='git init && git commit --allow-empty -m "First commit"'
 alias gs='git status'
 function gg() { git graph --color=always $* | less -EFRSX; }
+function gga() { git graph --color=always --all $* | less -EFRSX; }
 function gl() { git log --color=always --graph $* | less -EFRX; }
 function gla() { git log --color=always --graph --all $* | less -EFRX; }
 alias gb='git branch'
