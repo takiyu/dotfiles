@@ -5,7 +5,8 @@ Config {
     , border = TopB
     , bgColor = "#353535"
     , fgColor = "white"
-    , position = Static { xpos = 0 , ypos = 28, width = 1920, height = 18 }
+--  , position = Static { xpos = 0 , ypos = 28, width = 1920, height = 18 }
+    , position = Static { xpos = 1920 , ypos = 0, width = 1920, height = 28 }
     , lowerOnStart = False
     , persistent = True
     , hideOnStart = False
