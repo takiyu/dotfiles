@@ -213,16 +213,16 @@ shellPromptConfig = greenXPConfig {
 -- Moving alias
 moveWs d wt = do
     -- Greedy Moving
-    moveTo d wt
+    -- moveTo d wt
     -- Non-Greedy Moving
-    -- t <- findWorkspace getSortByIndex d wt 1
-    -- (windows . W.view) t
+    t <- findWorkspace getSortByIndex d wt 1
+    (windows . W.view) t
 -- Shifting alias
 shiftWs d wt = do
     -- Greedy Shifting
-    shiftTo d wt
-    moveTo d wt
+    -- shiftTo d wt
+    -- moveTo d wt
     -- Non-Greedy Shifting
-    -- t <- findWorkspace getSortByIndex d wt 1
-    -- (windows . W.shift) t
-    -- (windows . W.view) t
+    t <- findWorkspace getSortByIndex d wt 1
+    (windows . W.shift) t
+    (windows . W.view) t
