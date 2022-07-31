@@ -6,7 +6,7 @@ let g:tex_conceal=''
 " let g:tex_conceal='abgms'
 " let g:tex_conceal='adbmgs'
 
-autocmd BufWritePost *.tex :Latexmk
+" autocmd BufWritePost *.tex :Latexmk
 " autocmd BufWritePost *.tex :!latexmk
 let g:LatexBox_personal_latexmkrc = 1  " To disable g:LatexBox_output_type
 " let g:LatexBox_output_type = 'pdf'
