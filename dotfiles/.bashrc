@@ -68,12 +68,12 @@ shopt -s globstar      # enable **
 shopt -s autocd        # enable change directory without `cd`
 
 # Bash key bindings
-bind '"\C-j": menu-complete'
-bind '"\C-k": menu-complete-backward'
-# bind '"\C-j": history-search-backward'
-# bind '"\C-k": history-search-forward'
+# bind '"\C-j": menu-complete'
+# bind '"\C-k": menu-complete-backward'
+bind '"\C-j": history-search-backward'
+bind '"\C-k": history-search-forward'
 bind '"\C-l": forward-char'
-bind '"\C-h": backward-char'
+bind '"\C-h": backward-delete-char'  # Delete instead of backward
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
 bind '"\C-w": unix-filename-rubout'
