@@ -6,6 +6,9 @@ import os
 import os.path as osp
 from multiprocessing.pool import Pool
 
+# Constant parameters
+RESULT_DIRNAME = './Downsized'
+
 
 def process_one(src_filename):
     print(f'Process: {src_filename}')
@@ -15,16 +18,16 @@ def process_one(src_filename):
     # Create result filename
     base_dirname = osp.basename(src_dirname)
     base_filename = osp.basename(src_filename)
-    basename = f'{base_dirname}  {base_filename}'
-    dst_filename = osp.join(RESULT_DIRNAME, basename)
+    dst_filename = osp.join(RESULT_DIRNAME, base_dirname, base_filename)
     if osp.exists(dst_filename):
         print(f' > Skip existing file: {dst_filename}')
         return
+    os.makedirs(osp.dirname(dst_filename), exist_ok=True)
 
     # Downsize process
     _, ext = osp.splitext(dst_filename)
     ext = ext.lower()
-    if ext in ['.jpg', '*.jepg', 'png']:
+    if ext in ['.jpg', '*.jpeg', 'png']:
         # Copy (with meta data)
         shutil.copy2(src_filename, dst_filename)
         # Downsize image
@@ -39,10 +42,6 @@ def process_one(src_filename):
 
 
 if __name__ == '__main__':
-    # Create result directory
-    RESULT_DIRNAME = './Downsized'
-    os.makedirs(RESULT_DIRNAME, exist_ok=True)
-
     # Collect sub-directories
     src_dirnames = glob.glob('*')
     for src_dirname in src_dirnames:
