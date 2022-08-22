@@ -109,7 +109,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
     , ((mod1Mask,            xK_Tab   ), windows W.focusDown)
     , ((mod1Mask.|.shiftMask,   xK_Tab), windows W.swapDown )
     -- window alt-ctrl-tab (move to next WS)
-    , ((mod1Mask.|.controlMask, xK_Tab), moveWs Next (Not emptyWS))
+    , ((mod1Mask.|.controlMask, xK_Tab), moveWs Next NonEmptyWS)
 
     -- layout toggle
     , ((modm,                xK_space ), sendMessage NextLayout)
@@ -117,15 +117,15 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
     , ((modm,                xK_f     ), sendMessage ToggleLayout)
 
     -- workspaces
-    , ((modm,                xK_h     ), moveWs Prev anyWS)
---  , ((modm,                xK_h     ), moveWs Prev anyWS >> logCurrent >>= moveFlashText)
-    , ((modm,                xK_l     ), moveWs Next anyWS)
-    , ((modm.|.shiftMask,    xK_h     ), shiftWs Prev anyWS)
-    , ((modm.|.shiftMask,    xK_l     ), shiftWs Next anyWS)
-    , ((modm,                xK_n     ), moveWs Prev (Not emptyWS))
-    , ((modm,                xK_p     ), moveWs Next (Not emptyWS))
-    , ((modm.|.shiftMask,    xK_n     ), shiftWs Prev emptyWS)
-    , ((modm.|.shiftMask,    xK_p     ), shiftWs Next emptyWS)
+    , ((modm,                xK_h     ), moveWs Prev AnyWS)
+--  , ((modm,                xK_h     ), moveWs Prev AnyWS >> logCurrent >>= moveFlashText)
+    , ((modm,                xK_l     ), moveWs Next AnyWS)
+    , ((modm.|.shiftMask,    xK_h     ), shiftWs Prev AnyWS)
+    , ((modm.|.shiftMask,    xK_l     ), shiftWs Next AnyWS)
+    , ((modm,                xK_n     ), moveWs Prev NonEmptyWS)
+    , ((modm,                xK_p     ), moveWs Next NonEmptyWS)
+    , ((modm.|.shiftMask,    xK_n     ), shiftWs Prev EmptyWS)
+    , ((modm.|.shiftMask,    xK_p     ), shiftWs Next EmptyWS)
     , ((modm,                xK_b     ), toggleWS)
     -- physical screen
     , ((modm,                xK_s     ), nextScreen)
@@ -183,10 +183,10 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
 myMouseBindings (XConfig {XMonad.modMask = a}) = M.fromList $
     [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
     , ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-    , ((modm,             button4), (\w -> moveWs Prev (Not emptyWS)))
-    , ((modm,             button5), (\w -> moveWs Next (Not emptyWS)))
-    , ((modm.|.shiftMask, button4), (\w -> shiftWs Prev anyWS))
-    , ((modm.|.shiftMask, button5), (\w -> shiftWs Next anyWS))
+    , ((modm,             button4), (\w -> moveWs Prev NonEmptyWS))
+    , ((modm,             button5), (\w -> moveWs Next NonEmptyWS))
+    , ((modm.|.shiftMask, button4), (\w -> shiftWs Prev AnyWS))
+    , ((modm.|.shiftMask, button5), (\w -> shiftWs Next AnyWS))
     ]
 
 -- Shell Prompt Config
