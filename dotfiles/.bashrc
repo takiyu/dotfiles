@@ -531,6 +531,7 @@ elif [ "$PROXY_MODE" == 'Huawei_wsl' ]; then
     HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
     export PROXY_HOST="$HOST_IP:8888"
     export DISPLAY="$HOST_IP:0"
+    export PATH="$PATH:/usr/lib/wsl/lib/"
 fi
 
 case "$PROXY_MODE" in Huawei*)
