@@ -83,12 +83,12 @@ if [ $platform == 'Linux' ]; then
     fi
 
     # Golang
-    export GOPATH=$HOME/Projects/Gocode
+    # export GOPATH=$HOME/Projects/Gocode
 
     # Unity
-    if [ -e /opt/Unity/Editor ]; then
-        export PATH=$PATH:/opt/Unity/Editor/
-    fi
+    # if [ -e /opt/Unity/Editor ]; then
+    #     export PATH=$PATH:/opt/Unity/Editor/
+    # fi
 
     # Python path
     # export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
