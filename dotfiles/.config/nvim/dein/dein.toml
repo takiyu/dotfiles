@@ -92,24 +92,27 @@ repo = 'hrsh7th/cmp-nvim-lsp'                  # Completion
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip'
 [[plugins]]
+repo = 'hrsh7th/cmp-vsnip'
+[[plugins]]
 repo = 'hrsh7th/cmp-buffer'
 [[plugins]]
 repo = 'hrsh7th/cmp-path'
 [[plugins]]
 repo = 'hrsh7th/cmp-cmdline'
 [[plugins]]
-repo = 'hrsh7th/cmp-emoji'
-[[plugins]]
 repo = 'octaltree/cmp-look'
-[[plugins]]
-repo = 'onsails/lspkind.nvim'
 [[plugins]]
 repo = 'tzachar/cmp-tabnine'
 build = './install.sh'
 [[plugins]]
+repo = 'hrsh7th/cmp-emoji'
+[[plugins]]
+repo = 'onsails/lspkind.nvim'
+[[plugins]]
 repo = 'hrsh7th/nvim-cmp'
-depends = ['cmp-nvim-lsp','vim-vsnip', 'cmp-buffer', 'cmp-path', 'cmp-cmdline',
-           'cmp-emoji', 'cmp-spell', 'lspkind.nvim', 'nvim-cmp', 'cmp-tabnine']
+depends = ['cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer', 'cmp-path',
+           'cmp-cmdline', 'cmp-look', 'cmp-tabnine', 'cmp-emoji',
+           'lspkind.nvim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-cmp.vim'
 '''
