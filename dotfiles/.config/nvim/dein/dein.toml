@@ -19,7 +19,11 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'ryanoasis/vim-devicons'                # Icons for NerdTree
+
+[[plugins]]
 repo = 'scrooloose/nerdtree'                   # Filer
+depends = ['vim-devicons.vim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nerdtree.vim'
 '''

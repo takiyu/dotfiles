@@ -7,3 +7,5 @@ map <expr><C-f> g:NERDTree.IsOpen() ? ":NERDTreeClose<CR>:NERDTreeFind<CR>"
 let NERDTreeQuitOnOpen = 1           " 開いたら非表示
 let NERDTreeShowBookmarks = 1
 " let NERDTreeMapOpenInTab='<ENTER>' " デフォルトでタブで開く (フォルダ移動などはoを使用)
+
+let g:webdevicons_enable_nerdtree = 1  " アイコンを有効化
