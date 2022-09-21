@@ -104,12 +104,12 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
     , ((modm.|.shiftMask,    xK_c     ), kill)
     , ((modm,                xK_t     ), withFocused $ windows . W.sink)
     -- window alt-tab
-    , ((modm,                xK_Tab   ), windows W.focusDown)
-    , ((modm.|.shiftMask,    xK_Tab   ), windows W.focusUp  )
-    , ((mod1Mask,            xK_Tab   ), windows W.focusDown)
-    , ((mod1Mask.|.shiftMask,   xK_Tab), windows W.swapDown )
+    , ((modm,                xK_Tab   ), nextScreen)
+    , ((modm.|.shiftMask,    xK_Tab   ), prevScreen)
+    , ((mod1Mask,            xK_Tab   ), nextScreen)
+    , ((mod1Mask.|.shiftMask,   xK_Tab), prevScreen)
     -- window alt-ctrl-tab (move to next WS)
-    , ((mod1Mask.|.controlMask, xK_Tab), moveWs Next NonEmptyWS)
+    , ((mod1Mask.|.controlMask, xK_Tab), toggleWS)
 
     -- layout toggle
     , ((modm,                xK_space ), sendMessage NextLayout)
