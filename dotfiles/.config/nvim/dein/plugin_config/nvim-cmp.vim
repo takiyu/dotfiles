@@ -23,7 +23,6 @@ cmp.setup({
         { name = 'emoji', insert = true },
     },
     mapping = cmp.mapping.preset.insert({
-        ['<CR>'] = cmp.mapping.confirm { select = true },
         ['<tab>'] = cmp.mapping.select_next_item(),
         ['<S-tab>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -34,6 +33,12 @@ cmp.setup({
                 return cmp.complete_common_string()
             else
                 return cmp.complete()
+            end
+            fallback()
+        end, { 'i', 'c' }),
+        ['<CR>'] = cmp.mapping(function(fallback)
+            if cmp.get_active_entry() then
+                return cmp.confirm({ select = true })
             end
             fallback()
         end, { 'i', 'c' }),
@@ -104,3 +109,16 @@ tabnine.setup({
 })
 
 EOF
+
+" Key mappings for vim-vsnip
+" Expand or jump
+imap <expr> <CR>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<CR>'
+smap <expr> <CR>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<CR>'
+nmap <expr> <CR>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<CR>'
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+nmap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+nmap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
