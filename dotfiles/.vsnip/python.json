@@ -1,0 +1,234 @@
+{
+    "class": {
+        "prefix": "class",
+        "body": [
+            "class ${1:name}(${2}):",
+            "    def __init__(self, ${3}):",
+            "        ${0}"
+        ],
+        "description": ""
+    },
+    "classd": {
+        "prefix": "classd",
+        "body": [
+            "class ${1:name}(${2}):",
+            "    \"\"\"${3:class documentation}\"\"\"",
+            "    def __init__(self, ${4}):",
+            "        \"\"\"${5:__init__ documentation}\"\"\"",
+            "        ${0}"
+        ],
+        "description": ""
+    },
+    "def": {
+        "prefix": "def",
+        "body": [
+            "def ${1:name}(${2}):",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "defd": {
+        "prefix": "defd",
+        "body": [
+            "def ${1:name}(${2}):",
+            "    \"\"\"${3:function documentation}\"\"\"",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "defm": {
+        "prefix": "defm",
+        "body": [
+            "def ${1:name}(self, ${2}):",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "defmd": {
+        "prefix": "defmd",
+        "body": [
+            "def ${1:name}(self, ${2}):",
+            "    \"\"\"${3:method documentation}\"\"\"",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "elif": {
+        "prefix": "elif",
+        "body": [
+            "elif ${1:condition}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "else": {
+        "prefix": "else",
+        "body": [
+            "else:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "file-open": {
+        "prefix": "fileopen",
+        "body": [
+            "with open(${1:filename}, '${2:mode}') as ${3:f}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "for": {
+        "prefix": "for",
+        "body": [
+            "for ${1:value} in ${2:list}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "for-range": {
+        "prefix": "forrange",
+        "body": [
+            "for ${1:value} in range(${2:length}):",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "if": {
+        "prefix": "if",
+        "body": [
+            "if ${1:condition}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "tryexcept": {
+        "prefix": "tryexcept",
+        "body": [
+            "try:",
+            "    ${1}",
+            "except ${2:Exception}:",
+            "    ${3}"
+        ],
+        "description": ""
+    },
+    "tryexceptfinally": {
+        "prefix": "tryexcept",
+        "body": [
+            "try:",
+            "    ${1}",
+            "except ${2:Exception}:",
+            "    ${3}",
+            "finally:",
+            "    ${4}"
+        ],
+        "description": ""
+    },
+    "tryfinally": {
+        "prefix": "tryfinally",
+        "body": [
+            "try:",
+            "    ${1}",
+            "finally:",
+            "    ${2}"
+        ],
+        "description": ""
+    },
+    "while": {
+        "prefix": "while",
+        "body": [
+            "while ${1:condition}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "with": {
+        "prefix": "with",
+        "body": [
+            "with ${1:open}(${2:filename, mode}) as ${3:f}:",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "with-json-load": {
+        "prefix": "jsonload",
+        "body": [
+            "with open(${1:filename}, 'r') as f:",
+            "    data = json.load(f)"
+        ],
+        "description": ""
+    },
+    "with-json-dump": {
+        "prefix": "jsonsave",
+        "body": [
+            "with open(${1:filename}, 'w') as f:",
+            "    json.dump(data, f, indent=2, ensure_ascii=False)"
+        ],
+        "description": ""
+    },
+    "list-inline": {
+        "prefix": "list-inline",
+        "body": [
+            "[$1 for ${1:x} in ${2:list}]"
+        ],
+        "description": ""
+    },
+    "list-if": {
+        "prefix": "list-if",
+        "body": [
+            "[$1 for ${1:x} in ${2:list} if ${3:condition}]"
+        ],
+        "description": ""
+    },
+    "print": {
+        "prefix": "print",
+        "body": [
+            "print(${0})"
+        ],
+        "description": ""
+    },
+    "coding": {
+        "prefix": "coding",
+        "body": [
+            "# -*- coding: utf-8 -*-"
+        ],
+        "description": ""
+    },
+    "getattr": {
+        "prefix": "getattr",
+        "body": [
+            "getattr(${1:obj}, ${0})"
+        ],
+        "description": ""
+    },
+    "setattr": {
+        "prefix": "setattr",
+        "body": [
+            "setattr(${1:obj}, ${1})"
+        ],
+        "description": ""
+    },
+    "pdb": {
+        "prefix": "pdb",
+        "body": [
+            "import pdb; pdb.set_trace()"
+        ],
+        "description": ""
+    },
+    "ifmain": {
+        "prefix": "ifmain",
+        "body": [
+            "if __name__ == '__main__':",
+            "    ${0}"
+        ],
+        "description": ""
+    },
+    "helloworld": {
+        "prefix": "helloworld",
+        "body": [
+            "# -*- coding: utf-8 -*-",
+            "",
+            "if __name__ == '__main__':"
+        ],
+        "description": ""
+    }
+}

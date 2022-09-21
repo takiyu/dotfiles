@@ -154,7 +154,7 @@
         "prefix": "try",
         "body": [
             "try {",
-            "    ${1:TARGET}",
+            "    ${1}",
             "} catch(${2:exception}) {",
             "    ${3}",
             "}"
@@ -165,7 +165,7 @@
         "prefix": "for-auto",
         "body": [
             "for (auto&& ${1} : ${2}) {",
-            "    ${0:TARGET}",
+            "    ${0}",
             "}"
         ],
         "description": ""
@@ -173,14 +173,14 @@
     "lambda": {
         "prefix": "lambda",
         "body": [
-            "[${1}](${2})${3} { ${4:TARGET} }"
+            "[${1}](${2})${3} { ${4} }"
         ],
         "description": ""
     },
     "enum_scoped": {
         "prefix": "enum_scoped",
         "body": [
-            "enum struct { ${1:TARGET} }"
+            "enum struct { ${1} }"
         ],
         "description": ""
     },
@@ -195,7 +195,7 @@
         "prefix": "namespace",
         "body": [
             "namespace ${1} {",
-            "    ${0:TARGET}",
+            "    ${0}",
             "}  // namespace $1"
         ],
         "description": ""
@@ -243,7 +243,7 @@
     "cout": {
         "prefix": "cout",
         "body": [
-            "std::cout << ${0:TARGET} << std::endl;"
+            "std::cout << ${0} << std::endl;"
         ],
         "description": ""
     },
