@@ -88,7 +88,7 @@ if [ $platform == 'Linux' ]; then
              .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
              .mplayer/config .config/matplotlib/matplotlibrc \
              .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
-             .config/nvim/dein .config/pycodestyle .lesskey)
+             .config/nvim/dein .config/pycodestyle .lesskey .vsnip)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
 
     # First, create directories
@@ -110,7 +110,7 @@ elif [ $platform == 'Windows' ]; then
     # Windows setup
     echo "* Setup dotfiles for Windows Environment"
     TARGETS=(.bash_profile .bashrc .gitconfig .minttyrc .config/nvim/dein \
-             .lesskey)
+             .lesskey .vsnip)
     TARGET_DIRS=(.config/nvim/)
 
     # First, create directories

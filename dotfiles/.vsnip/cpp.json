@@ -1,0 +1,419 @@
+{
+    "include": {
+        "prefix": "inc",
+        "body": [
+            "#include <${1:iostream}>${0}"
+        ],
+        "description": ""
+    },
+    "include2": {
+        "prefix": "inc2",
+        "body": [
+            "#include \"${1:head.h}\"${0}"
+        ],
+        "description": ""
+    },
+    "template": {
+        "prefix": "template",
+        "body": [
+            "template <typename ${1:T}>${0}"
+        ],
+        "description": ""
+    },
+    "class-inline": {
+        "prefix": "class-inline",
+        "body": [
+            "class ${1:name} {",
+            "  public:",
+            "    $1(${2}) {}",
+            "    ~$1() {}",
+            "  private:",
+            "};",
+            "${0}"
+        ],
+        "description": ""
+    },
+    "class-outline": {
+        "prefix": "class-outline",
+        "body": [
+            "class ${1:name} {",
+            "  public:",
+            "    $1(${2});",
+            "    ~$1();",
+            "  private:",
+            "};",
+            "",
+            "$1::$1($2) {",
+            "}",
+            "",
+            "$1::~$1() {",
+            "}",
+            "${0}"
+        ],
+        "description": ""
+    },
+    "class-empty": {
+        "prefix": "class-empty",
+        "body": [
+            "class ${1:name} {",
+            "    ${2}",
+            "};"
+        ],
+        "description": ""
+    },
+    "class-full-inline": {
+        "prefix": "class-full-inline",
+        "body": [
+            "class ${1:name} {",
+            "  public:",
+            "    $1(${2}) {}",
+            "    $1(const $1& lhs) {}",
+            "    $1($1&& lhs) {}",
+            "    $1& operator=(const $1& lhs) { return *this; }",
+            "    $1& operator=($1&& lhs) { return *this; }",
+            "    ~$1() {}",
+            "  private:",
+            "};${0}"
+        ],
+        "description": ""
+    },
+    "class-full-outline": {
+        "prefix": "class-full-outline",
+        "body": [
+            "class ${1:name} {",
+            "  public:",
+            "    $1(${2});",
+            "    $1(const $1&);",
+            "    $1($1&&);",
+            "    $1& operator=(const $1&);",
+            "    $1& operator=($1&&);",
+            "    ~$1();",
+            "  private:",
+            "};",
+            "",
+            "$1::$1($2) {}",
+            "",
+            "$1::$1(const $1& lhs) {}",
+            "",
+            "$1::$1($1&& lhs) {}",
+            "",
+            "$1& $1::operator=(const $1& lhs) { return *this; }",
+            "",
+            "$1& $1::operator=($1&& lhs) { return *this; }",
+            "",
+            "$1::~$1() {}",
+            "${0}"
+        ],
+        "description": ""
+    },
+    "class-pimpl": {
+        "prefix": "class-pimpl",
+        "body": [
+            "class ${1:name} {",
+            "  public:",
+            "    $1(${2});",
+            "    $1(const $1&);",
+            "    $1($1&&);",
+            "    $1& operator=(const $1&);",
+            "    $1& operator=($1&&);",
+            "    ~$1();",
+            "  private:",
+            "    class Impl;",
+            "    std::unique_ptr<Impl> m_impl;",
+            "};",
+            "",
+            "class $1::Impl {",
+            "public:",
+            "    Impl() {}",
+            "    Impl(const Impl& lhs) {}",
+            "    Impl(Impl&&) = delete;",
+            "    Impl& operator=(const Impl& lhs) { return *this; }",
+            "    Impl& operator=(Impl&&) = delete;",
+            "    ~Impl() {}",
+            "};",
+            "",
+            "$1::$1($2) : m_impl(std::make_unique<Impl>($2)) {}",
+            "",
+            "$1::$1(const $1& lhs) : m_impl(std::make_unique<Impl>(*lhs.m_impl)) {}",
+            "",
+            "$1::$1($1&&) = default;",
+            "",
+            "$1& $1::operator=(const $1& lhs) {",
+            "    *m_impl = *lhs.m_impl;",
+            "    return *this;",
+            "}",
+            "",
+            "$1& $1::operator=($1&&) = default;",
+            "",
+            "$1::~$1() = default;",
+            "${0}"
+        ],
+        "description": ""
+    },
+    "try": {
+        "prefix": "try",
+        "body": [
+            "try {",
+            "    ${1:TARGET}",
+            "} catch(${2:exception}) {",
+            "    ${3}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-auto": {
+        "prefix": "for-auto",
+        "body": [
+            "for (auto&& ${1} : ${2}) {",
+            "    ${0:TARGET}",
+            "}"
+        ],
+        "description": ""
+    },
+    "lambda": {
+        "prefix": "lambda",
+        "body": [
+            "[${1}](${2})${3} { ${4:TARGET} }"
+        ],
+        "description": ""
+    },
+    "enum_scoped": {
+        "prefix": "enum_scoped",
+        "body": [
+            "enum struct { ${1:TARGET} }"
+        ],
+        "description": ""
+    },
+    "static_assert": {
+        "prefix": "static_assert",
+        "body": [
+            "static_assert(${1}, \"${2}\");${0}"
+        ],
+        "description": ""
+    },
+    "namespace": {
+        "prefix": "namespace",
+        "body": [
+            "namespace ${1} {",
+            "    ${0:TARGET}",
+            "}  // namespace $1"
+        ],
+        "description": ""
+    },
+    "static_cast": {
+        "prefix": "scast",
+        "body": [
+            "static_cast<${1}>(${2})${0}"
+        ],
+        "description": ""
+    },
+    "reinterpret_cast": {
+        "prefix": "rcast",
+        "body": [
+            "reinterpret_cast<${1}>(${2})${0}"
+        ],
+        "description": ""
+    },
+    "const_cast": {
+        "prefix": "ccast",
+        "body": [
+            "const_cast<${1}>(${2})${0}"
+        ],
+        "description": ""
+    },
+    "dynamic_cast": {
+        "prefix": "dcast",
+        "body": [
+            "dynamic_cast<${1}>(${2})${0}"
+        ],
+        "description": ""
+    },
+    "helloworld": {
+        "prefix": "helloworld",
+        "body": [
+            "#include <iostream>",
+            "",
+            "int main(int argc, char const* argv[]) {",
+            "    std::cout << \"hello, world!\" << std::endl;",
+            "    return 0;",
+            "}"
+        ],
+        "description": ""
+    },
+    "cout": {
+        "prefix": "cout",
+        "body": [
+            "std::cout << ${0:TARGET} << std::endl;"
+        ],
+        "description": ""
+    },
+    "using-namespace": {
+        "prefix": "usingnamespace",
+        "body": [
+            "using namespace ${1:std};",
+            "${0}"
+        ],
+        "description": ""
+    },
+    "string": {
+        "prefix": "str",
+        "body": [
+            "std::string ${0}"
+        ],
+        "description": ""
+    },
+    "const_string": {
+        "prefix": "cstr",
+        "body": [
+            "const std::string& ${0}"
+        ],
+        "description": ""
+    },
+    "vector": {
+        "prefix": "vec",
+        "body": [
+            "std::vector<${1}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_vector": {
+        "prefix": "cvec",
+        "body": [
+            "const std::vector<${1}>& ${0}"
+        ],
+        "description": ""
+    },
+    "array": {
+        "prefix": "arr",
+        "body": [
+            "std::array<${1}, ${2}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_arr": {
+        "prefix": "carr",
+        "body": [
+            "const std::array<${1}, ${2}>& ${0}"
+        ],
+        "description": ""
+    },
+    "map": {
+        "prefix": "map",
+        "body": [
+            "std::map<${1}, ${2}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_map": {
+        "prefix": "cmap",
+        "body": [
+            "const std::map<${1}, ${2}>& ${0}"
+        ],
+        "description": ""
+    },
+    "unordered_map": {
+        "prefix": "umap",
+        "body": [
+            "std::unordered_map<${1}, ${2}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_unordered_map": {
+        "prefix": "cumap",
+        "body": [
+            "const std::unordered_map<${1}, ${2}>& ${0}"
+        ],
+        "description": ""
+    },
+    "set": {
+        "prefix": "set",
+        "body": [
+            "std::set<${1}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_set": {
+        "prefix": "cset",
+        "body": [
+            "const std::set<${1}>& ${0}"
+        ],
+        "description": ""
+    },
+    "unordered_set": {
+        "prefix": "uset",
+        "body": [
+            "std::unordered_set<${1}> ${0}"
+        ],
+        "description": ""
+    },
+    "const_unordered_set": {
+        "prefix": "cuset",
+        "body": [
+            "const std::unordered_set<${1}>& ${0}"
+        ],
+        "description": ""
+    },
+    "shared_ptr": {
+        "prefix": "shared_ptr",
+        "body": [
+            "std::shared_ptr<${1}> ${0}"
+        ],
+        "description": ""
+    },
+    "make_shared": {
+        "prefix": "make_shared",
+        "body": [
+            "std::make_shared<${1}>(${0}"
+        ],
+        "description": ""
+    },
+    "unique_ptr": {
+        "prefix": "unique_ptr",
+        "body": [
+            "std::unique_ptr<${1}> ${0}"
+        ],
+        "description": ""
+    },
+    "make_unique": {
+        "prefix": "make_unique",
+        "body": [
+            "std::make_unique<${1}>(${0}"
+        ],
+        "description": ""
+    },
+    "move": {
+        "prefix": "move",
+        "body": [
+            "std::move(${0})"
+        ],
+        "description": ""
+    },
+    "forward": {
+        "prefix": "forward",
+        "body": [
+            "std::forward<${1}>(${0}"
+        ],
+        "description": ""
+    },
+    "auto": {
+        "prefix": "auto",
+        "body": [
+            "auto&& ${0}"
+        ],
+        "description": ""
+    },
+    "make_tuple": {
+        "prefix": "make_tuple",
+        "body": [
+            "std::make_tuple(${0}"
+        ],
+        "description": ""
+    },
+    "get": {
+        "prefix": "get",
+        "body": [
+            "std::get<${1}>(${0})"
+        ],
+        "description": ""
+    }
+}
