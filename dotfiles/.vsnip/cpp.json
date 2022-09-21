@@ -13,6 +13,136 @@
         ],
         "description": ""
     },
+    "if": {
+        "prefix": "if",
+        "body": [
+            "if (${1})",
+            "   ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "else": {
+        "prefix": "else",
+        "body": [
+            "else {",
+            "   ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "elseif": {
+        "prefix": "elseif",
+        "body": [
+            "else if (${1}) {",
+            "   ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "ifelse": {
+        "prefix": "ifelse",
+        "body": [
+            "if (${1}) {",
+            "   ${0}",
+            "} else {",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-empty": {
+        "prefix": "forempty",
+        "body": [
+            "for (${1} = 0; $1 < ${2}; $1++) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-int": {
+        "prefix": "forint",
+        "body": [
+            "for (int ${1} = 0; $1 < ${2}; $1++) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-int32": {
+        "prefix": "forint32",
+        "body": [
+            "for (int32_t ${1} = 0; $1 < ${2}; $1++) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-uint32": {
+        "prefix": "foruint32",
+        "body": [
+            "for (uint32_t ${1} = 0; $1 < ${2}; $1++) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-size_t": {
+        "prefix": "forsizet",
+        "body": [
+            "for (size_t ${1} = 0; $1 < ${2}; $1++) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "for-auto": {
+        "prefix": "forauto",
+        "body": [
+            "for (auto&& ${1} : ${2}) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "while": {
+        "prefix": "while",
+        "body": [
+            "while (${1}) {",
+            "    ${0}",
+            "}"
+        ],
+        "description": ""
+    },
+    "switch": {
+        "prefix": "siwtch",
+        "body": [
+            "switch (${1:var}) {",
+            "case ${2:val}",
+            "    ${0}",
+            "    break;",
+            "}"
+        ],
+        "description": ""
+    },
+    "case": {
+        "prefix": "case",
+        "body": [
+            "case ${1:val}",
+            "    ${0}",
+            "    break;",
+            "}"
+        ],
+        "description": ""
+    },
+    "struct": {
+        "prefix": "struct",
+        "body": [
+            "struct ${1:name} {",
+            "    ${0}",
+            "};"
+        ],
+        "description": ""
+    },
     "template": {
         "prefix": "template",
         "body": [
@@ -161,15 +291,6 @@
         ],
         "description": ""
     },
-    "for-auto": {
-        "prefix": "for-auto",
-        "body": [
-            "for (auto&& ${1} : ${2}) {",
-            "    ${0}",
-            "}"
-        ],
-        "description": ""
-    },
     "lambda": {
         "prefix": "lambda",
         "body": [
@@ -177,10 +298,17 @@
         ],
         "description": ""
     },
-    "enum_scoped": {
-        "prefix": "enum_scoped",
+    "enum": {
+        "prefix": "enum",
         "body": [
-            "enum struct { ${1} }"
+            "enum ${1:name} { ${0} }"
+        ],
+        "description": ""
+    },
+    "enum_class": {
+        "prefix": "enumclass",
+        "body": [
+            "enum class ${1:name} { ${0} }"
         ],
         "description": ""
     },
