@@ -1,13 +1,4 @@
 # ------------------------------------------------------------------------------
-# ----------------------------------- Basic ------------------------------------
-# ------------------------------------------------------------------------------
-[[plugins]]
-repo = 'vim-denops/denops.vim'  # deno operators
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'denops.vim'
-'''
-
-# ------------------------------------------------------------------------------
 # ---------------------------- Neovim compatibility ----------------------------
 # ------------------------------------------------------------------------------
 # [[plugins]]
@@ -83,73 +74,44 @@ hook_add = '''
 # --------------------------------- Completion ---------------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
-repo = 'neovim/nvim-lspconfig'  # LSP configuration
+repo = 'neovim/nvim-lspconfig'                 # LSP
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-lspconfig.vim'
 '''
 
 [[plugins]]
-repo = 'williamboman/nvim-lsp-installer'  # LSP installer
-depends = ['nvim-lspconfig']
+repo = 'williamboman/mason.nvim'               # LSP installer
+[[plugins]]
+repo = 'williamboman/mason-lspconfig.nvim'
 hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'nvim-lsp-installer.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'mason.vim'
 '''
 
 [[plugins]]
-repo = 'Shougo/ddc-matcher_head'  # ddc plugin
-
+repo = 'hrsh7th/cmp-nvim-lsp'                  # Completion
 [[plugins]]
-repo = 'Shougo/ddc-sorter_rank'   # ddc plugin
-
+repo = 'hrsh7th/vim-vsnip'
 [[plugins]]
-repo = 'Shougo/ddc-converter_remove_overlap'   # ddc plugin
-
+repo = 'hrsh7th/cmp-buffer'
 [[plugins]]
-repo = 'LumaKernel/ddc-file'      # ddc plugin
-
+repo = 'hrsh7th/cmp-path'
 [[plugins]]
-repo = 'Shougo/ddc-around'        # ddc plugin
-
+repo = 'hrsh7th/cmp-cmdline'
 [[plugins]]
-repo = 'matsui54/ddc-dictionary'  # ddc plugin
-
+repo = 'hrsh7th/cmp-emoji'
 [[plugins]]
-repo = 'LumaKernel/ddc-tabnine'   # ddc plugin
-
+repo = 'octaltree/cmp-look'
 [[plugins]]
-repo = 'Shougo/ddc-nvim-lsp'      # ddc plugin
-depends = ['nvim-lspconfig']
-
+repo = 'onsails/lspkind.nvim'
 [[plugins]]
-repo = 'takiyu/my-vim-snippets'   # snippet for ddc plugin
-
+repo = 'tzachar/cmp-tabnine'
+build = './install.sh'
 [[plugins]]
-repo = 'Shougo/neosnippet'        # ddc plugin
-depends = ['my-vim-snippets']
+repo = 'hrsh7th/nvim-cmp'
+depends = ['cmp-nvim-lsp','vim-vsnip', 'cmp-buffer', 'cmp-path', 'cmp-cmdline',
+           'cmp-emoji', 'cmp-spell', 'lspkind.nvim', 'nvim-cmp', 'cmp-tabnine']
 hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'neosnippet.vim'
-'''
-
-[[plugins]]
-repo = 'Shougo/ddc.vim'           # ddc body
-depends = ['denops.vim', 'ddc-around', 'ddc-matcher_head', 'ddc-sorter_rank',
-           'ddc-file', 'neosnippet']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'ddc.vim'
-'''
-
-[[plugins]]
-repo = 'matsui54/denops-signature_help'     # lsp enhancer
-depends = ['denops.vim', 'ddc.vim']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'denops-signature_help.vim'
-'''
-
-[[plugins]]
-repo = 'matsui54/denops-popup-preview.vim'  # lsp enhancer
-depends = ['denops.vim', 'ddc.vim']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'denops-popup-preview.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'nvim-cmp.vim'
 '''
 
 # ------------------------------------------------------------------------------
@@ -163,17 +125,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'                    # Git補助
-
-[[plugins]]
-repo = 'Shougo/vimproc.vim'                    # agitが依存
-build = 'make'
-
-[[plugins]]
-repo = 'cohama/agit.vim'                       # Git Graph
-depends = ['vimproc.vim']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'agit.vim'
-'''
 
 # ------------------------------------------------------------------------------
 # ----------------------------- Indent Assistance ------------------------------

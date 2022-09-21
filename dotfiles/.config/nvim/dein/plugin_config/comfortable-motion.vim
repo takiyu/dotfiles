@@ -9,6 +9,9 @@ let g:comfortable_motion_scroll_up_key = "\<C-u>"
 " Large motion
 nnoremap <silent> <Space>   :call comfortable_motion#flick(120)<CR>
 nnoremap <silent> <S-Space> :call comfortable_motion#flick(-120)<CR>
+nnoremap <silent> <A-Space> :call comfortable_motion#flick(-120)<CR>
+nnoremap <silent> <PageDown>:call comfortable_motion#flick(120)<CR>
+nnoremap <silent> <PageUp>  :call comfortable_motion#flick(-120)<CR>
 " Small motion
 noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
 noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>
