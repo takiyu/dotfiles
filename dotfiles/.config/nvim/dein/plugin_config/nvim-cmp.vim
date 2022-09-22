@@ -31,7 +31,7 @@ cmp.setup({
         ['<C-o>'] = cmp.mapping.complete(),
         ['<C-l>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                return cmp.complete_common_string()
+                return cmp.confirm({ select = true })
             else
                 return cmp.complete()
             end
