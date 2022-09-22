@@ -9,7 +9,7 @@
         "description": ""
     },
     "classd": {
-        "prefix": "classd",
+        "prefix": "class-doc",
         "body": [
             "class ${1:name}(${2}):",
             "    \"\"\"${3:class documentation}\"\"\"",
@@ -28,7 +28,7 @@
         "description": ""
     },
     "defd": {
-        "prefix": "defd",
+        "prefix": "def-doc",
         "body": [
             "def ${1:name}(${2}):",
             "    \"\"\"${3:function documentation}\"\"\"",
@@ -37,7 +37,7 @@
         "description": ""
     },
     "defm": {
-        "prefix": "defm",
+        "prefix": "def-method",
         "body": [
             "def ${1:name}(self, ${2}):",
             "    ${0}"
@@ -45,7 +45,7 @@
         "description": ""
     },
     "defmd": {
-        "prefix": "defmd",
+        "prefix": "def-method-doc",
         "body": [
             "def ${1:name}(self, ${2}):",
             "    \"\"\"${3:method documentation}\"\"\"",
@@ -70,7 +70,7 @@
         "description": ""
     },
     "file-open": {
-        "prefix": "fileopen",
+        "prefix": "file-open",
         "body": [
             "with open(${1:filename}, '${2:mode}') as ${3:f}:",
             "    ${0}"
@@ -86,7 +86,7 @@
         "description": ""
     },
     "for-range": {
-        "prefix": "forrange",
+        "prefix": "for-range",
         "body": [
             "for ${1:value} in range(${2:length}):",
             "    ${0}"
@@ -102,7 +102,7 @@
         "description": ""
     },
     "tryexcept": {
-        "prefix": "tryexcept",
+        "prefix": "try-except",
         "body": [
             "try:",
             "    ${1}",
@@ -112,7 +112,7 @@
         "description": ""
     },
     "tryexceptfinally": {
-        "prefix": "tryexcept",
+        "prefix": "try-except-finally",
         "body": [
             "try:",
             "    ${1}",
@@ -124,7 +124,7 @@
         "description": ""
     },
     "tryfinally": {
-        "prefix": "tryfinally",
+        "prefix": "try-finally",
         "body": [
             "try:",
             "    ${1}",
@@ -150,7 +150,7 @@
         "description": ""
     },
     "with-json-load": {
-        "prefix": "jsonload",
+        "prefix": "json-load",
         "body": [
             "with open(${1:filename}, 'r') as f:",
             "    data = json.load(f)"
@@ -158,7 +158,7 @@
         "description": ""
     },
     "with-json-dump": {
-        "prefix": "jsonsave",
+        "prefix": "json-save",
         "body": [
             "with open(${1:filename}, 'w') as f:",
             "    json.dump(data, f, indent=2, ensure_ascii=False)"
@@ -215,7 +215,7 @@
         "description": ""
     },
     "ifmain": {
-        "prefix": "ifmain",
+        "prefix": "if-main",
         "body": [
             "if __name__ == '__main__':",
             "    ${0}"
