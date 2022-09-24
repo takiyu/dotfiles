@@ -50,11 +50,12 @@ cmp.setup({
     formatting = {
         format = lspkind.cmp_format({
             -- Custom Icon for Tabnine
+            mode = 'symbol_text',
             maxwidth = 30,
             before = function (entry, vim_item)
                 -- Custom icon & text
                 if entry.source.name == 'cmp_tabnine' then
-                    vim_item.kind = ''
+                    vim_item.kind = '🎁 Tabnine'
                 end
                 return vim_item
             end
@@ -112,37 +113,35 @@ require('cmp_tabnine.config').setup({
 
 -- lspkind
 require('lspkind').init({
-    mode = 'symbol',
     preset = 'default',
     symbol_map = {
-        Text = '',
-        Method = '',
-        Function = '',
-        Constructor = '',
-        Field = 'ﰠ',
-        Variable = '',
-        Class = 'ﴯ',
-        Interface = '',
-        Module = '',
-        Property = 'ﰠ',
-        Unit = '塞',
-        Value = '',
-        Enum = '',
-        Keyword = '',
-        Snippet = '',
-        Color = '',
-        File = '',
-        Reference = '',
-        Folder = '',
-        EnumMember = '',
-        Constant = '',
-        Struct = 'פּ',
-        Event = '',
-        Operator = '',
+        Text = '📔',
+        Method = '🎓',
+        Function = '🎩',
+        Constructor = '🔨',
+        Field = '🏷️',
+        Variable = '🅰️',
+        Class = '🏫',
+        Interface = '🪟 ',
+        Module = '📦',
+        Property = '🏷️',
+        Unit = '📏',
+        Value = '💰',
+        Enum = '📶',
+        Keyword = '🔑',
+        Snippet = '🌟',
+        Color = '🎨',
+        File = '📄',
+        Reference = '🪢',
+        Folder = '📂',
+        EnumMember = '📶',
+        Constant = '🗿',
+        Struct = '📚',
+        Event = '🎉',
+        Operator = '➗',
         TypeParameter = ''
     },
 })
-
 EOF
 
 " Key mappings for vim-vsnip
