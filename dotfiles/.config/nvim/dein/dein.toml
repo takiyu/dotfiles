@@ -47,6 +47,12 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'windwp/nvim-autopairs'                 # カッコ自動入力
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'nvim-autopairs.vim'
+'''
+
+[[plugins]]
 repo = 'thinca/vim-ref'                        # 英語オンライン辞書
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-ref.vim'
@@ -116,8 +122,6 @@ repo = 'tzachar/cmp-tabnine'
 build = './install.sh'
 [[plugins]]
 repo = 'hrsh7th/cmp-emoji'
-[[plugins]]
-repo = 'windwp/nvim-autopairs'
 [[plugins]]
 repo = 'onsails/lspkind.nvim'
 [[plugins]]

@@ -119,33 +119,6 @@ noremap <C-k> 20k
 " 行末行頭への移動
 noremap 9 ^
 noremap 0 $
-" 括弧補完
-"inoremap { {}<Left>
-"inoremap ( ()<Left>
-"inoremap [ []<Left>
-"inoremap < <><Left>
-"inoremap " ""<Left>
-"inoremap ' ''<Left>
-"inoremap ` ``<Left>
-" 括弧補完 (手動入力時)
-"inoremap {} {}<Left>
-"inoremap () ()<Left>
-"inoremap [] []<Left>
-"inoremap <> <><Left>
-"inoremap "" ""<Left>
-"inoremap '' ''<Left>
-"inoremap `` ``<Left>
-" 括弧補完 (改行)
-inoremap {<CR> {<CR><CR>}<UP>
-inoremap (<CR> (<CR><CR>)<UP>
-inoremap [<CR> [<CR><CR>]<UP>
-inoremap <<CR> <<CR><CR>><UP>
-inoremap "<CR> "<CR><CR>"<UP>
-inoremap '<CR> '<CR><CR>'<UP>
-inoremap `<CR> `<CR><CR>`<UP>
-" 括弧補完 (英文)
-"inoremap 's 's
-"inoremap '<Space> '<Space>
 " タブ移動
 nnoremap 3 gt
 nnoremap 2 gT
@@ -171,8 +144,6 @@ nmap <C-9> :cN<CR>
 nmap <C-0> :cn<CR>
 " Quickfix/Preview/Location window/Float windowの非表示
 nnoremap <silent><C-c> :cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>
-" omni補完
-" inoremap <C-o> <C-x><C-o>
 " 検索ハイライトのクリア
 nmap <silent><Esc> :noh<CR>
 " 置換 (start from current cursor)
