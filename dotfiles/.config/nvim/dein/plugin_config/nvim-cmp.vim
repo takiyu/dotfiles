@@ -5,8 +5,6 @@ lua << EOF
 local cmp = require('cmp')
 local lspkind = require('lspkind')
 local compare = require('cmp.config.compare')
-local tabnine = require('cmp_tabnine.config')
-local compare_tabnine = require('cmp_tabnine.compare')
 
 -- Completion for general
 cmp.setup({
@@ -66,7 +64,7 @@ cmp.setup({
     sorting = {
         priority_weight = 2,
         comparators = {
-            compare_tabnine,  -- Tabnine comes upper
+            require('cmp_tabnine.compare'),  -- Tabnine comes upper
             compare.offset,
             compare.exact,
             compare.score,
@@ -78,7 +76,7 @@ cmp.setup({
         },
     },
     experimental = {
-        ghost_text = { hl_group = 'GhostText' },
+        ghost_text = { hl_group = 'GhostText' },  -- Defined in color scheme
     },
 })
 
@@ -103,6 +101,7 @@ cmp.setup.cmdline('/', {
 })
 
 -- Tabnine
+local tabnine = require('cmp_tabnine.config')
 tabnine.setup({
     max_lines = 200,
     max_num_results = 5,

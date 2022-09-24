@@ -64,13 +64,6 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
-[[plugins]]
-repo = 'yukimemi/dps-asyngrep'                 # 非同期検索
-depends = ['denops.vim']
-hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'dps-asyngrep.vim'
-'''
-
 # ------------------------------------------------------------------------------
 # ----------------------------------- Syntax -----------------------------------
 # ------------------------------------------------------------------------------
@@ -104,6 +97,9 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'onsails/lspkind.nvim'                  # LSP icon
+
+[[plugins]]
 repo = 'hrsh7th/cmp-nvim-lsp'                  # Completion
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip'
@@ -122,8 +118,6 @@ repo = 'tzachar/cmp-tabnine'
 build = './install.sh'
 [[plugins]]
 repo = 'hrsh7th/cmp-emoji'
-[[plugins]]
-repo = 'onsails/lspkind.nvim'
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'
 depends = ['cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer', 'cmp-path',
