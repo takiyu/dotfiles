@@ -51,7 +51,7 @@
         "description": ""
     },
     "for-empty": {
-        "prefix": "for-empty",
+        "prefix": "forempty",
         "body": [
             "for (${1:i} = 0; $1 < ${2}; $1++) {",
             "    ${0}",
@@ -60,7 +60,7 @@
         "description": ""
     },
     "for-int": {
-        "prefix": "for-int",
+        "prefix": "forint",
         "body": [
             "for (int ${1:i} = 0; $1 < ${2}; $1++) {",
             "    ${0}",
@@ -69,7 +69,7 @@
         "description": ""
     },
     "for-int32": {
-        "prefix": "for-int32",
+        "prefix": "forint32",
         "body": [
             "for (int32_t ${1:i} = 0; $1 < ${2}; $1++) {",
             "    ${0}",
@@ -78,7 +78,7 @@
         "description": ""
     },
     "for-uint32": {
-        "prefix": "for-uint32",
+        "prefix": "foruint32",
         "body": [
             "for (uint32_t ${1:i} = 0; $1 < ${2}; $1++) {",
             "    ${0}",
@@ -87,7 +87,7 @@
         "description": ""
     },
     "for-size_t": {
-        "prefix": "for-size_t",
+        "prefix": "forsize_t",
         "body": [
             "for (size_t ${1:i} = 0; $1 < ${2}; $1++) {",
             "    ${0}",
@@ -96,7 +96,7 @@
         "description": ""
     },
     "for-auto": {
-        "prefix": "for-auto",
+        "prefix": "forauto",
         "body": [
             "for (auto&& ${1} : ${2}) {",
             "    ${0}",
@@ -376,7 +376,7 @@
         "description": ""
     },
     "using-namespace": {
-        "prefix": "usingnamespace",
+        "prefix": "using-namespace",
         "body": [
             "using namespace ${1:std};",
             "${0}"
@@ -552,7 +552,7 @@
         "description": ""
     },
     "define": {
-        "prefix": "define",
+        "prefix": "def",
         "body": [
             "#define $0"
         ],
@@ -578,7 +578,7 @@
     "debug": {
         "prefix": "debug",
         "body": [
-            "std::cout << \"<<< DEBUG >>> [${TM_FILENAME}:l${TM_LINE_NUMBER}]\" << std::endl; $0"
+            "std::cout << \"<<< DEBUG >>> (\" << __FILE__ << \" l:\" << __LINE__ << \" f:\" << __func__ << \")\" << std::endl;${0}"
         ],
         "description": ""
     }
