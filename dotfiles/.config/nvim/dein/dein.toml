@@ -75,7 +75,7 @@ hook_add = '''
 # '''
 
 # ------------------------------------------------------------------------------
-# --------------------------------- Completion ---------------------------------
+# ------------------------------------ LSP -------------------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'                 # LSP
@@ -89,6 +89,12 @@ repo = 'williamboman/mason.nvim'               # LSP installer
 repo = 'williamboman/mason-lspconfig.nvim'
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'mason.vim'
+'''
+
+[[plugins]]
+repo = 'ray-x/lsp_signature.nvim'              # Signature
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'lsp_signature.vim'
 '''
 
 [[plugins]]

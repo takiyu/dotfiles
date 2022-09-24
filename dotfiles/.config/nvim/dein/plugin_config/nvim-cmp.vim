@@ -5,6 +5,8 @@ lua << EOF
 local cmp = require('cmp')
 local lspkind = require('lspkind')
 local compare = require('cmp.config.compare')
+local tabnine = require('cmp_tabnine.config')
+local compare_tabnine = require('cmp_tabnine.compare')
 
 -- Completion for general
 cmp.setup({
@@ -61,7 +63,7 @@ cmp.setup({
     sorting = {
         priority_weight = 2,
         comparators = {
-            require('cmp_tabnine.compare'),  -- Tabnine comes upper
+            compare_tabnine,  -- Tabnine comes upper
             compare.offset,
             compare.exact,
             compare.score,
@@ -98,7 +100,6 @@ cmp.setup.cmdline('/', {
 })
 
 -- Tabnine
-local tabnine = require('cmp_tabnine.config')
 tabnine.setup({
     max_lines = 200,
     max_num_results = 5,
