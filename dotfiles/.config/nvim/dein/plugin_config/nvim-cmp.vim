@@ -15,16 +15,19 @@ cmp.setup({
             vim.fn['vsnip#anonymous'](args.body)
         end,
     },
-    sources = {
-        { name = 'nvim_lsp' },
-        { name = 'vsnip' },
-        { name = 'buffer', max_item_count = 10 },
+    sources = cmp.config.sources({
+        -- Group 1
+        { name = 'vsnip'},
         { name = 'path' },
+        { name = 'emoji', insert = true },
+    }, {
+        -- Group 2
+        { name = 'cmp_tabnine' },
+        { name = 'nvim_lsp' },
+        { name = 'buffer', max_item_count = 10 },
         { name = 'look', max_item_count = 10,
                          option = {convert_case = true, loud = true} },
-        { name = 'cmp_tabnine' },
-        { name = 'emoji', insert = true },
-    },
+    }),
     mapping = cmp.mapping.preset.insert({
         ['<tab>'] = cmp.mapping.select_next_item(),
         ['<S-tab>'] = cmp.mapping.select_prev_item(),
