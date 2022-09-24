@@ -117,6 +117,8 @@ build = './install.sh'
 [[plugins]]
 repo = 'hrsh7th/cmp-emoji'
 [[plugins]]
+repo = 'windwp/nvim-autopairs'
+[[plugins]]
 repo = 'onsails/lspkind.nvim'
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'
