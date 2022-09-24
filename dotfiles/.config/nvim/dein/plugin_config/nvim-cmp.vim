@@ -49,13 +49,12 @@ cmp.setup({
     }),
     formatting = {
         format = lspkind.cmp_format({
-            -- Emoji
-            mode = 'symbol_text',
+            -- Custom Icon for Tabnine
             maxwidth = 30,
             before = function (entry, vim_item)
                 -- Custom icon & text
-                if entry.source.name == "cmp_tabnine" then
-                    vim_item.kind = " Tabnine"
+                if entry.source.name == 'cmp_tabnine' then
+                    vim_item.kind = ''
                 end
                 return vim_item
             end
@@ -101,8 +100,7 @@ cmp.setup.cmdline('/', {
 })
 
 -- Tabnine
-local tabnine = require('cmp_tabnine.config')
-tabnine.setup({
+require('cmp_tabnine.config').setup({
     max_lines = 200,
     max_num_results = 5,
     sort = true,
@@ -110,6 +108,39 @@ tabnine.setup({
     snippet_placeholder = '..',
     ignored_file_types = {},
     show_prediction_strength = true
+})
+
+-- lspkind
+require('lspkind').init({
+    mode = 'symbol',
+    preset = 'default',
+    symbol_map = {
+        Text = '',
+        Method = '',
+        Function = '',
+        Constructor = '',
+        Field = 'ﰠ',
+        Variable = '',
+        Class = 'ﴯ',
+        Interface = '',
+        Module = '',
+        Property = 'ﰠ',
+        Unit = '塞',
+        Value = '',
+        Enum = '',
+        Keyword = '',
+        Snippet = '',
+        Color = '',
+        File = '',
+        Reference = '',
+        Folder = '',
+        EnumMember = '',
+        Constant = '',
+        Struct = 'פּ',
+        Event = '',
+        Operator = '',
+        TypeParameter = ''
+    },
 })
 
 EOF
