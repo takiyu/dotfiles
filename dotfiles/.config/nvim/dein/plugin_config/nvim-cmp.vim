@@ -132,13 +132,13 @@ require('lspkind').init({
         Snippet = '🌟',
         Color = '🎨',
         File = '📄',
-        Reference = '🔖',
+        Reference = '🔗',
         Folder = '📂',
         EnumMember = '📶',
         Constant = '🗿',
-        Struct = '📚',
+        Struct = '🧳',
         Event = '🎉',
-        Operator = '➗',
+        Operator = '🧭',
         TypeParameter = ''
     },
 })
