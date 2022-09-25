@@ -356,18 +356,6 @@
         ],
         "description": ""
     },
-    "helloworld": {
-        "prefix": "helloworld",
-        "body": [
-            "#include <iostream>",
-            "",
-            "int main(int argc, char const* argv[]) {",
-            "    std::cout << \"hello, world!\" << std::endl;",
-            "    return 0;",
-            "}"
-        ],
-        "description": ""
-    },
     "cout": {
         "prefix": "cout",
         "body": [
@@ -579,6 +567,29 @@
         "prefix": "debug",
         "body": [
             "std::cout << \"<<< DEBUG >>> (\" << __FILE__ << \" l:\" << __LINE__ << \" f:\" << __func__ << \")\" << std::endl;${0}"
+        ],
+        "description": ""
+    },
+    "helloworld": {
+        "prefix": "helloworld",
+        "body": [
+            "#include <iostream>",
+            "",
+            "int main(int argc, char const* argv[]) {",
+            "    (void)argc, (void)argv;",
+            "    std::cout << \"hello, world!\" << std::endl;",
+            "    return 0;",
+            "}"
+        ],
+        "description": ""
+    },
+    "main": {
+        "prefix": "main",
+        "body": [
+            "int main(int argc, char const* argv[]) {",
+            "    (void)argc, (void)argv;",
+            "    return 0;",
+            "}"
         ],
         "description": ""
     }
