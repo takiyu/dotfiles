@@ -18,14 +18,18 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-localvimrc.vim'
 '''
 
-[[plugins]]
-repo = 'ryanoasis/vim-devicons'                # Icons for NerdTree
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'                   # Filer
-depends = ['vim-devicons.vim']
+repo = 'lambdalisue/nerdfont.vim'
+[[plugins]]
+repo = 'lambdalisue/glyph-palette.vim'
+[[plugins]]
+repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+[[plugins]]
+repo = 'lambdalisue/fern.vim'                  # Filer
+depends = ['nerdfont.vim', 'glyph-palette.vim', 'fern-renderer-nerdfont.vim']
 hook_add = '''
-    execute 'source ' . g:dein_plugin_config_dir . 'nerdtree.vim'
+    execute 'source ' . g:dein_plugin_config_dir . 'fern.vim'
 '''
 
 [[plugins]]
