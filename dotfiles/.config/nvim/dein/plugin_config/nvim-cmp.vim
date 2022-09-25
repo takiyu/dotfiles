@@ -56,12 +56,12 @@ cmp.setup({
         end,
     },
     sources = cmp.config.sources({
-        -- Group 1
+        -- Source group 1
         { name = 'vsnip'},
         { name = 'path' },
         { name = 'emoji', insert = true },
     }, {
-        -- Group 2
+        -- Source group 2
         { name = 'cmp_tabnine' },
         { name = 'nvim_lsp' },
         { name = 'buffer', max_item_count = 10 },
@@ -76,14 +76,19 @@ cmp.setup({
         ['<C-o>'] = cmp.mapping.complete(),
         ['<C-l>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
+                -- Confirm visible completion
                 return cmp.confirm({ select = true })
             else
-                return cmp.complete()
+                -- Start AUTO completion
+                return cmp.complete({
+                    config = { sources = { { name = 'cmp_tabnine' } } }
+                })
             end
             fallback()
         end, { 'i', 'c' }),
         ['<CR>'] = cmp.mapping(function(fallback)
             if cmp.get_active_entry() then
+                -- Confirm with explicit selection
                 return cmp.confirm({ select = true })
             end
             fallback()
@@ -91,11 +96,11 @@ cmp.setup({
     }),
     formatting = {
         format = require('lspkind').cmp_format({
-            -- Custom Icon for Tabnine
+            -- Tabnine integration setting
             mode = 'symbol_text',
             maxwidth = 30,
+            -- Custom Icon for Tabnine
             before = function (entry, vim_item)
-                -- Custom icon & text
                 if entry.source.name == 'cmp_tabnine' then
                     vim_item.kind = '🎁 Tabnine'
                 end
