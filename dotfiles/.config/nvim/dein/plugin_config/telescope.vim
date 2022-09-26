@@ -7,5 +7,5 @@ require('telescope').setup{
 
 EOF
 
-nnoremap <C-F3> <cmd>Telescope live_grep<cr>
-nnoremap <F3> <cmd>Telescope find_files<cr>
+nnoremap <F3> <cmd>Telescope live_grep<cr>
+nnoremap <C-F3> <cmd>Telescope find_files<cr>

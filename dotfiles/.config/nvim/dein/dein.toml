@@ -32,11 +32,18 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'fern.vim'
 '''
 
-# [[plugins]]
-# repo = 'nvim-telescope/telescope.nvim'                  # Fuzzy Finder
-# hook_add = '''
-#     execute 'source ' . g:dein_plugin_config_dir . 'telescope.vim'
-# '''
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'         # Fuzzy Finder
+depends = ['plenary.nvim']
+[[plugins]]
+repo = 'nvim-telescope/telescope-fzf-native.nvim'
+depends = ['telescope.nvim']
+build = 'make'
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'telescope.vim'
+'''
 
 [[plugins]]
 repo = 'mbbill/undotree'                       # undo可視化
