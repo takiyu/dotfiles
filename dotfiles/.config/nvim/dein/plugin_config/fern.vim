@@ -12,7 +12,7 @@ function! s:init_fern() abort
     " Define NERDTree like mappings in fern buffer
     nmap <buffer> o <Plug>(fern-action-open:edit)<Plug>(fern-close-drawer)
     nmap <buffer> O <Plug>(fern-action-open:edit)<C-w>p
-    nmap <buffer> t <Plug>(fern-action-open:tabedit)<Plug>(fern-close-drawer)
+    nmap <buffer> t <Plug>(fern-action-open:tabedit)gT<Plug>(fern-close-drawer)gt
     nmap <buffer> T <Plug>(fern-action-open:tabedit)gT
     nmap <buffer> i <Plug>(fern-action-open:split)<Plug>(fern-close-drawer)
     nmap <buffer> I <Plug>(fern-action-open:split)<C-w>p
