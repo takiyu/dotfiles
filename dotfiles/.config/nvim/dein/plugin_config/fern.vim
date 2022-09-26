@@ -3,7 +3,7 @@
 " ==============================================================================
 " Global key maps
 noremap <C-e> :Fern . -drawer -toggle<CR>
-noremap <C-f> :FernDo close -drawer<CR>:Fern . -drawer -reveal=%<CR>
+noremap <C-f> :FernDo close -drawer<CR>:Fern . -drawer -reveal=% -wait<CR>
 nnoremap <Plug>(fern-close-drawer) :<C-u>FernDo close -drawer -stay<CR>
 " Use icons
 let g:fern#renderer = 'nerdfont'
