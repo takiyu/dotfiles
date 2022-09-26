@@ -18,7 +18,7 @@ function! s:init_fern() abort
     nmap <buffer> I <Plug>(fern-action-open:split)<C-w>p
     nmap <buffer> s <Plug>(fern-action-open:vsplit)<Plug>(fern-close-drawer)
     nmap <buffer> S <Plug>(fern-action-open:vsplit)<C-w>p
-    nmap <buffer> u <Plug>(fern-action-leave)<Plug>(fern-close-drawer)
+    nmap <buffer> u <Plug>(fern-action-leave)
     nmap <buffer> r <Plug>(fern-action-reload)
     nmap <buffer> R gg<Plug>(fern-action-reload)<C-o>
     nmap <buffer> cd <Plug>(fern-action-cd)
