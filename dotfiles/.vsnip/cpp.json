@@ -371,6 +371,13 @@
         ],
         "description": ""
     },
+    "const_auto": {
+        "prefix": "cauto",
+        "body": [
+            "const auto$ ${0}"
+        ],
+        "description": ""
+    },
     "string": {
         "prefix": "str",
         "body": [
