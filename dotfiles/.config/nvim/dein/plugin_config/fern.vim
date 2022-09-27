@@ -1,12 +1,15 @@
 " ==============================================================================
 "                                    fern
 " ==============================================================================
+" Disable default mappings
+let g:fern#disable_default_mappings = 1
+" Use icons
+let g:fern#renderer = 'nerdfont'
+
 " Global key maps
 noremap <C-e> :Fern . -drawer -toggle<CR>
 noremap <C-f> :FernDo close -drawer<CR>:Fern . -drawer -reveal=% -wait<CR>
 nnoremap <Plug>(fern-close-drawer) :<C-u>FernDo close -drawer -stay<CR>
-" Use icons
-let g:fern#renderer = 'nerdfont'
 
 function! s:init_fern() abort
     " Define NERDTree like mappings in fern buffer
@@ -15,16 +18,22 @@ function! s:init_fern() abort
     nmap <buffer> t <Plug>(fern-action-open:tabedit)gT<Plug>(fern-close-drawer)gt
     nmap <buffer> T <Plug>(fern-action-open:tabedit)gT
     nmap <buffer> i <Plug>(fern-action-open:split)<Plug>(fern-close-drawer)
-    nmap <buffer> I <Plug>(fern-action-open:split)<C-w>p
     nmap <buffer> s <Plug>(fern-action-open:vsplit)<Plug>(fern-close-drawer)
     nmap <buffer> S <Plug>(fern-action-open:vsplit)<C-w>p
-    nmap <buffer> u <Plug>(fern-action-leave)
+
+    nmap <buffer> l <Plug>(fern-action-expand:in)
+    nmap <buffer> h <Plug>(fern-action-collapse)
+
+    nmap <buffer> u <Plug>(fern-action-collapse)
+    nmap <buffer> U <Plug>(fern-action-leave)
     nmap <buffer> r <Plug>(fern-action-reload)
     nmap <buffer> R gg<Plug>(fern-action-reload)<C-o>
     nmap <buffer> cd <Plug>(fern-action-cd)
     nmap <buffer> CD gg<Plug>(fern-action-cd)<C-o>
-    nmap <buffer> <C-h> <Plug>(fern-action-hidden-toggle)
+    nmap <buffer> I <Plug>(fern-action-hidden:toggle)
+    nmap <buffer> <C-h> <Plug>(fern-action-hidden:toggle)
     nmap <buffer> q :<C-u>quit<CR>
+    nmap <buffer> ? <Plug>(fern-action-help)
 
     " Enter key to open or expand
     nmap <buffer><silent><expr>
