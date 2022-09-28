@@ -10,10 +10,10 @@ esac
 # ------------------------------------------------------------------------------
 # ------------------------------- Configurations -------------------------------
 # ------------------------------------------------------------------------------
+export MODE=''
 export PS1_PREFIX=''
 # export PROXY_USER=''
 # export PROXY_PASS=''
-# export PROXY_MODE=''
 
 # ------------------------------------------------------------------------------
 # ------------------------------ Utility scripts -------------------------------
@@ -518,18 +518,38 @@ fi
 # ------------------------------------------------------------------------------
 # ----------------------------------- Proxy ------------------------------------
 # ------------------------------------------------------------------------------
-if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
+if [ "$MODE" == 'Huawei_linux' ]; then
     # Global proxy
     export PROXY_HOST='proxyjp.huawei.com:8080'
     export GIT_SSL_NO_VERIFY=1
     export CURL_SSL_NO_VERIFY=1
-elif [ "$PROXY_MODE" == 'Huawei_wsl' ]; then
+elif [ "$MODE" == 'Huawei_wsl' ]; then
     # Proxy forwarding
     HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
     export PROXY_HOST="$HOST_IP:8888"
     export DISPLAY="$HOST_IP:0"
+fi
+
+case "$MODE" in Huawei*)
+    # Huawei common settings
+    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
+    export HTTPS_PROXY="$HTTP_PROXY"
+    export FTP_PROXY="$HTTP_PROXY"
+    export NO_PROXY="huawei.com,localhost"
+esac
+
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+export ftp_proxy=$FTP_PROXY
+export no_proxy=$NO_PROXY
+
+# ------------------------------------------------------------------------------
+# ------------------------------------ WSL -------------------------------------
+# ------------------------------------------------------------------------------
+if [ "$MODE" == 'Huawei_wsl' ]; then
+    # Path for `nvidia-smi`
     export PATH="$PATH:/usr/lib/wsl/lib/"
-    
+
     # Wrap the git command to either run windows git or linux
     function IsWinDir {
         p=`realpath $PWD`
@@ -545,21 +565,7 @@ elif [ "$PROXY_MODE" == 'Huawei_wsl' ]; then
             /usr/bin/git "$@"
         fi
     }
-
 fi
-
-case "$PROXY_MODE" in Huawei*)
-    # Huawei common settings
-    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
-    export HTTPS_PROXY="$HTTP_PROXY"
-    export FTP_PROXY="$HTTP_PROXY"
-    export NO_PROXY="huawei.com,localhost"
-esac
-
-export http_proxy=$HTTP_PROXY
-export https_proxy=$HTTPS_PROXY
-export ftp_proxy=$FTP_PROXY
-export no_proxy=$NO_PROXY
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
