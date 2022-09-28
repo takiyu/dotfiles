@@ -523,15 +523,29 @@ if [ "$PROXY_MODE" == 'Huawei_linux' ]; then
     export PROXY_HOST='proxyjp.huawei.com:8080'
     export GIT_SSL_NO_VERIFY=1
     export CURL_SSL_NO_VERIFY=1
-elif [ "$PROXY_MODE" == 'Huawei_linux_vbox' ]; then
-    # Proxy forwarding
-    export PROXY_HOST='192.168.56.1:8888'
 elif [ "$PROXY_MODE" == 'Huawei_wsl' ]; then
     # Proxy forwarding
     HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
     export PROXY_HOST="$HOST_IP:8888"
     export DISPLAY="$HOST_IP:0"
     export PATH="$PATH:/usr/lib/wsl/lib/"
+    
+    # Wrap the git command to either run windows git or linux
+    function IsWinDir {
+        p=`realpath $PWD`
+        case $p/ in
+            /mnt/*) return $(true);;
+            *) return $(false);;
+        esac
+    }
+    function git {
+        if IsWinDir; then
+            git.exe "$@"
+        else
+            /usr/bin/git "$@"
+        fi
+    }
+
 fi
 
 case "$PROXY_MODE" in Huawei*)
