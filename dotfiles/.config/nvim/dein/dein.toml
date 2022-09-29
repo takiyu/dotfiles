@@ -81,6 +81,14 @@ hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
 
+
+
+[[plugins]]
+repo = 'akinsho/toggleterm.nvim'               # Terminal
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'toggleterm.vim'
+'''
+
 # ------------------------------------------------------------------------------
 # ----------------------------------- Syntax -----------------------------------
 # ------------------------------------------------------------------------------

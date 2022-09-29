@@ -203,8 +203,6 @@ set spell spelllang=en_us,cjk  " Enabled by default
 nnoremap <F12> :set spell! spelllang=en_us,cjk<CR>
 
 "===== Terminal =====
-nnoremap <F4> :new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>
+" nnoremap <F4> :new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>
 tnoremap <silent><ESC> <C-\><C-n>
-if has('nvim')
-    autocmd TermOpen * startinsert
-endif
+autocmd TermOpen * set spell! spelllang=  " Disable spell check in terminal
