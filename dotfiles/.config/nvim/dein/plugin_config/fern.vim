@@ -7,7 +7,7 @@ let g:fern#disable_default_mappings = 1
 let g:fern#renderer = 'nerdfont'
 
 " Global key maps
-noremap <C-e> :Fern . -drawer -toggle -wait<CR>
+noremap <C-e> :Fern . -drawer -toggle<CR>
 noremap <C-f> :FernDo close -drawer<CR>:Fern . -drawer -reveal=% -wait<CR>
 nnoremap <Plug>(fern-close-drawer) :<C-u>FernDo close -drawer -stay<CR>
 
