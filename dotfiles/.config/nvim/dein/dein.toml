@@ -13,11 +13,16 @@
 # ------------------------------ Extra Functions -------------------------------
 # ------------------------------------------------------------------------------
 [[plugins]]
+repo = 'pysan3/autosession.nvim'               # セッション管理
+hook_add = '''
+    execute 'source ' . g:dein_plugin_config_dir . 'autosession.vim'
+'''
+
+[[plugins]]
 repo = 'embear/vim-localvimrc'                 # Local vimrc
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'vim-localvimrc.vim'
 '''
-
 
 [[plugins]]
 repo = 'lambdalisue/nerdfont.vim'
@@ -80,8 +85,6 @@ repo = 'skywind3000/asyncrun.vim'              # 非同期実行
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'asyncrun.vim'
 '''
-
-
 
 [[plugins]]
 repo = 'akinsho/toggleterm.nvim'               # Terminal
