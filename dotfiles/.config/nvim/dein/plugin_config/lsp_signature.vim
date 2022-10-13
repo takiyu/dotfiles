@@ -9,6 +9,7 @@ require 'lsp_signature'.setup({
    },
    hint_prefix = '🐬 ',
    toggle_key = '<F10>',
+   floating_window_off_y = 2,
 })
 
 EOF
