@@ -2,7 +2,9 @@
 "                                    toggleterm
 " ==============================================================================
 lua << EOF
-require("toggleterm").setup()
+require("toggleterm").setup({
+    auto_scroll = false,
+})
 
 EOF
 
