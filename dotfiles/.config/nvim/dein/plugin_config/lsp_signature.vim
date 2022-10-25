@@ -5,7 +5,7 @@ lua << EOF
 require 'lsp_signature'.setup({
    bind = true,
    handler_opts = {
-      border = 'shadow'
+      border = 'rounded'
    },
    doc_lines = 3,
    hint_prefix = '🐬 ',
