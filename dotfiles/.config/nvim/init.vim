@@ -5,7 +5,8 @@
 filetype on
 
 " ===== Dein settings =====
-let g:dein#auto_recache = 1  " Enable auto re-cache
+let g:dein#auto_recache = 1   " Enable auto re-cache
+let g:dein#lazy_rplugins = 1  " Enable lazy load of remote plugins
 
 " Set dein cache path and dein config dir
 let g:dein_cache_path = expand('~/.cache/nvim/dein/')
