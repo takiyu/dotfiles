@@ -6,15 +6,18 @@ local cmp = require('cmp')
 local compare = require('cmp.config.compare')
 
 -- Tabnine
-require('cmp_tabnine.config').setup({
-    max_lines = 200,
-    max_num_results = 5,
-    sort = true,
-    run_on_every_keystroke = false,
-    snippet_placeholder = '..',
-    ignored_file_types = {},
-    show_prediction_strength = true
-})
+local has_tabnine = pcall(require, 'cmp_tabnine')
+if has_tabnine then
+    require('cmp_tabnine.config').setup({
+        max_lines = 200,
+        max_num_results = 5,
+        sort = true,
+        run_on_every_keystroke = false,
+        snippet_placeholder = '..',
+        ignored_file_types = {},
+        show_prediction_strength = true
+    })
+end
 
 -- lspkind
 require('lspkind').init({
@@ -111,7 +114,7 @@ cmp.setup({
     sorting = {
         priority_weight = 2,
         comparators = {
-            require('cmp_tabnine.compare'),  -- Tabnine comes upper
+            has_tabnine and require('cmp_tabnine.compare'),  -- Tabnine comes upper
             compare.offset,
             compare.exact,
             compare.score,
