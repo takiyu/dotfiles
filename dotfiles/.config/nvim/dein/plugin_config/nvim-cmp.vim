@@ -60,6 +60,7 @@ cmp.setup({
     },
     sources = cmp.config.sources({
         -- Source group 1
+        { name = 'calc'},
         { name = 'vsnip'},
         { name = 'path' },
         { name = 'emoji', insert = true },

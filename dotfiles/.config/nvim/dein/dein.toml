@@ -147,9 +147,11 @@ build = './install.sh'
 [[plugins]]
 repo = 'hrsh7th/cmp-emoji'
 [[plugins]]
+repo = 'hrsh7th/cmp-calc'
+[[plugins]]
 repo = 'hrsh7th/nvim-cmp'
 depends = ['cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer', 'cmp-path',
-           'cmp-cmdline', 'cmp-look', 'cmp-tabnine', 'cmp-emoji',
+           'cmp-cmdline', 'cmp-look', 'cmp-tabnine', 'cmp-emoji', 'cmp-calc',
            'lspkind.nvim']
 hook_add = '''
     execute 'source ' . g:dein_plugin_config_dir . 'nvim-cmp.vim'
