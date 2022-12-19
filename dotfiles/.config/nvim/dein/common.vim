@@ -195,7 +195,7 @@ function! NextColorColumn()
         return 'Line limit: 120'
     endif
 endfunction
-autocmd VimEnter * call NextColorColumn()  " Initial call
+call NextColorColumn()  " Initial call
 nnoremap <silent><F11> :echo NextColorColumn()<CR>
 
 "===== Spell check toggle =====
