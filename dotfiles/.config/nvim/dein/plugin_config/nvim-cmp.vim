@@ -17,6 +17,8 @@ if has_tabnine then
         ignored_file_types = {},
         show_prediction_strength = true
     })
+else
+    print('No Tabnine')
 end
 
 -- lspkind
