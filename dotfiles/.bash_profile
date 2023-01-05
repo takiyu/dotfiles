@@ -53,7 +53,7 @@ if [ $platform == 'Linux' ]; then
     if [ "$CUDA_HOME" != "" ]; then
         export CUDA_PATH=$CUDA_HOME
         export CUDA_CUDART_LIBRARY=$CUDA_HOME
-        export PATH=$PATH:$CUDA_HOME/bin
+        export PATH=$CUDA_HOME/bin:$PATH
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_HOME/lib64
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_HOME/targets/x86_64-linux/lib
     fi
@@ -83,7 +83,8 @@ if [ $platform == 'Linux' ]; then
     fi
 
     # Golang
-    # export GOPATH=$HOME/Projects/Gocode
+    export GOPATH=$HOME/Projects/Gocode
+    export PATH=$GOPATH/bin:$PATH
 
     # Unity
     # if [ -e /opt/Unity/Editor ]; then

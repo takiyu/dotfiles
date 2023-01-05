@@ -548,7 +548,7 @@ export no_proxy=$NO_PROXY
 # ------------------------------------------------------------------------------
 if [ "$MODE" == 'Huawei_wsl' ]; then
     # Path for `nvidia-smi`
-    export PATH="$PATH:/usr/lib/wsl/lib/"
+    export PATH="/usr/lib/wsl/lib/:$PATH"
 
     # Wrap the git command to either run windows git or linux
     function IsWinDir {
