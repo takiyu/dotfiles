@@ -156,7 +156,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
     -- run application
     , ((modm.|.shiftMask,    xK_Return), spawn $ XMonad.terminal conf)
     , ((modm,                xK_r     ), shellPrompt shellPromptConfig)
-    , ((modm,                xK_q     ), spawn killCommand)
+    , ((modm.|.shiftMask,    xK_q     ), spawn killCommand)
     , ((modm,                xK_e     ), unsafeSpawn (myFiler ++ " ~"))
     , ((modm,                xK_o     ), unsafeSpawn myTerminal)
     , ((mod1Mask,            xK_o     ), unsafeSpawn myXmodmap)
