@@ -102,6 +102,7 @@ myKeyBindings conf@(XConfig {XMonad.modMask = a}) = M.fromList $
     , ((modm,                xK_m     ), windows W.focusMaster)
     , ((modm,                xK_Return), windows W.shiftMaster)
     , ((modm.|.shiftMask,    xK_c     ), kill)
+    , ((modm.|.shiftMask,    xK_v     ), kill)
     , ((modm,                xK_t     ), withFocused $ windows . W.sink)
     -- window alt-tab
     , ((modm,                xK_Tab   ), nextScreen)
