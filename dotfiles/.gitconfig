@@ -5,15 +5,15 @@
 [alias]
 	graph = log --graph --pretty=format:'%C(green)<%ad>%C(reset)[%C(bold blue)%h%Creset](%C(yellow)%an%C(reset))%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)<%cr>%C(reset)' --abbrev-commit --date=format-local:'%Y/%m/%d'
 [diff]
-	tool = nvim-qt_nofork
-[difftool "nvim-qt_nofork"]
-	cmd = nvim-qt --nofork -- -d $LOCAL $REMOTE
+	tool = nvim
+[difftool "nvim"]
+	cmd = nvim -d $LOCAL $REMOTE
 	prompt = true
 [merge]
-	tool = nvim-qt_nofork
+	tool = nvim
 	ff = false
-[mergetool "nvim-qt_nofork"]
-	cmd = nvim-qt --nofork -- -d $LOCAL $REMOTE
+[mergetool "nvim"]
+	cmd = nvim -d $LOCAL $REMOTE
 	prompt = true
 [pull]
 	rebase = false
