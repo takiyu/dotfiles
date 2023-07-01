@@ -462,24 +462,21 @@ alias ni=ninja
 # aliases for editors
 if [ "`$exist_command nvim`" == 'exist' ]; then
     alias vim=nvim
+    alias gvim=nvim
+    alias v=nvim
+    alias vimdiff="nvim -d"
+    alias gvimdiff="nvim -- -d"
+    export EDITOR=nvim
+    export GIT_EDITOR=nvim
+else
+    alias nvim=vim
+    alias gvim=vim
+    alias v="vim"
+    alias vimdiff="vim -d"
+    alias gvimdiff="vim -- -d"
+    export EDITOR=vim
+    export GIT_EDITOR=vim
 fi
-if [ $platform == 'Linux' ]; then
-    if [ "`$exist_command nvim-qt`" == 'exist' ]; then
-        function gvim() { command nvim-qt $@ 2> /dev/null; }
-    fi
-elif [ $platform == 'Windows' ]; then
-    if [ "`$exist_command nvim-qt`" == 'exist' ]; then
-        function gvim() { command nvim-qt $@ & 2> /dev/null; disown; }
-    fi
-fi
-alias v="gvim"
-alias gv="gvim"
-alias vimdiff="vim -d"
-alias gvimdiff="gvim -- -d"
-function gvim_nofork() { command nvim-qt --nofork $@ 2> /dev/null; }
-alias gvimdiff_nofork="gvim_nofork -- -d"
-export EDITOR=gvim
-export GIT_EDITOR="nvim-qt --nofork"  # Blocking command
 
 # aliases for fzy
 function gvimf() { gvim `find | fzy`; }
