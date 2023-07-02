@@ -8,7 +8,8 @@ local compare = require('cmp.config.compare')
 -- Tabnine
 local has_tabnine = pcall(require, 'cmp_tabnine')
 if has_tabnine then
-    require('cmp_tabnine.config').setup({
+    local tabnine = require('cmp_tabnine.config')
+    tabnine:setup({
         max_lines = 200,
         max_num_results = 5,
         sort = true,
