@@ -66,11 +66,17 @@
 #  Control + b:2 + Release
 
 "xdotool key 'Alt_R+n'"
-    b:10
+    b:6
 "xdotool key 'Alt_R+p'"
-    b:11
+    b:7
 "xdotool key 'Alt_R+s'"
     b:12
+
+"xdotool key 'Left'"
+    b:10
+"xdotool key 'Right'"
+    b:11
+
 
 ##################################
 # End of xbindkeys configuration #
