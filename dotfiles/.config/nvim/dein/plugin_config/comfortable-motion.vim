@@ -7,11 +7,17 @@ let g:comfortable_motion_air_drag = 3.0
 let g:comfortable_motion_scroll_down_key = "\<C-d>"  " Move cursor too
 let g:comfortable_motion_scroll_up_key = "\<C-u>"
 " Large motion
-nnoremap <silent> <Space>   :call comfortable_motion#flick(120)<CR>
-nnoremap <silent> <S-Space> :call comfortable_motion#flick(-120)<CR>
-nnoremap <silent> <A-Space> :call comfortable_motion#flick(-120)<CR>
-nnoremap <silent> <PageDown>:call comfortable_motion#flick(120)<CR>
-nnoremap <silent> <PageUp>  :call comfortable_motion#flick(-120)<CR>
+nmap <silent> <Space>   :call comfortable_motion#flick(120)<CR>
+nmap <silent> <S-Space> :call comfortable_motion#flick(-120)<CR>
+
+nmap <silent> <PageUp>     :call comfortable_motion#flick(-120)<CR>
+nmap <silent> <PageDown>   <Space>
+" nmap <silent> <PageDown> :call comfortable_motion#flick(120)<CR>
+
+nmap <silent> <S-Up>       :call comfortable_motion#flick(-120)<CR>
+nmap <silent> <S-Down>     <Space>
+" nmap <silent> <S-Down>   :call comfortable_motion#flick(120)<CR>
+
 " Small motion
 noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
 noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>
