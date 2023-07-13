@@ -72,9 +72,9 @@
 "xdotool key 'Alt_R+s'"
     b:12
 
-"xdotool key 'Left'"
+"xdotool key 'Prior'"
     b:10
-"xdotool key 'Right'"
+"xdotool key 'Next'"
     b:11
 
 
