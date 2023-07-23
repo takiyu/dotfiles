@@ -69,8 +69,11 @@
     b:6
 "xdotool key 'Alt_R+p'"
     b:7
-"xdotool key 'Alt_R+s'"
-    b:12
+
+# "xdotool key 'Alt_R+s'"
+# "xdotool key 'Ctrl_L'"
+# "xdotool click 2"
+#     b:12
 
 "xdotool key 'Prior'"
     b:10
