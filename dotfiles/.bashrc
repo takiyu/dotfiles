@@ -472,6 +472,7 @@ alias ni=ninja
 
 # aliases for editors
 if [ "`$exist_command nvim`" == 'exist' ]; then
+    # Set nvim for all
     alias vim=nvim
     alias gvim=nvim
     alias v=nvim
@@ -480,6 +481,7 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     export EDITOR=nvim
     export GIT_EDITOR=nvim
 else
+    # Set vim for all
     alias nvim=vim
     alias gvim=vim
     alias v="vim"
@@ -490,8 +492,12 @@ else
 fi
 
 # aliases for fzy
-function gvimf() { gvim `find | fzy`; }
+function vf() { vim `find | fzy`; }
+function vimf() { vim `find | fzy`; }
+function gvimf() { vim `find | fzy`; }
+function cf() { cd `find | fzy`; }
 function cdf() { cd `find | fzy`; }
+function lf() { find | fzy; }
 function lsf() { find | fzy; }
 
 # aliases for applications
@@ -505,6 +511,10 @@ fi
 alias f=filer
 alias f.='filer .'
 alias f..='filer ..'
+alias f...='filer ...'
+alias p='python'
+alias p2='python2'
+alias p3='python3'
 
 # Trizen
 if [ "`$exist_command trizen`" == 'exist' ]; then
