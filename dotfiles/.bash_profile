@@ -104,6 +104,11 @@ if [ $platform == 'Linux' ]; then
         export LD_LIBRARY_PATH=$SWIFTSHADER_LIB_PATH:$LD_LIBRARY_PATH
     fi
 
+    # PyEnv
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+
 elif [ $platform == 'Windows' ]; then
     # --------------------------------------------------------------------------
     # ----------------------------- Windows setup ------------------------------
