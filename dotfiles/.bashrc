@@ -536,6 +536,7 @@ fi
 # Mouse mapping
 if [ $platform == 'Linux' ]; then
     if [ "`$exist_command xinput`" == 'exist' ]; then
+        # For a trackball Huge
         xinput set-button-map 8 1 3 2 4 5 6 7 8 9 10 11 3
     fi
     if [ "`$exist_command xbindkeys`" == 'exist' ]; then
