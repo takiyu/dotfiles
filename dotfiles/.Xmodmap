@@ -1,13 +1,13 @@
 ! ---- Standard Japanese Keyboard ----
-! ! Thumb Esc
-! keysym Henkan_Mode = Escape
-! ! Left Ctrl
-! remove lock = Caps_Lock
-! keysym Caps_Lock = Control_L
-! keysym Scroll_Lock = Caps_Lock
-! keysym Print = Insert
-! add lock = Caps_Lock
-! add Control = Control_L
+! Thumb Esc
+keysym Henkan_Mode = Escape
+! Left Ctrl
+remove lock = Caps_Lock
+keysym Caps_Lock = Control_L
+keysym Scroll_Lock = Caps_Lock
+keysym Print = Insert
+add lock = Caps_Lock
+add Control = Control_L
 ! Mod3 for Xmonad
 clear mod3
 remove mod1 = Alt_R
