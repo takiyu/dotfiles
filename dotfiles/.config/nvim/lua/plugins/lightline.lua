@@ -1,5 +1,7 @@
-vim.api.nvim_exec(
-[[
+local vimscript_code = [[
+" ==============================================================================
+"                                  lightline
+" ==============================================================================
 " Global configuration
 let g:lightline = {
     \   'enable': {
@@ -11,6 +13,7 @@ let g:lightline = {
     \     'readonly': '%{&readonly ? "R" : "W"}',
     \     'percentlineinfo': '[%3p%% %3l:%-2v]',
     \     'fileinfo': '%{&fileencoding}  %{&fileformat}  %{&filetype}',
+    \     'asyncrun': '%{g:asyncrun_status}',
     \   },
     \   'component_function': {
     \     'gitstatus': 'LightlineGitStatus',
@@ -39,7 +42,7 @@ let g:lightline.tabline = {
     \ }
 
 " Neovim-LSP components
-" call lightline#lsp#register()
+call lightline#lsp#register()
 
 " Git状態のステータスライン表示
 function! LightlineGitStatus()
@@ -72,21 +75,11 @@ function! LightlineGitStatus()
     return join(ret, ' ')
 endfunction
 
-]],
-true)
+" Update events
+autocmd TextChanged * call lightline#update()
+autocmd TextChangedI * call lightline#update()
+autocmd CursorHold * call lightline#update()
+autocmd CursorHoldI * call lightline#update()
+]]
 
-return {
-  {'itchyny/lightline.vim',
-    config = function()
-      -- Update events
-      vim.cmd("autocmd TextChanged * call lightline#update()")
-      vim.cmd("autocmd TextChangedI * call lightline#update()")
-      vim.cmd("autocmd CursorHold * call lightline#update()")
-      vim.cmd("autocmd CursorHoldI * call lightline#update()")
-    end,
-    dependencies = {
-      'josa42/nvim-lightline-lsp',
-    }
-  },
-  {'josa42/nvim-lightline-lsp'},        -- Status line for lsp
-}
+return {}
