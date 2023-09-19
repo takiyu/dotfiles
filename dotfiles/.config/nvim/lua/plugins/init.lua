@@ -156,26 +156,41 @@ return {
    end,
   },
 
-
   ------------------------------------------------------------------------------
   --------------------------------- Appearance ---------------------------------
   ------------------------------------------------------------------------------
   {'takiyu/tango-lx'},                  -- Color Scheme
   {'bronson/vim-trailing-whitespace'},  -- 行末スペース可視化
--- repo = 'josa42/nvim-lightline-lsp'        # Status line for lsp
--- repo = 'itchyny/lightline.vim'            # Status line
--- depends = ['vim-fugitive', 'nvim-lightline-lsp']
--- hook_add = '''
---     execute 'source ' . g:dein_plugin_config_dir . 'lightline.vim'
--- '''
--- repo = 'vimtaku/hl_matchit.vim'           # 括弧+αをハイライト
--- hook_add = '''
---     execute 'source ' . g:dein_plugin_config_dir . 'hl_matchit.vim'
--- '''
--- repo = 't9md/vim-quickhl'                 # ハイライト
--- hook_add = '''
---     execute 'source ' . g:dein_plugin_config_dir . 'vim-quickhl.vim'
--- '''
+  {'vimtaku/hl_matchit.vim',            -- 括弧+αをハイライト
+   init = function()
+    vim.g.hl_matchit_enable_on_vim_startup = 1
+   end,
+  },
+  {'t9md/vim-quickhl',                  -- ハイライト
+   init = function()
+    vim.g.quickhl_manual_hl_priority = 0
+    vim.g.quickhl_manual_colors = {
+      "gui=bold ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA guifg=Black",
+      "gui=bold ctermbg=Green   ctermfg=Black guibg=#A4E57E guifg=Black",
+      "gui=bold ctermbg=Yellow  ctermfg=Black guibg=#FFDB72 guifg=Black",
+      "gui=bold ctermbg=Red     ctermfg=Black guibg=#FF7272 guifg=Black",
+      "gui=bold ctermbg=Magenta ctermfg=Black guibg=#FFB3FF guifg=Black",
+      "gui=bold ctermbg=Blue    ctermfg=Black guibg=#9999FF guifg=Black",
+      "gui=bold ctermbg=DarkCyan    ctermfg=Black guibg=#436170 guifg=Black",
+      "gui=bold ctermbg=DarkGreen   ctermfg=Black guibg=#62894b guifg=Black",
+      "gui=bold ctermbg=DarkYellow  ctermfg=Black guibg=#998344 guifg=Black",
+      "gui=bold ctermbg=DarkRed     ctermfg=Black guibg=#994444 guifg=Black",
+      "gui=bold ctermbg=DarkMagenta ctermfg=Black guibg=#996b99 guifg=Black",
+      "gui=bold ctermbg=DarkBlue    ctermfg=Black guibg=#5b5b99 guifg=Black",
+    }
+   end,
+   config = function()
+    vim.api.nvim_set_keymap('n', 'm', '<Plug>(quickhl-manual-this)',  {})
+    vim.api.nvim_set_keymap('v', 'm', '<Plug>(quickhl-manual-this)',  {})
+    vim.api.nvim_set_keymap('n', 'M', '<Plug>(quickhl-manual-reset)',  {})
+    vim.api.nvim_set_keymap('v', 'M', '<Plug>(quickhl-manual-reset)',  {})
+   end,
+  },
 
   ------------------------------------------------------------------------------
   ------------------------------------------------------------------------------
