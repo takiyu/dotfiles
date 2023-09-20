@@ -23,13 +23,16 @@ local function OnAttach(bufnr)
   -- api.config.mappings.default_on_attach(bufnr)
 
   -- Custom mappings
-  vim.keymap.set('n', '<CR>',   open_func,                      opts('Open'))
-  vim.keymap.set('n', 'o',      open_func,                      opts('Open'))
-  vim.keymap.set('n', 'l',      api.node.open.drop,                 opts('Open: Tree'))
-  vim.keymap.set('n', 't',      api.node.open.tab,              opts('Open: New Tab'))
-  vim.keymap.set('n', 'h',      api.node.navigate.parent_close, opts('Close'))
-  vim.keymap.set('n', 'u',      api.tree.change_root_to_parent, opts('Up'))
-  vim.keymap.set('n', 'cd',     api.tree.change_root_to_node,   opts('CD'))
+  vim.keymap.set('n', '<CR>',  open_func,                       opts('Open'))
+  vim.keymap.set('n', 'o',     open_func,                       opts('Open'))
+  vim.keymap.set('n', 't',     api.node.open.tab,               opts('Open: New Tab'))
+  vim.keymap.set('n', 'i',     api.node.open.horizontal,        opts('Open: Horizontal Split'))
+  vim.keymap.set('n', 'v',     api.node.open.vertical,          opts('Open: Vertical Split'))
+
+  vim.keymap.set('n', 'l',     api.node.open.drop,              opts('Open: Tree'))
+  vim.keymap.set('n', 'h',     api.node.navigate.parent_close,  opts('Close'))
+  vim.keymap.set('n', 'u',     api.tree.change_root_to_parent,  opts('Up'))
+  vim.keymap.set('n', 'cd',    api.tree.change_root_to_node,    opts('CD'))
 
   vim.keymap.set('n', 'R',     api.tree.reload,                 opts('Refresh'))
   vim.keymap.set('n', 's',     api.tree.search_node,            opts('Search'))
