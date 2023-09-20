@@ -53,6 +53,9 @@ return {
     -- Setup
     require("nvim-tree").setup{
       on_attach = OnAttach,
+      filters = {
+        dotfiles = true,
+      },
     }
     -- Key maps
     vim.api.nvim_set_keymap('', '<C-e>', ':NvimTreeToggle<CR>',  {noremap = true})
