@@ -159,7 +159,11 @@ return {
   ------------------------------------------------------------------------------
   --------------------------------- Appearance ---------------------------------
   ------------------------------------------------------------------------------
-  {'takiyu/tango-lx'},                  -- Color Scheme
+  {'takiyu/tango-lx',                  -- Color Scheme
+   config = function()
+    vim.cmd('colorscheme tango_lx')
+   end
+  },
   {'bronson/vim-trailing-whitespace'},  -- 行末スペース可視化
   {'vimtaku/hl_matchit.vim',            -- 括弧+αをハイライト
    init = function()

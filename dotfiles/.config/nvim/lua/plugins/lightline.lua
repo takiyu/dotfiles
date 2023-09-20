@@ -71,14 +71,17 @@ endfunction
 ]])
 
 return {
-  {'josa42/nvim-lightline-lsp'},
+  {'josa42/nvim-lightline-lsp',
+   dependency = {'neovim/nvim-lspconfig'},
+   config = function()
+    vim.cmd([[ call lightline#lsp#register() ]])
+   end
+  },
   {'itchyny/lightline.vim',
    dependency = {'tpope/vim-fugitive', 'skywind3000/asyncrun.vim',
                  'josa42/nvim-lightline-lsp'},
    config = function()
     vim.cmd([[
-        " Neovim-LSP components
-        call lightline#lsp#register()
         autocmd TextChanged * call lightline#update()
         autocmd TextChangedI * call lightline#update()
         autocmd CursorHold * call lightline#update()
