@@ -114,31 +114,13 @@ return {
   },
   {'hrsh7th/cmp-emoji'},
   {'hrsh7th/cmp-calc'},
-  {'tzachar/cmp-ai', dependencies = 'nvim-lua/plenary.nvim'},
   {'hrsh7th/nvim-cmp',
    dependency = {'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
                  'cmp-path', 'cmp-cmdline', 'cmp-look', 'cmp-tabnine',
-                 'cmp-emoji', 'cmp-calc', 'lspkind.nvim', 'tzachar/cmp-ai'},
+                 'cmp-emoji', 'cmp-calc', 'lspkind.nvim'},
    config = function()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
-
-    -- CmpAI
-    local cmp_ai = require('cmp_ai.config')
-    cmp_ai:setup({
-      max_lines = 1000,
-      provider = 'HF',
-      notify = true,
-      notify_callback = function(msg)
-        vim.notify(msg)
-      end,
-      run_on_every_keystroke = true,
-      ignored_file_types = {
-        -- default is not to ignore
-        -- uncomment to ignore in lua:
-        -- lua = true
-      },
-    })
 
     -- Tabnine
     local has_tabnine = pcall(require, 'cmp_tabnine')
@@ -204,7 +186,6 @@ return {
           { name = 'emoji', insert = true },
         }, {
           -- Source group 2
-          { name = 'cmp_ai' },
           { name = 'cmp_tabnine' },
           { name = 'nvim_lsp' },
           { name = 'buffer', max_item_count = 10 },
