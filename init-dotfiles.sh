@@ -87,9 +87,8 @@ if [ $platform == 'Linux' ]; then
              .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
              .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
              .mplayer/config .config/matplotlib/matplotlibrc \
-             .vimrc .config/nvim/init.vim .config/nvim/ginit.vim \
-             .config/nvim/dein .config/pycodestyle .lesskey .vsnip .xbindkeysrc)
-    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/ .config/nvim/)
+             .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc)
+    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
 
     # First, create directories
     for target_dir in ${TARGET_DIRS[@]}; do
@@ -126,6 +125,6 @@ elif [ $platform == 'Windows' ]; then
     # Third, create nvim entry for windows
     app_nvim=$HOME/AppData/Local/nvim
     create_dir "$app_nvim"
-    create_link_prompt "$dotfiles/dotfiles/.config/nvim/init.vim" "$app_nvim/init.vim"
+    create_link_prompt "$dotfiles/dotfiles/.config/nvim/init.lua" "$app_nvim/init.lua"
     create_link_prompt "$dotfiles/dotfiles/.config/nvim/ginit.vim" "$app_nvim/ginit.vim"
 fi

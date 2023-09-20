@@ -1,3 +1,4 @@
+local vimscript_code = [[
 " ==============================================================================
 "                                  vim-ref
 " ==============================================================================
@@ -50,3 +51,6 @@ function! g:RefSelectingWord(source, query)
 endfunction
 vnoremap <silent><c-d> :call g:RefSelectingWord('webdict', 'alc')<CR>
 vnoremap <silent><c-d><c-d> :call g:RefSelectingWord('webdict', 'longman')<CR>
+]]
+
+return {}
