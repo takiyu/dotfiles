@@ -118,7 +118,9 @@ vim.api.nvim_set_keymap('n', '<C-j>', '10j',  {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-k>', '10k',  {noremap = true})
 -- 行末行頭への移動
 vim.api.nvim_set_keymap('n', '9', '^',  {noremap = true})
+vim.api.nvim_set_keymap('v', '9', '^',  {noremap = true})
 vim.api.nvim_set_keymap('n', '0', '$',  {noremap = true})
+vim.api.nvim_set_keymap('v', '0', '$',  {noremap = true})
 -- タブ移動
 vim.api.nvim_set_keymap('n', '2', 'gT',  {noremap = true})
 vim.api.nvim_set_keymap('n', '3', 'gt',  {noremap = true})

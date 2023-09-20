@@ -114,161 +114,180 @@ return {
   },
   {'hrsh7th/cmp-emoji'},
   {'hrsh7th/cmp-calc'},
+  {'tzachar/cmp-ai', dependencies = 'nvim-lua/plenary.nvim'},
   {'hrsh7th/nvim-cmp',
    dependency = {'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
                  'cmp-path', 'cmp-cmdline', 'cmp-look', 'cmp-tabnine',
-                 'cmp-emoji', 'cmp-calc', 'lspkind.nvim'},
+                 'cmp-emoji', 'cmp-calc', 'lspkind.nvim', 'tzachar/cmp-ai'},
    config = function()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
 
+    -- CmpAI
+    local cmp_ai = require('cmp_ai.config')
+    cmp_ai:setup({
+      max_lines = 1000,
+      provider = 'HF',
+      notify = true,
+      notify_callback = function(msg)
+        vim.notify(msg)
+      end,
+      run_on_every_keystroke = true,
+      ignored_file_types = {
+        -- default is not to ignore
+        -- uncomment to ignore in lua:
+        -- lua = true
+      },
+    })
+
     -- Tabnine
     local has_tabnine = pcall(require, 'cmp_tabnine')
     if has_tabnine then
-        local tabnine = require('cmp_tabnine.config')
-        tabnine:setup({
-            max_lines = 200,
-            max_num_results = 5,
-            sort = true,
-            run_on_every_keystroke = false,
-            snippet_placeholder = '..',
-            ignored_file_types = {},
-            show_prediction_strength = true
-        })
+      local tabnine = require('cmp_tabnine.config')
+      tabnine:setup({
+        max_lines = 200,
+        max_num_results = 5,
+        sort = true,
+        run_on_every_keystroke = false,
+        snippet_placeholder = '..',
+        ignored_file_types = {},
+        show_prediction_strength = true
+      })
     else
-        print('No Tabnine')
+      print('No Tabnine')
     end
 
     -- lspkind
     require('lspkind').init({
-        preset = 'default',
-        symbol_map = {
-            Text = '📔',
-            Method = '🎓',
-            Function = '🎩',
-            Constructor = '🔨',
-            Field = '🏷️',
-            Variable = '🅰️ ',
-            Class = '🏫',
-            Interface = '🪟 ',
-            Module = '📦',
-            Property = '🏷️',
-            Unit = '📏',
-            Value = '💰',
-            Enum = '📶',
-            Keyword = '🔑',
-            Snippet = '🌟',
-            Color = '🎨',
-            File = '📄',
-            Reference = '🔗',
-            Folder = '📂',
-            EnumMember = '📶',
-            Constant = '🗿',
-            Struct = '🧳',
-            Event = '🎉',
-            Operator = '🧭',
-            TypeParameter = ''
-        },
+      preset = 'default',
+      symbol_map = {
+        Text = '📔',
+        Method = '🎓',
+        Function = '🎩',
+        Constructor = '🔨',
+        Field = '🏷️',
+        Variable = '🅰️ ',
+        Class = '🏫',
+        Interface = '🪟 ',
+        Module = '📦',
+        Property = '🏷️',
+        Unit = '📏',
+        Value = '💰',
+        Enum = '📶',
+        Keyword = '🔑',
+        Snippet = '🌟',
+        Color = '🎨',
+        File = '📄',
+        Reference = '🔗',
+        Folder = '📂',
+        EnumMember = '📶',
+        Constant = '🗿',
+        Struct = '🧳',
+        Event = '🎉',
+        Operator = '🧭',
+        TypeParameter = ''
+      },
     })
 
     -- nvim-cmp: Completion for general
     cmp.setup({
-        snippet = {
-            expand = function(args)
-                vim.fn['vsnip#anonymous'](args.body)
-            end,
-        },
-        sources = cmp.config.sources({
-            -- Source group 1
-            { name = 'calc'},
-            { name = 'vsnip'},
-            { name = 'path' },
-            { name = 'emoji', insert = true },
+      snippet = {
+        expand = function(args)
+          vim.fn['vsnip#anonymous'](args.body)
+        end,
+      },
+      sources = cmp.config.sources({
+          -- Source group 1
+          { name = 'calc'},
+          { name = 'vsnip'},
+          { name = 'path' },
+          { name = 'emoji', insert = true },
         }, {
-            -- Source group 2
-            { name = 'cmp_tabnine' },
-            { name = 'nvim_lsp' },
-            { name = 'buffer', max_item_count = 10 },
-            { name = 'look', max_item_count = 10,
-                             option = {convert_case = true, loud = true} },
+          -- Source group 2
+          { name = 'cmp_ai' },
+          { name = 'cmp_tabnine' },
+          { name = 'nvim_lsp' },
+          { name = 'buffer', max_item_count = 10 },
+          { name = 'look', max_item_count = 10,
+                           option = {convert_case = true, loud = true} },
         }),
-        mapping = cmp.mapping.preset.insert({
-            ['<tab>'] = cmp.mapping.select_next_item(),
-            ['<S-tab>'] = cmp.mapping.select_prev_item(),
-            ['<C-n>'] = cmp.mapping.select_next_item(),
-            ['<C-p>'] = cmp.mapping.select_prev_item(),
-            ['<C-o>'] = cmp.mapping.complete(),
-            ['<C-l>'] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    -- Confirm visible completion
-                    return cmp.confirm({ select = true })
-                else
-                    -- Start AUTO completion
-                    return cmp.complete({
-                        config = { sources = { { name = 'cmp_tabnine' } } }
-                    })
-                end
-                fallback()
-            end, { 'i', 'c' }),
-            ['<CR>'] = cmp.mapping(function(fallback)
-                if cmp.get_active_entry() then
-                    -- Confirm with explicit selection
-                    return cmp.confirm({ select = true })
-                end
-                fallback()
-            end, { 'i', 'c' }),
-        }),
-        formatting = {
-            format = require('lspkind').cmp_format({
-                -- Tabnine integration setting
-                mode = 'symbol_text',
-                maxwidth = 30,
-                -- Custom Icon for Tabnine
-                before = function (entry, vim_item)
-                    if entry.source.name == 'cmp_tabnine' then
-                        vim_item.kind = '🎁 Tabnine'
-                    end
-                    return vim_item
-                end
+      mapping = cmp.mapping.preset.insert({
+        ['<tab>'] = cmp.mapping.select_next_item(),
+        ['<S-tab>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-o>'] = cmp.mapping.complete(),
+        ['<C-l>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            -- Confirm visible completion
+            return cmp.confirm({ select = true })
+          else
+            -- Start AUTO completion
+            return cmp.complete({
+              config = { sources = { { name = 'cmp_tabnine' } } }
             })
+          end
+          fallback()
+        end, { 'i', 'c' }),
+        ['<CR>'] = cmp.mapping(function(fallback)
+          if cmp.get_active_entry() then
+            -- Confirm with explicit selection
+            return cmp.confirm({ select = true })
+          end
+          fallback()
+        end, { 'i', 'c' }),
+      }),
+      formatting = {
+        format = require('lspkind').cmp_format({
+          -- Tabnine integration setting
+          mode = 'symbol_text',
+          maxwidth = 30,
+          -- Custom Icon for Tabnine
+          before = function (entry, vim_item)
+            if entry.source.name == 'cmp_tabnine' then
+              vim_item.kind = '🎁 Tabnine'
+            end
+            return vim_item
+          end
+        })
+      },
+      sorting = {
+        priority_weight = 2,
+        comparators = {
+          has_tabnine and require('cmp_tabnine.compare'),  -- Tabnine comes upper
+          compare.offset,
+          compare.exact,
+          compare.score,
+          compare.recently_used,
+          compare.kind,
+          compare.sort_text,
+          compare.length,
+          compare.order,
         },
-        sorting = {
-            priority_weight = 2,
-            comparators = {
-                has_tabnine and require('cmp_tabnine.compare'),  -- Tabnine comes upper
-                compare.offset,
-                compare.exact,
-                compare.score,
-                compare.recently_used,
-                compare.kind,
-                compare.sort_text,
-                compare.length,
-                compare.order,
-            },
-        },
-        experimental = {
-            ghost_text = { hl_group = 'GhostText' },  -- Defined in color scheme
-        },
+      },
+      experimental = {
+        ghost_text = { hl_group = 'GhostText' },  -- Defined in color scheme
+      },
     })
 
     -- nvim-cmp: Completion for command
     cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'path' },
-            { name = 'cmdline' },
-        },
-        completion = {
-            keyword_length = 2,  -- Hide for a single letter
-        },
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = 'path' },
+        { name = 'cmdline' },
+      },
+      completion = {
+        keyword_length = 2,  -- Hide for a single letter
+      },
     })
 
     -- nvim-cmp: Completion for search
     cmp.setup.cmdline('/', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'buffer' }
-        },
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = 'buffer' }
+      },
     })
 
     -- Key mappings for vim-vsnip
