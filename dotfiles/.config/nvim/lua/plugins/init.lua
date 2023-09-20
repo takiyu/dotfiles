@@ -195,6 +195,11 @@ return {
     vim.keymap.set('v', 'M', '<Plug>(quickhl-manual-reset)',  {remap = true})
    end,
   },
+  {'brenoprata10/nvim-highlight-colors',
+   config = function()
+    require('nvim-highlight-colors').setup {}
+   end
+  }
 
   ------------------------------------------------------------------------------
   ------------------------------------------------------------------------------
