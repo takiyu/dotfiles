@@ -12,7 +12,7 @@ return {
   },
   {'mbbill/undotree',             -- undo可視化
    config = function()
-    vim.api.nvim_set_keymap('n', 'U', ':<C-u>UndotreeToggle<CR>', {})
+    vim.keymap.set('n', 'U', ':<C-u>UndotreeToggle<CR>', {remap = true})
    end
   },
   {'simeji/winresizer',           -- ウィンドウリサイズ
@@ -41,12 +41,12 @@ return {
   {'akinsho/toggleterm.nvim',    -- Terminal
    config = function()
     require("toggleterm").setup({ auto_scroll = false })
-    vim.api.nvim_set_keymap('n', '<F4>', ':ToggleTerm direction=float<CR>',  {noremap = true})
-    vim.api.nvim_set_keymap('n', '<C-t>', ':ToggleTerm direction=float<CR>',  {noremap = true})
-    vim.api.nvim_set_keymap('i', '<F4>', '<ESC>:ToggleTermToggleAll<CR>',  {noremap = true})
-    vim.api.nvim_set_keymap('i', '<C-t>', '<ESC>:ToggleTermToggleAll<CR>',  {noremap = true})
-    vim.api.nvim_set_keymap('t', '<F4>', '<C-\\><C-n>:ToggleTerm<CR>',  {noremap = true})
-    vim.api.nvim_set_keymap('t', '<C-t>', '<C-\\><C-n>:ToggleTerm<CR>',  {noremap = true})
+    vim.keymap.set('n', '<F4>', ':ToggleTerm direction=float<CR>')
+    vim.keymap.set('n', '<C-t>', ':ToggleTerm direction=float<CR>')
+    vim.keymap.set('i', '<F4>', '<ESC>:ToggleTermToggleAll<CR>')
+    vim.keymap.set('i', '<C-t>', '<ESC>:ToggleTermToggleAll<CR>')
+    vim.keymap.set('t', '<F4>', '<C-\\><C-n>:ToggleTerm<CR>')
+    vim.keymap.set('t', '<C-t>', '<C-\\><C-n>:ToggleTerm<CR>')
    end
   },
   {'nvim-lua/plenary.nvim'},    -- Telescope
@@ -54,8 +54,8 @@ return {
    dependency = {'nvim-lua/plenary.nvim'},
    config = function()
     require('telescope').setup{}
-    vim.api.nvim_set_keymap('n', '<F3>', '<cmd>Telescope live_grep<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<C-F3>', '<cmd>Telescope find_files<cr>', {noremap = true})
+    vim.keymap.set('n', '<F3>', '<cmd>Telescope live_grep<cr>')
+    vim.keymap.set('n', '<C-F3>', '<cmd>Telescope find_files<cr>')
    end
   },
   {'nvim-telescope/telescope-fzf-native.nvim',
@@ -93,10 +93,10 @@ return {
   ------------------------------------------------------------------------------
   {'tyru/caw.vim',                     -- コメントアウト補助
    config = function()
-    vim.api.nvim_set_keymap('n', '\\c', '<Plug>(caw:zeropos:toggle)',  {noremap = true})
-    vim.api.nvim_set_keymap('v', '\\c', '<Plug>(caw:zeropos:toggle)',  {noremap = true})
-    vim.api.nvim_set_keymap('n', '\\C', '<Plug>(caw:zeropos:uncomment)',  {noremap = true})
-    vim.api.nvim_set_keymap('v', '\\C', '<Plug>(caw:zeropos:uncomment)',  {noremap = true})
+    vim.keymap.set('n', '\\c', '<Plug>(caw:zeropos:toggle)')
+    vim.keymap.set('v', '\\c', '<Plug>(caw:zeropos:toggle)')
+    vim.keymap.set('n', '\\C', '<Plug>(caw:zeropos:uncomment)')
+    vim.keymap.set('v', '\\C', '<Plug>(caw:zeropos:uncomment)')
     vim.cmd("autocmd FileType glsl let b:caw_oneline_comment = '//'")
     vim.cmd("autocmd FileType json5 let b:caw_oneline_comment = '//'")
    end
@@ -116,12 +116,12 @@ return {
     vim.g.clever_f_not_overwrites_standard_mappings = 1  -- Enables only `f` and `F` mappings
    end,
    config = function()
-    vim.api.nvim_set_keymap('n', 'f', '<Plug>(clever-f-f)',  {})
-    vim.api.nvim_set_keymap('x', 'f', '<Plug>(clever-f-f)',  {})
-    vim.api.nvim_set_keymap('o', 'f', '<Plug>(clever-f-f)',  {})
-    vim.api.nvim_set_keymap('n', 'F', '<Plug>(clever-f-F)',  {})
-    vim.api.nvim_set_keymap('x', 'F', '<Plug>(clever-f-F)',  {})
-    vim.api.nvim_set_keymap('o', 'F', '<Plug>(clever-f-F)',  {})
+    vim.keymap.set('n', 'f', '<Plug>(clever-f-f)',  {remap = true})
+    vim.keymap.set('x', 'f', '<Plug>(clever-f-f)',  {remap = true})
+    vim.keymap.set('o', 'f', '<Plug>(clever-f-f)',  {remap = true})
+    vim.keymap.set('n', 'F', '<Plug>(clever-f-F)',  {remap = true})
+    vim.keymap.set('x', 'F', '<Plug>(clever-f-F)',  {remap = true})
+    vim.keymap.set('o', 'F', '<Plug>(clever-f-F)',  {remap = true})
    end
   },
   {'easymotion/vim-easymotion',        -- カーソル移動 (s)
@@ -132,8 +132,8 @@ return {
     vim.g.EasyMotion_enter_jump_first = 1
    end,
    config = function()
-    vim.api.nvim_set_keymap('n', 's', '<Plug>(easymotion-sn)',  {})
-    vim.api.nvim_set_keymap('n', 'S', '<Plug>(easymotion-prefix)',  {})
+    vim.keymap.set('n', 's', '<Plug>(easymotion-sn)',  {remap = true})
+    vim.keymap.set('n', 'S', '<Plug>(easymotion-prefix)',  {remap = true})
    end
  },
  {'yuttie/comfortable-motion.vim',     -- Smooth scroll
@@ -185,10 +185,10 @@ return {
     }
    end,
    config = function()
-    vim.api.nvim_set_keymap('n', 'm', '<Plug>(quickhl-manual-this)',  {})
-    vim.api.nvim_set_keymap('v', 'm', '<Plug>(quickhl-manual-this)',  {})
-    vim.api.nvim_set_keymap('n', 'M', '<Plug>(quickhl-manual-reset)',  {})
-    vim.api.nvim_set_keymap('v', 'M', '<Plug>(quickhl-manual-reset)',  {})
+    vim.keymap.set('n', 'm', '<Plug>(quickhl-manual-this)',  {remap = true})
+    vim.keymap.set('v', 'm', '<Plug>(quickhl-manual-this)',  {remap = true})
+    vim.keymap.set('n', 'M', '<Plug>(quickhl-manual-reset)',  {remap = true})
+    vim.keymap.set('v', 'M', '<Plug>(quickhl-manual-reset)',  {remap = true})
    end,
   },
 
