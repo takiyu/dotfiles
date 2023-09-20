@@ -1,7 +1,4 @@
-local vimscript_code = [[
-" ==============================================================================
-"                                  lightline
-" ==============================================================================
+vim.cmd([[
 " Global configuration
 let g:lightline = {
     \   'enable': {
@@ -41,9 +38,6 @@ let g:lightline.tabline = {
     \   'right': []
     \ }
 
-" Neovim-LSP components
-call lightline#lsp#register()
-
 " Git状態のステータスライン表示
 function! LightlineGitStatus()
     if winwidth('.') <= 60
@@ -74,12 +68,22 @@ function! LightlineGitStatus()
     endtry
     return join(ret, ' ')
 endfunction
+]])
 
-" Update events
-autocmd TextChanged * call lightline#update()
-autocmd TextChangedI * call lightline#update()
-autocmd CursorHold * call lightline#update()
-autocmd CursorHoldI * call lightline#update()
-]]
-
-return {}
+return {
+  {'josa42/nvim-lightline-lsp'},
+  {'itchyny/lightline.vim',
+   dependency = {'tpope/vim-fugitive', 'skywind3000/asyncrun.vim',
+                 'josa42/nvim-lightline-lsp'},
+   config = function()
+    vim.cmd([[
+        " Neovim-LSP components
+        call lightline#lsp#register()
+        autocmd TextChanged * call lightline#update()
+        autocmd TextChangedI * call lightline#update()
+        autocmd CursorHold * call lightline#update()
+        autocmd CursorHoldI * call lightline#update()
+    ]])
+   end
+  },
+}
