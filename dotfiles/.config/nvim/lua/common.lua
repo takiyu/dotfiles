@@ -143,9 +143,9 @@ vim.api.nvim_set_keymap('n', '<A-]>', ':cn<CR>', {})
 vim.api.nvim_set_keymap('n', '<C-9>', ':cN<CR>', {})
 vim.api.nvim_set_keymap('n', '<C-0>', ':cn<CR>', {})
 -- Quickfix/Preview/Location window/Float windowの非表示
-vim.api.nvim_set_keymap('n', '<silent><C-c>', ':cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-c>', ':cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>', { noremap = true, silent = true })
 -- 検索ハイライトのクリア
-vim.api.nvim_set_keymap('n', '<silent><Esc>', ':noh<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<Esc>', ':noh<CR>', { noremap = true, silent = true })
 -- 置換 (start from current cursor)
 vim.api.nvim_set_keymap('n', '<F2>', ":,$s/\\<<C-r><C-w>\\>//gc|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>", { noremap = true })
 
