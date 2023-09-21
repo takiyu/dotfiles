@@ -57,6 +57,7 @@ return {
     require("nvim-tree").setup{
       on_attach = OnAttach,
       filters = {
+        gitignore = false,
         dotfiles = true,
       },
     }
