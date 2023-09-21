@@ -38,8 +38,7 @@ end
 vim.cmd('set shellslash')                    -- ファイルパスに\の代わりに/を使用
 
 -- 改行時のコメントアウト継続を無効化
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-  pattern = {'*'},
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead', 'BufEnter' }, {
   command = 'setlocal formatoptions-=ro',
 })
 -- 保存時に行末の空白を除去
