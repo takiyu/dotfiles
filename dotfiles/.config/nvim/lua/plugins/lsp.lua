@@ -142,6 +142,9 @@ return {
       print('No Tabnine')
     end
 
+    -- Turbopilot
+--     require("cmp_turbopilot").setup()
+
     -- lspkind
     require('lspkind').init({
       preset = 'default',
@@ -176,6 +179,9 @@ return {
 
     -- nvim-cmp: Completion for general
     cmp.setup({
+      performance = {
+        fetching_timeout = 60000,
+      },
       snippet = {
         expand = function(args)
           vim.fn['vsnip#anonymous'](args.body)
@@ -183,6 +189,7 @@ return {
       },
       sources = cmp.config.sources({
           -- Source group 1
+          { name = 'cmp_turbopilot' },
           { name = 'calc'},
           { name = 'vsnip'},
           { name = 'path' },
@@ -208,7 +215,7 @@ return {
           else
             -- Start AUTO completion
             return cmp.complete({
-              config = { sources = { { name = 'cmp_tabnine' } } }
+              config = { sources = { { name = 'cmp_turbopilot' } } }
             })
           end
           fallback()
