@@ -173,6 +173,7 @@ function NextColorColumn()
   end
 end
 vim.api.nvim_set_keymap('n', '<F10>', ':lua print(NextColorColumn())<CR>', { noremap = true })
+NextColorColumn()
 
 --------------------------------- Spell check toggle ---------------------------
 vim.opt.spell = true
