@@ -108,16 +108,19 @@ return {
   {'hrsh7th/cmp-buffer'},
   {'hrsh7th/cmp-path'},
   {'hrsh7th/cmp-cmdline'},
+  {'hrsh7th/cmp-emoji'},
+  {'hrsh7th/cmp-calc'},
   {'octaltree/cmp-look'},
   {'tzachar/cmp-tabnine',
    build = './install.sh'
   },
-  {'hrsh7th/cmp-emoji'},
-  {'hrsh7th/cmp-calc'},
+  {'takiyu/cmp-turbopilot',
+   dependency = {'nvim-lua/plenary.nvim'},
+  },
   {'hrsh7th/nvim-cmp',
    dependency = {'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
-                 'cmp-path', 'cmp-cmdline', 'cmp-look', 'cmp-tabnine',
-                 'cmp-emoji', 'cmp-calc', 'lspkind.nvim'},
+                 'cmp-path', 'cmp-cmdline', 'cmp-emoji', 'cmp-calc',
+                 'cmp-look', 'cmp-tabnine', 'cmp-turbopilot', 'lspkind.nvim'},
    config = function()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
@@ -227,6 +230,8 @@ return {
           before = function (entry, vim_item)
             if entry.source.name == 'cmp_tabnine' then
               vim_item.kind = '🎁 Tabnine'
+            elseif entry.source.name == 'cmp_turbopilot' then
+              vim_item.kind = '🚀 Turbopilot'
             end
             return vim_item
           end

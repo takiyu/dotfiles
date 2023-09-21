@@ -3,7 +3,8 @@ return {
   ------------------------------ Extra Functions -------------------------------
   ------------------------------------------------------------------------------
   {'dstein64/vim-startuptime'},   -- :StartupTime
-  {'h-hg/fcitx.nvim'},            -- Auto Fcitx
+  {'nvim-lua/plenary.nvim'},      -- lua utility
+  {'h-hg/fcitx.nvim'},            -- fcitx自動化
   {'embear/vim-localvimrc',       -- lvimrc
    init = function()
     vim.g.localvimrc_ask = 0
@@ -49,8 +50,7 @@ return {
     vim.keymap.set('t', '<C-t>', '<C-\\><C-n>:ToggleTerm<CR>')
    end
   },
-  {'nvim-lua/plenary.nvim'},    -- Telescope
-  {'nvim-telescope/telescope.nvim',
+  {'nvim-telescope/telescope.nvim',    -- Telescope
    dependency = {'nvim-lua/plenary.nvim'},
    config = function()
     require('telescope').setup{}
