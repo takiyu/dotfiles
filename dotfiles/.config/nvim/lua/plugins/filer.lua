@@ -72,7 +72,6 @@ return {
     }
     -- Key maps
     vim.api.nvim_set_keymap('', '<C-e>', ':NvimTreeToggle<CR>',  {noremap = true})
-
     vim.api.nvim_set_keymap('', '<C-f>', ':NvimTreeClose<CR>:NvimTreeFindFileToggle<CR>',  {noremap = true})
   end
 }
