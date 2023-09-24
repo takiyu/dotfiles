@@ -112,9 +112,13 @@ vim.api.nvim_set_keymap('n', '<Up>', 'g<Up>', {})
 vim.api.nvim_set_keymap('n', '<Down>', 'g<Down>', {})
 -- 高速移動 上下移動は滑らかに
 vim.api.nvim_set_keymap('n', '<C-h>', '10h',  {noremap = true})
+vim.api.nvim_set_keymap('v', '<C-h>', '10h',  {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-l>', '10l',  {noremap = true})
+vim.api.nvim_set_keymap('v', '<C-l>', '10l',  {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-j>', '10j',  {noremap = true})
+vim.api.nvim_set_keymap('v', '<C-j>', '10j',  {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-k>', '10k',  {noremap = true})
+vim.api.nvim_set_keymap('v', '<C-k>', '10k',  {noremap = true})
 -- 行末行頭への移動
 vim.api.nvim_set_keymap('n', '9', '^',  {noremap = true})
 vim.api.nvim_set_keymap('v', '9', '^',  {noremap = true})
@@ -147,6 +151,7 @@ vim.api.nvim_set_keymap('n', '<C-c>', ':cclose<CR>:pclose<CR>:lclose<CR>:lua for
 vim.api.nvim_set_keymap('n', '<Esc>', ':noh<CR>', { noremap = true, silent = true })
 -- 置換 (start from current cursor)
 vim.api.nvim_set_keymap('n', '<F2>', ":,$s/\\<<C-r><C-w>\\>//gc|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<F1>', ':%s///gc<Left><Left><Left><Left>', {})
 
 ------------------------------ Custom line limits ------------------------------
 colorcolumn_mode = 0
