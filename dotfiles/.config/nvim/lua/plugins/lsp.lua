@@ -114,16 +114,21 @@ return {
   {'tzachar/cmp-tabnine',
    build = './install.sh'
   },
-  {'takiyu/cmp-turbopilot',
-   dependency = {'nvim-lua/plenary.nvim'},
-  },
+  {'takiyu/cmp-tabby'},
   {'hrsh7th/nvim-cmp',
    dependency = {'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
                  'cmp-path', 'cmp-cmdline', 'cmp-emoji', 'cmp-calc',
-                 'cmp-look', 'cmp-tabnine', 'cmp-turbopilot', 'lspkind.nvim'},
+                 'cmp-look', 'cmp-tabnine', 'cmp-tabby', 'lspkind.nvim'},
    config = function()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
+
+    -- Tabby
+    local tabby = require('cmp_tabby.config')
+    tabby:setup({
+      host = 'http://localhost:8080',
+      max_lines = 1000,
+    })
 
     -- Tabnine
     local has_tabnine = pcall(require, 'cmp_tabnine')
@@ -183,6 +188,7 @@ return {
       },
       sources = cmp.config.sources({
           -- Source group 1
+          { name = 'cmp_tabby' },
           { name = 'calc'},
           { name = 'vsnip'},
           { name = 'path' },
@@ -208,7 +214,8 @@ return {
           else
             -- Start AUTO completion
             return cmp.complete({
-              config = { sources = { { name = 'cmp_tabnine' } } }
+              -- config = { sources = { { name = 'cmp_tabnine' } } }
+              config = { sources = { { name = 'cmp_tabby' } } }
             })
           end
           fallback()
@@ -230,8 +237,8 @@ return {
           before = function (entry, vim_item)
             if entry.source.name == 'cmp_tabnine' then
               vim_item.kind = '🎁 Tabnine'
-            elseif entry.source.name == 'cmp_turbopilot' then
-              vim_item.kind = '🚀 Turbopilot'
+            elseif entry.source.name == 'cmp_tabby' then
+              vim_item.kind = '🎁 Tabby'
             end
             return vim_item
           end
