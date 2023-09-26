@@ -127,7 +127,7 @@ return {
     local tabby = require('cmp_tabby.config')
     tabby:setup({
       host = 'http://localhost:8080',
-      max_lines = 1000,
+      max_lines = 200,
     })
 
     -- Tabnine
