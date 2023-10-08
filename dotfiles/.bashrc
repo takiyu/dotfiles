@@ -480,15 +480,6 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     alias gvimdiff="nvim -- -d"
     export EDITOR=nvim
     export GIT_EDITOR=nvim
-else
-    # Set vim for all
-    alias nvim=vim
-    alias gvim=vim
-    alias v="vim"
-    alias vimdiff="vim -d"
-    alias gvimdiff="vim -- -d"
-    export EDITOR=vim
-    export GIT_EDITOR=vim
 fi
 
 # aliases for fzy
