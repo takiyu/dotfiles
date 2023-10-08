@@ -215,7 +215,10 @@ return {
             -- Start AUTO completion
             return cmp.complete({
               -- config = { sources = { { name = 'cmp_tabnine' } } }
-              config = { sources = { { name = 'cmp_tabby' } } }
+              config = { sources = {
+                { name = 'cmp_tabby' },
+                { name = 'cmp_tabnine' },
+              }}
             })
           end
           fallback()
