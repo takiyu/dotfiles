@@ -400,7 +400,7 @@ __git_complete gurl __git_remotes
 __git_complete gurlset __git_remotes
 __git_complete gd _git_diff
 __git_complete gdc _git_diff
-__git_complete grm _git_remove
+__git_complete grm _git_rm
 __git_complete ga _git_add
 __git_complete gau _git_add
 __git_complete gaup _git_add
