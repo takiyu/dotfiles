@@ -1,4 +1,3 @@
-#!/bin/bash
 case "$(uname -s)" in
     Linux)
         echo "Linux" ;;

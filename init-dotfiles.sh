@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # utility scripts
 dotfiles=$HOME/dotfiles
 determ_platform=$dotfiles/utils/determ_platform.sh
