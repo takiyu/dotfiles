@@ -1,5 +1,5 @@
-! ---- Standard Japanese Keyboard ----
-! Thumb Esc
+! ---- Standard JP Keyboard ----
+! Thumb Escape
 keysym Henkan_Mode = Escape
 ! Left Ctrl
 remove lock = Caps_Lock
@@ -15,6 +15,22 @@ keysym Muhenkan = Alt_R
 keysym Hiragana_Katakana = Alt_R
 add mod3 = Alt_R
 
+! ---- Android Physical Keyboard ----
+! Thumb Escape
+! remove mod1 = Alt_R
+! keysym Alt_R = Escape
+! Left Ctrl
+! remove lock = Caps_Lock
+! keysym Caps_Lock = Control_L
+! add lock = Caps_Lock
+! add Control = Control_L
+! Mod3 for Xmonad
+! clear mod3
+! remove mod1 = Alt_L
+! add mod3 = Alt_L
+! Underscore
+! remove shift = Shift_R
+! keycode 62 = backslash underscore backslash underscore
 
 ! ---- EN -> JP ----
 ! clear shift
