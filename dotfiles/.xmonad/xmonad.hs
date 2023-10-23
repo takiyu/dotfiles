@@ -65,16 +65,16 @@ myHandleEventHook = handleEventHook kdeConfig
 
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar"
+--     xmproc <- spawnPipe "xmobar"
     xmonad $ kdeConfig {
         layoutHook = desktopLayoutModifiers( myLayout ),
         manageHook = myManageHook ,
         handleEventHook = myHandleEventHook ,
         -- Send to xmobar
-        logHook = logHook kdeConfig
-                <+> (dynamicLogWithPP $ xmobarPP
-                    { ppOutput = hPutStrLn xmproc
-                    , ppTitle = xmobarColor "green" "" . shorten 50 }),
+--         logHook = logHook kdeConfig
+--                 <+> (dynamicLogWithPP $ xmobarPP
+--                     { ppOutput = hPutStrLn xmproc
+--                     , ppTitle = xmobarColor "green" "" . shorten 50 }),
         -- Workspaces
         workspaces =  myWorkspaces,
         -- Border settings
