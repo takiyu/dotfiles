@@ -84,7 +84,7 @@ if [ $platform == 'Linux' ]; then
     TARGETS=(.Xmodmap_default .Xmodmap .xinitrc .bash_profile .bashrc .xmonad \
              .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
              .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
-             .mplayer/config .config/matplotlib/matplotlibrc \
+             .mplayer/config .config/matplotlib/matplotlibrc .mime.types \
              .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
 
