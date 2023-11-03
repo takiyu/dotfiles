@@ -107,9 +107,13 @@ vim.api.nvim_set_keymap('n', '<F5>', '<C-l>', {noremap = true})
 vim.api.nvim_set_keymap('i', '<F5>', '<ESC><C-l>a', {noremap = true})
 -- 上下移動を表記上のものにする
 vim.api.nvim_set_keymap('n', 'j', 'gj', {})
+vim.api.nvim_set_keymap('v', 'j', 'gj', {})
 vim.api.nvim_set_keymap('n', 'k', 'gk', {})
+vim.api.nvim_set_keymap('v', 'k', 'gk', {})
 vim.api.nvim_set_keymap('n', '<Up>', 'g<Up>', {})
+vim.api.nvim_set_keymap('v', '<Up>', 'g<Up>', {})
 vim.api.nvim_set_keymap('n', '<Down>', 'g<Down>', {})
+vim.api.nvim_set_keymap('v', '<Down>', 'g<Down>', {})
 -- 高速移動 上下移動は滑らかに
 vim.api.nvim_set_keymap('n', '<C-h>', '10h',  {noremap = true})
 vim.api.nvim_set_keymap('v', '<C-h>', '10h',  {noremap = true})
