@@ -97,6 +97,10 @@ return {
     vim.keymap.set('v', '\\c', '<Plug>(caw:zeropos:toggle)')
     vim.keymap.set('n', '\\C', '<Plug>(caw:zeropos:uncomment)')
     vim.keymap.set('v', '\\C', '<Plug>(caw:zeropos:uncomment)')
+    vim.keymap.set('n', 'c', '<Plug>(caw:zeropos:toggle)')
+    vim.keymap.set('v', 'c', '<Plug>(caw:zeropos:toggle)')
+    vim.keymap.set('n', 'C', '<Plug>(caw:zeropos:uncomment)')
+    vim.keymap.set('v', 'C', '<Plug>(caw:zeropos:uncomment)')
     vim.cmd("autocmd FileType glsl let b:caw_oneline_comment = '//'")
     vim.cmd("autocmd FileType json5 let b:caw_oneline_comment = '//'")
    end
