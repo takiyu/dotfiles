@@ -370,7 +370,7 @@ alias gsta='git stash apply'
 alias gstc='git stash clear'
 alias gsts='git stash show -p'
 alias gsub='git submodule'
-alias gsb='git submodule'
+alias gsubadd='git submodule add'
 alias gsuburi='git submodule update --init --recursive -j 8'
 alias gsburi='git submodule update --init --recursive -j 8'
 alias gbis='git bisect'
@@ -530,7 +530,7 @@ fi
 if [ "$MODE" == 'Home_linux' ]; then
     # Mouse mapping for a trackball Huge
     if [ "`$exist_command xinput`" == 'exist' ]; then
-        xinput set-button-map 8 1 3 2 4 5 6 7 8 9 10 11 3
+        xinput set-button-map 12 1 3 2 4 5 6 7 8 9 10 11 3
     fi
     if [ "`$exist_command xbindkeys`" == 'exist' ]; then
         xbindkeys
