@@ -221,7 +221,14 @@ return {
               }}
             })
           end
-          fallback()
+        end, { 'i', 'c' }),
+        ['<C-j>'] = cmp.mapping(function(fallback)
+          -- Start Tabby completion
+          return cmp.complete({
+            config = { sources = {
+              { name = 'cmp_tabby' },
+            }}
+          })
         end, { 'i', 'c' }),
         ['<CR>'] = cmp.mapping(function(fallback)
           if cmp.get_active_entry() then
