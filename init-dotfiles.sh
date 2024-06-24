@@ -85,8 +85,10 @@ if [ $platform == 'Linux' ]; then
              .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
              .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
              .mplayer/config .config/matplotlib/matplotlibrc .mime.types \
-             .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc)
-    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib/)
+             .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc \
+             .config/pypoetry/config.toml)
+    TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib
+                 .config/pypoetry/)
 
     # First, create directories
     for target_dir in ${TARGET_DIRS[@]}; do
