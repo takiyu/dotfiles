@@ -482,15 +482,6 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     export GIT_EDITOR=nvim
 fi
 
-# aliases for fzy
-function vf() { vim `find | fzy`; }
-function vimf() { vim `find | fzy`; }
-function gvimf() { vim `find | fzy`; }
-function cf() { cd `find | fzy`; }
-function cdf() { cd `find | fzy`; }
-function lf() { find | fzy; }
-function lsf() { find | fzy; }
-
 # aliases for applications
 if [ $platform == 'Linux' ]; then
     function filer() { command thunar "$@" & 2> /dev/null; disown; }
