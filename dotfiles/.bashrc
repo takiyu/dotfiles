@@ -493,10 +493,10 @@ function lsf() { find | fzy; }
 
 # aliases for applications
 if [ $platform == 'Linux' ]; then
-    function filer() { command thunar $@ & 2> /dev/null; disown; }
-    function zathura() { command zathura $@ & 2> /dev/null; disown; }
+    function filer() { command thunar "$@" & 2> /dev/null; disown; }
+    function zathura() { command zathura "$@" & 2> /dev/null; disown; }
 elif [ $platform == 'Windows' ]; then
-    function filer() { command explorer $@ & 2> /dev/null; disown; }
+    function filer() { command explorer "$@" & 2> /dev/null; disown; }
     alias w=winpty
 fi
 alias f=filer
