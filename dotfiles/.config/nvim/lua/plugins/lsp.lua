@@ -76,25 +76,38 @@ return {
    config = function()
     require('mason').setup()
     require('mason-lspconfig').setup_handlers({ function(server)
-       local opt = {}
+      local opt = {}
 
-       -- Setup `cmp_nvim_lsp`
-       opt.capabilities = require('cmp_nvim_lsp').default_capabilities(
-          vim.lsp.protocol.make_client_capabilities()
-       )
+      -- Setup `cmp_nvim_lsp`
+      opt.capabilities = require('cmp_nvim_lsp').default_capabilities(
+        vim.lsp.protocol.make_client_capabilities()
+      )
 
-       -- Arguments for Clangd
-       if server == 'clangd' then
-          opt.cmd = {
-             'clangd',
-             '--background-index=false',
-             '--cross-file-rename',
-             '--header-insertion=never',
+      -- Arguments for Clangd
+      if server == 'clangd' then
+        opt.cmd = {
+          'clangd',
+          '--background-index=false',
+          '--cross-file-rename',
+          '--header-insertion=never',
+        }
+      end
+
+      -- Arguments for PyRight
+      if server == 'pyright' then
+        opt.settings = {
+          python = {
+            venvPath = ".",
+            pythonPath = "./.venv/bin/python",
+            analysis = {
+              extraPaths = {"."}
+            }
           }
-       end
+        }
+      end
 
-       -- Pass to `lspconfig` setup
-       require('lspconfig')[server].setup(opt)
+      -- Pass to `lspconfig` setup
+      require('lspconfig')[server].setup(opt)
     end })
    end
   },
