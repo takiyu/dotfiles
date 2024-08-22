@@ -56,8 +56,22 @@ return {
     vim.g.hexmode_xxd_options = '-g 2'  -- xxd option: 2 bytes
    end,
    config = function()
-    vim.keymap.set('n', '<F8>', ':lua vim.g.hexmode_xxd_options = "-g 2"<CR>:e<CR>')      -- Mode: Binary
-    vim.keymap.set('n', '<F9>', ':lua vim.g.hexmode_xxd_options = "-b -c 16"<CR>:e<CR>')  -- Mode: Hex
+     vim.g.is_hexmode_binary = false
+     vim.keymap.set('n', '<F7>', function()
+       if vim.g.is_hexmode_binary then
+         -- Hex mode
+        print("Editer mode: Hex")
+         vim.g.hexmode_xxd_options = "-g 2"
+         vim.cmd('e')
+         vim.g.is_hexmode_binary = false
+       else
+         -- Binary mode
+         print("Editer mode: Binary")
+         vim.g.hexmode_xxd_options = "-b -c 16"
+         vim.cmd('e')
+         vim.g.is_hexmode_binary = true
+       end
+     end)
    end
   },
 

@@ -41,11 +41,6 @@ vim.cmd('set shellslash')                    -- ファイルパスに\の代わ�
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead', 'BufEnter' }, {
   command = 'setlocal formatoptions-=ro',
 })
--- 保存時に行末の空白を除去
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  pattern = {'*'},
-  command = [[%s/\s\+$//ge]],
-})
 
 ----------------------------------- Encoding -----------------------------------
 vim.cmd('set encoding=utf-8')
@@ -180,7 +175,7 @@ function NextColorColumn()
     return 'Line limit: 120'
   end
 end
-vim.api.nvim_set_keymap('n', '<F10>', ':lua print(NextColorColumn())<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<F9>', ':lua print(NextColorColumn())<CR>', { noremap = true })
 NextColorColumn()
 
 --------------------------------- Spell check toggle ---------------------------
@@ -195,6 +190,36 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
   pattern = {'*'},
   command = 'set spell! spelllang=',   -- Disable spell check in terminal
 })
+
+------------------------------ Tail Space Removal ------------------------------
+local function set_trim_whitespace()
+  vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+    pattern = {'*'},
+    command = [[%s/\s\+$//ge]],
+    group = vim.api.nvim_create_augroup('TrimWhitespace', { clear = true })
+  })
+end
+local function unset_trim_whitespace()
+  vim.api.nvim_del_augroup_by_name('TrimWhitespace')
+end
+
+local trim_whitespace_enabled = true
+
+function toggle_trim_whitespace()
+  if trim_whitespace_enabled then
+    unset_trim_whitespace()
+    print("Trim trailing whitespace: OFF")
+  else
+    set_trim_whitespace()
+    print("Trim trailing whitespace: ON")
+  end
+  trim_whitespace_enabled = not trim_whitespace_enabled
+end
+
+set_trim_whitespace() -- Enable by default
+vim.api.nvim_set_keymap('n', '<F8>', ':lua toggle_trim_whitespace()<CR>',
+                        { noremap = true, silent = true })
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
