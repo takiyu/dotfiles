@@ -58,7 +58,7 @@ return {
       },
       doc_lines = 3,
       hint_prefix = '🐬 ',
-      toggle_key = '<F9>',
+      -- toggle_key = '<F10>',
       fix_pos = true,
       floating_window_above_cur_line = true,
       floating_window_off_y = 1000,
