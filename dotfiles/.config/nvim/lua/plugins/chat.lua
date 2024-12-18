@@ -83,8 +83,8 @@ return {
       })
 
       -- Key binding
-      vim.keymap.set('n', 'J', ':CopilotChatToggle<CR>')
-      vim.keymap.set('v', 'J', ':CopilotChat<CR>')
+      vim.keymap.set('n', 'L', ':CopilotChatToggle<CR>')
+      vim.keymap.set('v', 'L', ':CopilotChat<CR>')
 
       -- Key binding for actions
       function ShowCopilotChatActionPrompt()
