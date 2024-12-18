@@ -124,41 +124,35 @@ return {
   {'hrsh7th/cmp-emoji'},
   {'hrsh7th/cmp-calc'},
   {'octaltree/cmp-look'},
-  {'tzachar/cmp-tabnine',
-   build = './install.sh'
-  },
   {'takiyu/cmp-tabby'},
+  {'zbirenbaum/copilot.lua'},
+  {'zbirenbaum/copilot-cmp',
+   dependency = {'copilot.lua'},
+  },
   {'hrsh7th/nvim-cmp',
    dependency = {'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
                  'cmp-path', 'cmp-cmdline', 'cmp-emoji', 'cmp-calc',
-                 'cmp-look', 'cmp-tabnine', 'cmp-tabby', 'lspkind.nvim'},
+                 'cmp-look', 'cmp-tabby', 'copilot-cmp', 'lspkind.nvim'},
    config = function()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
 
     -- Tabby
-    local tabby = require('cmp_tabby.config')
-    tabby:setup({
-      host = 'http://localhost:8080',
-      max_lines = 200,
-    })
-
-    -- Tabnine
-    local has_tabnine = pcall(require, 'cmp_tabnine')
-    if has_tabnine then
-      local tabnine = require('cmp_tabnine.config')
-      tabnine:setup({
+    if false then
+      local tabby = require('cmp_tabby.config')
+      tabby:setup({
+        host = 'http://localhost:8080',
         max_lines = 200,
-        max_num_results = 5,
-        sort = true,
-        run_on_every_keystroke = false,
-        snippet_placeholder = '..',
-        ignored_file_types = {},
-        show_prediction_strength = true
       })
-    else
-      print('No Tabnine')
     end
+
+    -- Copilot
+    require('copilot').setup({
+      suggestion = {enabled = false},
+      panel = {enabled = false},
+      copilot_node_command = 'node'
+    })
+    require('copilot_cmp').setup()
 
     -- lspkind
     require('lspkind').init({
@@ -188,7 +182,7 @@ return {
         Struct = '🧳',
         Event = '🎉',
         Operator = '🧭',
-        TypeParameter = ''
+        TypeParameter = '',
       },
     })
 
@@ -201,14 +195,13 @@ return {
       },
       sources = cmp.config.sources({
           -- Source group 1
-          { name = 'cmp_tabby' },
+          { name = 'copilot' },
           { name = 'calc'},
           { name = 'vsnip'},
           { name = 'path' },
           { name = 'emoji', insert = true },
         }, {
           -- Source group 2
-          { name = 'cmp_tabnine' },
           { name = 'nvim_lsp' },
           { name = 'buffer', max_item_count = 10 },
           { name = 'look', max_item_count = 10,
@@ -227,21 +220,11 @@ return {
           else
             -- Start AUTO completion
             return cmp.complete({
-              -- config = { sources = { { name = 'cmp_tabnine' } } }
               config = { sources = {
-                { name = 'cmp_tabby' },
-                { name = 'cmp_tabnine' },
+                { name = 'copilot_cmp' },
               }}
             })
           end
-        end, { 'i', 'c' }),
-        ['<C-j>'] = cmp.mapping(function(fallback)
-          -- Start Tabby completion
-          return cmp.complete({
-            config = { sources = {
-              { name = 'cmp_tabby' },
-            }}
-          })
         end, { 'i', 'c' }),
         ['<CR>'] = cmp.mapping(function(fallback)
           if cmp.get_active_entry() then
@@ -253,13 +236,13 @@ return {
       }),
       formatting = {
         format = require('lspkind').cmp_format({
-          -- Tabnine integration setting
           mode = 'symbol_text',
           maxwidth = 30,
-          -- Custom Icon for Tabnine
+          -- Custom Icons
           before = function (entry, vim_item)
-            if entry.source.name == 'cmp_tabnine' then
-              vim_item.kind = '🎁 Tabnine'
+            print(entry.source.name)
+            if entry.source.name == 'copilot' then
+              vim_item.kind = '🎁 Copilot'
             elseif entry.source.name == 'cmp_tabby' then
               vim_item.kind = '🎁 Tabby'
             end
@@ -270,7 +253,6 @@ return {
       sorting = {
         priority_weight = 2,
         comparators = {
-          has_tabnine and require('cmp_tabnine.compare'),  -- Tabnine comes upper
           compare.offset,
           compare.exact,
           compare.score,
