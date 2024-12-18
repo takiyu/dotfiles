@@ -242,7 +242,6 @@ return {
           maxwidth = 30,
           -- Custom Icons
           before = function (entry, vim_item)
-            print(entry.source.name)
             if entry.source.name == 'copilot' then
               vim_item.kind = '🎁 Copilot'
             elseif entry.source.name == 'cmp_tabby' then
