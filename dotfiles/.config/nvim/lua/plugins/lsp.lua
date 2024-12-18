@@ -212,6 +212,8 @@ return {
         ['<S-tab>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
         ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<Down>'] = cmp.mapping.select_next_item(),
+        ['<Up>'] = cmp.mapping.select_prev_item(),
         ['<C-o>'] = cmp.mapping.complete(),
         ['<C-l>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
