@@ -7,13 +7,13 @@ return {
       require('CopilotChat').setup({
         show_help = false,
         window = {
-          layout = 'float',
-          width = 0.6,
-          height = 0.6,
-          border = 'rounded'
+          layout = 'vertical',
+          width = 0.4,
+          height = 0.4,
+          border = 'rounded',
         },
         auto_insert_mode = false,
-        auto_follow_cursor = false,
+        auto_follow_cursor = true,
         prompts = {
           Explain = {
             prompt = '/COPILOT_EXPLAIN コードを日本語で説明してください',
@@ -83,8 +83,8 @@ return {
       })
 
       -- Key binding
-      vim.keymap.set('n', 'L', ':CopilotChatToggle<CR>')
-      vim.keymap.set('v', 'L', ':CopilotChat<CR>')
+      vim.keymap.set('n', 'C', ':CopilotChatToggle<CR>')
+      vim.keymap.set('v', 'C', ':CopilotChat<CR>')
 
       -- Key binding for actions
       function ShowCopilotChatActionPrompt()

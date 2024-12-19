@@ -223,7 +223,7 @@ return {
             -- Start AUTO completion
             return cmp.complete({
               config = { sources = {
-                { name = 'copilot' },
+                { name = 'copilot' }
               }}
             })
           end
@@ -239,7 +239,7 @@ return {
       formatting = {
         format = require('lspkind').cmp_format({
           mode = 'symbol_text',
-          maxwidth = 30,
+          maxwidth = 50,
           -- Custom Icons
           before = function (entry, vim_item)
             if entry.source.name == 'copilot' then
@@ -270,7 +270,7 @@ return {
       },
     })
 
-    -- nvim-cmp: Completion for command
+    -- Completion for command
     cmp.setup.cmdline(':', {
       mapping = cmp.mapping.preset.cmdline(),
       sources = {
@@ -282,7 +282,7 @@ return {
       },
     })
 
-    -- nvim-cmp: Completion for search
+    -- Completion for search
     cmp.setup.cmdline('/', {
       mapping = cmp.mapping.preset.cmdline(),
       sources = {
