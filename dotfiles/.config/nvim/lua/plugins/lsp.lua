@@ -223,7 +223,7 @@ return {
             -- Start AUTO completion
             return cmp.complete({
               config = { sources = {
-                { name = 'copilot_cmp' },
+                { name = 'copilot' },
               }}
             })
           end
