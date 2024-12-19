@@ -7,10 +7,12 @@ return {
       require('CopilotChat').setup({
         show_help = false,
         window = {
-          layout = 'vertical',
+          layout = 'float',
           width = 0.4,
           height = 0.4,
           border = 'rounded',
+          row = 1000,  -- bottom
+          col = 1000,  -- right
         },
         auto_insert_mode = false,
         auto_follow_cursor = true,
