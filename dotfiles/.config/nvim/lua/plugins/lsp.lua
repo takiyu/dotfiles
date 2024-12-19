@@ -19,7 +19,6 @@ return {
         vim.lsp.handlers.hover, {
           border = 'rounded'  -- Border
         }
-        }
       )
       vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
         vim.lsp.handlers.signature_help, {
