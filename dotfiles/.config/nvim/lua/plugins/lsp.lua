@@ -8,7 +8,7 @@ return {
       -- Diagnostic appearance
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
-          virtual_text = false,
+          virtual_text = false, -- Hide virtual text
           signs = true,
           underline = true,
           update_in_insert = false,
@@ -37,7 +37,18 @@ return {
       -- Show diagnostic floating automatically
       vim.api.nvim_create_autocmd('CursorHold', {
         pattern = { '*' },
-        callback = function() vim.diagnostic.open_float() end
+        callback = function() vim.diagnostic.open_float({ border = 'rounded' }) end
+      })
+      -- Set diagnostic signs
+      vim.diagnostic.config({
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '🔥',
+            [vim.diagnostic.severity.WARN] = '🚧',
+            [vim.diagnostic.severity.HINT] = '🐬',
+            [vim.diagnostic.severity.INFO] = '🖊️',
+          },
+        },
       })
     end
   },
