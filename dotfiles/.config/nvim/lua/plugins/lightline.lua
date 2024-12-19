@@ -71,22 +71,24 @@ endfunction
 ]])
 
 return {
-  {'josa42/nvim-lightline-lsp',
-   dependency = {'neovim/nvim-lspconfig'},
-   config = function()
-    vim.cmd([[ call lightline#lsp#register() ]])
-   end
-  },
-  {'itchyny/lightline.vim',
-   dependency = {'tpope/vim-fugitive', 'skywind3000/asyncrun.vim',
-                 'josa42/nvim-lightline-lsp'},
-   config = function()
-    vim.cmd([[
+    {
+        'josa42/nvim-lightline-lsp',
+        dependency = { 'neovim/nvim-lspconfig' },
+        config = function()
+            vim.cmd([[ call lightline#lsp#register() ]])
+        end
+    },
+    {
+        'itchyny/lightline.vim',
+        dependency = { 'tpope/vim-fugitive', 'skywind3000/asyncrun.vim',
+            'josa42/nvim-lightline-lsp' },
+        config = function()
+            vim.cmd([[
         autocmd TextChanged * call lightline#update()
         autocmd TextChangedI * call lightline#update()
         autocmd CursorHold * call lightline#update()
         autocmd CursorHoldI * call lightline#update()
     ]])
-   end
-  },
+        end
+    },
 }

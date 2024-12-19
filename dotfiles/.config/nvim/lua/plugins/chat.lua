@@ -91,9 +91,9 @@ return {
         local actions = require('CopilotChat.actions')
         require('CopilotChat.integrations.telescope').pick(actions.prompt_actions())
       end
+
       vim.api.nvim_set_keymap('n', 'H', '<cmd>lua ShowCopilotChatActionPrompt()<cr>',
         { noremap = true, silent = true })
-
     end
   },
 }

@@ -1,41 +1,41 @@
 --------------------------------------------------------------------------------
 -------------------------------- Basic Settings --------------------------------
 --------------------------------------------------------------------------------
-vim.cmd('set synmaxcol=400')                 -- ハイライトする文字数を制限する
-vim.cmd('set backspace=indent,eol,start')    -- インサートモード時にバックスペースを使う
-vim.cmd('set whichwrap=b,s,h,l,<,>,[,]')     -- 行頭から前行文末へ移動可能にする
+vim.cmd('set synmaxcol=400')              -- ハイライトする文字数を制限する
+vim.cmd('set backspace=indent,eol,start') -- インサートモード時にバックスペースを使う
+vim.cmd('set whichwrap=b,s,h,l,<,>,[,]')  -- 行頭から前行文末へ移動可能にする
 -- vim.cmd('set scrolloff=999')                 -- スクロール時にカーソルを中央へ移動
-vim.cmd('set scrolloff=3')                   -- スクロールを開始する行数
-vim.cmd('set cindent')                       -- cオートインデント
-vim.cmd('set cinoptions=g0')                 -- cppでのpublic宣言を下げる
-vim.cmd('set showtabline=2')                 -- タブ(上部)を常に表示する
-vim.cmd('set number')                        -- 行数を表示する
-vim.cmd('set hlsearch')                      -- 検索文字列を強調
-vim.cmd('set ignorecase')                    -- 大文字小文字を無視
-vim.cmd('set smartcase')                     -- (ただし大文字入力時のみ考慮)
-vim.cmd('set guioptions-=m')                 -- メニューバーを非表示
-vim.cmd('set guioptions-=T')                 -- ツールバーを非表示
-vim.cmd('set guioptions-=e')                 -- TabのGUI表示をOFF
-vim.cmd('set mouse=a')                       -- マウスをすべてのモードで使用する
-vim.cmd('set wildmenu')                      -- コマンドモードの補完方法
-vim.cmd('set diffopt+=vertical')             -- diffは縦分割
-vim.cmd('set conceallevel=0')                -- 非表示文字も表示
-vim.cmd('set nobackup')                      -- バックアップhoge~を作成しない
-vim.cmd('set belloff=all')                   -- ビープ音無効化
-vim.cmd('set termguicolors')                 -- CLIでフルカラー
+vim.cmd('set scrolloff=3')                -- スクロールを開始する行数
+vim.cmd('set cindent')                    -- cオートインデント
+vim.cmd('set cinoptions=g0')              -- cppでのpublic宣言を下げる
+vim.cmd('set showtabline=2')              -- タブ(上部)を常に表示する
+vim.cmd('set number')                     -- 行数を表示する
+vim.cmd('set hlsearch')                   -- 検索文字列を強調
+vim.cmd('set ignorecase')                 -- 大文字小文字を無視
+vim.cmd('set smartcase')                  -- (ただし大文字入力時のみ考慮)
+vim.cmd('set guioptions-=m')              -- メニューバーを非表示
+vim.cmd('set guioptions-=T')              -- ツールバーを非表示
+vim.cmd('set guioptions-=e')              -- TabのGUI表示をOFF
+vim.cmd('set mouse=a')                    -- マウスをすべてのモードで使用する
+vim.cmd('set wildmenu')                   -- コマンドモードの補完方法
+vim.cmd('set diffopt+=vertical')          -- diffは縦分割
+vim.cmd('set conceallevel=0')             -- 非表示文字も表示
+vim.cmd('set nobackup')                   -- バックアップhoge~を作成しない
+vim.cmd('set belloff=all')                -- ビープ音無効化
+vim.cmd('set termguicolors')              -- CLIでフルカラー
 -- vim.cmd('set ttimeoutlen=50')              -- ノーマルモードに戻る時間
-vim.cmd('set cursorline')                    -- カーソル行をハイライト
-vim.cmd('set incsearch')                     -- 入力しながら検索
-vim.cmd('set breakindent')                   -- 折り返し時にインデントを考慮
-vim.cmd('set updatetime=700')                -- CursorHoldイベントの発生タイミング
+vim.cmd('set cursorline')                 -- カーソル行をハイライト
+vim.cmd('set incsearch')                  -- 入力しながら検索
+vim.cmd('set breakindent')                -- 折り返し時にインデントを考慮
+vim.cmd('set updatetime=700')             -- CursorHoldイベントの発生タイミング
 if vim.loop.os_uname().sysname == 'Windows' then
-  vim.cmd('set shell=cmd.exe')               -- コマンドプロンプト bashではPATH形式が異なる
+  vim.cmd('set shell=cmd.exe')            -- コマンドプロンプト bashではPATH形式が異なる
   vim.cmd('set shellcmdflag=-c')
-  vim.cmd('set shellxquote=\\')              -- コマンドを囲う引用符
+  vim.cmd('set shellxquote=\\')           -- コマンドを囲う引用符
 else
   vim.cmd('set shellcmdflag=-c')
 end
-vim.cmd('set shellslash')                    -- ファイルパスに\の代わりに/を使用
+vim.cmd('set shellslash') -- ファイルパスに\の代わりに/を使用
 
 -- 改行時のコメントアウト継続を無効化
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead', 'BufEnter' }, {
@@ -49,31 +49,31 @@ vim.cmd('set fileformats=unix,dos,mac')
 
 ----------------------------------- Folding ------------------------------------
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = {'*'},
+  pattern = { '*' },
   command = 'set foldmethod=syntax',
 })
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = {'python', 'glsl', 'verilog', 'text'},
+  pattern = { 'python', 'glsl', 'verilog', 'text' },
   command = 'set foldmethod=syntax',
 })
-vim.cmd('set nofoldenable')   -- 自動では折りたたまない
+vim.cmd('set nofoldenable') -- 自動では折りたたまない
 vim.cmd('set foldlevel=0')
 vim.cmd('set foldcolumn=2')
 
 -------------------------------- Preview Window --------------------------------
-vim.cmd('set completeopt=menuone,longest,preview')  -- プレビューウインドウで表示
-vim.cmd('set previewheight=1')                      -- プレビューウインドウの高さ
-vim.cmd('set splitbelow')                           -- 下に表示
-vim.cmd('set laststatus=2')                         -- ステータスラインを常に表示
+vim.cmd('set completeopt=menuone,longest,preview') -- プレビューウインドウで表示
+vim.cmd('set previewheight=1')                     -- プレビューウインドウの高さ
+vim.cmd('set splitbelow')                          -- 下に表示
+vim.cmd('set laststatus=2')                        -- ステータスラインを常に表示
 
 ---------------------------------- Tab Settings --------------------------------
 -- Soft Tab
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = {'*'},
+  pattern = { '*' },
   command = 'set tabstop=4 shiftwidth=4 expandtab',
 })
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = {'javascript', 'lua'},
+  pattern = { 'javascript', 'lua' },
   command = 'set tabstop=2 shiftwidth=2 expandtab',
 })
 
@@ -85,21 +85,21 @@ end
 
 ----------------------------------- Quickfix -----------------------------------
 vim.api.nvim_create_autocmd({ 'QuickfixCmdPost' }, {
-  pattern = {'make', 'grep', 'grapadd', 'vimgrep'},
-  command = 'copen',  -- 自動で開く
+  pattern = { 'make', 'grep', 'grapadd', 'vimgrep' },
+  command = 'copen', -- 自動で開く
 })
 
 ------------------------------- Wrap with vimdiff ------------------------------
-vim.cmd('set diffopt-=internal')  -- internalではFilterWritePreが発生しない
+vim.cmd('set diffopt-=internal') -- internalではFilterWritePreが発生しない
 vim.api.nvim_create_autocmd({ 'FilterWritePre' }, {
-  pattern = {'*'},
+  pattern = { '*' },
   command = 'if &diff | setlocal wrap< | endif',
 })
 
 ------------------------------------ KeyBind -----------------------------------
 -- 再描画
-vim.api.nvim_set_keymap('n', '<F5>', '<C-l>', {noremap = true})
-vim.api.nvim_set_keymap('i', '<F5>', '<ESC><C-l>a', {noremap = true})
+vim.api.nvim_set_keymap('n', '<F5>', '<C-l>', { noremap = true })
+vim.api.nvim_set_keymap('i', '<F5>', '<ESC><C-l>a', { noremap = true })
 -- 上下移動を表記上のものにする
 vim.api.nvim_set_keymap('n', 'j', 'gj', {})
 vim.api.nvim_set_keymap('v', 'j', 'gj', {})
@@ -110,24 +110,24 @@ vim.api.nvim_set_keymap('v', '<Up>', 'g<Up>', {})
 vim.api.nvim_set_keymap('n', '<Down>', 'g<Down>', {})
 vim.api.nvim_set_keymap('v', '<Down>', 'g<Down>', {})
 -- 高速移動 上下移動は滑らかに
-vim.api.nvim_set_keymap('n', '<C-h>', '10h',  {noremap = true})
-vim.api.nvim_set_keymap('v', '<C-h>', '10h',  {noremap = true})
-vim.api.nvim_set_keymap('n', '<C-l>', '10l',  {noremap = true})
-vim.api.nvim_set_keymap('v', '<C-l>', '10l',  {noremap = true})
-vim.api.nvim_set_keymap('n', '<C-j>', '10j',  {noremap = true})
-vim.api.nvim_set_keymap('v', '<C-j>', '10j',  {noremap = true})
-vim.api.nvim_set_keymap('n', '<C-k>', '10k',  {noremap = true})
-vim.api.nvim_set_keymap('v', '<C-k>', '10k',  {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-h>', '10h', { noremap = true })
+vim.api.nvim_set_keymap('v', '<C-h>', '10h', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-l>', '10l', { noremap = true })
+vim.api.nvim_set_keymap('v', '<C-l>', '10l', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-j>', '10j', { noremap = true })
+vim.api.nvim_set_keymap('v', '<C-j>', '10j', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-k>', '10k', { noremap = true })
+vim.api.nvim_set_keymap('v', '<C-k>', '10k', { noremap = true })
 -- 行末行頭への移動
-vim.api.nvim_set_keymap('n', '9', '^',  {noremap = true})
-vim.api.nvim_set_keymap('v', '9', '^',  {noremap = true})
-vim.api.nvim_set_keymap('n', '0', '$',  {noremap = true})
-vim.api.nvim_set_keymap('v', '0', '$',  {noremap = true})
+vim.api.nvim_set_keymap('n', '9', '^', { noremap = true })
+vim.api.nvim_set_keymap('v', '9', '^', { noremap = true })
+vim.api.nvim_set_keymap('n', '0', '$', { noremap = true })
+vim.api.nvim_set_keymap('v', '0', '$', { noremap = true })
 -- タブ移動
-vim.api.nvim_set_keymap('n', '2', 'gT',  {noremap = true})
-vim.api.nvim_set_keymap('n', '3', 'gt',  {noremap = true})
-vim.api.nvim_set_keymap('n', '"', ':tabm -1 <CR>',  {noremap = true})
-vim.api.nvim_set_keymap('n', '#', ':tabm +1 <CR>',  {noremap = true})
+vim.api.nvim_set_keymap('n', '2', 'gT', { noremap = true })
+vim.api.nvim_set_keymap('n', '3', 'gt', { noremap = true })
+vim.api.nvim_set_keymap('n', '"', ':tabm -1 <CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '#', ':tabm +1 <CR>', { noremap = true })
 -- クリップボードから貼り付け,コピー
 vim.api.nvim_set_keymap('i', '<C-v>', '<Esc>"+gp', { noremap = true })
 vim.api.nvim_set_keymap('x', '<C-c>', '"+y', { noremap = true })
@@ -145,11 +145,15 @@ vim.api.nvim_set_keymap('n', '<A-]>', ':cn<CR>', {})
 vim.api.nvim_set_keymap('n', '<C-9>', ':cN<CR>', {})
 vim.api.nvim_set_keymap('n', '<C-0>', ':cn<CR>', {})
 -- Quickfix/Preview/Location window/Float windowの非表示
-vim.api.nvim_set_keymap('n', '<C-c>', ':cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-c>',
+  ':cclose<CR>:pclose<CR>:lclose<CR>:lua for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false) end end<CR>',
+  { noremap = true, silent = true })
 -- 検索ハイライトのクリア
 vim.api.nvim_set_keymap('n', '<Esc>', ':noh<CR>', { noremap = true, silent = true })
 -- 置換 (start from current cursor)
-vim.api.nvim_set_keymap('n', '<F2>', ":,$s/\\<<C-r><C-w>\\>//gc|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<F2>',
+  ":,$s/\\<<C-r><C-w>\\>//gc|1,''-&&<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>",
+  { noremap = true })
 vim.api.nvim_set_keymap('n', '<F1>', ':%s///gc<Left><Left><Left><Left>', {})
 
 ------------------------------ Custom line limits ------------------------------
@@ -175,6 +179,7 @@ function NextColorColumn()
     return 'Line limit: 120'
   end
 end
+
 vim.api.nvim_set_keymap('n', '<F9>', ':lua print(NextColorColumn())<CR>', { noremap = true })
 NextColorColumn()
 
@@ -187,14 +192,14 @@ vim.api.nvim_set_keymap('n', '<F12>', ':set spell! spelllang=en_us,cjk<CR>', { n
 -- vim.api.nvim_set_keymap('n', '<F4>', ':new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>', { noremap = true })
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 vim.api.nvim_create_autocmd({ 'TermOpen' }, {
-  pattern = {'*'},
-  command = 'set spell! spelllang=',   -- Disable spell check in terminal
+  pattern = { '*' },
+  command = 'set spell! spelllang=', -- Disable spell check in terminal
 })
 
 ------------------------------ Tail Space Removal ------------------------------
 local function set_trim_whitespace()
   vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-    pattern = {'*'},
+    pattern = { '*' },
     command = [[%s/\s\+$//ge]],
     group = vim.api.nvim_create_augroup('TrimWhitespace', { clear = true })
   })
@@ -218,7 +223,7 @@ end
 
 set_trim_whitespace() -- Enable by default
 vim.api.nvim_set_keymap('n', '<F8>', ':lua toggle_trim_whitespace()<CR>',
-                        { noremap = true, silent = true })
+  { noremap = true, silent = true })
 
 
 --------------------------------------------------------------------------------
