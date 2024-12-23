@@ -16,14 +16,8 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  -- Lazy UI settings
-  ui = {
-    border = "rounded",
-    size = {
-      width = 0.8,
-      height = 0.8,
-    },
-  },
+  -- Lazy UI with border
+  ui = { border = "rounded" },
 })
 
 --------------------------------------------------------------------------------
