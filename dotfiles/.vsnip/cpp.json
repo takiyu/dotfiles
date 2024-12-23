@@ -371,6 +371,13 @@
         ],
         "description": ""
     },
+    "const": {
+        "prefix": "const",
+        "body": [
+            "const${0}"
+        ],
+        "description": ""
+    },
     "const_auto": {
         "prefix": "cauto",
         "body": [
@@ -381,105 +388,105 @@
     "string": {
         "prefix": "str",
         "body": [
-            "std::string ${0}"
+            "std::string${0}"
         ],
         "description": ""
     },
     "const_string": {
         "prefix": "cstr",
         "body": [
-            "const std::string& ${0}"
+            "const std::string&${0}"
         ],
         "description": ""
     },
     "vector": {
         "prefix": "vec",
         "body": [
-            "std::vector<${1}> ${0}"
+            "std::vector<${1}>${0}"
         ],
         "description": ""
     },
     "const_vector": {
         "prefix": "cvec",
         "body": [
-            "const std::vector<${1}>& ${0}"
+            "const std::vector<${1}>&${0}"
         ],
         "description": ""
     },
     "array": {
         "prefix": "arr",
         "body": [
-            "std::array<${1}, ${2}> ${0}"
+            "std::array<${1}, ${2}>${0}"
         ],
         "description": ""
     },
     "const_arr": {
         "prefix": "carr",
         "body": [
-            "const std::array<${1}, ${2}>& ${0}"
+            "const std::array<${1}, ${2}>&${0}"
         ],
         "description": ""
     },
     "map": {
         "prefix": "map",
         "body": [
-            "std::map<${1}, ${2}> ${0}"
+            "std::map<${1}, ${2}>${0}"
         ],
         "description": ""
     },
     "const_map": {
         "prefix": "cmap",
         "body": [
-            "const std::map<${1}, ${2}>& ${0}"
+            "const std::map<${1}, ${2}>&${0}"
         ],
         "description": ""
     },
     "unordered_map": {
         "prefix": "umap",
         "body": [
-            "std::unordered_map<${1}, ${2}> ${0}"
+            "std::unordered_map<${1}, ${2}>${0}"
         ],
         "description": ""
     },
     "const_unordered_map": {
         "prefix": "cumap",
         "body": [
-            "const std::unordered_map<${1}, ${2}>& ${0}"
+            "const std::unordered_map<${1}, ${2}>&${0}"
         ],
         "description": ""
     },
     "set": {
         "prefix": "set",
         "body": [
-            "std::set<${1}> ${0}"
+            "std::set<${1}>${0}"
         ],
         "description": ""
     },
     "const_set": {
         "prefix": "cset",
         "body": [
-            "const std::set<${1}>& ${0}"
+            "const std::set<${1}>&${0}"
         ],
         "description": ""
     },
     "unordered_set": {
         "prefix": "uset",
         "body": [
-            "std::unordered_set<${1}> ${0}"
+            "std::unordered_set<${1}>${0}"
         ],
         "description": ""
     },
     "const_unordered_set": {
         "prefix": "cuset",
         "body": [
-            "const std::unordered_set<${1}>& ${0}"
+            "const std::unordered_set<${1}>&${0}"
         ],
         "description": ""
     },
     "shared_ptr": {
         "prefix": "shared_ptr",
         "body": [
-            "std::shared_ptr<${1}> ${0}"
+            "std::shared_ptr<${1}>${0}"
         ],
         "description": ""
     },
@@ -493,7 +500,7 @@
     "unique_ptr": {
         "prefix": "unique_ptr",
         "body": [
-            "std::unique_ptr<${1}> ${0}"
+            "std::unique_ptr<${1}>${0}"
         ],
         "description": ""
     },
@@ -521,7 +528,7 @@
     "auto": {
         "prefix": "auto",
         "body": [
-            "auto&& ${0}"
+            "auto&&${0}"
         ],
         "description": ""
     },
