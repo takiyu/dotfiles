@@ -152,17 +152,25 @@ return {
   { 'takiyu/cmp-tabby' },
   { 'zbirenbaum/copilot.lua' },
   {
-    'zbirenbaum/copilot-cmp',
+    'litoj/cmp-copilot',  -- alt to 'zbirenbaum/copilot-cmp'
     dependency = { 'copilot.lua' },
   },
   {
     'hrsh7th/nvim-cmp',
     dependency = { 'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
       'cmp-path', 'cmp-cmdline', 'cmp-emoji', 'cmp-calc',
-      'cmp-look', 'cmp-tabby', 'copilot-cmp', 'lspkind.nvim' },
+      'cmp-look', 'cmp-tabby', 'cmp-copilot', 'lspkind.nvim' },
     config = function()
       local cmp = require('cmp')
       local compare = require('cmp.config.compare')
+
+      -- Copilot
+      require('copilot').setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+        copilot_node_command = 'node'
+      })
+      require('cmp_copilot').setup()
 
       -- Tabby
       if false then
@@ -172,14 +180,6 @@ return {
           max_lines = 200,
         })
       end
-
-      -- Copilot
-      require('copilot').setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-        copilot_node_command = 'node'
-      })
-      require('copilot_cmp').setup()
 
       -- lspkind
       require('lspkind').init({
@@ -286,7 +286,7 @@ return {
         sorting = {
           priority_weight = 2,
           comparators = {
-            require("copilot_cmp.comparators").prioritize,
+            require("cmp_copilot.comparators").prioritize,
             compare.offset,
             -- compare.exact,  -- Disable exact match for copilot
             compare.score,
