@@ -288,7 +288,7 @@ return {
           comparators = {
             require("copilot_cmp.comparators").prioritize,
             compare.offset,
-            compare.exact,
+            -- compare.exact,  -- Disable exact match for copilot
             compare.score,
             compare.recently_used,
             compare.kind,
