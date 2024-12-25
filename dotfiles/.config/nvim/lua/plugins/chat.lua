@@ -8,8 +8,8 @@ return {
         show_help = false,
         window = {
           layout = 'float',
-          width = 0.4,
-          height = 0.4,
+          width = 0.5,
+          height = 0.5,
           border = 'rounded',
           row = 1000,  -- bottom
           col = 1000,  -- right
