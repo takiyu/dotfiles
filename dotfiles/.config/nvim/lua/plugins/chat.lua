@@ -85,8 +85,8 @@ return {
       })
 
       -- Key binding
-      vim.keymap.set('n', 'C', ':CopilotChatToggle<CR>')
-      vim.keymap.set('v', 'C', ':CopilotChat<CR>')
+      vim.keymap.set('n', 'H', ':CopilotChatToggle<CR>')
+      vim.keymap.set('v', 'H', ':CopilotChat<CR>')
 
       -- Key binding for actions
       function ShowCopilotChatActionPrompt()
@@ -94,7 +94,7 @@ return {
         require('CopilotChat.integrations.telescope').pick(actions.prompt_actions())
       end
 
-      vim.api.nvim_set_keymap('n', 'H', '<cmd>lua ShowCopilotChatActionPrompt()<cr>',
+      vim.api.nvim_set_keymap('n', 'C', '<cmd>lua ShowCopilotChatActionPrompt()<cr>',
         { noremap = true, silent = true })
     end
   },

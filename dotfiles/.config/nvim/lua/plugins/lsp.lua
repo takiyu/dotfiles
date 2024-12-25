@@ -12,17 +12,17 @@ return {
           signs = true,
           underline = true,
           update_in_insert = false,
-          border = 'rounded'  -- Border
+          border = 'rounded' -- Border
         }
       )
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover, {
-          border = 'rounded'  -- Border
+          border = 'rounded' -- Border
         }
       )
       vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
         vim.lsp.handlers.signature_help, {
-          border = 'rounded'  -- Border
+          border = 'rounded' -- Border
         }
       )
       -- Diagnostic gutter
@@ -150,9 +150,9 @@ return {
   { 'hrsh7th/cmp-calc' },
   { 'octaltree/cmp-look' },
   { 'takiyu/cmp-tabby' },
-  { 'zbirenbaum/copilot.lua' },
+  { 'takiyu/copilot.lua' },
   {
-    'litoj/cmp-copilot',  -- alt to 'zbirenbaum/copilot-cmp'
+    'litoj/cmp-copilot', -- alt to 'zbirenbaum/copilot-cmp'
     dependency = { 'copilot.lua' },
   },
   {
@@ -167,10 +167,17 @@ return {
       -- Copilot
       require('copilot').setup({
         suggestion = { enabled = false },
-        panel = { enabled = false },
+        panel = {
+          layout = {
+            position = 'float',
+            ratio = 0.5,
+          }
+        },
         copilot_node_command = 'node'
       })
       require('cmp_copilot').setup()
+      -- Copilot keymap
+      vim.api.nvim_set_keymap('i', '<C-H>', '<ESC>:Copilot panel<CR>', { noremap = true })
 
       -- Tabby
       if false then
