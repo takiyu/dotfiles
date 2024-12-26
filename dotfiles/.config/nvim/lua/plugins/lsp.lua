@@ -149,8 +149,11 @@ return {
   { 'hrsh7th/cmp-emoji' },
   { 'hrsh7th/cmp-calc' },
   { 'octaltree/cmp-look' },
-  { 'takiyu/cmp-tabby' },
-  { 'takiyu/copilot.lua' },
+  -- { 'takiyu/cmp-tabby' },
+  {
+    'takiyu/copilot.lua', -- alt to 'zbirenbaum/copilot.lua'
+    branch = 'takiyu'
+  },
   {
     'litoj/cmp-copilot', -- alt to 'zbirenbaum/copilot-cmp'
     dependency = { 'copilot.lua' },
@@ -180,13 +183,11 @@ return {
       vim.api.nvim_set_keymap('i', '<C-H>', '<ESC>:Copilot panel<CR>', { noremap = true })
 
       -- Tabby
-      if false then
-        local tabby = require('cmp_tabby.config')
-        tabby:setup({
-          host = 'http://localhost:8080',
-          max_lines = 200,
-        })
-      end
+      -- local tabby = require('cmp_tabby.config')
+      -- tabby:setup({
+      --   host = 'http://localhost:8080',
+      --   max_lines = 200,
+      -- })
 
       -- lspkind
       require('lspkind').init({
