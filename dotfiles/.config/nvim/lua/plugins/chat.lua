@@ -88,6 +88,17 @@ return {
       vim.keymap.set('n', 'H', ':CopilotChatToggle<CR>')
       vim.keymap.set('v', 'H', ':CopilotChat<CR>')
 
+      -- Initial text in chat area
+      vim.api.nvim_create_autocmd("BufEnter", {
+          pattern = "copilot-*",
+          callback = function()
+              local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+              if col == 0 then
+                vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, {"#files:full: "})
+              end
+          end,
+      })
+
       -- Key binding for actions
       function ShowCopilotChatActionPrompt()
         local actions = require('CopilotChat.actions')
