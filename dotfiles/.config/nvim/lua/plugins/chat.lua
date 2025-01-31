@@ -93,7 +93,8 @@ return {
           pattern = "copilot-*",
           callback = function()
               local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-              if col == 0 then
+              local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
+              if col == 0 and line == "" then
                 vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col,
                                           -- {"#files:full: "})
                                           {"#buffers "})
