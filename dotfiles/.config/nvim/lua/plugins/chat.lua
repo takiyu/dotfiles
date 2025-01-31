@@ -94,7 +94,9 @@ return {
           callback = function()
               local row, col = unpack(vim.api.nvim_win_get_cursor(0))
               if col == 0 then
-                vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, {"#files:full: "})
+                vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col,
+                                          -- {"#files:full: "})
+                                          {"#buffers "})
               end
           end,
       })
