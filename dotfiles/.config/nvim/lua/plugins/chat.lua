@@ -6,6 +6,7 @@ return {
     config = function()
       require('CopilotChat').setup({
         show_help = false,
+        model = 'claude-3.5-sonnet',
         window = {
           layout = 'float',
           width = 0.4,
