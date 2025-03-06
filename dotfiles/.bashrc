@@ -526,25 +526,7 @@ if [ "$MODE" == 'Home_linux' ]; then
     if [ "`$exist_command xbindkeys`" == 'exist' ]; then
         xbindkeys
     fi
-elif [ "$MODE" == 'Huawei_linux' ]; then
-    # Global proxy
-    export PROXY_HOST='proxyjp.huawei.com:8080'
-    export GIT_SSL_NO_VERIFY=1
-    export CURL_SSL_NO_VERIFY=1
-elif [ "$MODE" == 'Huawei_wsl' ]; then
-    # Proxy forwarding
-    HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
-    export PROXY_HOST="$HOST_IP:8888"
-    export DISPLAY="$HOST_IP:0"
 fi
-
-case "$MODE" in Huawei*)
-    # Huawei common settings
-    export HTTP_PROXY="http://$PROXY_USER:$PROXY_PASS@$PROXY_HOST"
-    export HTTPS_PROXY="$HTTP_PROXY"
-    export FTP_PROXY="$HTTP_PROXY"
-    export NO_PROXY="huawei.com,localhost"
-esac
 
 export http_proxy=$HTTP_PROXY
 export https_proxy=$HTTPS_PROXY
@@ -554,7 +536,7 @@ export no_proxy=$NO_PROXY
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
 # ------------------------------------------------------------------------------
-if [ "$MODE" == 'Huawei_wsl' ]; then
+if [ "$MODE" == 'wsl' ]; then
     # Path for `nvidia-smi`
     export PATH="/usr/lib/wsl/lib/:$PATH"
 
