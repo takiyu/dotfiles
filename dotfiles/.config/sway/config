@@ -1,16 +1,25 @@
 ### Variables
 set $mod Mod1
-# Terminal emulator
-set $term foot
-# Application launcher
+# set $term foot
+set $term xfce4-terminal
+set $filer thunar
 set $menu fuzzel
 
 ### Output configuration
 # Default wallpaper
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Display
-output HDMI-1 resolution 2560x1440 position 0,0
-output DP-5 resolution 2560x1440 position 2560,0
+output DP-1 resolution 2560x1440 position 5120,0
+output HDMI-A-1 resolution 2560x1440 position 2560,0
+output DP-2 resolution 2560x1440 position 0,0
+
+workspace 1 output DP-1
+workspace 2 output DP-1
+workspace 3 output DP-1
+workspace 4 output DP-1
+workspace 5 output DP-1
+workspace 6 output DP-1
+workspace 7 output DP-1
 
 ### Idle configuration
 #
@@ -36,50 +45,74 @@ input type:keyboard {
 exec fcitx -r -d
 
 ### Key bindings
-#
-# Basics:
-#
-    bindsym $mod+o exec $term
-    bindsym $mod+Shift+c kill
-    bindsym $mod+r exec $menu
+bindsym $mod+o exec $term
+bindsym $mod+e exec $filer
+bindsym $mod+Shift+c kill
+bindsym $mod+r exec $menu
+bindsym $mod+q reload
+bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
-    bindsym $mod+q reload
-    bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-#
-# Moving around:
-#
-    bindsym $mod+h focus left
-    bindsym $mod+j focus down
-    bindsym $mod+k focus up
-    bindsym $mod+l focus right
-    bindsym $mod+Shift+h move left
-    bindsym $mod+Shift+j move down
-    bindsym $mod+Shift+k move up
-    bindsym $mod+Shift+l move right
-#
-# Layout stuff:
-#
-    floating_modifier $mod normal
+# bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+# bindsym $mod+l focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+h workspace prev
+bindsym $mod+l workspace next
+
+floating_modifier $mod normal
+bindsym $mod+f fullscreen
+
+# Window Resize
+bindsym $mod+9 resize shrink width 30px
+bindsym $mod+0 resize grow width 30px
+# Window Resize Mode
+mode "resize" {
+    bindsym h resize shrink width 30px
+    bindsym j resize grow height 30px
+    bindsym k resize shrink height 30px
+    bindsym l resize grow width 30px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Minus mode "resize"
+
+# Special keys to adjust volume via PulseAudio
+bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
+# Special keys to adjust brightness via brightnessctl
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+# Special keys to take screenshots
+bindsym Print exec grim - | wl-copy
+bindsym shift+Print exec slurp | grim -g - ~/screenshot_`date +%Y%m%d_%H%M%S`.png
+
+
+
 
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+#     bindsym $mod+b splith
+#     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+#     bindsym $mod+s layout stacking
+#     bindsym $mod+w layout tabbed
+#     bindsym $mod+e layout toggle split
 
-    # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
 
     # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
+#     bindsym $mod+Shift+space floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+#     bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
 #     bindsym $mod+a focus parent
@@ -90,49 +123,15 @@ exec fcitx -r -d
     # You can send windows there and get them back later.
 
     # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+#     bindsym $mod+Shift+minus move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
-#
-# Resizing containers:
-#
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym h resize shrink width 10px
-    bindsym j resize grow height 10px
-    bindsym k resize shrink height 10px
-    bindsym l resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+Equal mode "resize"
+#     bindsym $mod+minus scratchpad show
 
 #
 # Utilities:
 #
-    # Special keys to adjust volume via PulseAudio
-    bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
-    bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
-    bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
-    bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
-    # Special keys to adjust brightness via brightnessctl
-    bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-    bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
-    # Special key to take a screenshot with grim
-    bindsym Print exec grim
 
 #
 # Status Bar:
