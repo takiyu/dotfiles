@@ -86,9 +86,9 @@ if [ $platform == 'Linux' ]; then
              .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura/zathurarc \
              .mplayer/config .config/matplotlib/matplotlibrc .mime.types \
              .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc \
-             .config/pypoetry/config.toml .config/sway/config)
+             .config/pypoetry/config.toml .config/sway/config .config/fuzzel/fuzzel.ini)
     TARGET_DIRS=(.config/zathura/ .mplayer/ .config/matplotlib
-                 .config/pypoetry/ .config/sway)
+                 .config/pypoetry/ .config/sway .config/fuzzel)
 
     # First, create directories
     for target_dir in ${TARGET_DIRS[@]}; do
