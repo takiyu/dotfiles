@@ -1,7 +1,7 @@
 ### Variables
 set $mod Mod1
 # Terminal emulator
-set $term xfce4-terminal
+set $term foot
 # Application launcher
 set $menu fuzzel
 
@@ -33,7 +33,7 @@ input type:keyboard {
     repeat_rate 50
 }
 # Start fcitx
-exec fcitx
+exec fcitx -r -d
 
 ### Key bindings
 #
