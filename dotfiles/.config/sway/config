@@ -72,8 +72,8 @@ bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_works
 bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_prev_display"
 
 # Mouse
-bindsym --whole-window button6 workspace next_on_output
-bindsym --whole-window button7 workspace prev_on_output
+bindsym --whole-window button6 exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
+bindsym --whole-window button7 exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
 
 floating_modifier $mod normal
 bindsym $mod+f fullscreen
