@@ -24,13 +24,8 @@ output DP-2 resolution 2560x1440 position 5120,0
 
 # Red border
 client.focused #cc0000 #cc0000 #ffffff
-# Title bar font
-font DejavuMonoNerdPowerline 11
-
-# default_border none
-# for_window [title="^.*"] title_format ""
-# default_border normal 0
-# default_floating_border normal 0
+# Hide title bar (by small font size)
+font DejavuMonoNerdPowerline 1
 
 ### Idle configuration
 exec swayidle -w \
