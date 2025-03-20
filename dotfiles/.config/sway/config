@@ -22,6 +22,16 @@ output DP-1 resolution 2560x1440 position 0,0
 output HDMI-A-1 resolution 2560x1440 position 2560,0
 output DP-2 resolution 2560x1440 position 5120,0
 
+# Red border
+client.focused #cc0000 #cc0000 #ffffff
+# Title bar font
+font DejavuMonoNerdPowerline 11
+
+# default_border none
+# for_window [title="^.*"] title_format ""
+# default_border normal 0
+# default_floating_border normal 0
+
 ### Idle configuration
 exec swayidle -w \
         timeout 1800 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
