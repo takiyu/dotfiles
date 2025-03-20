@@ -9,9 +9,9 @@ set $menu fuzzel
 # Default wallpaper
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Display
-output DP-1 resolution 2560x1440 position 5120,0
+output DP-1 resolution 2560x1440 position 0,0
 output HDMI-A-1 resolution 2560x1440 position 2560,0
-output DP-2 resolution 2560x1440 position 0,0
+output DP-2 resolution 2560x1440 position 5120,0
 
 workspace 1 output DP-1
 workspace 2 output DP-1
@@ -20,6 +20,29 @@ workspace 4 output DP-1
 workspace 5 output DP-1
 workspace 6 output DP-1
 workspace 7 output DP-1
+workspace 8 output DP-1
+workspace 9 output DP-1
+workspace 10 output DP-1
+workspace 11 output HDMI-A-1
+workspace 12 output HDMI-A-1
+workspace 13 output HDMI-A-1
+workspace 14 output HDMI-A-1
+workspace 15 output HDMI-A-1
+workspace 16 output HDMI-A-1
+workspace 17 output HDMI-A-1
+workspace 18 output HDMI-A-1
+workspace 19 output HDMI-A-1
+workspace 20 output HDMI-A-1
+workspace 31 output DP-2
+workspace 32 output DP-2
+workspace 33 output DP-2
+workspace 34 output DP-2
+workspace 35 output DP-2
+workspace 36 output DP-2
+workspace 37 output DP-2
+workspace 38 output DP-2
+workspace 39 output DP-2
+workspace 40 output DP-2
 
 ### Idle configuration
 #
@@ -44,38 +67,58 @@ input type:keyboard {
 # Start fcitx
 exec fcitx -r -d
 
+# Start swaymonad
+exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
+exec nop set_layout tall
+
 ### Key bindings
 bindsym $mod+o exec $term
 bindsym $mod+e exec $filer
-bindsym $mod+Shift+c kill
 bindsym $mod+r exec $menu
+bindsym $mod+Shift+c kill
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
 # bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
+# bindsym $mod+j focus down
+# bindsym $mod+k focus up
 # bindsym $mod+l focus right
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+# bindsym $mod+Shift+h move left
+# bindsym $mod+Shift+j move down
+# bindsym $mod+Shift+k move up
+# bindsym $mod+Shift+l move right
+
+bindsym $mod+Return nop promote_window
+bindsym $mod+j nop focus_next_window
+bindsym $mod+k nop focus_prev_window
+bindsym $mod+Shift+j nop swap_with_next_window
+bindsym $mod+Shift+k nop swap_with_prev_window
+
+bindsym $mod+Comma nop increment_masters
+bindsym $mod+Period nop decrement_masters
+
+bindsym $mod+t nop set_layout tall
 
 bindsym $mod+h workspace prev
 bindsym $mod+l workspace next
+bindsym $mod+shift+h exec "swaymsg move container to output left && swaymsg workspace prev"
+bindsym $mod+shift+l exec "swaymsg move container to output right && swaymsg workspace next"
 
 floating_modifier $mod normal
 bindsym $mod+f fullscreen
 
 # Window Resize
-bindsym $mod+9 resize shrink width 30px
-bindsym $mod+0 resize grow width 30px
+bindsym $mod+9 nop resize_master shrink width 30px
+bindsym $mod+0 nop resize_master grow width 30px
+bindsym $mod+shift+9 resize shrink height 30px
+bindsym $mod+shift+0 resize grow height 30px
+
 # Window Resize Mode
 mode "resize" {
-    bindsym h resize shrink width 30px
+    bindsym h resize grow width 30px
+    bindsym l resize shrink width 30px
     bindsym j resize grow height 30px
     bindsym k resize shrink height 30px
-    bindsym l resize grow width 30px
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }

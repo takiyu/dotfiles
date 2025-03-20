@@ -1,0 +1,3 @@
+[submodule "dotfiles/.config/sway/swaymonad"]
+	path = dotfiles/.config/sway/swaymonad
+	url = https://github.com/nicolasavru/swaymonad
