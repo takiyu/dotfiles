@@ -1,9 +1,18 @@
 ### Variables
 set $mod Mod1
 # set $term foot
-set $term xfce4-terminal
-set $filer thunar
-set $menu fuzzel
+set $term "xfce4-terminal"
+set $filer "thunar"
+set $menu "fuzzel"
+
+### Startup applications
+# Start fcitx
+exec fcitx -r -d
+# Start swaymonad
+exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
+# Initial setups
+exec_always nop set_layout tall
+exec_always "python3 ~/.config/sway/sway_helper.py setup"
 
 ### Output configuration
 # Default wallpaper
@@ -12,37 +21,6 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output DP-1 resolution 2560x1440 position 0,0
 output HDMI-A-1 resolution 2560x1440 position 2560,0
 output DP-2 resolution 2560x1440 position 5120,0
-
-workspace 1 output DP-1
-workspace 2 output DP-1
-workspace 3 output DP-1
-workspace 4 output DP-1
-workspace 5 output DP-1
-workspace 6 output DP-1
-workspace 7 output DP-1
-workspace 8 output DP-1
-workspace 9 output DP-1
-workspace 10 output DP-1
-workspace 11 output HDMI-A-1
-workspace 12 output HDMI-A-1
-workspace 13 output HDMI-A-1
-workspace 14 output HDMI-A-1
-workspace 15 output HDMI-A-1
-workspace 16 output HDMI-A-1
-workspace 17 output HDMI-A-1
-workspace 18 output HDMI-A-1
-workspace 19 output HDMI-A-1
-workspace 20 output HDMI-A-1
-workspace 31 output DP-2
-workspace 32 output DP-2
-workspace 33 output DP-2
-workspace 34 output DP-2
-workspace 35 output DP-2
-workspace 36 output DP-2
-workspace 37 output DP-2
-workspace 38 output DP-2
-workspace 39 output DP-2
-workspace 40 output DP-2
 
 ### Idle configuration
 #
@@ -64,12 +42,6 @@ input type:keyboard {
     repeat_delay 300
     repeat_rate 50
 }
-# Start fcitx
-exec fcitx -r -d
-
-# Start swaymonad
-exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
-exec nop set_layout tall
 
 ### Key bindings
 bindsym $mod+o exec $term
@@ -78,15 +50,6 @@ bindsym $mod+r exec $menu
 bindsym $mod+Shift+c kill
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-
-# bindsym $mod+h focus left
-# bindsym $mod+j focus down
-# bindsym $mod+k focus up
-# bindsym $mod+l focus right
-# bindsym $mod+Shift+h move left
-# bindsym $mod+Shift+j move down
-# bindsym $mod+Shift+k move up
-# bindsym $mod+Shift+l move right
 
 bindsym $mod+Return nop promote_window
 bindsym $mod+j nop focus_next_window
@@ -97,15 +60,17 @@ bindsym $mod+Shift+k nop swap_with_prev_window
 bindsym $mod+Comma nop increment_masters
 bindsym $mod+Period nop decrement_masters
 
-bindsym $mod+t nop set_layout tall
-
-bindsym $mod+h workspace prev
-bindsym $mod+l workspace next
-bindsym $mod+shift+h exec "swaymsg move container to output left && swaymsg workspace prev"
-bindsym $mod+shift+l exec "swaymsg move container to output right && swaymsg workspace next"
+bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
+bindsym $mod+l exec "python3 ~/.config/sway/sway_helper.py focus_next_workspace"
+bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_prev_display"
+bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_workspace"
+bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"
+bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_prev_display"
 
 floating_modifier $mod normal
 bindsym $mod+f fullscreen
+bindsym $mod+t nop set_layout tall
+bindsym $mod+space floating toggle
 
 # Window Resize
 bindsym $mod+9 nop resize_master shrink width 30px
