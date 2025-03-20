@@ -59,6 +59,8 @@ bindsym $mod+Period nop decrement_masters
 
 bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
 bindsym $mod+l exec "python3 ~/.config/sway/sway_helper.py focus_next_workspace"
+bindsym $mod+n exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
+bindsym $mod+p exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
 bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_prev_display"
 bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_workspace"
 bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"

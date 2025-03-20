@@ -24,6 +24,10 @@ def run_action(action: str):
         move_nei_workspace(+1)
     elif action == 'move_prev_workspace':
         move_nei_workspace(-1)
+    elif action == 'focus_next_valid_workspace':
+        focus_valid_nei_workspace(+1)
+    elif action == 'focus_prev_valid_workspace':
+        focus_valid_nei_workspace(-1)
     elif action == 'focus_next_display':
         focus_nei_display(+1)
     elif action == 'focus_prev_display':
@@ -64,6 +68,15 @@ def move_nei_workspace(offset: int = 1):
     nxt_ws = re.sub(r'\d+', lambda x: str((int(x.group()) + offset) % N_WS),
                     cur_ws)
     move_workspace(nxt_ws)
+
+
+def focus_valid_nei_workspace(offset: int = 1):
+    ''' Focus to valid neighbor workspace on current display. '''
+    cur_disp = get_cur_display()
+    ws = get_workspaces(cur_disp)
+    cur_ws = get_cur_workspace(cur_disp)
+    nxt_ws = ws[(ws.index(cur_ws) + offset) % len(ws)]
+    focus_workspace(nxt_ws)
 
 
 def focus_nei_display(offset: int = 1):
