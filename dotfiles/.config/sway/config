@@ -67,6 +67,10 @@ bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_works
 bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"
 bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_prev_display"
 
+# Mouse
+bindsym --whole-window button6 workspace next_on_output
+bindsym --whole-window button7 workspace prev_on_output
+
 floating_modifier $mod normal
 bindsym $mod+f fullscreen
 bindsym $mod+t nop set_layout tall
