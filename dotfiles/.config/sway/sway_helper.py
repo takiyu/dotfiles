@@ -45,6 +45,13 @@ def run_action(action: str):
 # -----------------------------------------------------------------------------
 def setup_workspace_names():
     ''' Rename workspaces to A1, A2, B1, B2, etc. '''
+    # Rename to temporal names
+    for disp_idx, disp in enumerate(get_displays()):
+        ws = get_workspaces(disp)
+        for ws_idx, old_ws_name in enumerate(ws):
+            new_ws_name = f'tmp_{disp_idx}{ws_idx}'
+            rename_workspace(old_ws_name, new_ws_name)
+    # Rename to desired names
     for disp_idx, disp in enumerate(get_displays()):
         ws = get_workspaces(disp)
         for ws_idx, old_ws_name in enumerate(ws):

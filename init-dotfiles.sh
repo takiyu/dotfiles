@@ -83,10 +83,11 @@ if [ $platform == 'Linux' ]; then
     echo "* Setup dotfiles for Linux Environment"
     TARGETS=(.Xmodmap_default .Xmodmap .xinitrc .bash_profile .bashrc .xmonad \
              .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
-             .clang-tidy .jshintrc .pep8 .tmux.conf .config/zathura \
-             .mplayer .config/matplotlib .mime.types \
-             .config/nvim .config/pycodestyle .lesskey .vsnip .xbindkeysrc \
-             .config/pypoetry .config/sway .config/fuzzel .config/foot)
+             .clang-tidy .jshintrc .pep8 .tmux.conf .mplayer  .mime.types \
+             .lesskey .vsnip .xbindkeysrc \
+             .config/matplotlib .config/nvim .config/pycodestyle  \
+             .config/zathura .config/pypoetry .config/sway .config/fuzzel
+             .config/foot .config/waybar )
     TARGET_DIRS=()
 
     # First, create directories

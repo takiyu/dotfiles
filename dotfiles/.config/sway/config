@@ -1,13 +1,12 @@
 ### Variables
 set $mod Mod1
-# set $term foot
-set $term "xfce4-terminal"
+set $term foot
+# set $term "xfce4-terminal"
 set $filer "thunar"
 set $menu "fuzzel"
 
 ### Startup applications
-# Start fcitx
-exec fcitx -r -d
+exec fcitx5 -r -d
 # Start swaymonad
 exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
 # Initial setups
@@ -53,15 +52,22 @@ bindsym $mod+Shift+c kill
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
+# Layout
+floating_modifier $mod normal
+bindsym $mod+f fullscreen
+bindsym $mod+space floating toggle
+
+# Xmonad-like key bindings (swaymonad)
 bindsym $mod+Return nop promote_window
 bindsym $mod+j nop focus_next_window
 bindsym $mod+k nop focus_prev_window
 bindsym $mod+Shift+j nop swap_with_next_window
 bindsym $mod+Shift+k nop swap_with_prev_window
-
 bindsym $mod+Comma nop increment_masters
 bindsym $mod+Period nop decrement_masters
+bindsym $mod+t nop set_layout tall
 
+# Xmonad-like key bindings (helper)
 bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
 bindsym $mod+l exec "python3 ~/.config/sway/sway_helper.py focus_next_workspace"
 bindsym $mod+n exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
@@ -70,22 +76,15 @@ bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_prev_display"
 bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_workspace"
 bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"
 bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_prev_display"
-
 # Mouse
 bindsym --whole-window button6 exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
 bindsym --whole-window button7 exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
-
-floating_modifier $mod normal
-bindsym $mod+f fullscreen
-bindsym $mod+t nop set_layout tall
-bindsym $mod+space floating toggle
 
 # Window Resize
 bindsym $mod+9 nop resize_master shrink width 30px
 bindsym $mod+0 nop resize_master grow width 30px
 bindsym $mod+shift+9 resize shrink height 30px
 bindsym $mod+shift+0 resize grow height 30px
-
 # Window Resize Mode
 mode "resize" {
     bindsym h resize grow width 30px

@@ -121,6 +121,8 @@ function cd {
     else
         pushd "$@" && ls;
     fi
+    # Emit OSC 7 escape sequence
+    printf '\e]7;file://%s%s\a' "$HOSTNAME" "$PWD"
 }
 function pushd() { command pushd "$@" > /dev/null; }  # silent `pushd`
 function popd() { command popd "$@" > /dev/null; }    # silent `popd`
