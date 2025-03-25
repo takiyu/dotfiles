@@ -1,9 +1,10 @@
 ### Variables
 set $mod Mod1
-set $term foot
-# set $term "xfce4-terminal"
+# set $term foot
+set $term "xfce4-terminal"
 set $filer "thunar"
 set $menu "fuzzel"
+set $suspend "bash -c suspend.sh"
 
 ### Startup applications
 exec fcitx5 -r -d
@@ -51,6 +52,7 @@ bindsym $mod+r exec $menu
 bindsym $mod+Shift+c kill
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+o exec $suspend
 
 # Layout
 floating_modifier $mod normal
