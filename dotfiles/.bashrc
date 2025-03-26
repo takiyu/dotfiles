@@ -12,6 +12,7 @@ esac
 # ------------------------------------------------------------------------------
 export MODE='Home_linux'
 export PS1_PREFIX=''
+# export PS1_PREFIX="$HOSTNAME "
 # export PROXY_USER=''
 # export PROXY_PASS=''
 
