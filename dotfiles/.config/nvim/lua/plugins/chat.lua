@@ -39,7 +39,7 @@ return {
           },
           Commit = {
             prompt =
-            '> #git:staged\n\nWrite one line commit message which starts with a verb (e.g. Fix/Add/Optimize/Arrange)',
+            '> #git:staged\n\nWrite one line commit message which starts with a verb (e.g. Fix/Add/Optimize/Arrange). Output only the commit message.',
           },
         },
 

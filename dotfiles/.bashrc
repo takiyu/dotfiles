@@ -157,6 +157,10 @@ alias c........="cd ../../../../../../../.."
 alias c.........="cd ../../../../../../../../.."
 alias c..........="cd ../../../../../../../../../.."
 
+# Aliases for github copilot
+function ai() { yes "" 2>/dev/null | gh copilot suggest $1; }
+alias copilot='ai'
+
 # Aliases for clear
 alias cl=clear
 
