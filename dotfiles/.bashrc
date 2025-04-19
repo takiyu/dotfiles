@@ -483,7 +483,7 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     alias vim=nvim
     alias gvim=nvim
     alias v=nvim
-    alias v.=nvim .
+    alias v.='nvim .'
     alias vimdiff="nvim -d"
     alias gvimdiff="nvim -- -d"
     export EDITOR=nvim
@@ -502,11 +502,11 @@ alias f=filer
 alias f.='filer .'
 alias f..='filer ..'
 alias f...='filer ...'
-alias p='python'
-alias p2='python2'
-alias p3='python3'
+alias p=python
+alias p2=python2
+alias p3=python3
 alias c=code
-alias c.=code .
+alias c.='code .'
 
 # Trizen
 if [ "`$exist_command trizen`" == 'exist' ]; then
