@@ -87,6 +87,8 @@ return {
         floating_window_above_cur_line = true,
         floating_window_off_y = 1000,
         floating_window_off_x = 1000,
+        max_width=70,
+        max_height=5
       })
     end
   },
