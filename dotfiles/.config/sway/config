@@ -57,7 +57,7 @@ bindsym $mod+Shift+o exec $suspend
 # Layout
 floating_modifier $mod normal
 bindsym $mod+f fullscreen
-bindsym $mod+space floating toggle
+# bindsym $mod+space floating toggle
 
 # Xmonad-like key bindings (swaymonad)
 bindsym $mod+Return nop promote_window
@@ -67,7 +67,8 @@ bindsym $mod+Shift+j nop swap_with_next_window
 bindsym $mod+Shift+k nop swap_with_prev_window
 bindsym $mod+Comma nop increment_masters
 bindsym $mod+Period nop decrement_masters
-bindsym $mod+t nop set_layout tall
+bindsym $mod+t nop transpose
+bindsym $mod+shift+t nop set_layout tall
 
 # Xmonad-like key bindings (helper)
 bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
