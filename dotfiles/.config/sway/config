@@ -69,14 +69,14 @@ bindsym $mod+Shift+k nop swap_with_prev_window
 bindsym $mod+Comma nop increment_masters
 bindsym $mod+Period nop decrement_masters
 bindsym $mod+t nop transpose
-bindsym $mod+shift+t nop set_layout tall
+bindsym $mod+Shift+t nop set_layout tall
 
 # Xmonad-like key bindings (helper)
 bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
 bindsym $mod+l exec "python3 ~/.config/sway/sway_helper.py focus_next_workspace"
 bindsym $mod+n exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
 bindsym $mod+p exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
-bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_prev_display"
+bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_next_display"
 bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_workspace"
 bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"
 bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_prev_display"

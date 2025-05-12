@@ -2,6 +2,7 @@ import argparse
 import subprocess
 from typing import Optional
 import re
+import json
 
 
 # -----------------------------------------------------------------------------
@@ -108,7 +109,20 @@ def move_nei_display(offset: int = 1):
 # ---------------------------- Sway Getter Wrappers ---------------------------
 # -----------------------------------------------------------------------------
 def get_displays() -> list:
-    return run_cmd("swaymsg -t get_outputs | jq -r '.[] | .name'").splitlines()
+    # Get display info with positions
+    output_json = run_cmd("swaymsg -t get_outputs")
+    outputs = json.loads(output_json)
+
+    # Extract display names and their x positions
+    display_positions = [(output['name'], output['rect']['x'])
+                          for output in outputs if output['active']]
+
+    # Sort by x position
+    display_positions.sort(key=lambda x: x[1])
+
+    # Return just the display names in sorted order
+    all_disps = [name for name, _ in display_positions]
+    return all_disps
 
 
 def get_cur_display() -> str:
