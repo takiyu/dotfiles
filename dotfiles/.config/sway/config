@@ -18,9 +18,10 @@ exec_always "python3 ~/.config/sway/sway_helper.py setup"
 # Default wallpaper
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Display
-output DP-1 resolution 2560x1440 position 0,0
-output HDMI-A-1 resolution 2560x1440 position 2560,0
-output DP-2 resolution 2560x1440 position 5120,0
+output DP-2 resolution 2560x1440 position -1440,0 transform 270
+output DP-1 resolution 2560x1440 position 0,0  transform 180
+output HDMI-A-1 resolution 2560x1440 position 0,1440
+output HDMI-A-2 resolution 2560x1440 position 2560,0 transform 90
 
 # Red border
 client.focused #cc0000 #cc0000 #ffffff
