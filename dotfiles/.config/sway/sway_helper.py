@@ -14,7 +14,7 @@ N_WS = 10
 # -----------------------------------------------------------------------------
 # ---------------------------- Action Entry Point -----------------------------
 # -----------------------------------------------------------------------------
-def run_action(action: str):
+def run_action(action: str, opt: str = ''):
     if action == 'setup':
         setup_workspace_names()
     elif action == 'focus_next_workspace':
@@ -37,6 +37,10 @@ def run_action(action: str):
         move_nei_display(+1)
     elif action == 'move_prev_display':
         move_nei_display(-1)
+    elif action == 'focus_display':
+        focus_display(int(opt))
+    elif action == 'move_display':
+        move_display(int(opt))
     else:
         raise ValueError(f'Invalid action: {action}')
 
@@ -105,6 +109,22 @@ def move_nei_display(offset: int = 1):
     move_workspace(nxt_ws)
 
 
+def focus_display(index: int):
+    ''' Focus to display by index. '''
+    all_disps = get_displays()
+    nxt_disp = all_disps[index % len(all_disps)]
+    nxt_ws = get_cur_workspace(nxt_disp)
+    focus_workspace(nxt_ws)
+
+
+def move_display(index: int):
+    ''' Move to display by index. '''
+    all_disps = get_displays()
+    nxt_disp = all_disps[index % len(all_disps)]
+    nxt_ws = get_cur_workspace(nxt_disp)
+    move_workspace(nxt_ws)
+
+
 # -----------------------------------------------------------------------------
 # ---------------------------- Sway Getter Wrappers ---------------------------
 # -----------------------------------------------------------------------------
@@ -115,7 +135,7 @@ def get_displays() -> list:
 
     # Extract display names and their x positions
     display_positions = [(output['name'], output['rect']['x'])
-                          for output in outputs if output['active']]
+                         for output in outputs if output['active']]
 
     # Sort by x position
     display_positions.sort(key=lambda x: x[1])
@@ -190,10 +210,12 @@ if __name__ == '__main__':
     # Arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('action', type=str, help='Action to perform')
+    parser.add_argument('--opt', type=str, help='Optional argument',
+                        default='')
     argv = parser.parse_args()
 
     # Run action
-    run_action(argv.action)
+    run_action(argv.action, argv.opt)
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
