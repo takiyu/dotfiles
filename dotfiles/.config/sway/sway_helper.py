@@ -134,14 +134,16 @@ def get_displays() -> list:
     outputs = json.loads(output_json)
 
     # Extract display names and their x positions
-    display_positions = [(output['name'], output['rect']['x'])
+    display_positions = [(output['name'],
+                          output['rect']['x'],
+                          output['rect']['y'])
                          for output in outputs if output['active']]
 
     # Sort by x position
-    display_positions.sort(key=lambda x: x[1])
+    display_positions.sort(key=lambda x: (x[1], x[2]))
 
     # Return just the display names in sorted order
-    all_disps = [name for name, _ in display_positions]
+    all_disps = [name for name, _, _ in display_positions]
     return all_disps
 
 
