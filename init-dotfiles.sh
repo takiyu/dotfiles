@@ -87,7 +87,7 @@ if [ $platform == 'Linux' ]; then
              .lesskey .vsnip .xbindkeysrc \
              .config/matplotlib .config/nvim .config/pycodestyle  \
              .config/zathura .config/pypoetry .config/sway .config/fuzzel
-             .config/foot .config/waybar )
+             .config/foot .config/waybar .config/xfce4/terminal)
     TARGET_DIRS=()
 
     # First, create directories
