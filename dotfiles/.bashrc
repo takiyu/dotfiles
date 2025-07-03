@@ -29,6 +29,11 @@ git_completion=$dotfiles/utils/git/git-completion.bash
 platform=`$determ_platform`
 
 # ------------------------------------------------------------------------------
+# ---------------------------- VS Code Integration -----------------------------
+# ------------------------------------------------------------------------------
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path bash)"
+
+# ------------------------------------------------------------------------------
 # --------------------------- Linux Default Settings ---------------------------
 # ------------------------------------------------------------------------------
 # don't put duplicate lines or lines starting with space in the history.
