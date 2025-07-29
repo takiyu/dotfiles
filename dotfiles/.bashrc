@@ -543,6 +543,9 @@ alias c=copilot_chat.sh
 #     fi
 # fi
 
+# ------------------------------------------------------------------------------
+# ------------------------------ Proxy Forwarding ------------------------------
+# ------------------------------------------------------------------------------
 export http_proxy=$HTTP_PROXY
 export https_proxy=$HTTPS_PROXY
 export ftp_proxy=$FTP_PROXY
@@ -551,9 +554,13 @@ export no_proxy=$NO_PROXY
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
 # ------------------------------------------------------------------------------
-if [ "$MODE" == 'wsl' ]; then
+case "$MODE" in *wsl)
     # Path for `nvidia-smi`
     export PATH="/usr/lib/wsl/lib/:$PATH"
+
+    # Display
+    HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
+    export DISPLAY="$HOST_IP:0"
 
     # Wrap the git command to either run windows git or linux
     function IsWinDir {
@@ -570,7 +577,7 @@ if [ "$MODE" == 'wsl' ]; then
             /usr/bin/git "$@"
         fi
     }
-fi
+esac
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
