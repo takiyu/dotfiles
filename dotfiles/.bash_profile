@@ -58,6 +58,11 @@ if [ $platform == 'Linux' ]; then
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_HOME/targets/x86_64-linux/lib
     fi
 
+    # NPM
+    if [ -e $HOME/node_modules/.bin ]; then
+        export PATH=$HOME/node_modules/.bin:$PATH
+    fi
+
     # Microchip
     # export PATH=$PATH:/opt/microchip/xc8/v1.33/bin
     # export PATH="$PATH:"/opt/microchip/xc32/v1.40/bin""
