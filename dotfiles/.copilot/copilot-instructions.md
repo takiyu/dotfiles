@@ -113,7 +113,7 @@ EOF
 
 ## Python Specifics
 - Poetry for virtual environment
-- 4-space indent, 79 chars/line, PEP 8
+- 4-space indent, 79 chars/line, PEP 8 (important)
 - PascalCase classes, snake_case functions/variables
 - Use type hints, single quotes
 - `import os.path as osp` not Path
