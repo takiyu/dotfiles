@@ -112,7 +112,7 @@ EOF
 ```
 
 ## Python Specifics
-- Poetry for virtual environment
+- Must use Poetry for virtual environment
 - 4-space indent, 79 chars/line, PEP 8 (important)
 - PascalCase classes, snake_case functions/variables
 - Use type hints, single quotes
