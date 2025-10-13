@@ -88,7 +88,7 @@ if [ $platform == 'Linux' ]; then
              .config/matplotlib .config/nvim .config/pycodestyle  \
              .config/zathura .config/pypoetry .config/sway .config/fuzzel
              .config/foot .config/waybar .config/xfce4/terminal)
-    TARGET_DIRS=()
+    TARGET_DIRS=(.copilot)
 
     # First, create directories
     for target_dir in ${TARGET_DIRS[@]}; do
