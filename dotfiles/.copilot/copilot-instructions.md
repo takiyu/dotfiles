@@ -1,7 +1,7 @@
 # Task Rules
 - Never give up until finished the task including behavior check and testing without relying on users. (important)
 - Must check the code behavior by running or testing it. (important)
-- When envirommnet variable missing, search `.env` file and source it.
+- When environment variable missing, search `.env` file and source it.
 
 # Coding Rules
 ## Must Do
