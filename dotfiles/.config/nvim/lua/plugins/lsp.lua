@@ -102,7 +102,7 @@ return {
     dependency = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
     config = function()
       require('mason').setup()
-      require('mason-lspconfig').setup_handlers({ function(server)
+      require('mason-lspconfig').setup({ function(server)
         local opt = {}
 
         -- Setup `cmp_nvim_lsp`
