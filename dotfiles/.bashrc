@@ -529,6 +529,8 @@ fi
 # Aliases for github copilot
 alias gcmA=copilot_auto_commit.sh
 alias c=copilot_chat.sh
+alias copilot_allow_all='copilot --allow-all-tools --allow-all-paths'
+alias ca=copilot_allow_all
 
 # ------------------------------------------------------------------------------
 # -------------------------- Mode Dependent Settings ---------------------------

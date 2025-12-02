@@ -2,6 +2,7 @@
 - Never give up until finished the task including behavior check and testing without relying on users. (important)
 - Must check the code behavior by running or testing it. (important)
 - When environment variable missing, search `.env` file and source it.
+- After completing tasks, you must repeatedly check that the rules are being followed.
 
 # Coding Rules
 ## Must Do
