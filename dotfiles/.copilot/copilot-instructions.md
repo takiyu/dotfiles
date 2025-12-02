@@ -12,12 +12,15 @@
 - Extract pure functions outside classes
 - Write comments in English to explain logic
 - Add comments for complex logic blocks
+- Add one-line English comment at the beginning of each code block
 - Function dependencies should be clear (from top to bottom)
 - Import/Include should be at the top of the file
 - Keep changes to a minimum and do not change irrelevant parts.
 - Use enum instead of string constants.
 - Absolutely forbid duplicated code; similar functionality must be consolidated into common functions.
 - Constants must be defined in `constants.*` files.
+- Use semantically correct structure
+- Write minimal, concise, and readable code
 - After implementing each feature, you must compile and test to confirm operation before proceeding to the next feature.
 
 ## Must Not Do
@@ -60,56 +63,7 @@ Implementation code here
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------- (EOF)
 ```
-`#` can be replaced with `//` for other languages.
-
-# Task Rules
-- Never give up until finished the task including behavior check and testing without relying on users. (important)
-- Must check the code behavior by running or testing it. (important)
-- When envirommnet variable missing, search `.env` file and source it.
-
-# Coding Rules
-## Must Do
-- Follow existing code style (important)
-- Remove trailing whitespace, 2 lines between functions
-- Use snake_case for files, variables: xxx_filename, xxx_dirname
-- Keep structure simple, avoid deep nesting
-- Extract pure functions outside classes
-- Write comments in English to explain logic
-- Add comments for complex logic blocks
-- Function dependencies should be clear (from top to bottom)
-- Import/Include should be at the top of the file
-- Keep changes to a minimum and do not change irrelevant parts.
-- Use enum instead of string constants.
-
-## Must Not Do
-- Use docstrings (unnecessary)
-- Use class methods/global variables (avoid)
-- Create too many methods
-- Deep indentation
-
-## Code Structure Template
-```python
-# -----------------------------------------------------------------------------
-# ------------------------------- Section Name --------------------------------
-# ----------------------------------------------------------------------------- (no empty line)
-Interface code here
-...
- (2 empty lines)
-
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# ------------------------------ Implementation -------------------------------
-# -----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------- (no empty line)
-Implementation code here
-...
- (2 empty lines)
-
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-EOF
-```
+`#` can be replaced (e.g. `//`) for other languages.
 
 ## Python Specifics
 - Must use Poetry for virtual environment
