@@ -22,6 +22,7 @@
 - Constants must be defined in `constants.*` files.
 - Use semantically correct structure
 - Write minimal, concise, and readable code
+- Always write comparison operators with the left side smaller (use the "<" orientation)
 - After implementing each feature, you must compile and test to confirm operation before proceeding to the next feature.
 
 ## Must Not Do
