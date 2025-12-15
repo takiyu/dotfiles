@@ -491,6 +491,31 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     alias gvimdiff="nvim -- -d"
     export EDITOR=nvim
     export GIT_EDITOR=nvim
+
+    # Open git modified/untracked files (including submodules) in nvim tabs
+    gdvim() {
+        # Collect modified and untracked files in current repo and submodules
+        local files
+        files=$(git ls-files -m -o --exclude-standard 2>/dev/null; \
+                git submodule foreach --recursive 'git ls-files -m -o --exclude-standard | sed "s#^#$path/#"' 2>/dev/null | sed '/^Entering /d') || true
+        # Fallback when nothing
+        if [ -z "$files" ]; then
+            echo "No modified or untracked files found."
+            return 0
+        fi
+        # Filter to existing regular files only and stream them to xargs (avoid nulls in command substitution)
+        printf '%s\n' "$files" | while IFS= read -r f; do
+            if [ -f "$f" ]; then
+                printf '%s\0' "$f"
+            fi
+        done | { read -r -d '' _ || true; } 2>/dev/null
+        # Open with nvim using null-delimited xargs directly from the pipe
+        printf '%s\n' "$files" | while IFS= read -r f; do
+            if [ -f "$f" ]; then
+                printf '%s\0' "$f"
+            fi
+        done | xargs -0 nvim -p --
+    }
 fi
 
 # aliases for applications
