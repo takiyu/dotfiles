@@ -516,6 +516,7 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
             fi
         done | xargs -0 nvim -p --
     }
+    alias gdv=gdvim
 fi
 
 # aliases for applications
