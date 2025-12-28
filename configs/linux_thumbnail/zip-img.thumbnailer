@@ -1,0 +1,4 @@
+[Thumbnailer Entry]
+Exec=/usr/local/bin/zip-img-thumbnailer.sh %i %o %s
+TryExec=/usr/local/bin/zip-img-thumbnailer.sh
+MimeType=application/zip;application/x-cbz;application/x-cbr;application/rar;
