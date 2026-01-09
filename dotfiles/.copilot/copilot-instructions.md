@@ -14,7 +14,7 @@
 - Write comments in English to explain logic
 - Add comments for complex logic blocks
 - Add one-line English comment at the beginning of each code block
-- Function dependencies should be clear (higher-level (caller) is upper, lower-level (callee) is lower)
+- Function dependencies should be clear (higher-level (caller) should be above; lower-level (callee) should be below)
 - Import/Include should be at the top of the file
 - Keep changes to a minimum and do not change irrelevant parts.
 - Use enum instead of string constants.
