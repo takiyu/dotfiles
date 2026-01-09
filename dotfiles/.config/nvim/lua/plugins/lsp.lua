@@ -102,40 +102,45 @@ return {
     dependency = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
     config = function()
       require('mason').setup()
-      require('mason-lspconfig').setup({ function(server)
-        local opt = {}
+      require('mason-lspconfig').setup({
+        automatic_enable = true,
+      })
 
-        -- Setup `cmp_nvim_lsp`
-        opt.capabilities = require('cmp_nvim_lsp').default_capabilities(
-          vim.lsp.protocol.make_client_capabilities()
-        )
+      -- Setup `cmp_nvim_lsp` capabilities
+      local capabilities = require('cmp_nvim_lsp').default_capabilities(
+        vim.lsp.protocol.make_client_capabilities()
+      )
 
-        -- Arguments for Clangd
-        if server == 'clangd' then
-          opt.cmd = {
-            'clangd',
-            '--background-index=false',
-            '--cross-file-rename',
-            '--header-insertion=never',
-          }
-        end
+      -- Configure Clangd
+      vim.lsp.config('clangd', {
+        cmd = {
+          'clangd',
+          '--background-index=false',
+          '--cross-file-rename',
+          '--header-insertion=never',
+        },
+        capabilities = capabilities,
+      })
 
-        -- Arguments for PyRight
-        if server == 'pyright' then
-          opt.settings = {
-            python = {
-              venvPath = ".",
-              pythonPath = "./.venv/bin/python",
-              analysis = {
-                extraPaths = { "." }
-              }
+      -- Configure PyRight
+      vim.lsp.config('pyright', {
+        settings = {
+          python = {
+            venvPath = ".",
+            venv = ".venv",
+            pythonPath = "./.venv/bin/python",
+            analysis = {
+              extraPaths = { "." }
             }
           }
-        end
+        },
+        capabilities = capabilities,
+      })
 
-        -- Pass to `lspconfig` setup
-        require('lspconfig')[server].setup(opt)
-      end })
+      -- Configure other LSP servers with default capabilities
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
     end
   },
 
