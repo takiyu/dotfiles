@@ -5,6 +5,14 @@ return {
   {
     'neovim/nvim-lspconfig',
     init = function()
+      -- Global floating window border configuration
+      local org_func = vim.lsp.util.open_floating_preview
+      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or 'rounded'
+        return org_func(contents, syntax, opts, ...)
+      end
+
       -- Diagnostic appearance
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -12,17 +20,6 @@ return {
           signs = true,
           underline = true,
           update_in_insert = false,
-          border = 'rounded' -- Border
-        }
-      )
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-        vim.lsp.handlers.hover, {
-          border = 'rounded' -- Border
-        }
-      )
-      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-        vim.lsp.handlers.signature_help, {
-          border = 'rounded' -- Border
         }
       )
       -- Diagnostic gutter
@@ -48,7 +45,7 @@ return {
       -- Show diagnostic floating automatically
       vim.api.nvim_create_autocmd('CursorHold', {
         pattern = { '*' },
-        callback = function() vim.diagnostic.open_float({ border = 'rounded' }) end
+        callback = function() vim.diagnostic.open_float() end
       })
       -- Set diagnostic signs
       vim.diagnostic.config({
@@ -77,9 +74,6 @@ return {
     config = function()
       require 'lsp_signature'.setup({
         bind = true,
-        handler_opts = {
-          border = 'rounded'
-        },
         doc_lines = 3,
         hint_prefix = '🐬 ',
         -- toggle_key = '<F10>',
@@ -313,8 +307,12 @@ return {
           },
         },
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered({
+            border = 'rounded',
+          }),
+          documentation = cmp.config.window.bordered({
+            border = 'rounded',
+          }),
         },
         experimental = {
           ghost_text = { hl_group = 'GhostText' }, -- Defined in color scheme
