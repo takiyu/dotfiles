@@ -557,7 +557,7 @@ fi
 alias gcmA=copilot_auto_commit.sh
 alias c=copilot_chat.sh
 copilot_allow_all() { copilot --allow-all-tools --allow-all-paths "$@"; }
-alias ca_default="copilot_allow_all --model claude-sonet-4.5"
+alias ca_default="copilot_allow_all --model claude-sonnet-4.5"
 alias ca_free="copilot_allow_all --model gpt-5-mini"
 
 # ------------------------------------------------------------------------------
