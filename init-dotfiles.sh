@@ -84,7 +84,9 @@ if [ $platform == 'Linux' ]; then
     TARGETS=(.Xmodmap_default .Xmodmap .xinitrc .bash_profile .bashrc .xmonad \
              .xmobarrc .wgetrc .gitconfig .latexmkrc .ctags .clang-format \
              .clang-tidy .jshintrc .pep8 .tmux.conf .mplayer  .mime.types \
-             .lesskey .vsnip .xbindkeysrc .copilot/copilot-instructions.md \
+             .lesskey .vsnip .xbindkeysrc \
+             .copilot/copilot-instructions.md \
+             .copilot/mcp-config.json \
              .config/matplotlib .config/nvim .config/pycodestyle  \
              .config/zathura .config/pypoetry .config/sway .config/fuzzel
              .config/foot .config/waybar .config/xfce4/terminal)
