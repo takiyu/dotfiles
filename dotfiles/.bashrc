@@ -561,6 +561,12 @@ alias ca_opus4.5="copilot_allow_all --model claude-opus-4.5"
 alias ca_sonnet4.5="copilot_allow_all --model claude-sonnet-4.5"
 alias ca_gpt5.2codex="copilot_allow_all --model gpt-5.2-codex"
 alias ca_free="copilot_allow_all --model gpt-5-mini"
+# Copilot installer
+ca_install() {
+    mkdir -p "$PWD/.github"
+    ln -s "$HOME/.copilot/copilot-instructions.md" "$PWD/.github/copilot-instructions.md"
+    ln -s "$HOME/.copilot/mcp-config.json" "$PWD/.github/mcp-config.json"
+}
 
 # ------------------------------------------------------------------------------
 # -------------------------- Mode Dependent Settings ---------------------------
