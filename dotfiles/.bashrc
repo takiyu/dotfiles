@@ -531,8 +531,7 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
         files=$(_get_git_modified_files) || return 0
         # Prepare temp files and build nvim command
         local tmp_files=()
-        local nvim_args=()
-        local first_file=true
+        local file_pairs=()
         while IFS= read -r f; do
             if [ -f "$f" ] && git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
                 # Create secure temp file with mktemp
@@ -540,18 +539,21 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
                 # Get git HEAD version to temp file
                 git show "HEAD:$f" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
                 tmp_files+=("$tmp_file")
-                # Build command: first file uses -d, others use tabnew + diffsplit
-                if [ "$first_file" = true ]; then
-                    nvim_args=(-d "$f" "$tmp_file")
-                    first_file=false
-                else
-                    nvim_args+=(-c "tabnew $tmp_file | vert diffsplit $f")
-                fi
+                file_pairs+=("$f" "$tmp_file")
             fi
         done <<< "$files"
         # Open all files in vimdiff tabs
-        if [ ${#nvim_args[@]} -gt 0 ]; then
-            nvim "${nvim_args[@]}"
+        if [ ${#file_pairs[@]} -gt 0 ]; then
+            # Build single -c command for all tabs
+            local cmd=""
+            for ((i=2; i<${#file_pairs[@]}; i+=2)); do
+                cmd="${cmd}tabnew ${file_pairs[i+1]} | vert diffsplit ${file_pairs[i]} | "
+            done
+            if [ -n "$cmd" ]; then
+                nvim -d "${file_pairs[0]}" "${file_pairs[1]}" -c "${cmd%??}"
+            else
+                nvim -d "${file_pairs[0]}" "${file_pairs[1]}"
+            fi
             # Cleanup temp files
             for tmp in "${tmp_files[@]}"; do
                 rm -f "$tmp"
