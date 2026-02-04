@@ -536,16 +536,16 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
         while IFS= read -r f; do
             if [ -f "$f" ] && git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
                 # Create secure temp file with mktemp
-                local tmp_file=$(mktemp /tmp/gdvimdiff_$(basename "$f").XXXXXX) || continue
+                local tmp_file=$(mktemp /tmp/gdvimdiff_XXXXXX_$(basename "$f")) || continue
                 # Get git HEAD version to temp file
                 git show "HEAD:$f" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
                 tmp_files+=("$tmp_file")
                 # Build command: first file uses -d, others use tabnew + diffsplit
                 if [ "$first_file" = true ]; then
-                    nvim_args=(-d "$tmp_file" "$f")
+                    nvim_args=(-d "$f" "$tmp_file")
                     first_file=false
                 else
-                    nvim_args+=(-c "tabnew $f | vert diffsplit $tmp_file")
+                    nvim_args+=(-c "tabnew $tmp_file | vert diffsplit $f")
                 fi
             fi
         done <<< "$files"
