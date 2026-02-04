@@ -494,16 +494,22 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     export GIT_EDITOR=nvim
 
     # Open git modified/untracked files (including submodules) in nvim tabs
-    gdvim() {
-        # Collect modified and untracked files in current repo and submodules
+    # Collect modified files in git repo (helper for gdvim/gdvimdiff)
+    _get_git_modified_files() {
         local files
         files=$(git ls-files -m -o --exclude-standard 2>/dev/null; \
                 git submodule foreach --recursive 'git ls-files -m -o --exclude-standard | sed "s#^#$path/#"' 2>/dev/null | sed '/^Entering /d') || true
-        # Fallback when nothing
         if [ -z "$files" ]; then
-            echo "No modified or untracked files found."
-            return 0
+            echo "No modified or untracked files found." >&2
+            return 1
         fi
+        printf '%s\n' "$files"
+    }
+
+    gdvim() {
+        # Collect modified and untracked files in current repo and submodules
+        local files
+        files=$(_get_git_modified_files) || return 0
         # Filter to existing regular files only and stream them to xargs (avoid nulls in command substitution)
         printf '%s\n' "$files" | while IFS= read -r f; do
             if [ -f "$f" ]; then
@@ -518,6 +524,41 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
         done | xargs -0 nvim -p --
     }
     alias gdv=gdvim
+
+    gdvimdiff() {
+        # Collect modified files in current repo and submodules
+        local files
+        files=$(_get_git_modified_files) || return 0
+        # Prepare temp files and build nvim command
+        local tmp_files=()
+        local nvim_args=()
+        local first_file=true
+        while IFS= read -r f; do
+            if [ -f "$f" ] && git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+                # Create secure temp file with mktemp
+                local tmp_file=$(mktemp /tmp/gdvimdiff_$(basename "$f").XXXXXX) || continue
+                # Get git HEAD version to temp file
+                git show "HEAD:$f" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
+                tmp_files+=("$tmp_file")
+                # Build command: first file uses -d, others use tabnew + diffsplit
+                if [ "$first_file" = true ]; then
+                    nvim_args=(-d "$tmp_file" "$f")
+                    first_file=false
+                else
+                    nvim_args+=(-c "tabnew $f | vert diffsplit $tmp_file")
+                fi
+            fi
+        done <<< "$files"
+        # Open all files in vimdiff tabs
+        if [ ${#nvim_args[@]} -gt 0 ]; then
+            nvim "${nvim_args[@]}"
+            # Cleanup temp files
+            for tmp in "${tmp_files[@]}"; do
+                rm -f "$tmp"
+            done
+        fi
+    }
+    alias gdvd=gdvimdiff
 fi
 
 # aliases for applications
