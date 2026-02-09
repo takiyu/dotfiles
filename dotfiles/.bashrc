@@ -336,9 +336,11 @@ alias gau='git add -u'
 alias gaup='git add -u -p'
 alias gcm='git commit'
 function gcmm() { git commit -m "$*"; }
+function gcmmn() { git commit -n -m "$*"; }
 alias gcma='git commit --amend'
 function gcmma() { git commit --amend -m "$*"; }
 function gcmam() { git commit --amend -m "$*"; }
+function gcmman() { git commit --amend -n -m "$*"; }
 alias gclo='git clone'
 alias gclone='git clone'
 alias gcl='git clean -i'
