@@ -529,6 +529,9 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
         # Collect modified files in current repo and submodules
         local files
         files=$(_get_git_modified_files) || return 0
+        # Get prefix for relative path conversion
+        local prefix
+        prefix=$(git rev-parse --show-prefix)
         # Prepare temp files and build nvim command
         local tmp_files=()
         local file_pairs=()
@@ -536,8 +539,8 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
             if [ -f "$f" ] && git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
                 # Create secure temp file with mktemp
                 local tmp_file=$(mktemp /tmp/gdvimdiff_XXXXXX_$(basename "$f")) || continue
-                # Get git HEAD version to temp file
-                git show "HEAD:$f" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
+                # Get git HEAD version to temp file (use prefix for repo-root relative path)
+                git show "HEAD:${prefix}${f}" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
                 tmp_files+=("$tmp_file")
                 file_pairs+=("$f" "$tmp_file")
             fi
