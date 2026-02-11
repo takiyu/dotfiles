@@ -30,6 +30,7 @@
 - Use class methods/global variables (avoid)
 - Create too many methods
 - Deep indentation
+- Use sentence-style names (containing preposition like 'and')
 
 ## Code Structure Template
 ```python
