@@ -608,8 +608,8 @@ alias c=copilot_chat.sh
 copilot_allow_all() { copilot --allow-all --enable-all-github-mcp-tools "$@"; }
 # copilot_allow_all() { copilot --allow-all --no-auto-update --enable-all-github-mcp-tools "$@"; }  # noupdate
 alias ca_opus4.6="copilot_allow_all --model claude-opus-4.6"
-alias ca_sonnet4.5="copilot_allow_all --model claude-sonnet-4.5"
-alias ca_gpt5.2codex="copilot_allow_all --model gpt-5.2-codex"
+alias ca_sonnet4.6="copilot_allow_all --model claude-sonnet-4.6"
+alias ca_gpt5.3codex="copilot_allow_all --model gpt-5.3-codex"
 alias ca_free="copilot_allow_all --model gpt-5-mini"
 # Copilot installer
 ca_install() {
