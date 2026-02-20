@@ -89,25 +89,3 @@ Implementation code here
 
 ## Commit Messages
 - Feature/Fix/Docs/Style/Refactor/Test: description
-
-## Python Specifics
-- Poetry for virtual environment
-- 4-space indent, 79 chars/line, PEP 8
-- PascalCase classes, snake_case functions/variables
-- Use type hints, single quotes
-- `import os.path as osp` not Path
-- No typing.Dict/List/Tuple/Union/Any and object for typing
-- pytest: tests/ dir, test_*.py files
-
-## TypeScript Specifics
-- 2-space indent, 100 chars/line
-- PascalCase classes, camelCase functions, snake_case variables
-- Function components, type all props
-- Use React Bootstrap, i18n all text
-- vitest: test_*.ts files
-
-## Docker
-- Use Dockerfile only (not docker-compose for single service)
-
-## Commit Messages
-- Feature/Fix/Docs/Style/Refactor/Test: description
