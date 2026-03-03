@@ -3,6 +3,8 @@
 - Must check the code behavior by running or testing it. (important)
 - When environment variable missing, search `.env` file and source it.
 - After completing tasks, you must repeatedly check that the rules are being followed.
+- Always use high reasoning effort for agent responses unless explicitly overridden.
+- No git commit without user instructions.
 
 # Coding Rules
 ## Must Do
@@ -31,6 +33,7 @@
 - Create too many methods
 - Deep indentation
 - Use sentence-style names (containing preposition like 'and')
+- Unintended line breaks (inserting line breaks before reaching the per-line character limit)
 
 ## Code Structure Template
 ```python
