@@ -77,8 +77,35 @@ Implementation code here
 - PascalCase classes, snake_case functions/variables
 - Use type hints, single quotes
 - `import os.path as osp` not Path
-- No typing.Dict/List/Tuple/Union/Any and object for typing
-- pytest: tests/ dir, test_*.py files
+- Use built-in generics (`dict[K, V]`, `list[X]`, `tuple[X, Y]`) and `Optional[X]` for type hints
+- No `typing.Dict`/`List`/`Tuple`/`Union`/`Any` and `object` for typing; no `X | None` syntax
+- Use `dict()`, `list()`, `set()` for empty collections (not `{}`, '[]')
+- Align continuation lines to the opening delimiter (`(`, `[`, `{`), not hanging indent
+- Pack multiple parameters/arguments per line within 79-char limit (do not use one-per-line unnecessarily)
+- When return type doesn't fit on last parameter line, put `)` aligned with params then `-> Type:` on the same line
+
+### Python Line Continuation Examples
+```python
+# Function definition: align params to opening `(`
+def generate_report(cc: canvas.Canvas, params: Params, track_id: str = '',
+                    repl_info: dict[ReplType, str] = dict(),
+                    insert_debug: bool = False):
+
+# Return type: `) -> Type:` when it doesn't fit on last param line
+def apply_replacements(cc: canvas.Canvas, repl_info: dict[ReplType, str],
+                       slots: dict[ReplType, ReplSlot],
+                       insert_debug: bool = False) -> dict[ReplType,
+                                                           ReplResult]:
+
+# Function call: align args to opening `(`
+draw_patient_info(cc, entry.measure_time, entry.patient_age, params.patient_id,
+                  params.patient_name, repl_results, insert_debug)
+
+# Dict literal: first item on same line as `{`, rest aligned
+texts: dict[ReplType, str] = {ReplType.DATE: date_str,
+                              ReplType.AGE: age_str,
+                              ReplType.ID: patient_id}
+```
 
 ## TypeScript Specifics
 - 2-space indent, 100 chars/line
