@@ -6,8 +6,7 @@
   },
   "render_markdown": true,
   "theme": "auto",
-  "trusted_folders": [
-  ],
+  "trusted_folders": [],
   "alt_screen": false,
   "reasoning_effort": "high"
 }
