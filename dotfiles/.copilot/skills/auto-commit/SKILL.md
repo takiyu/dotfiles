@@ -1,86 +1,56 @@
 ---
 name: auto-commit
-description: Stage-based auto-commit skill. Gets git staged diff, generates commit message (Feature/Fix/Docs/Style/Refactor/Test format), checks code quality, and commits only if quality is OK.
+description: Generates commit message (Feature/Fix/Docs/Style/Refactor/Test) and checks code quality for staged changes. For fast use, prefer the copilot_auto_commit.sh script (gcmA alias).
 allowed-tools: bash
 ---
 
-# Auto-Commit
+# Auto-Commit (Interactive)
 
-Perform auto-commit workflow for staged git changes in the current directory.
+Perform auto-commit workflow for staged git changes.
 
 ## Steps
 
 ### 1. Get Staged Diff
 
-Run:
 ```sh
 git diff --cached --submodule=diff
 ```
 
-If the output is empty, stop and report: "No staged changes to commit."
+If empty: report "No staged changes." and stop.
 
-### 2. Display Diff
+### 2. Single-Pass Analysis
 
-Print with section header:
+In **one analysis**, produce both:
+- **Commit message**: `Feature/Fix/Docs/Style/Refactor/Test: <description>`
+- **Quality check**: `OK` or issues in Japanese with `[高]/[中]/[低]` labels (≤10 lines)
+
+Print:
 ```
 ------------------------------------------------------------------
 ------------------------- Code Difference ------------------------
 ------------------------------------------------------------------
-```
-
-### 3. Generate Commit Message
-
-Analyze the diff and create a single-line English commit message.
-Format: `Feature/Fix/Docs/Style/Refactor/Test: description`
-
-Print with section header:
-```
+<diff>
 ------------------------------------------------------------------
----------------- Generating commit message by LLM ----------------
+---------------- Generating commit message by LLM ---------------
 ------------------------------------------------------------------
  > <commit message>
-```
-
-### 4. Check Code Quality
-
-Evaluate the diff against these criteria:
-- Algorithmic correctness
-- Security
-- Maintainability
-- Readability
-- Harmony with surrounding code (most important)
-- Absence of bugs
-
-**Output format (Japanese):**
-- If everything is correct: output exactly `OK`
-- If there are issues: output each issue in Japanese with an importance label
-  - `[高]` = high importance
-  - `[中]` = medium importance
-  - `[低]` = low importance
-  - Keep it concise (1–10 lines total)
-
-Print with section header:
-```
 ------------------------------------------------------------------
 ---------------------- Quality Check by LLM ----------------------
 ------------------------------------------------------------------
  > <quality result>
 ```
 
-### 5. Confirm with User
-
-Always ask the user whether to proceed, regardless of quality result.
-Run the following command to prompt for confirmation:
+### 3. User Confirmation
 
 ```sh
-read -p "Commit? [y/N]: " _confirm && echo "$_confirm"
+read -p "Commit? [y/N]: " _r && echo "$_r"
 ```
 
-- If the user enters `y` or `Y`: proceed to Step 6
-- Otherwise: report "コミットを中止しました。" and stop
+- `y`/`Y` → Step 4
+- else → "コミットを中止しました。" and stop
 
-### 6. Run Git Commit
+### 4. Commit
 
 ```sh
-git commit -m "<generated commit message>"
+git commit -m "<commit message from Step 2>"
 ```
