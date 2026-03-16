@@ -67,11 +67,20 @@ Print with section header:
  > <quality result>
 ```
 
-### 5. Commit Decision
+### 5. Confirm with User
 
-**Quality result is `OK`:**
-- Run: `git commit -m "<generated commit message>"`
+Always ask the user whether to proceed, regardless of quality result.
+Run the following command to prompt for confirmation:
 
-**Quality issues found:**
-- Do NOT run `git commit`
-- Report: "品質問題のためコミットを中止しました。問題を修正してから再試行してください。"
+```sh
+read -p "Commit? [y/N]: " _confirm && echo "$_confirm"
+```
+
+- If the user enters `y` or `Y`: proceed to Step 6
+- Otherwise: report "コミットを中止しました。" and stop
+
+### 6. Run Git Commit
+
+```sh
+git commit -m "<generated commit message>"
+```
