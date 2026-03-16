@@ -45,11 +45,13 @@ if [ -z "$COMMIT_MSG" ]; then
     exit 1
 fi
 
-# User confirmation (handled by shell, not LLM — reliable even in -p mode)
-read -p "Commit? [y/N]: " CONFIRM
-if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
-    echo "コミットを中止しました。"
-    exit 0
+# Skip confirmation if quality is OK; ask only when issues are found
+if [ "$QUALITY" != "OK" ]; then
+    read -p "Commit? [y/N]: " CONFIRM
+    if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+        echo "コミットを中止しました。"
+        exit 0
+    fi
 fi
 
 echo "------------------------------------------------------------------"
