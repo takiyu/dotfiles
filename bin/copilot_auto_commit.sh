@@ -1,17 +1,35 @@
 #!/bin/bash
 # Auto-commit: shell handles diff/IO/git, copilot does text-only analysis (fast single inference)
 
-DIFF=$(git diff --cached --submodule=diff)
-if [ -z "$DIFF" ]; then
+DIFF_FULL=$(git diff --cached --submodule=diff)
+if [ -z "$DIFF_FULL" ]; then
     echo "No staged changes to commit."
     exit 0
 fi
 
-# Show diff
+# Exclude lock/generated files from LLM analysis (still committed as-is)
+DIFF_STAT=$(git diff --cached --stat)
+DIFF=$(git diff --cached --submodule=diff -- \
+    ':(exclude)*.lock' \
+    ':(exclude)package-lock.json' \
+    ':(exclude)*.min.js' \
+    ':(exclude)*.min.css')
+
+# Truncate diff to avoid exceeding LLM context limit
+MAX_CHARS=12000
+DIFF_LEN=${#DIFF}
+if [ "$DIFF_LEN" -gt "$MAX_CHARS" ]; then
+    DIFF="${DIFF:0:$MAX_CHARS}
+... [truncated: ${DIFF_LEN} chars total]"
+fi
+
+# Show stat and diff
 echo "------------------------------------------------------------------"
 echo "------------------------- Code Difference ------------------------"
 echo "------------------------------------------------------------------"
-echo "$DIFF"
+echo "$DIFF_STAT"
+echo ""
+echo "$DIFF_FULL"
 echo ""
 
 # Single text-only LLM inference with diff pre-embedded (no tool calls -> fast)
@@ -20,6 +38,9 @@ RESULT=$(copilot --allow-all --model gpt-5-mini -p \
 "Output EXACTLY two lines and nothing else:
 COMMIT: Feature/Fix/Docs/Style/Refactor/Test: <one-line description>
 QUALITY: OK (or issues in Japanese with [高]/[中]/[低] labels, use / as separator)
+
+stat:
+$DIFF_STAT
 
 diff:
 $DIFF" 2>&1)
