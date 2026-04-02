@@ -4,10 +4,12 @@
     "host": "https://github.com",
     "login": "takiyu"
   },
-  "render_markdown": true,
+  "renderMarkdown": true,
   "theme": "auto",
-  "trusted_folders": [],
+  "trusted_folders": [
+    "/home/takiyu/dotfiles/dotfiles"
+  ],
   "alt_screen": false,
-  "reasoning_effort": "high",
+  "effortLevel": "high",
   "firstLaunchAt": "2026-03-11T00:00:00.000Z"
 }
