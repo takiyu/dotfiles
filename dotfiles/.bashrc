@@ -605,7 +605,7 @@ fi
 # Aliases for github copilot
 alias gcmA=copilot_auto_commit.sh
 alias c=copilot_chat.sh
-copilot_allow_all() { copilot --allow-all --enable-all-github-mcp-tools "$@"; }
+copilot_allow_all() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 # copilot_allow_all() { copilot --allow-all --no-auto-update --enable-all-github-mcp-tools "$@"; }  # noupdate
 alias ca_opus4.6="copilot_allow_all --model claude-opus-4.6"
 alias ca_sonnet4.6="copilot_allow_all --model claude-sonnet-4.6"
