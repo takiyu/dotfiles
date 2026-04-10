@@ -90,10 +90,10 @@ One per line in this format:
 - Sentence-style names with prepositions (e.g. `fetchAndDisplay`)
 - Hook defined outside component but missing `use` prefix
 - Mutable module-level state (avoid)
+- Unused import
 
 **[低] Nice to fix:**
 - `console.log` left in production code
-- Unused import
 - Long function exceeding ~50 lines
 
 ### 6. Print summary

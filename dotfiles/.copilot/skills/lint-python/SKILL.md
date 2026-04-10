@@ -97,10 +97,10 @@ One per line in this format:
 - No English comment at start of non-trivial code block
 - Class-level mutable state or module-level globals
 - Continuation lines not aligned to opening delimiter (`(`, `[`, `{`)
+- `from pathlib import Path` (use `import os.path as osp`)
+- Sentence-style names with prepositions (e.g. `load_and_parse`)
 
 **[低] Nice to fix:**
-- Sentence-style names with prepositions (e.g. `load_and_parse`)
-- `from pathlib import Path` (use `import os.path as osp`)
 - Params split one-per-line when they fit within 79 chars
 
 ### 6. Print summary
