@@ -76,27 +76,39 @@ Implementation code here
 - Pack multiple parameters/arguments per line within 79-char limit (do not use one-per-line unnecessarily)
 - When return type doesn't fit on last parameter line, put `)` aligned with params then `-> Type:` on the same line
 
-### Python Line Continuation Examples
+
+### Known Antipatterns — NEVER write these (失敗事例)
 ```python
-# Function definition: align params to opening `(`
-def generate_report(cc: canvas.Canvas, params: Params, track_id: str = '',
-                    repl_info: dict[ReplType, str] = dict(),
-                    insert_debug: bool = False):
+# ❌ WRONG: def with ( alone at end of line
+def func(
+        arg1: str, arg2: int) -> None: ...
+# ✅ CORRECT:
+def func(arg1: str, arg2: int,
+         more: bool = False) -> None: ...
 
-# Return type: `) -> Type:` when it doesn't fit on last param line
-def apply_replacements(cc: canvas.Canvas, repl_info: dict[ReplType, str],
-                       slots: dict[ReplType, ReplSlot],
-                       insert_debug: bool = False) -> dict[ReplType,
-                                                           ReplResult]:
+# ❌ WRONG: function call with ( alone at end of line
+result = my_func(
+    arg1, arg2, arg3)
+# ✅ CORRECT:
+result = my_func(arg1, arg2,
+                 arg3)
 
-# Function call: align args to opening `(`
-draw_patient_info(cc, entry.measure_time, entry.patient_age, params.patient_id,
-                  params.patient_name, repl_results, insert_debug)
+# ❌ WRONG: multi-line ternary expression
+x = (value
+     if condition else other)
+# ✅ CORRECT:
+if condition:
+    x = value
+else:
+    x = other
 
-# Dict literal: first item on same line as `{`, rest aligned
-texts: dict[ReplType, str] = {ReplType.DATE: date_str,
-                              ReplType.AGE: age_str,
-                              ReplType.ID: patient_id}
+# ❌ WRONG: closing ) at column 0 before ->
+def func(
+        arg1: str
+) -> Type: ...
+# ✅ CORRECT:
+def func(arg1: str,
+         arg2: int) -> Type: ...
 ```
 
 ## TypeScript Specifics
