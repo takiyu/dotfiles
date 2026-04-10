@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "$HOME/.copilot/hooks/lint-on-write.sh",
+        "timeoutSec": 30
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "$HOME/.copilot/hooks/session-end-diary.sh",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
