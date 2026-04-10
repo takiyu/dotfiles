@@ -79,6 +79,55 @@ $(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [高] Use dict() for empty dict, n
         VIOLATIONS="$VIOLATIONS
 $(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [高] Use list() for empty list, not []"
     fi
+
+    # def/async def with ( at end of line — first arg must start on same line
+    MATCH=$(grep -nP '^\s*(async\s+)?def\s+\w+\($' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] First arg must be on same line as def funcname("
+    fi
+
+    # Function call with ( at end of line — first arg must be on same line (no hanging indent)
+    if command -v python3 >/dev/null 2>&1; then
+        MATCH=$(PY_FILE="$FILE_PATH" python3 -c "
+import os
+path = os.environ['PY_FILE']
+lines = open(path).readlines()
+for i, line in enumerate(lines[:-1]):
+    s = line.rstrip()
+    if not s.endswith('(') or len(s) < 2:
+        continue
+    if not (s[-2].isalnum() or s[-2] == '_'):
+        continue
+    if s.lstrip().startswith(('def ', 'async def ')):
+        continue
+    paren_col = len(s) - 1
+    nxt = lines[i + 1]
+    nxt_stripped = nxt.lstrip()
+    if not nxt_stripped.strip():
+        continue
+    if len(nxt) - len(nxt_stripped) != paren_col + 1:
+        print(f'{i+1}:{s}')
+" 2>/dev/null || true)
+        if [ -n "$MATCH" ]; then
+            VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] First arg must be on same line as (; align continuation to opening ("
+        fi
+    fi
+
+    # ) at column 0 before -> ReturnType — closing paren not aligned to opening (
+    MATCH=$(grep -nP '^\)\s*->' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] Closing ) at col 0; must align to opening ( column"
+    fi
+
+    # Multi-line ternary — continuation line starting with 'if ... else'
+    MATCH=$(grep -nP '^\s+if\s+.+\belse\b' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] Multi-line ternary; rewrite as if/else block"
+    fi
 fi
 
 # -----------------------------------------------------------------------------

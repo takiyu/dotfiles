@@ -96,12 +96,19 @@ One per line in this format:
 - Nesting deeper than 3 levels
 - No English comment at start of non-trivial code block
 - Class-level mutable state or module-level globals
-- Continuation lines not aligned to opening delimiter (`(`, `[`, `{`)
+- Continuation lines not aligned to opening delimiter (`(`, `[`, `{`);
+  first argument **must** start on the same line as the opening `(` —
+  never leave `(` alone at end of a `def` line or function call
+- Closing `)` at column 0 before `-> ReturnType:` — must align to
+  the column of the opening `(` (e.g. `                               ) -> T:`)
 - `from pathlib import Path` (use `import os.path as osp`)
 - Sentence-style names with prepositions (e.g. `load_and_parse`)
+- Multi-line ternary expression (`x = (val\n    if cond else other)`);
+  rewrite as `if/else` block instead
 
 **[低] Nice to fix:**
-- Params split one-per-line when they fit within 79 chars
+- Params or args split one-per-line when packing fits within 79 chars
+  (usually a symptom of the hanging-indent `[中]` issue above)
 
 ### 6. Print summary
 

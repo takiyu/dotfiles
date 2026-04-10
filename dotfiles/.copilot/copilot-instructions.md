@@ -9,7 +9,6 @@
 # Coding Rules
 ## Must Do
 - Follow existing code style (important)
-- Remove trailing whitespace, 2 lines between functions
 - Use snake_case for files, variables: xxx_filename, xxx_dirname
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
@@ -19,7 +18,6 @@
 - Function dependencies should be clear (higher-level (caller) should be above; lower-level (callee) should be below)
 - Import/Include should be at the top of the file
 - Keep changes to a minimum and do not change irrelevant parts.
-- Use enum instead of string constants.
 - Absolutely forbid duplicated code; similar functionality must be consolidated into common functions.
 - Constants must be defined in `constants.*` files.
 - Use semantically correct structure
@@ -28,12 +26,8 @@
 - After implementing each feature, you must compile and test to confirm operation before proceeding to the next feature.
 
 ## Must Not Do
-- Use docstrings (unnecessary)
 - Use class methods/global variables (avoid)
 - Create too many methods
-- Deep indentation
-- Use sentence-style names (containing preposition like 'and')
-- Unintended line breaks (inserting line breaks before reaching the per-line character limit)
 
 ## Code Structure Template
 ```python
@@ -73,13 +67,11 @@ Implementation code here
 
 ## Python Specifics
 - Must use Poetry for virtual environment
-- 4-space indent, 79 chars/line, PEP 8 (important)
+- 79 chars/line, PEP 8 (important)
 - PascalCase classes, snake_case functions/variables
 - Use type hints, single quotes
 - `import os.path as osp` not Path
 - Use built-in generics (`dict[K, V]`, `list[X]`, `tuple[X, Y]`) and `Optional[X]` for type hints
-- No `typing.Dict`/`List`/`Tuple`/`Union`/`Any` and `object` for typing; no `X | None` syntax
-- Use `dict()`, `list()`, `set()` for empty collections (not `{}`, '[]')
 - Align continuation lines to the opening delimiter (`(`, `[`, `{`), not hanging indent
 - Pack multiple parameters/arguments per line within 79-char limit (do not use one-per-line unnecessarily)
 - When return type doesn't fit on last parameter line, put `)` aligned with params then `-> Type:` on the same line
@@ -110,7 +102,6 @@ texts: dict[ReplType, str] = {ReplType.DATE: date_str,
 ## TypeScript Specifics
 - 2-space indent, 100 chars/line
 - PascalCase classes, camelCase functions, snake_case variables
-- Function components, type all props
 - Use React Bootstrap, i18n all text
 - vitest: test_*.ts files
 
