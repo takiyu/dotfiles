@@ -427,7 +427,6 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
     The first column holds n_masters windows; each remaining column
     holds an equal share of the slave windows.
     '''
-    # Declare Optional to allow reassignment via _refetch within this function
     ws: Any = ws_in
     if len(ws.leaves()) <= 1:
         return False
@@ -453,7 +452,6 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                 and ws.layout == 'splitv'))
     nodes = ws.nodes[::-1] if flip else list(ws.nodes)
 
-    caused = False
     for i, col in enumerate(nodes):
         n = len(nodes)
 
@@ -462,17 +460,18 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                 # Single column overflows: push one window right to new col
                 _move_count[0] += 1
                 focused = ws.find_focused() if ws else None
+                col.nodes[-1].command(_transform_cmd(state, 'move right'))
                 if focused:
                     focused.command('focus')
-                caused = True
-                ws = _refetch(i3, ws)
+                return True
             if n > 1:
-                caused |= _balance_cols(i3, col, state.n_masters, nodes[1])
+                if _balance_cols(i3, col, state.n_masters, nodes[1]):
+                    return True
 
         elif i == n - 1 and i > 0:  # last slave pane
             if i > 1:
-                caused |= _balance_cols(
-                    i3, nodes[i - 1], slaves_per_col, col)
+                if _balance_cols(i3, nodes[i - 1], slaves_per_col, col):
+                    return True
             if len(col.nodes) > 1:
                 if n < state.n_columns:
                     # Too few columns: expand rightward
@@ -482,8 +481,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                         _transform_cmd(state, 'move right'))
                     if focused:
                         focused.command('focus')
-                    caused = True
-                    ws = _refetch(i3, ws)
+                    return True
                 elif n > state.n_columns:
                     # Too many columns: collapse leftward
                     _move_count[0] += 1
@@ -492,15 +490,14 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                         _transform_cmd(state, 'move left'))
                     if focused:
                         focused.command('focus')
-                    caused = True
-                    ws = _refetch(i3, ws)
+                    return True
 
         else:  # middle slave pane
             if i + 1 < n:
-                caused |= _balance_cols(
-                    i3, col, slaves_per_col, nodes[i + 1])
+                if _balance_cols(i3, col, slaves_per_col, nodes[i + 1]):
+                    return True
 
-    return caused
+    return False
 
 
 # -----------------------------------------------------------------------------
@@ -709,11 +706,9 @@ def _balance_cols(i3: SwayConn, col1: Con, expected: int,
     '''
     if len(col1.nodes) < expected and col2.nodes:
         _move_container(col2.nodes[0], col1)
-        col1.nodes.append(col2.nodes.pop(0))
         return True
     if len(col1.nodes) > expected and len(col1.nodes) > 1:
         _add_to_front(i3, col2, col1.nodes[-1])
-        col2.nodes.insert(0, col1.nodes.pop(-1))
         return True
     return False
 

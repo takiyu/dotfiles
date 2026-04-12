@@ -370,18 +370,26 @@ def get_workspace_cycle(display: str) -> tuple[list[str], str]:
     workspaces: list[str] = []
     current = ''
     for _ in range(2):
-        workspaces = _get_managed_workspaces(display)
-        current = get_cur_workspace(display)
+        ws_data = _get_workspaces_data()
+        workspaces = _get_managed_workspace_names(ws_data, display)
+        current = _get_visible_workspace_name(ws_data, display)
         if current in workspaces:
             return workspaces, current
         time.sleep(0.05)
     return workspaces, current
 
 
-def _get_managed_workspaces(display: Optional[str] = None) -> list[str]:
-    '''Return user-facing workspaces, excluding internal temp workspaces.'''
-    return [name for name in get_workspaces(display)
-            if _is_managed_workspace(name)]
+def _get_managed_workspace_names(workspaces: list[dict[str, Any]],
+                                 display: Optional[str] = None) -> list[str]:
+    '''Return managed workspace names from one consistent snapshot.'''
+    names: list[str] = []
+    for ws in workspaces:
+        if display is not None and ws.get('output') != display:
+            continue
+        name = str(ws['name'])
+        if _is_managed_workspace(name):
+            names.append(name)
+    return sorted(names, key=ws_sort_key)
 
 
 def _is_managed_workspace(ws_name: str) -> bool:
