@@ -1,4 +1,4 @@
-.PHONY: all install lint test daemon setup
+.PHONY: all install lint test daemon setup helper
 
 PYTHON = .venv/bin/python
 
@@ -36,14 +36,17 @@ test:
 # ------------------------------------------------------------------------------
 # --------------------------------- Sway Run -----------------------------------
 # ------------------------------------------------------------------------------
-# Kill old daemon and start new one (blocking; sway exec_always expects this)
+# Kill old daemon and start new one (blocking; start_daemon.sh execs python)
 daemon:
-	-pkill -f 'swayhelper.daemon'
-	$(PYTHON) -m swayhelper.daemon
+	./start_daemon.sh
 
 # One-shot workspace/display setup
 setup:
 	$(PYTHON) -m swayhelper.helper setup
+
+# Helper action: ACTION=<action> [OPT=<n>]
+helper:
+	$(PYTHON) -m swayhelper.helper $(ACTION)$(if $(OPT), --opt $(OPT))
 
 
 # ------------------------------------------------------------------------------
