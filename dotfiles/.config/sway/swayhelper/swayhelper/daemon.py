@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
 '''Sway IPC tiling daemon.
 
 Self-contained replacement for the swaymonad dependency.
 Listens for sway 'nop' binding events and manages auto-tiling layouts.
-Invoke once at startup:  exec_always ~/.config/sway/sway_helper_impl.py
+Invoke once at startup:  exec_always ~/.config/sway/sway_helper_daemon.py
 '''
 import argparse
 import enum
@@ -11,15 +10,16 @@ import logging
 import math
 import shlex
 import traceback
-from typing import Optional
+from typing import Any, Callable, Optional, cast
 
 import i3ipc
+import i3ipc.events
 
+from swayhelper.constants import MOVE_MARK
 
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
-_MOVE_MARK = '__tiler_mark'   # Temporary sway mark for container relocation
 DEFAULT_LAYOUT = 'tall'       # Layout for workspaces with no explicit setting
 
 
@@ -47,6 +47,24 @@ _LAYOUT_COLS: dict[LayoutKind, int] = {
 # String-to-enum map for use with the 'set_layout' command
 _LAYOUT_BY_NAME: dict[str, LayoutKind] = {k.value: k for k in LayoutKind}
 
+# i3ipc type aliases; Con attrs are set dynamically via setattr, so alias to
+# Any to avoid false positives from pyright when stubs are not present.
+Con = Any
+WindowEvent = i3ipc.events.WindowEvent
+BindingEvent = i3ipc.events.BindingEvent
+
+# Callable type for nop command handlers (i3, event, *args)
+_CmdHandler = Callable[..., None]
+
+# Callable type matching i3ipc.Connection.on() handler signature
+_IpcHandler = Callable[
+    [i3ipc.Connection, i3ipc.events.IpcBaseEvent], None]
+
+
+def _event_con_id(event: Any) -> int:
+    '''Extract container id from a window event (dynamic attr on i3ipc.Con).'''
+    return int(event.container.id)  # type: ignore[attr-defined]
+
 
 # -----------------------------------------------------------------------------
 # ------------------------------ Workspace State ------------------------------
@@ -64,7 +82,7 @@ class WorkspaceState:
         self.transforms: set[Transform] = (
             set() if transforms is None else set(transforms))
         # Snapshot of the workspace tree captured before each window event
-        self.prev_ws: Optional[i3ipc.Con] = None
+        self.prev_ws: Optional[Con] = None
 
     @property
     def n_columns(self) -> int:
@@ -91,12 +109,12 @@ class SwayConn(i3ipc.Connection):
     round-trip, reducing latency during multi-step layout operations.
     '''
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self) -> None:
+        super().__init__()
         self._buffering = False
         self._buf: list[str] = []
 
-    def command(self, payload: str) -> list:
+    def command(self, payload: str) -> list:  # type: ignore[override]
         if self._buffering:
             self._buf.append(payload)
             return []
@@ -115,16 +133,16 @@ class SwayConn(i3ipc.Connection):
         self._buf.clear()
         return super().command(payload)
 
-    def get_tree(self) -> i3ipc.Con:
+    def get_tree(self) -> Con:  # type: ignore[override]
         # Flush pending moves before reading tree to get a consistent view
         was_buffering = self._buffering
         self.flush()
         tree = super().get_tree()
         if was_buffering:
             self.start_buffering()
-        return tree
+        return tree  # type: ignore[return-value]
 
-    def get_workspaces(self) -> list:
+    def get_workspaces(self) -> list:  # type: ignore[override]
         was_buffering = self._buffering
         self.flush()
         workspaces = super().get_workspaces()
@@ -146,7 +164,7 @@ class SwayConn(i3ipc.Connection):
 # -----------------------------------------------------------------------------
 # ----------------------------- Event Dispatchers -----------------------------
 # -----------------------------------------------------------------------------
-def on_binding(i3: SwayConn, event: i3ipc.Event) -> None:
+def on_binding(i3: SwayConn, event: BindingEvent) -> None:
     '''Dispatch 'nop' binding events to registered command handlers.'''
     commands = _parse_nop_commands(event)
     if not commands:
@@ -162,7 +180,7 @@ def on_binding(i3: SwayConn, event: i3ipc.Event) -> None:
         traceback.print_exc()
 
 
-def on_window(i3: SwayConn, event: i3ipc.Event) -> None:
+def on_window(i3: SwayConn, event: WindowEvent) -> None:
     '''Apply the workspace layout after any window new/close/move event.'''
     try:
         ws = (_get_workspace_of_event(i3, event)
@@ -180,7 +198,7 @@ def on_window(i3: SwayConn, event: i3ipc.Event) -> None:
 # ----------------------------- Command Handlers ------------------------------
 # -----------------------------------------------------------------------------
 def _cmd_promote_window(i3: SwayConn,
-                        event: i3ipc.Event, *args: str) -> None:
+                        event: BindingEvent, *args: str) -> None:
     '''Swap the focused window with the master (largest) window.'''
     ws = _get_focused_workspace(i3)
     focused = _get_focused_window(i3)
@@ -194,7 +212,7 @@ def _cmd_promote_window(i3: SwayConn,
 
 
 def _cmd_focus_master(i3: SwayConn,
-                      event: i3ipc.Event, *args: str) -> None:
+                      event: BindingEvent, *args: str) -> None:
     '''Move focus to the master (largest) window.'''
     ws = _get_focused_workspace(i3)
     if ws is None:
@@ -205,7 +223,7 @@ def _cmd_focus_master(i3: SwayConn,
 
 
 def _cmd_resize_master(i3: SwayConn,
-                       event: i3ipc.Event, *args: str) -> None:
+                       event: BindingEvent, *args: str) -> None:
     '''Resize the master window. Extra args forwarded to sway resize.'''
     ws = _get_focused_workspace(i3)
     if ws is None:
@@ -216,27 +234,27 @@ def _cmd_resize_master(i3: SwayConn,
 
 
 def _cmd_focus_next_window(i3: SwayConn,
-                           event: i3ipc.Event, *args: str) -> None:
+                           event: BindingEvent, *args: str) -> None:
     _focus_window(i3, offset=+1)
 
 
 def _cmd_focus_prev_window(i3: SwayConn,
-                           event: i3ipc.Event, *args: str) -> None:
+                           event: BindingEvent, *args: str) -> None:
     _focus_window(i3, offset=-1)
 
 
 def _cmd_swap_next_window(i3: SwayConn,
-                          event: i3ipc.Event, *args: str) -> None:
+                          event: BindingEvent, *args: str) -> None:
     _swap_with_window(i3, offset=+1)
 
 
 def _cmd_swap_prev_window(i3: SwayConn,
-                          event: i3ipc.Event, *args: str) -> None:
+                          event: BindingEvent, *args: str) -> None:
     _swap_with_window(i3, offset=-1)
 
 
 def _cmd_set_layout(i3: SwayConn,
-                    event: i3ipc.Event, *args: str) -> None:
+                    event: BindingEvent, *args: str) -> None:
     '''Change the current workspace to a named layout and re-tile.'''
     if not args:
         return
@@ -253,7 +271,7 @@ def _cmd_set_layout(i3: SwayConn,
 
 
 def _cmd_increment_masters(i3: SwayConn,
-                           event: i3ipc.Event, *args: str) -> None:
+                           event: BindingEvent, *args: str) -> None:
     '''Add one master slot to the current workspace and re-tile.'''
     ws = _get_focused_workspace(i3)
     if ws is None:
@@ -264,7 +282,7 @@ def _cmd_increment_masters(i3: SwayConn,
 
 
 def _cmd_decrement_masters(i3: SwayConn,
-                           event: i3ipc.Event, *args: str) -> None:
+                           event: BindingEvent, *args: str) -> None:
     '''Remove one master slot (minimum 1) and re-tile.'''
     ws = _get_focused_workspace(i3)
     if ws is None:
@@ -274,7 +292,7 @@ def _cmd_decrement_masters(i3: SwayConn,
     _run_layout(i3, ws.id, None)
 
 
-def _cmd_toggle_transform(i3: SwayConn, event: i3ipc.Event,
+def _cmd_toggle_transform(i3: SwayConn, event: BindingEvent,
                           transform: Transform) -> None:
     '''Toggle a geometric transformation and re-tile the workspace.'''
     ws = _get_focused_workspace(i3)
@@ -298,22 +316,22 @@ def _cmd_toggle_transform(i3: SwayConn, event: i3ipc.Event,
 
 
 def _cmd_transpose(i3: SwayConn,
-                   event: i3ipc.Event, *args: str) -> None:
+                   event: BindingEvent, *args: str) -> None:
     _cmd_toggle_transform(i3, event, Transform.TRANSPOSE)
 
 
 def _cmd_reflectx(i3: SwayConn,
-                  event: i3ipc.Event, *args: str) -> None:
+                  event: BindingEvent, *args: str) -> None:
     _cmd_toggle_transform(i3, event, Transform.REFLECTX)
 
 
 def _cmd_reflecty(i3: SwayConn,
-                  event: i3ipc.Event, *args: str) -> None:
+                  event: BindingEvent, *args: str) -> None:
     _cmd_toggle_transform(i3, event, Transform.REFLECTY)
 
 
 def _cmd_move(i3: SwayConn,
-              event: i3ipc.Event, *args: str) -> None:
+              event: BindingEvent, *args: str) -> None:
     '''Move the focused window in a direction with layout awareness.'''
     if not args:
         return
@@ -334,7 +352,7 @@ def _cmd_move(i3: SwayConn,
 
 
 def _cmd_fullscreen(i3: SwayConn,
-                    event: i3ipc.Event, *args: str) -> None:
+                    event: BindingEvent, *args: str) -> None:
     '''Toggle fullscreen and update the workspace layout snapshot.'''
     ws = _get_focused_workspace(i3)
     i3.command('fullscreen')
@@ -345,7 +363,7 @@ def _cmd_fullscreen(i3: SwayConn,
 
 
 # Map nop command names to their handler functions
-_COMMANDS: dict[str, object] = {
+_COMMANDS: dict[str, _CmdHandler] = {
     'promote_window':        _cmd_promote_window,
     'focus_master':          _cmd_focus_master,
     'resize_master':         _cmd_resize_master,
@@ -368,7 +386,7 @@ _COMMANDS: dict[str, object] = {
 # -------------------------------- Layout Engine ------------------------------
 # -----------------------------------------------------------------------------
 def _run_layout(i3: SwayConn, ws_id: int,
-                event: Optional[i3ipc.Event]) -> None:
+                event: Optional[WindowEvent]) -> None:
     '''Select and run the appropriate layout function for a workspace.'''
     state = _get_ws_state(ws_id)
     if state.kind == LayoutKind.NOP:
@@ -378,7 +396,7 @@ def _run_layout(i3: SwayConn, ws_id: int,
 
 
 def _run_nop_layout(i3: SwayConn, state: WorkspaceState,
-                    event: Optional[i3ipc.Event]) -> None:
+                    event: Optional[WindowEvent]) -> None:
     '''Nop layout: no auto-tiling; re-layout source workspace on moves.'''
     ws = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
@@ -391,32 +409,37 @@ def _run_nop_layout(i3: SwayConn, state: WorkspaceState,
 
 
 def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
-                     event: Optional[i3ipc.Event]) -> None:
+                     event: Optional[WindowEvent]) -> None:
     '''NCol layout: maintain n-column tiling on every window change.'''
-    ws = i3.get_tree().find_by_id(state.ws_id)
+    # Declare Optional to allow reassignment via _refetch throughout
+    ws: Optional[Con] = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
         return
-    if state.prev_ws is None:
-        state.prev_ws = ws
+    # prev_ws tracks the workspace snapshot before the current event
+    prev_ws: Con = state.prev_ws or ws
+    state.prev_ws = prev_ws
 
     should_reflow = (event is None)
     focused_ws_name: Optional[str] = None
 
     if event and event.change == 'new':
         ws = _refetch(i3, ws)
-        old_ids = {n.id for n in state.prev_ws.leaves()}
+        if ws is None:
+            return
+        old_ids = {n.id for n in prev_ws.leaves()}
         new_ids = {n.id for n in ws.leaves()}
         if old_ids != new_ids:
             # Place new window before the currently focused one
-            new_con = ws.find_by_id(event.container.id)
-            _swap_with_window(i3, offset=-1, win=new_con)
+            new_con = ws.find_by_id(_event_con_id(event))
+            if new_con is not None:
+                _swap_with_window(i3, offset=-1, win=new_con)
             should_reflow = True
 
     elif event and event.change == 'close':
-        old_ids = {n.id for n in state.prev_ws.leaves()}
+        old_ids = {n.id for n in prev_ws.leaves()}
         new_ids = {n.id for n in ws.leaves()}
         focused_ws = _get_focused_workspace(i3)
-        closed = state.prev_ws.find_by_id(event.container.id)
+        closed = prev_ws.find_by_id(_event_con_id(event))
         if (old_ids != new_ids
                 and focused_ws is not None
                 and focused_ws.id == state.ws_id
@@ -424,7 +447,7 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
                 and not _is_floating(closed)):
             should_reflow = True
             # Focus the window that followed the closed one in cycle order
-            next_win = closed
+            next_win: Optional[Con] = closed
             for _ in range(len(old_ids)):
                 next_win = _find_offset_window(next_win, +1)
                 if next_win and next_win.id in new_ids:
@@ -440,7 +463,7 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
         focused_ws = _get_focused_workspace(i3)
         if focused_ws:
             focused_ws_name = focused_ws.name
-        win = ws.find_by_id(event.container.id)
+        win = ws.find_by_id(_event_con_id(event))
         _swap_with_window(i3, offset=-1, win=win, focus_after=False)
         _relayout_old_workspace(i3, ws)
 
@@ -469,13 +492,15 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
 
 
 def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
-                 ws: i3ipc.Con) -> bool:
+                 ws_in: Con) -> bool:
     '''Redistribute windows into n-column layout; return True if moved.
 
     Columns are top-level vertical-split containers in the workspace.
     The first column holds n_masters windows; each remaining column
     holds an equal share of the slave windows.
     '''
+    # Declare Optional to allow reassignment via _refetch within this function
+    ws: Any = ws_in
     if len(ws.leaves()) <= 1:
         return False
 
@@ -508,8 +533,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
             if n == 1 and len(col.nodes) > state.n_masters:
                 # Single column overflows: push one window right to new col
                 _move_count[0] += 1
-                focused = ws.find_focused()
-                col.nodes[0].command(_transform_cmd(state, 'move left'))
+                focused = ws.find_focused() if ws else None
                 if focused:
                     focused.command('focus')
                 caused = True
@@ -525,7 +549,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                 if n < state.n_columns:
                     # Too few columns: expand rightward
                     _move_count[0] += 1
-                    focused = ws.find_focused()
+                    focused = ws.find_focused() if ws else None
                     col.nodes[-1].command(
                         _transform_cmd(state, 'move right'))
                     if focused:
@@ -535,7 +559,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                 elif n > state.n_columns:
                     # Too many columns: collapse leftward
                     _move_count[0] += 1
-                    focused = ws.find_focused()
+                    focused = ws.find_focused() if ws else None
                     col.nodes[0].command(
                         _transform_cmd(state, 'move left'))
                     if focused:
@@ -554,7 +578,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
 # -----------------------------------------------------------------------------
 # ----------------------------- Transformations -------------------------------
 # -----------------------------------------------------------------------------
-def _apply_transpose(i3: SwayConn, ws: i3ipc.Con) -> None:
+def _apply_transpose(i3: SwayConn, ws: Con) -> None:
     '''Physically transpose the workspace container tree.'''
     focused = _get_focused_window(i3)
     _transpose_container(i3, ws)
@@ -562,17 +586,17 @@ def _apply_transpose(i3: SwayConn, ws: i3ipc.Con) -> None:
         focused.command('focus')
 
 
-def _apply_reflectx(i3: SwayConn, ws: i3ipc.Con) -> None:
+def _apply_reflectx(i3: SwayConn, ws: Con) -> None:
     '''Flip the workspace horizontally (mirror left/right).'''
     _reflect_container(i3, ws, {'splith'})
 
 
-def _apply_reflecty(i3: SwayConn, ws: i3ipc.Con) -> None:
+def _apply_reflecty(i3: SwayConn, ws: Con) -> None:
     '''Flip the workspace vertically (mirror top/bottom).'''
     _reflect_container(i3, ws, {'splitv'})
 
 
-def _transpose_container(i3: SwayConn, con: i3ipc.Con) -> None:
+def _transpose_container(i3: SwayConn, con: Con) -> None:
     '''Recursively toggle split direction and rotate the container tree.'''
     if con.type == 'workspace' and con.nodes:
         con.nodes[0].command('layout toggle split')
@@ -588,8 +612,8 @@ def _transpose_container(i3: SwayConn, con: i3ipc.Con) -> None:
         _transpose_container(i3, child)
 
 
-def _reflect_container(i3: SwayConn, con: i3ipc.Con,
-                       split_filter: set) -> None:
+def _reflect_container(i3: SwayConn, con: Con,
+                       split_filter: set[str]) -> None:
     '''Recursively reverse child order in containers matching split_filter.'''
     if con.layout in split_filter:
         _reverse_nodes(i3, con)
@@ -645,10 +669,15 @@ def _reflecty_map_cmd(cmd: str) -> str:
 # -----------------------------------------------------------------------------
 # ------------------------------- Window Cycling ------------------------------
 # -----------------------------------------------------------------------------
-def _find_offset_window(win: i3ipc.Con,
-                        offset: int) -> Optional[i3ipc.Con]:
+def _find_offset_window(win: Optional[Con],
+                        offset: int) -> Optional[Con]:
     '''Return the leaf at cyclic offset from win within its workspace.'''
-    leaves = win.workspace().leaves()
+    if win is None:
+        return None
+    ws = win.workspace()
+    if ws is None:
+        return None
+    leaves = ws.leaves()
     if not leaves:
         return None
     ids = [leaf.id for leaf in leaves]
@@ -659,7 +688,7 @@ def _find_offset_window(win: i3ipc.Con,
     return leaves[(idx + offset) % len(leaves)]
 
 
-def _refocus_window(i3: SwayConn, win: i3ipc.Con) -> None:
+def _refocus_window(i3: SwayConn, win: Con) -> None:
     '''Re-focus win, moving the mouse cursor to its center.
 
     Temporarily focusing a neighbor and returning to win causes sway
@@ -673,7 +702,7 @@ def _refocus_window(i3: SwayConn, win: i3ipc.Con) -> None:
 
 
 def _focus_window(i3: SwayConn, offset: int,
-                  win: Optional[i3ipc.Con] = None) -> None:
+                  win: Optional[Con] = None) -> None:
     '''Focus the leaf at cyclic offset from win (or the focused window).'''
     src = win or _get_focused_window(i3)
     if src is None:
@@ -687,7 +716,7 @@ def _focus_window(i3: SwayConn, offset: int,
 
 
 def _swap_with_window(i3: SwayConn, offset: int,
-                      win: Optional[i3ipc.Con] = None,
+                      win: Optional[Con] = None,
                       focus_after: bool = True) -> None:
     '''Swap win (or focused) with the leaf at cyclic offset.'''
     src = win or _get_focused_window(i3)
@@ -706,7 +735,7 @@ def _swap_with_window(i3: SwayConn, offset: int,
 # -----------------------------------------------------------------------------
 # ----------------------------- Master Operations -----------------------------
 # -----------------------------------------------------------------------------
-def _find_biggest_window(ws: i3ipc.Con) -> Optional[i3ipc.Con]:
+def _find_biggest_window(ws: Con) -> Optional[Con]:
     '''Return the non-floating leaf with the largest screen area.'''
     leaves = [n for n in ws.leaves() if not _is_floating(n)]
     if not leaves:
@@ -717,16 +746,15 @@ def _find_biggest_window(ws: i3ipc.Con) -> Optional[i3ipc.Con]:
 # -----------------------------------------------------------------------------
 # --------------------------- Container Move Helpers --------------------------
 # -----------------------------------------------------------------------------
-def _move_container(src: i3ipc.Con, dst: i3ipc.Con) -> None:
+def _move_container(src: Con, dst: Con) -> None:
     '''Teleport src to be placed adjacent to dst using a temporary mark.'''
     _move_count[0] += 1
-    dst.command(f'mark {_MOVE_MARK}')
-    src.command(f'move window to mark {_MOVE_MARK}')
-    dst.command(f'unmark {_MOVE_MARK}')
+    dst.command(f'mark {MOVE_MARK}')
+    src.command(f'move window to mark {MOVE_MARK}')
+    dst.command(f'unmark {MOVE_MARK}')
 
 
-def _add_to_front(i3: SwayConn, container: i3ipc.Con,
-                  node: i3ipc.Con) -> None:
+def _add_to_front(i3: SwayConn, container: Con, node: Con) -> None:
     '''Prepend node to the front of container's children via pairwise swaps.'''
     _move_container(node, container)
     # node landed at the end; bubble it to position 0
@@ -734,7 +762,7 @@ def _add_to_front(i3: SwayConn, container: i3ipc.Con,
         node.command(f'swap container with con_id {old_node.id}')
 
 
-def _reverse_nodes(i3: SwayConn, con: i3ipc.Con, start: int = 0) -> None:
+def _reverse_nodes(i3: SwayConn, con: Con, start: int = 0) -> None:
     '''Reverse child order of con from index start onward, using swaps.'''
     nodes = con.nodes
     half = math.ceil((len(nodes) - start) / 2)
@@ -744,12 +772,12 @@ def _reverse_nodes(i3: SwayConn, con: i3ipc.Con, start: int = 0) -> None:
             node.command(f'swap container with con_id {mirror.id}')
 
 
-def _balance_cols(i3: SwayConn, col1: i3ipc.Con, expected: int,
-                  col2: i3ipc.Con) -> bool:
+def _balance_cols(i3: SwayConn, col1: Con, expected: int,
+                  col2: Con) -> bool:
     '''Balance windows between adjacent columns; return True if moved.
 
-    Transfers one window from col2 → col1 when col1 is short, or
-    col1 → front-of-col2 when col1 exceeds the expected count.
+    Transfers one window from col2 -> col1 when col1 is short, or
+    col1 -> front-of-col2 when col1 exceeds the expected count.
     '''
     if len(col1.nodes) < expected and col2.nodes:
         _move_container(col2.nodes[0], col1)
@@ -765,7 +793,7 @@ def _balance_cols(i3: SwayConn, col1: i3ipc.Con, expected: int,
 # -----------------------------------------------------------------------------
 # ----------------------- Sway Tree Utilities / State -------------------------
 # -----------------------------------------------------------------------------
-def _get_focused_workspace(i3: SwayConn) -> Optional[i3ipc.Con]:
+def _get_focused_workspace(i3: SwayConn) -> Optional[Con]:
     '''Return the currently focused workspace container.'''
     for reply in i3.get_workspaces():
         if reply.focused:
@@ -774,34 +802,34 @@ def _get_focused_workspace(i3: SwayConn) -> Optional[i3ipc.Con]:
     return None
 
 
-def _get_focused_window(i3: SwayConn) -> Optional[i3ipc.Con]:
+def _get_focused_window(i3: SwayConn) -> Optional[Con]:
     '''Return the currently focused leaf window.'''
     ws = _get_focused_workspace(i3)
     return ws.find_focused() if ws else None
 
 
 def _get_workspace_of_event(i3: SwayConn,
-                             event: i3ipc.Event) -> Optional[i3ipc.Con]:
+                            event: WindowEvent) -> Optional[Con]:
     '''Return the workspace that contains the event's container.'''
-    node = i3.get_tree().find_by_id(event.container.id)
+    node = i3.get_tree().find_by_id(_event_con_id(event))
     return node.workspace() if node else None
 
 
 def _refetch(i3: SwayConn,
-             con: Optional[i3ipc.Con]) -> Optional[i3ipc.Con]:
+             con: Optional[Con]) -> Optional[Con]:
     '''Re-fetch a container from the live sway tree by its id.'''
     if con is None:
         return None
     return i3.get_tree().find_by_id(con.id)
 
 
-def _is_floating(con: i3ipc.Con) -> bool:
+def _is_floating(con: Con) -> bool:
     '''Return True if the container is floating.'''
     return (con.floating in ('user_on', 'auto_on')
             or con.type == 'floating_con')
 
 
-def _relayout_old_workspace(i3: SwayConn, new_ws: i3ipc.Con) -> None:
+def _relayout_old_workspace(i3: SwayConn, new_ws: Con) -> None:
     '''Re-tile the workspace that a container moved FROM.'''
     old_ws = _get_focused_workspace(i3)
     if old_ws is None:
@@ -823,7 +851,7 @@ def _get_ws_state(ws_id: int) -> WorkspaceState:
     return _ws_states[ws_id]
 
 
-def _parse_nop_commands(event: i3ipc.Event) -> list[list[str]]:
+def _parse_nop_commands(event: BindingEvent) -> list[list[str]]:
     '''Extract nop command arg lists from a sway binding event.
 
     The binding command may chain multiple subcommands with ';' or ','.
@@ -877,10 +905,10 @@ def main() -> None:
                ' %(message)s')
 
     i3 = SwayConn()
-    i3.on(i3ipc.Event.BINDING, on_binding)
-    i3.on(i3ipc.Event.WINDOW_NEW, on_window)
-    i3.on(i3ipc.Event.WINDOW_CLOSE, on_window)
-    i3.on(i3ipc.Event.WINDOW_MOVE, on_window)
+    i3.on(i3ipc.Event.BINDING, cast(_IpcHandler, on_binding))
+    i3.on(i3ipc.Event.WINDOW_NEW, cast(_IpcHandler, on_window))
+    i3.on(i3ipc.Event.WINDOW_CLOSE, cast(_IpcHandler, on_window))
+    i3.on(i3ipc.Event.WINDOW_MOVE, cast(_IpcHandler, on_window))
     i3.main()
 
 

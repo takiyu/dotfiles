@@ -1,17 +1,22 @@
+'''Sway workspace and display navigation helper.
+
+Provides CLI commands for workspace/display focus and move operations.
+Invoke as: python3 -m swayhelper.helper <action> [--opt <value>]
+'''
 import argparse
+import json
 import os
 import os.path as osp
+import re
 import subprocess
 import time
 from typing import Optional
-import re
-import json
 
+from swayhelper.constants import N_WS
 
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
-N_WS = 10
 # Persistent file (per-user, survives sway reload but cleared on reboot)
 WS_DISP_MAP_FILE = f'/tmp/sway_wsdisp_map_{os.getuid()}.json'
 
@@ -370,7 +375,7 @@ def _is_native_ws(ws_name: str, letter: str) -> bool:
 
 def run_cmd(cmd) -> str:
     return subprocess.run(cmd, shell=True, check=True,
-                          stdout=subprocess.PIPE).stdout.decode("utf-8")
+                          stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 
 def idx2char(idx: int) -> str:
@@ -427,17 +432,18 @@ def _save_display_map(disp_to_letter: dict[str, str]):
 # -----------------------------------------------------------------------------
 # -------------------------------- Entry Point --------------------------------
 # -----------------------------------------------------------------------------
-if __name__ == '__main__':
-    # Arguments
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('action', type=str, help='Action to perform')
     parser.add_argument('--opt', type=str, help='Optional argument',
                         default='')
     argv = parser.parse_args()
 
-    # Run action
     run_action(argv.action, argv.opt)
+
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
+if __name__ == '__main__':
+    main()
