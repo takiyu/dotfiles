@@ -192,12 +192,13 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
 # -----------------------------------------------------------------------------
 def _cmd_promote_window(i3: SwayConn,
                         event: BindingEvent, *args: str) -> None:
-    '''Swap the focused window with the master (largest) window.'''
+    '''Swap the focused window with the primary master window.'''
     ws = _get_focused_workspace(i3)
     focused = _get_focused_window(i3)
     if ws is None or focused is None:
         return
-    master = _find_biggest_window(ws)
+    state = _get_ws_state(ws.id)
+    master = _get_master_window(ws, state)
     if master is None or focused.id == master.id:
         return
     focused.command(f'swap container with con_id {master.id}')
@@ -206,11 +207,12 @@ def _cmd_promote_window(i3: SwayConn,
 
 def _cmd_focus_master(i3: SwayConn,
                       event: BindingEvent, *args: str) -> None:
-    '''Move focus to the master (largest) window.'''
+    '''Move focus to the primary master window.'''
     ws = _get_focused_workspace(i3)
     if ws is None:
         return
-    master = _find_biggest_window(ws)
+    state = _get_ws_state(ws.id)
+    master = _get_master_window(ws, state)
     if master:
         master.command('focus')
 
@@ -221,7 +223,8 @@ def _cmd_resize_master(i3: SwayConn,
     ws = _get_focused_workspace(i3)
     if ws is None:
         return
-    master = _find_biggest_window(ws)
+    state = _get_ws_state(ws.id)
+    master = _get_resize_target(ws, state)
     if master:
         master.command('resize ' + ' '.join(args))
 
@@ -445,12 +448,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
     n_slave_cols = max(1, state.n_columns - 1)
     slaves_per_col = math.ceil(n_slaves / n_slave_cols) if n_slaves else 0
 
-    # Reverse column traversal order when a horizontal/vertical reflect is on
-    flip = ((Transform.REFLECTX in state.transforms
-             and ws.layout == 'splith')
-            or (Transform.REFLECTY in state.transforms
-                and ws.layout == 'splitv'))
-    nodes = ws.nodes[::-1] if flip else list(ws.nodes)
+    nodes = _get_layout_nodes(state, ws)
 
     for i, col in enumerate(nodes):
         n = len(nodes)
@@ -660,12 +658,52 @@ def _swap_with_window(i3: SwayConn, offset: int,
 # -----------------------------------------------------------------------------
 # ----------------------------- Master Operations -----------------------------
 # -----------------------------------------------------------------------------
-def _find_biggest_window(ws: Con) -> Optional[Con]:
-    '''Return the non-floating leaf with the largest screen area.'''
-    leaves = [n for n in ws.leaves() if not _is_floating(n)]
+def _get_layout_nodes(state: WorkspaceState, ws: Con) -> list[Con]:
+    '''Return top-level layout nodes in the logical master-to-slave order.'''
+    flip = ((Transform.REFLECTX in state.transforms
+             and ws.layout == 'splith')
+            or (Transform.REFLECTY in state.transforms
+                and ws.layout == 'splitv'))
+    return list(ws.nodes[::-1] if flip else ws.nodes)
+
+
+def _get_master_windows(ws: Con, state: WorkspaceState) -> list[Con]:
+    '''Return windows that belong to the logical master pane.'''
+    leaves = [node for node in ws.leaves() if not _is_floating(node)]
     if not leaves:
+        return []
+    if state.kind == LayoutKind.NOP:
+        return [leaves[0]]
+    nodes = _get_layout_nodes(state, ws)
+    if not nodes:
+        return [leaves[0]]
+    master_col = nodes[0]
+    master_leaves = [node for node in master_col.leaves()
+                     if not _is_floating(node)]
+    if not master_leaves:
+        return [leaves[0]]
+    return master_leaves
+
+
+def _get_master_window(ws: Con, state: WorkspaceState) -> Optional[Con]:
+    '''Return the primary master window for commands like focus/promote.'''
+    master_windows = _get_master_windows(ws, state)
+    if not master_windows:
         return None
-    return max(leaves, key=lambda n: n.rect.width * n.rect.height)
+    return master_windows[0]
+
+
+def _get_resize_target(ws: Con, state: WorkspaceState) -> Optional[Con]:
+    '''Return a stable resize target within the master pane.'''
+    master_windows = _get_master_windows(ws, state)
+    if not master_windows:
+        return None
+    focused = ws.find_focused()
+    if focused is not None:
+        for node in master_windows:
+            if node.id == focused.id:
+                return node
+    return master_windows[0]
 
 
 # -----------------------------------------------------------------------------

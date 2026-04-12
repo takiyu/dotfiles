@@ -108,3 +108,88 @@ def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
     assert daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws)
     assert slave.commands == ['move right']
     assert master.commands == ['focus']
+
+
+def test_get_resize_target_uses_master_pane_not_biggest_window() -> None:
+    class FakeLeaf:
+        def __init__(self, con_id: int, area: int = 1) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.rect = SimpleNamespace(width=area, height=1)
+
+        def leaves(self) -> list['FakeLeaf']:
+            return [self]
+
+    class FakeColumn:
+        def __init__(self, nodes: list[FakeLeaf]) -> None:
+            self.nodes = nodes
+
+        def leaves(self) -> list[FakeLeaf]:
+            return list(self.nodes)
+
+    class FakeWorkspace:
+        def __init__(self, nodes: list[FakeColumn], focused: FakeLeaf) -> None:
+            self.nodes = nodes
+            self.layout = 'splith'
+            self._focused = focused
+
+        def leaves(self) -> list[FakeLeaf]:
+            leaves: list[FakeLeaf] = []
+            for node in self.nodes:
+                leaves.extend(node.leaves())
+            return leaves
+
+        def find_focused(self) -> FakeLeaf:
+            return self._focused
+
+    master = FakeLeaf(1, area=20)
+    slave = FakeLeaf(2, area=100)
+    ws = FakeWorkspace([FakeColumn([master]), FakeColumn([slave])], slave)
+    state = daemon.WorkspaceState(ws_id=1)
+
+    target = daemon._get_resize_target(ws, state)
+    assert target is not None
+    assert target.id == master.id
+
+
+def test_get_master_window_respects_reflectx_order() -> None:
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+
+        def leaves(self) -> list['FakeLeaf']:
+            return [self]
+
+    class FakeColumn:
+        def __init__(self, node: FakeLeaf) -> None:
+            self.nodes = [node]
+
+        def leaves(self) -> list[FakeLeaf]:
+            return list(self.nodes)
+
+    class FakeWorkspace:
+        def __init__(self, nodes: list[FakeColumn]) -> None:
+            self.nodes = nodes
+            self.layout = 'splith'
+
+        def leaves(self) -> list[FakeLeaf]:
+            leaves: list[FakeLeaf] = []
+            for node in self.nodes:
+                leaves.extend(node.leaves())
+            return leaves
+
+        def find_focused(self) -> None:
+            return None
+
+    left = FakeLeaf(1)
+    right = FakeLeaf(2)
+    ws = FakeWorkspace([FakeColumn(left), FakeColumn(right)])
+    state = daemon.WorkspaceState(
+        ws_id=1, transforms={daemon.Transform.REFLECTX})
+
+    master = daemon._get_master_window(ws, state)
+    assert master is not None
+    assert master.id == right.id
