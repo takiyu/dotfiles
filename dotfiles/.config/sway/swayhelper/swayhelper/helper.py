@@ -12,8 +12,6 @@ import subprocess
 import time
 from typing import Any, Optional
 
-from swayhelper.constants import N_WS
-
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
@@ -129,8 +127,9 @@ def focus_nei_workspace(offset: int = 1) -> None:
     ''' Focus to neighbor workspace on current display. '''
     cur_disp = get_cur_display()
     cur_ws = get_cur_workspace(cur_disp)
-    nxt_ws = re.sub(r'\d+', lambda x: str((int(x.group()) + offset) % N_WS),
-                    cur_ws)
+    nxt_ws = _shift_workspace_name(cur_ws, offset)
+    if nxt_ws == cur_ws:
+        return
     # Record existing workspaces before creation
     ws_before = set(get_workspaces_raw(cur_disp))
     focus_workspace(nxt_ws)
@@ -143,8 +142,9 @@ def move_nei_workspace(offset: int = 1) -> None:
     ''' Move to neighbor workspace on current display. '''
     cur_disp = get_cur_display()
     cur_ws = get_cur_workspace(cur_disp)
-    nxt_ws = re.sub(r'\d+', lambda x: str((int(x.group()) + offset) % N_WS),
-                    cur_ws)
+    nxt_ws = _shift_workspace_name(cur_ws, offset)
+    if nxt_ws == cur_ws:
+        return
     # Record existing workspaces before creation
     ws_before = set(get_workspaces_raw(cur_disp))
     move_workspace(nxt_ws)
@@ -358,6 +358,15 @@ def ws_sort_key(name: str) -> tuple:
     if match:
         return (match.group(1), int(match.group(2)))
     return (name, 0)
+
+
+def _shift_workspace_name(ws_name: str, offset: int) -> str:
+    '''Shift a workspace suffix without wrapping to a fixed maximum.'''
+    match = re.match(r'^([A-Z]*)(\d+)$', ws_name)
+    if match is None:
+        return ws_name
+    next_index = max(0, int(match.group(2)) + offset)
+    return f'{match.group(1)}{next_index}'
 
 
 def get_workspace_cycle(display: str) -> tuple[list[str], str]:
