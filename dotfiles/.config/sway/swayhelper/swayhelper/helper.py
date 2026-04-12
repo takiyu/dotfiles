@@ -10,7 +10,7 @@ import os.path as osp
 import re
 import subprocess
 import time
-from typing import Optional
+from typing import Any, Optional
 
 from swayhelper.constants import N_WS
 
@@ -24,7 +24,7 @@ WS_DISP_MAP_FILE = f'/tmp/sway_wsdisp_map_{os.getuid()}.json'
 # -----------------------------------------------------------------------------
 # ---------------------------- Action Entry Point -----------------------------
 # -----------------------------------------------------------------------------
-def run_action(action: str, opt: str = ''):
+def run_action(action: str, opt: str = '') -> None:
     if action == 'setup':
         setup_workspace_names()
     elif action == 'focus_next_workspace':
@@ -58,7 +58,7 @@ def run_action(action: str, opt: str = ''):
 # -----------------------------------------------------------------------------
 # --------------------- High-level Actions Implementation ---------------------
 # -----------------------------------------------------------------------------
-def setup_workspace_names():
+def setup_workspace_names() -> None:
     ''' Rename workspaces to A0, A1, B0, B1, etc. based on display map. '''
     all_disps = get_displays()
     # Ensure persistent display-letter map is up to date
@@ -99,7 +99,7 @@ def setup_workspace_names():
 
 
 def _restore_workspace_assignments(all_disps: list[str],
-                                   disp_to_letter: dict[str, str]):
+                                   disp_to_letter: dict[str, str]) -> None:
     ''' Move workspaces with known letter prefixes to their home display. '''
     active_outputs = set(all_disps)
     # Build reverse map: letter -> output (only for currently active displays)
@@ -125,7 +125,7 @@ def _restore_workspace_assignments(all_disps: list[str],
         focus_workspace(orig_focused)
 
 
-def focus_nei_workspace(offset: int = 1):
+def focus_nei_workspace(offset: int = 1) -> None:
     ''' Focus to neighbor workspace on current display. '''
     cur_disp = get_cur_display()
     cur_ws = get_cur_workspace(cur_disp)
@@ -139,7 +139,7 @@ def focus_nei_workspace(offset: int = 1):
         fix_workspace_order(cur_disp, nxt_ws)
 
 
-def move_nei_workspace(offset: int = 1):
+def move_nei_workspace(offset: int = 1) -> None:
     ''' Move to neighbor workspace on current display. '''
     cur_disp = get_cur_display()
     cur_ws = get_cur_workspace(cur_disp)
@@ -153,7 +153,7 @@ def move_nei_workspace(offset: int = 1):
         fix_workspace_order(cur_disp, nxt_ws)
 
 
-def fix_workspace_order(display: str, new_ws: str):
+def fix_workspace_order(display: str, new_ws: str) -> None:
     ''' Reorder sway's workspace list after a new one is created mid-sequence.
 
     When B1 is created after B0,B2, sway appends it: B0,B2,B1.
@@ -194,16 +194,17 @@ def fix_workspace_order(display: str, new_ws: str):
             move_window_to_workspace(win_id, ws)
 
 
-def focus_valid_nei_workspace(offset: int = 1):
+def focus_valid_nei_workspace(offset: int = 1) -> None:
     ''' Focus to valid neighbor workspace on current display. '''
     cur_disp = get_cur_display()
-    ws = get_workspaces(cur_disp)
-    cur_ws = get_cur_workspace(cur_disp)
+    ws, cur_ws = get_workspace_cycle(cur_disp)
+    if not ws or cur_ws not in ws:
+        return
     nxt_ws = ws[(ws.index(cur_ws) + offset) % len(ws)]
     focus_workspace(nxt_ws)
 
 
-def focus_nei_display(offset: int = 1):
+def focus_nei_display(offset: int = 1) -> None:
     ''' Focus to neighbor display. '''
     all_disps = get_displays()
     cur_disp = get_cur_display()
@@ -212,7 +213,7 @@ def focus_nei_display(offset: int = 1):
     focus_workspace(nxt_ws)
 
 
-def move_nei_display(offset: int = 1):
+def move_nei_display(offset: int = 1) -> None:
     ''' Move to neighbor display. '''
     all_disps = get_displays()
     cur_disp = get_cur_display()
@@ -221,7 +222,7 @@ def move_nei_display(offset: int = 1):
     move_workspace(nxt_ws)
 
 
-def focus_display(index: int):
+def focus_display(index: int) -> None:
     ''' Focus to display by index. '''
     all_disps = get_displays()
     nxt_disp = all_disps[index % len(all_disps)]
@@ -229,7 +230,7 @@ def focus_display(index: int):
     focus_workspace(nxt_ws)
 
 
-def move_display(index: int):
+def move_display(index: int) -> None:
     ''' Move to display by index. '''
     all_disps = get_displays()
     nxt_disp = all_disps[index % len(all_disps)]
@@ -240,7 +241,7 @@ def move_display(index: int):
 # -----------------------------------------------------------------------------
 # ---------------------------- Sway Getter Wrappers ---------------------------
 # -----------------------------------------------------------------------------
-def get_displays() -> list:
+def get_displays() -> list[str]:
     # Get display info with positions
     output_json = run_cmd("swaymsg -t get_outputs")
     outputs = json.loads(output_json)
@@ -264,25 +265,25 @@ def get_cur_display() -> str:
                    "select(.focused) | .name'").strip()
 
 
-def get_workspaces(display: Optional[str] = None) -> list:
+def get_workspaces(display: Optional[str] = None) -> list[str]:
     ''' Get workspaces sorted by name. '''
     return sorted(get_workspaces_raw(display), key=ws_sort_key)
 
 
-def get_workspaces_raw(display: Optional[str] = None) -> list:
+def get_workspaces_raw(display: Optional[str] = None) -> list[str]:
     ''' Get workspaces in sway's natural (creation) order. '''
-    if display is None:
-        return run_cmd("swaymsg -t get_workspaces | jq -r '.[] | "
-                       ".name'").splitlines()
-    else:
-        return run_cmd("swaymsg -t get_workspaces | jq -r '.[] | "
-                       f"select(.output == \"{display}\") | "
-                       ".name'").splitlines()
+    workspaces = _get_workspaces_data()
+    names: list[str] = []
+    for ws in workspaces:
+        if display is not None and ws.get('output') != display:
+            continue
+        names.append(str(ws['name']))
+    return names
 
 
 def _get_all_workspaces_with_output() -> list[tuple[str, str]]:
     ''' Return (workspace_name, output_name) pairs for all workspaces. '''
-    workspaces = json.loads(run_cmd('swaymsg -t get_workspaces'))
+    workspaces = _get_workspaces_data()
     return [(ws['name'], ws['output']) for ws in workspaces]
 
 
@@ -321,34 +322,29 @@ def _collect_windows(node: dict) -> list:
 
 
 def get_cur_workspace(display: Optional[str] = None) -> str:
+    workspaces = _get_workspaces_data()
     if display is None:
-        # Current display's active workspace
-        return run_cmd("swaymsg -t get_workspaces | jq -r '.[] | " +
-                       "select(.focused) | .name'").strip()
-    else:
-        # Showing workspace on a display
-        return run_cmd("swaymsg -t get_outputs | jq -r '.[] | " +
-                       f"select(.name == \"{display}\") | " +
-                       ".current_workspace'").strip()
+        return _get_focused_workspace_name(workspaces)
+    return _get_visible_workspace_name(workspaces, display)
 
 
 # -----------------------------------------------------------------------------
 # ---------------------------- Sway Action Wrappers ---------------------------
 # -----------------------------------------------------------------------------
-def rename_workspace(old_name: str, new_name: str):
+def rename_workspace(old_name: str, new_name: str) -> None:
     run_cmd(f"swaymsg 'rename workspace {old_name} to {new_name}'")
 
 
-def focus_workspace(ws: str):
+def focus_workspace(ws: str) -> None:
     run_cmd(f"swaymsg 'workspace {ws}'")
 
 
-def move_workspace(ws: str):
+def move_workspace(ws: str) -> None:
     run_cmd(f"swaymsg 'move container to workspace {ws}'")  # Move
     focus_workspace(ws)  # Focus
 
 
-def move_window_to_workspace(win_id: int, ws_name: str):
+def move_window_to_workspace(win_id: int, ws_name: str) -> None:
     ''' Move a specific window by con_id to a target workspace. '''
     run_cmd(f"swaymsg '[con_id={win_id}] move to workspace {ws_name}'")
 
@@ -364,6 +360,36 @@ def ws_sort_key(name: str) -> tuple:
     return (name, 0)
 
 
+def get_workspace_cycle(display: str) -> tuple[list[str], str]:
+    '''Return managed workspaces and the visible workspace for a display.
+
+    Sway can briefly expose a stale current workspace right after a close or
+    workspace deletion. Retry once so workspace-cycle bindings remain
+    single-shot.
+    '''
+    workspaces: list[str] = []
+    current = ''
+    for _ in range(2):
+        workspaces = _get_managed_workspaces(display)
+        current = get_cur_workspace(display)
+        if current in workspaces:
+            return workspaces, current
+        time.sleep(0.05)
+    return workspaces, current
+
+
+def _get_managed_workspaces(display: Optional[str] = None) -> list[str]:
+    '''Return user-facing workspaces, excluding internal temp workspaces.'''
+    return [name for name in get_workspaces(display)
+            if _is_managed_workspace(name)]
+
+
+def _is_managed_workspace(ws_name: str) -> bool:
+    '''Return True for normal named workspaces used by the helper.'''
+    return bool(re.match(r'^[A-Z]+\d+$', ws_name)
+                or re.match(r'^\d+$', ws_name))
+
+
 def _is_native_ws(ws_name: str, letter: str) -> bool:
     ''' Return True if workspace belongs to the display with given letter. '''
     if re.match(rf'^{letter}\d+$', ws_name):
@@ -373,7 +399,35 @@ def _is_native_ws(ws_name: str, letter: str) -> bool:
     return False
 
 
-def run_cmd(cmd) -> str:
+def _get_workspaces_data() -> list[dict[str, Any]]:
+    '''Return the raw `get_workspaces` JSON payload as Python objects.'''
+    data = json.loads(run_cmd('swaymsg -t get_workspaces'))
+    if not isinstance(data, list):
+        raise ValueError('swaymsg -t get_workspaces did not return a list')
+    return data
+
+
+def _get_focused_workspace_name(workspaces: list[dict[str, Any]]) -> str:
+    '''Return the focused workspace name from get_workspaces payload.'''
+    for ws in workspaces:
+        if ws.get('focused'):
+            return str(ws['name'])
+    raise RuntimeError('No focused workspace found')
+
+
+def _get_visible_workspace_name(workspaces: list[dict[str, Any]],
+                                display: str) -> str:
+    '''Return the visible workspace name for a specific display.'''
+    for ws in workspaces:
+        if ws.get('output') == display and ws.get('visible'):
+            return str(ws['name'])
+    for ws in workspaces:
+        if ws.get('output') == display and ws.get('focused'):
+            return str(ws['name'])
+    raise RuntimeError(f'No visible workspace found for display: {display}')
+
+
+def run_cmd(cmd: str) -> str:
     return subprocess.run(cmd, shell=True, check=True,
                           stdout=subprocess.PIPE).stdout.decode('utf-8')
 
@@ -423,7 +477,7 @@ def _load_display_map() -> dict[str, str]:
         return {}
 
 
-def _save_display_map(disp_to_letter: dict[str, str]):
+def _save_display_map(disp_to_letter: dict[str, str]) -> None:
     ''' Save display map to persistent JSON file. '''
     with open(WS_DISP_MAP_FILE, 'w') as f:
         json.dump(disp_to_letter, f, indent=2)

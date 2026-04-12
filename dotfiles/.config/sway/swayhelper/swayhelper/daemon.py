@@ -60,15 +60,11 @@ _CmdHandler = Callable[..., None]
 _IpcHandler = Callable[
     [i3ipc.Connection, i3ipc.events.IpcBaseEvent], None]
 
-
-def _event_con_id(event: Any) -> int:
-    '''Extract container id from a window event (dynamic attr on i3ipc.Con).'''
-    return int(event.container.id)  # type: ignore[attr-defined]
-
-
 # -----------------------------------------------------------------------------
 # ------------------------------ Workspace State ------------------------------
 # -----------------------------------------------------------------------------
+
+
 class WorkspaceState:
     '''Tiling layout state for a single sway workspace.'''
 
@@ -81,8 +77,6 @@ class WorkspaceState:
         self.n_masters = n_masters
         self.transforms: set[Transform] = (
             set() if transforms is None else set(transforms))
-        # Snapshot of the workspace tree captured before each window event
-        self.prev_ws: Optional[Con] = None
 
     @property
     def n_columns(self) -> int:
@@ -181,14 +175,13 @@ def on_binding(i3: SwayConn, event: BindingEvent) -> None:
 
 
 def on_window(i3: SwayConn, event: WindowEvent) -> None:
-    '''Apply the workspace layout after any window new/close/move event.'''
+    '''Re-tile existing workspaces after any relevant window event.'''
     try:
-        ws = (_get_workspace_of_event(i3, event)
-              or _get_focused_workspace(i3))
-        if ws is None:
+        if event.change == 'move' and _move_count[0] > 0:
+            _move_count[0] -= 1
             return
         i3.start_buffering()
-        _run_layout(i3, ws.id, event)
+        _run_existing_layouts(i3)
         i3.flush()
     except Exception:
         traceback.print_exc()
@@ -267,7 +260,7 @@ def _cmd_set_layout(i3: SwayConn,
         return
     state = _get_ws_state(ws.id)
     state.kind = kind
-    _run_layout(i3, ws.id, None)
+    _run_layout(i3, ws.id)
 
 
 def _cmd_increment_masters(i3: SwayConn,
@@ -278,7 +271,7 @@ def _cmd_increment_masters(i3: SwayConn,
         return
     state = _get_ws_state(ws.id)
     state.n_masters += 1
-    _run_layout(i3, ws.id, None)
+    _run_layout(i3, ws.id)
 
 
 def _cmd_decrement_masters(i3: SwayConn,
@@ -289,7 +282,7 @@ def _cmd_decrement_masters(i3: SwayConn,
         return
     state = _get_ws_state(ws.id)
     state.n_masters = max(1, state.n_masters - 1)
-    _run_layout(i3, ws.id, None)
+    _run_layout(i3, ws.id)
 
 
 def _cmd_toggle_transform(i3: SwayConn, event: BindingEvent,
@@ -312,7 +305,7 @@ def _cmd_toggle_transform(i3: SwayConn, event: BindingEvent,
             _apply_reflectx(i3, ws_fresh)
         elif transform == Transform.REFLECTY:
             _apply_reflecty(i3, ws_fresh)
-    _run_layout(i3, ws.id, None)
+    _run_layout(i3, ws.id)
 
 
 def _cmd_transpose(i3: SwayConn,
@@ -353,13 +346,8 @@ def _cmd_move(i3: SwayConn,
 
 def _cmd_fullscreen(i3: SwayConn,
                     event: BindingEvent, *args: str) -> None:
-    '''Toggle fullscreen and update the workspace layout snapshot.'''
-    ws = _get_focused_workspace(i3)
+    '''Toggle fullscreen on the focused window.'''
     i3.command('fullscreen')
-    if ws:
-        ws_fresh = _refetch(i3, ws)
-        if ws_fresh:
-            _get_ws_state(ws.id).prev_ws = ws_fresh
 
 
 # Map nop command names to their handler functions
@@ -385,110 +373,50 @@ _COMMANDS: dict[str, _CmdHandler] = {
 # -----------------------------------------------------------------------------
 # -------------------------------- Layout Engine ------------------------------
 # -----------------------------------------------------------------------------
-def _run_layout(i3: SwayConn, ws_id: int,
-                event: Optional[WindowEvent]) -> None:
+def _run_existing_layouts(i3: SwayConn) -> None:
+    '''Re-tile each currently existing workspace with managed state.'''
+    for reply in i3.get_workspaces():
+        _run_layout(i3, int(reply.ipc_data['id']))
+
+
+def _run_layout(i3: SwayConn, ws_id: int) -> None:
     '''Select and run the appropriate layout function for a workspace.'''
     state = _get_ws_state(ws_id)
     if state.kind == LayoutKind.NOP:
-        _run_nop_layout(i3, state, event)
+        _run_nop_layout(i3, state)
     else:
-        _run_ncol_layout(i3, state, event)
+        _run_ncol_layout(i3, state)
 
 
-def _run_nop_layout(i3: SwayConn, state: WorkspaceState,
-                    event: Optional[WindowEvent]) -> None:
-    '''Nop layout: no auto-tiling; re-layout source workspace on moves.'''
+def _run_nop_layout(i3: SwayConn, state: WorkspaceState) -> None:
+    '''Nop layout: preserve manual placement and current focus.'''
     ws = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
         return
-    if event and event.change == 'move':
-        _relayout_old_workspace(i3, ws)
     focused = ws.find_focused()
     if focused:
         focused.command('focus')
 
 
-def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
-                     event: Optional[WindowEvent]) -> None:
-    '''NCol layout: maintain n-column tiling on every window change.'''
-    # Declare Optional to allow reassignment via _refetch throughout
+def _run_ncol_layout(i3: SwayConn, state: WorkspaceState) -> None:
+    '''NCol layout: deterministically rebalance the whole workspace tree.'''
     ws: Optional[Con] = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
         return
-    # prev_ws tracks the workspace snapshot before the current event
-    prev_ws: Con = state.prev_ws or ws
-    state.prev_ws = prev_ws
 
-    should_reflow = (event is None)
-    focused_ws_name: Optional[str] = None
-
-    if event and event.change == 'new':
+    while True:
         ws = _refetch(i3, ws)
         if ws is None:
             return
-        old_ids = {n.id for n in prev_ws.leaves()}
-        new_ids = {n.id for n in ws.leaves()}
-        if old_ids != new_ids:
-            # Place new window before the currently focused one
-            new_con = ws.find_by_id(_event_con_id(event))
-            if new_con is not None:
-                _swap_with_window(i3, offset=-1, win=new_con)
-            should_reflow = True
-
-    elif event and event.change == 'close':
-        old_ids = {n.id for n in prev_ws.leaves()}
-        new_ids = {n.id for n in ws.leaves()}
-        focused_ws = _get_focused_workspace(i3)
-        closed = prev_ws.find_by_id(_event_con_id(event))
-        if (old_ids != new_ids
-                and focused_ws is not None
-                and focused_ws.id == state.ws_id
-                and closed is not None
-                and not _is_floating(closed)):
-            should_reflow = True
-            # Focus the window that followed the closed one in cycle order
-            next_win: Optional[Con] = closed
-            for _ in range(len(old_ids)):
-                next_win = _find_offset_window(next_win, +1)
-                if next_win and next_win.id in new_ids:
-                    next_win.command('focus')
-                    break
-
-    elif event and event.change == 'move':
-        if _move_count[0] > 0:
-            # This move was triggered by the layout engine; skip reflow
-            _move_count[0] -= 1
-            return
-        should_reflow = True
-        focused_ws = _get_focused_workspace(i3)
-        if focused_ws:
-            focused_ws_name = focused_ws.name
-        win = ws.find_by_id(_event_con_id(event))
-        _swap_with_window(i3, offset=-1, win=win, focus_after=False)
-        _relayout_old_workspace(i3, ws)
-
-    # Iteratively reflow until the layout is stable
-    while should_reflow:
-        ws = _refetch(i3, ws)
-        if ws is None:
+        if not _reflow_ncol(i3, state, ws):
             break
-        should_reflow = _reflow_ncol(i3, state, ws)
 
-    # Restore focus to the workspace active before the reflow
-    if focused_ws_name:
-        i3.command(f'workspace {focused_ws_name}')
-
-    # Move the mouse cursor to the center of the focused window
     ws = _refetch(i3, ws)
     focused_ws = _get_focused_workspace(i3)
     if ws and focused_ws and ws.id == focused_ws.id:
         focused = ws.find_focused()
         if focused:
             _refocus_window(i3, focused)
-
-    ws = _refetch(i3, ws)
-    if ws:
-        state.prev_ws = ws
 
 
 def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
@@ -808,13 +736,6 @@ def _get_focused_window(i3: SwayConn) -> Optional[Con]:
     return ws.find_focused() if ws else None
 
 
-def _get_workspace_of_event(i3: SwayConn,
-                            event: WindowEvent) -> Optional[Con]:
-    '''Return the workspace that contains the event's container.'''
-    node = i3.get_tree().find_by_id(_event_con_id(event))
-    return node.workspace() if node else None
-
-
 def _refetch(i3: SwayConn,
              con: Optional[Con]) -> Optional[Con]:
     '''Re-fetch a container from the live sway tree by its id.'''
@@ -827,20 +748,6 @@ def _is_floating(con: Con) -> bool:
     '''Return True if the container is floating.'''
     return (con.floating in ('user_on', 'auto_on')
             or con.type == 'floating_con')
-
-
-def _relayout_old_workspace(i3: SwayConn, new_ws: Con) -> None:
-    '''Re-tile the workspace that a container moved FROM.'''
-    old_ws = _get_focused_workspace(i3)
-    if old_ws is None:
-        return
-    if old_ws.id == new_ws.id:
-        # Cross-output move: navigate back temporarily to find the source ws
-        i3.command('workspace back_and_forth')
-        old_ws = _get_focused_workspace(i3)
-        i3.command('workspace back_and_forth')
-    if old_ws:
-        _run_layout(i3, old_ws.id, None)
 
 
 def _get_ws_state(ws_id: int) -> WorkspaceState:
