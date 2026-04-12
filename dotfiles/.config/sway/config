@@ -8,10 +8,9 @@ set $suspend "bash -c suspend.sh"
 
 ### Startup applications
 exec fcitx5 -r -d
-# Start swaymonad
-exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
+# Start sway tiling daemon
+exec_always "pkill -f 'python3? .+/sway_helper_impl.py'; ~/.config/sway/sway_helper_impl.py"
 # Initial setups
-exec_always nop set_layout tall
 exec_always "python3 ~/.config/sway/sway_helper.py setup"
 
 ### Output configuration
