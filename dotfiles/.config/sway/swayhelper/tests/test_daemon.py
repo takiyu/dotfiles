@@ -153,6 +153,62 @@ def test_get_resize_target_uses_master_pane_not_biggest_window() -> None:
     assert target.id == master.id
 
 
+def test_run_ncol_layout_resets_state_on_single_window() -> None:
+    class FakeLeaf:
+        floating = 'user_off'
+        type = 'con'
+
+    class FakeWorkspace:
+        def leaves(self) -> list[FakeLeaf]:
+            return [FakeLeaf()]
+
+    class FakeTree:
+        def find_by_id(self, _ws_id: int) -> FakeWorkspace:
+            return FakeWorkspace()
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    state = daemon.WorkspaceState(
+        ws_id=99, kind=daemon.LayoutKind.THREE_COL,
+        n_masters=2, transforms={daemon.Transform.REFLECTX})
+
+    daemon._run_ncol_layout(cast(daemon.SwayConn, FakeConn()), state)
+
+    assert state.kind == daemon._LAYOUT_BY_NAME.get(daemon.DEFAULT_LAYOUT)
+    assert state.n_masters == 1
+    assert state.transforms == set()
+
+
+def test_run_nop_layout_resets_state_on_single_window() -> None:
+    class FakeLeaf:
+        floating = 'user_off'
+        type = 'con'
+
+    class FakeWorkspace:
+        def leaves(self) -> list[FakeLeaf]:
+            return [FakeLeaf()]
+
+    class FakeTree:
+        def find_by_id(self, _ws_id: int) -> FakeWorkspace:
+            return FakeWorkspace()
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    state = daemon.WorkspaceState(
+        ws_id=99, kind=daemon.LayoutKind.NOP,
+        n_masters=3, transforms={daemon.Transform.TRANSPOSE})
+
+    daemon._run_nop_layout(cast(daemon.SwayConn, FakeConn()), state)
+
+    assert state.kind == daemon._LAYOUT_BY_NAME.get(daemon.DEFAULT_LAYOUT)
+    assert state.n_masters == 1
+    assert state.transforms == set()
+
+
 def test_get_master_window_respects_reflectx_order() -> None:
     class FakeLeaf:
         def __init__(self, con_id: int) -> None:

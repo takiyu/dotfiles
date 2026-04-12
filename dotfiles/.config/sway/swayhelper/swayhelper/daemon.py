@@ -396,6 +396,10 @@ def _run_nop_layout(i3: SwayConn, state: WorkspaceState) -> None:
     ws = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
         return
+    # Reset to default layout when only one tiling window remains
+    if len([leaf for leaf in ws.leaves() if not _is_floating(leaf)]) <= 1:
+        _reset_ws_state(state)
+        return
     focused = ws.find_focused()
     if focused:
         focused.command('focus')
@@ -405,6 +409,10 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState) -> None:
     '''NCol layout: deterministically rebalance the whole workspace tree.'''
     ws: Optional[Con] = i3.get_tree().find_by_id(state.ws_id)
     if ws is None:
+        return
+    # Reset to default layout when only one tiling window remains
+    if len([leaf for leaf in ws.leaves() if not _is_floating(leaf)]) <= 1:
+        _reset_ws_state(state)
         return
 
     while True:
@@ -789,6 +797,13 @@ def _get_ws_state(ws_id: int) -> WorkspaceState:
         kind = _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT, LayoutKind.TALL)
         _ws_states[ws_id] = WorkspaceState(ws_id=ws_id, kind=kind)
     return _ws_states[ws_id]
+
+
+def _reset_ws_state(state: WorkspaceState) -> None:
+    '''Reset workspace layout state to default settings.'''
+    state.kind = _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT, LayoutKind.TALL)
+    state.n_masters = 1
+    state.transforms.clear()
 
 
 def _parse_nop_commands(event: BindingEvent) -> list[list[str]]:
