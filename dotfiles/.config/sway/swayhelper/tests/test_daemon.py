@@ -512,3 +512,167 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
 
     assert refocused_ids == [MOVED_WIN_ID], (
         f'Expected focus on moved window {MOVED_WIN_ID}, got {refocused_ids}')
+
+
+# -----------------------------------------------------------------------------
+# --------- on_window move / _swap_moved_before_active -----------------------
+# -----------------------------------------------------------------------------
+def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
+    '''User-initiated move swaps moved window before active, then reflows.'''
+    actions: list[str] = []
+
+    class FakeConn:
+        def start_buffering(self) -> None:
+            actions.append('start')
+
+        def flush(self) -> None:
+            actions.append('flush')
+
+    daemon._move_count[0] = 0
+    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+                        lambda _i3, _id: actions.append('swap'))
+    monkeypatch.setattr(daemon, '_run_existing_layouts',
+                        lambda _i3: actions.append('run'))
+
+    event = cast(Any, SimpleNamespace(change='move',
+                                      container=SimpleNamespace(id=77)))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+
+    assert actions == ['start', 'swap', 'run', 'flush']
+
+
+def test_swap_moved_before_active_swaps_with_predecessor(
+        monkeypatch) -> None:
+    '''_swap_moved_before_active swaps moved window with the leaf before it.'''
+    MOVED_ID = 30
+    PREV_ID = 20
+    AFTER_ID = 40
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    prev_leaf = FakeLeaf(PREV_ID)
+    moved_leaf = FakeLeaf(MOVED_ID)
+    after_leaf = FakeLeaf(AFTER_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return moved_leaf if con_id == MOVED_ID else None
+
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [prev_leaf, moved_leaf, after_leaf]
+
+    moved_leaf.workspace = (  # type: ignore[method-assign]
+        lambda: FakeWsCon())
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_moved_before_active(
+        cast(daemon.SwayConn, FakeConn()), MOVED_ID)
+
+    assert f'swap container with con_id {PREV_ID}' in moved_leaf.commands
+    assert 'focus' in moved_leaf.commands
+
+
+def test_swap_moved_before_active_swaps_when_predecessor_is_last(
+        monkeypatch) -> None:
+    '''_swap_moved_before_active swaps even when moved window is last.
+
+    Unlike _swap_new_before_prev, there is no idx==len-1 early-return.
+    '''
+    MOVED_ID = 30
+    PREV_ID = 20
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    prev_leaf = FakeLeaf(PREV_ID)
+    moved_leaf = FakeLeaf(MOVED_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return moved_leaf if con_id == MOVED_ID else None
+
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [prev_leaf, moved_leaf]
+
+    moved_leaf.workspace = (  # type: ignore[method-assign]
+        lambda: FakeWsCon())
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_moved_before_active(
+        cast(daemon.SwayConn, FakeConn()), MOVED_ID)
+
+    assert f'swap container with con_id {PREV_ID}' in moved_leaf.commands
+    assert 'focus' in moved_leaf.commands
+
+
+def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
+    '''_swap_moved_before_active does nothing when moved window is first.'''
+    MOVED_ID = 10
+    OTHER_ID = 20
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    moved_leaf = FakeLeaf(MOVED_ID)
+    other_leaf = FakeLeaf(OTHER_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return moved_leaf if con_id == MOVED_ID else None
+
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [moved_leaf, other_leaf]
+
+    moved_leaf.workspace = (  # type: ignore[method-assign]
+        lambda: FakeWsCon())
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_moved_before_active(
+        cast(daemon.SwayConn, FakeConn()), MOVED_ID)
+
+    assert moved_leaf.commands == []
+
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------

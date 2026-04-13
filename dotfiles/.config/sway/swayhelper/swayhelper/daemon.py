@@ -187,6 +187,11 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
             # layout engine settles on the intended final order in one pass.
             container: Any = event.container
             _swap_new_before_prev(i3, container.id)
+        elif event.change == 'move':
+            # User-initiated move (_move_count == 0): swap the moved window
+            # before the previously-active window on the destination workspace.
+            container = event.container
+            _swap_moved_before_active(i3, container.id)
         _run_existing_layouts(i3)
         i3.flush()
     except Exception:
@@ -712,6 +717,38 @@ def _swap_new_before_prev(i3: SwayConn, new_win_id: int) -> None:
     prev_win = leaves[idx - 1]
     new_win.command(f'swap container with con_id {prev_win.id}')
     new_win.command('focus')
+
+
+def _swap_moved_before_active(i3: SwayConn, moved_win_id: int) -> None:
+    '''Swap the moved window before the active window on the destination ws.
+
+    Sway places moved containers immediately after the focused window, so
+    leaves()[idx-1] is the previously focused window.  Swapping puts the
+    moved window in the focused window's slot (before it).
+
+    Unlike _swap_new_before_prev, this always swaps even when the moved
+    window lands at the last position, preserving the intended stack order.
+    '''
+    tree = i3.get_tree()
+    moved_win = tree.find_by_id(moved_win_id)
+    if moved_win is None or _is_floating(moved_win):
+        return
+    ws = moved_win.workspace()
+    if ws is None:
+        return
+    leaves = [leaf for leaf in ws.leaves() if not _is_floating(leaf)]
+    if len(leaves) < 2:
+        return
+    ids = [leaf.id for leaf in leaves]
+    try:
+        idx = ids.index(moved_win_id)
+    except ValueError:
+        return
+    if idx == 0:
+        return  # already before all other windows; nothing to do
+    prev_win = leaves[idx - 1]
+    moved_win.command(f'swap container with con_id {prev_win.id}')
+    moved_win.command('focus')
 
 
 # -----------------------------------------------------------------------------

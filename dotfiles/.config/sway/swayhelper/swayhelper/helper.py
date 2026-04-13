@@ -510,6 +510,40 @@ def _collect_windows(node: dict) -> list:
     return result
 
 
+def _collect_tiling_windows(node: dict) -> list[int]:
+    ''' Collect tiling-only leaf window con_ids under a node (DFS). '''
+    children = node.get('nodes', [])
+    if not children:
+        return [node['id']] if node.get('type') == 'con' else []
+    result: list[int] = []
+    for child in children:
+        result.extend(_collect_tiling_windows(child))
+    return result
+
+
+def _get_next_window_on_cur_ws(win_id: int) -> Optional[int]:
+    '''Return the next tiling window after win_id on the current workspace.
+
+    Returns the previous window if win_id is the last one, or None if it
+    is the only tiling window on the workspace.
+    '''
+    tree = json.loads(run_cmd('swaymsg -t get_tree'))
+    ws_node = _find_node(tree,
+                         lambda n: n.get('type') == 'workspace'
+                         and win_id in _collect_tiling_windows(n))
+    if ws_node is None:
+        return None
+    ids = _collect_tiling_windows(ws_node)
+    try:
+        idx = ids.index(win_id)
+    except ValueError:
+        return None
+    if len(ids) < 2:
+        return None
+    # Return next; fall back to previous when win_id is last
+    return ids[idx + 1] if idx + 1 < len(ids) else ids[idx - 1]
+
+
 def get_cur_workspace(display: Optional[str] = None) -> str:
     workspaces = _get_workspaces_data()
     if display is None:
@@ -543,12 +577,20 @@ def move_workspace(ws: str) -> Optional[int]:
     # sub-commands have been applied, guaranteeing it sees our window focused
     # instead of the master on the destination workspace.
     win_id = get_focused_window_id()
-    if win_id is not None:
-        run_cmd(f"swaymsg 'move container to workspace {ws}; "
-                f"workspace {ws}; [con_id={win_id}] focus'")
-    else:
+    if win_id is None:
         run_cmd(f"swaymsg 'move container to workspace {ws}'")
         focus_workspace(ws)
+        return None
+    next_win_id = _get_next_window_on_cur_ws(win_id)
+    if next_win_id is not None:
+        # After the move we are still on the source workspace; focusing
+        # next_win_id here sets the source-ws focus without switching.
+        run_cmd(f"swaymsg 'move container to workspace {ws}; "
+                f"[con_id={next_win_id}] focus; "
+                f"workspace {ws}; [con_id={win_id}] focus'")
+    else:
+        run_cmd(f"swaymsg 'move container to workspace {ws}; "
+                f"workspace {ws}; [con_id={win_id}] focus'")
     return win_id
 
 

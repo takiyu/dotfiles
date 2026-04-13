@@ -216,14 +216,14 @@ def test_move_valid_nei_workspace_noop_when_single_workspace(
 
 def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
         monkeypatch) -> None:
-    # When a window is focused, move_workspace must issue ONE swaymsg that
-    # combines move + workspace-switch + focus so the daemon cannot interleave
-    # its layout re-tile between the workspace switch and the focus restore.
+    # When a window is focused and no next window exists, move_workspace must
+    # issue ONE swaymsg combining move + workspace-switch + focus.
     cmds: list[str] = []
     FOCUSED_WIN_ID = 42
 
     monkeypatch.setattr(helper, 'get_focused_window_id',
                         lambda: FOCUSED_WIN_ID)
+    monkeypatch.setattr(helper, '_get_next_window_on_cur_ws', lambda _: None)
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda _ws: (_ for _ in ()).throw(
                             AssertionError('focus_workspace must not be '
@@ -697,6 +697,139 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
 
     assert focused == []
     assert renamed == [('A3', 'A2')]
+
+
+# -----------------------------------------------------------------------------
+# --------- _collect_tiling_windows / _get_next_window_on_cur_ws --------------
+# -----------------------------------------------------------------------------
+def test_collect_tiling_windows_excludes_floating() -> None:
+    # Floating nodes must not appear in the tiling window list.
+    node = {
+        'type': 'workspace',
+        'nodes': [
+            {'type': 'con', 'id': 10, 'nodes': [], 'floating_nodes': []},
+            {'type': 'con', 'id': 20, 'nodes': [], 'floating_nodes': []},
+        ],
+        'floating_nodes': [
+            {'type': 'con', 'id': 99, 'nodes': [], 'floating_nodes': []},
+        ],
+    }
+    result = helper._collect_tiling_windows(node)
+    assert result == [10, 20]
+    assert 99 not in result
+
+
+def test_collect_tiling_windows_returns_empty_for_empty_workspace() -> None:
+    node = {'type': 'workspace', 'nodes': [], 'floating_nodes': []}
+    assert helper._collect_tiling_windows(node) == []
+
+
+def test_get_next_window_on_cur_ws_returns_next(monkeypatch) -> None:
+    # When win_id is not last, returns the next tiling window.
+    tree = {
+        'type': 'root',
+        'nodes': [{
+            'type': 'output',
+            'nodes': [{
+                'type': 'workspace',
+                'nodes': [
+                    {'type': 'con', 'id': 10, 'nodes': [],
+                     'floating_nodes': []},
+                    {'type': 'con', 'id': 20, 'nodes': [],
+                     'floating_nodes': []},
+                    {'type': 'con', 'id': 30, 'nodes': [],
+                     'floating_nodes': []},
+                ],
+                'floating_nodes': [],
+            }],
+            'floating_nodes': [],
+        }],
+        'floating_nodes': [],
+    }
+    import json
+    monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
+
+    assert helper._get_next_window_on_cur_ws(10) == 20
+    assert helper._get_next_window_on_cur_ws(20) == 30
+
+
+def test_get_next_window_on_cur_ws_wraps_to_prev_when_last(
+        monkeypatch) -> None:
+    # When win_id is the last window, falls back to the previous window.
+    tree = {
+        'type': 'root',
+        'nodes': [{
+            'type': 'output',
+            'nodes': [{
+                'type': 'workspace',
+                'nodes': [
+                    {'type': 'con', 'id': 10, 'nodes': [],
+                     'floating_nodes': []},
+                    {'type': 'con', 'id': 20, 'nodes': [],
+                     'floating_nodes': []},
+                ],
+                'floating_nodes': [],
+            }],
+            'floating_nodes': [],
+        }],
+        'floating_nodes': [],
+    }
+    import json
+    monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
+
+    assert helper._get_next_window_on_cur_ws(20) == 10
+
+
+def test_get_next_window_on_cur_ws_returns_none_when_only_window(
+        monkeypatch) -> None:
+    # When win_id is the only tiling window, returns None.
+    tree = {
+        'type': 'root',
+        'nodes': [{
+            'type': 'output',
+            'nodes': [{
+                'type': 'workspace',
+                'nodes': [
+                    {'type': 'con', 'id': 10, 'nodes': [],
+                     'floating_nodes': []},
+                ],
+                'floating_nodes': [],
+            }],
+            'floating_nodes': [],
+        }],
+        'floating_nodes': [],
+    }
+    import json
+    monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
+
+    assert helper._get_next_window_on_cur_ws(10) is None
+
+
+def test_move_workspace_focuses_next_window_on_source_ws(
+        monkeypatch) -> None:
+    # When there is a next tiling window, the atomic command must set
+    # focus to that window on the source workspace before switching.
+    cmds: list[str] = []
+    FOCUSED_WIN_ID = 42
+    NEXT_WIN_ID = 55
+
+    monkeypatch.setattr(helper, 'get_focused_window_id',
+                        lambda: FOCUSED_WIN_ID)
+    monkeypatch.setattr(helper, '_get_next_window_on_cur_ws',
+                        lambda _: NEXT_WIN_ID)
+    monkeypatch.setattr(helper, 'run_cmd', lambda cmd: cmds.append(cmd))
+
+    result = helper.move_workspace('B0')
+
+    assert result == FOCUSED_WIN_ID
+    assert len(cmds) == 1
+    cmd = cmds[0]
+    assert 'move container to workspace B0' in cmd
+    assert f'[con_id={NEXT_WIN_ID}] focus' in cmd
+    assert 'workspace B0' in cmd
+    assert f'[con_id={FOCUSED_WIN_ID}] focus' in cmd
+    # next-window focus must appear before standalone workspace switch
+    assert f'; [con_id={NEXT_WIN_ID}] focus; workspace B0' in cmd
 
 
 # -----------------------------------------------------------------------------
