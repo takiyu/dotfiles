@@ -181,6 +181,12 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
             _move_count[0] -= 1
             return
         i3.start_buffering()
+        if event.change == 'new':
+            # Swap the new window before its sway-assigned predecessor so it
+            # appears before the focused window; done before reflow so the
+            # layout engine settles on the intended final order in one pass.
+            container: Any = event.container
+            _swap_new_before_prev(i3, container.id)
         _run_existing_layouts(i3)
         i3.flush()
     except Exception:
@@ -672,6 +678,40 @@ def _swap_with_window(i3: SwayConn, offset: int,
         src.command('focus')
         if src.fullscreen_mode == 1:
             target.command('fullscreen')
+
+
+def _swap_new_before_prev(i3: SwayConn, new_win_id: int) -> None:
+    '''Swap the newly opened window before its sway-assigned predecessor.
+
+    Sway places new windows immediately after the focused window, so
+    leaves()[idx-1] is the previously focused window.  Swapping puts
+    the new window in the focused window's slot (before it).
+
+    Calling i3.get_tree() flushes any pending buffered commands first,
+    giving a consistent pre-reflow view of the tree.
+    '''
+    tree = i3.get_tree()
+    new_win = tree.find_by_id(new_win_id)
+    if new_win is None or _is_floating(new_win):
+        return
+    ws = new_win.workspace()
+    if ws is None:
+        return
+    leaves = [leaf for leaf in ws.leaves() if not _is_floating(leaf)]
+    if len(leaves) < 2:
+        return
+    ids = [leaf.id for leaf in leaves]
+    try:
+        idx = ids.index(new_win_id)
+    except ValueError:
+        return
+    if idx == 0:
+        return  # already before all other windows; nothing to do
+    if idx == len(leaves) - 1:
+        return  # predecessor was the last window; keep new window at end
+    prev_win = leaves[idx - 1]
+    new_win.command(f'swap container with con_id {prev_win.id}')
+    new_win.command('focus')
 
 
 # -----------------------------------------------------------------------------

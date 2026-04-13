@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from typing import Any, cast
+from typing import Any, Optional, cast
 
 from swayhelper import daemon
 
@@ -63,6 +63,186 @@ def test_on_window_retiles_after_close(monkeypatch) -> None:
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'run', 'flush']
+
+
+def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
+    '''New window is inserted before its predecessor before layout reflow.'''
+    actions: list[str] = []
+
+    class FakeConn:
+        def start_buffering(self) -> None:
+            actions.append('start')
+
+        def flush(self) -> None:
+            actions.append('flush')
+
+    daemon._move_count[0] = 0
+    monkeypatch.setattr(daemon, '_swap_new_before_prev',
+                        lambda _i3, _id: actions.append('swap'))
+    monkeypatch.setattr(daemon, '_run_existing_layouts',
+                        lambda _i3: actions.append('run'))
+
+    event = cast(Any, SimpleNamespace(change='new',
+                                      container=SimpleNamespace(id=99)))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+
+    assert actions == ['start', 'swap', 'run', 'flush']
+
+
+def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
+    '''_swap_new_before_prev swaps new window with the leaf just before it.'''
+    NEW_ID = 30
+    PREV_ID = 20
+    AFTER_ID = 40
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    prev_leaf = FakeLeaf(PREV_ID)
+    new_leaf = FakeLeaf(NEW_ID)
+    after_leaf = FakeLeaf(AFTER_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            if con_id == NEW_ID:
+                return new_leaf
+            if con_id == PREV_ID:
+                return prev_leaf
+            return None
+
+    # prev, new, after — new is in the middle, so swap should happen
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [prev_leaf, new_leaf, after_leaf]
+
+    new_leaf.workspace = lambda: FakeWsCon()  # type: ignore[method-assign]
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+
+    assert f'swap container with con_id {PREV_ID}' in new_leaf.commands
+    assert 'focus' in new_leaf.commands
+
+
+def test_swap_new_before_prev_skips_when_predecessor_is_last(
+        monkeypatch) -> None:
+    '''_swap_new_before_prev does nothing when the predecessor was last.'''
+    NEW_ID = 30
+    PREV_ID = 20
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    prev_leaf = FakeLeaf(PREV_ID)
+    new_leaf = FakeLeaf(NEW_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            if con_id == NEW_ID:
+                return new_leaf
+            return None
+
+    # prev, new — new is last; predecessor was last, so no swap
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [prev_leaf, new_leaf]
+
+    new_leaf.workspace = lambda: FakeWsCon()  # type: ignore[method-assign]
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+
+    assert new_leaf.commands == []
+
+
+def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
+    '''_swap_new_before_prev does nothing when new window is already first.'''
+    NEW_ID = 10
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    new_leaf = FakeLeaf(NEW_ID)
+
+    class FakeWsCon:
+        id = 1
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [new_leaf]
+
+    new_leaf.workspace = lambda: FakeWsCon()  # type: ignore[method-assign]
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return new_leaf if con_id == NEW_ID else None
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+
+    assert new_leaf.commands == []
+
+
+def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
+    '''_swap_new_before_prev does nothing for floating new windows.'''
+    NEW_ID = 42
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_on'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    new_leaf = FakeLeaf(NEW_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return new_leaf if con_id == NEW_ID else None
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+
+    assert new_leaf.commands == []
 
 
 def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
