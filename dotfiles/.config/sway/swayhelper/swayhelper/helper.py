@@ -161,7 +161,13 @@ def focus_nei_workspace(offset: int = 1) -> None:
     cur_ws = get_cur_workspace(cur_disp)
     nxt_ws = _shift_workspace_name(cur_ws, offset)
     if nxt_ws == cur_ws:
-        return
+        if offset >= 0:
+            return
+        # Wrap: moving left from ws 0 jumps to the last existing workspace
+        workspaces = get_workspaces(cur_disp)
+        if not workspaces or workspaces[-1] == cur_ws:
+            return
+        nxt_ws = workspaces[-1]
     # Record existing workspaces before creation
     ws_before = set(get_workspaces_raw(cur_disp))
     focus_workspace(nxt_ws)
@@ -181,7 +187,13 @@ def move_nei_workspace(offset: int = 1) -> None:
         cur_ws = get_cur_workspace(cur_disp)
         nxt_ws = _shift_workspace_name(cur_ws, offset)
         if nxt_ws == cur_ws:
-            return
+            if offset >= 0:
+                return
+            # Wrap: moving left from ws 0 jumps to the last existing workspace
+            workspaces = get_workspaces(cur_disp)
+            if not workspaces or workspaces[-1] == cur_ws:
+                return
+            nxt_ws = workspaces[-1]
         # Record existing workspaces before creation
         ws_before = set(get_workspaces_raw(cur_disp))
         win_id = move_workspace(nxt_ws)

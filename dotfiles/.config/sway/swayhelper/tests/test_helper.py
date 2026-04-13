@@ -312,8 +312,81 @@ def test_move_nei_workspace_serialises_concurrent_calls(
 
 
 # -----------------------------------------------------------------------------
-# ----------------------- _strip_reorder_tmp_prefix --------------------------
+# ------------ focus_nei_workspace / move_nei_workspace wrap-to-last ----------
 # -----------------------------------------------------------------------------
+def test_focus_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
+    # On ws0, pressing prev (offset=-1) should focus the last workspace.
+    focused: list[str] = []
+
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
+    monkeypatch.setattr(helper, 'get_workspaces',
+                        lambda _d: ['A0', 'A1', 'A2'])
+    monkeypatch.setattr(helper, 'get_workspaces_raw',
+                        lambda _d: ['A0', 'A1', 'A2'])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'fix_workspace_order', lambda _d, _ws: None)
+
+    helper.focus_nei_workspace(-1)
+
+    assert focused == ['A2']
+
+
+def test_focus_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
+    # Single workspace: wrap has nowhere to go; must be a no-op.
+    focused: list[str] = []
+
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
+    monkeypatch.setattr(helper, 'get_workspaces', lambda _d: ['A0'])
+    monkeypatch.setattr(helper, 'get_workspaces_raw', lambda _d: ['A0'])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+
+    helper.focus_nei_workspace(-1)
+
+    assert focused == []
+
+
+def test_move_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
+    # On ws0, pressing move-prev (offset=-1) should move window to last ws.
+    moved: list[str] = []
+
+    monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
+    monkeypatch.setattr(helper, 'get_workspaces',
+                        lambda _d: ['A0', 'A1', 'A2'])
+    monkeypatch.setattr(helper, 'get_workspaces_raw',
+                        lambda _d: ['A0', 'A1', 'A2'])
+    monkeypatch.setattr(helper, 'move_workspace',
+                        lambda ws: moved.append(ws) or 1)
+    monkeypatch.setattr(helper, 'fix_workspace_order', lambda _d, _ws: None)
+    monkeypatch.setattr(helper, 'focus_window', lambda _wid: None)
+
+    helper.move_nei_workspace(-1)
+
+    assert moved == ['A2']
+
+
+def test_move_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
+    # Single workspace: move-wrap has nowhere to go; must be a no-op.
+    moved: list[str] = []
+
+    monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
+    monkeypatch.setattr(helper, 'get_workspaces', lambda _d: ['A0'])
+    monkeypatch.setattr(helper, 'get_workspaces_raw', lambda _d: ['A0'])
+    monkeypatch.setattr(helper, 'move_workspace',
+                        lambda ws: moved.append(ws) or 1)
+
+    helper.move_nei_workspace(-1)
+
+    assert moved == []
+
+
 def test_strip_reorder_tmp_prefix_removes_new_prefix() -> None:
     assert helper._strip_reorder_tmp_prefix('__swh_tmp_A1') == 'A1'
 
