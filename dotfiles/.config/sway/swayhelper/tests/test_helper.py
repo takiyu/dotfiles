@@ -512,3 +512,193 @@ def test_fix_workspace_order_aborts_on_evacuation_timeout(
     assert (42, f'{helper._WS_REORDER_TMP}A2') in moved
     assert (42, 'A2') in moved
     assert not focused
+
+
+# -----------------------------------------------------------------------------
+# ----------------------------- compact_workspaces ----------------------------
+# -----------------------------------------------------------------------------
+def test_compact_workspaces_deletes_and_renames(monkeypatch) -> None:
+    # A0(empty), A1(windows, current), A2(empty), A3(windows)
+    # Expected: visit A0/A2, rename A1→A0, A3→A1
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data1 = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
+        {'name': 'A1', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A2', 'output': 'DP-1', 'visible': False, 'focused': False},
+        {'name': 'A3', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+    ws_data2 = [
+        {'name': 'A1', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A3', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+
+    call_count = [0]
+
+    def mock_ws_data():
+        call_count[0] += 1
+        return ws_data1 if call_count[0] == 1 else ws_data2
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+                        lambda ws: [] if ws in ('A0', 'A2') else [1])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == ['A0', 'A1', 'A2', 'A1']
+    assert renamed == [('A1', 'A0'), ('A3', 'A1')]
+
+
+def test_compact_workspaces_handles_empty_current_ws(monkeypatch) -> None:
+    # A0(empty, current), A1(windows), A2(windows)
+    # Expected: immediately focus A1, then rename A1→A0, A2→A1
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data1 = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
+        {'name': 'A2', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+    ws_data2 = [
+        {'name': 'A1', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A2', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+
+    call_count = [0]
+
+    def mock_ws_data():
+        call_count[0] += 1
+        return ws_data1 if call_count[0] == 1 else ws_data2
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+                        lambda ws: [] if ws == 'A0' else [1])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == ['A1']
+    assert renamed == [('A1', 'A0'), ('A2', 'A1')]
+
+
+def test_compact_workspaces_noop_when_no_empty(monkeypatch) -> None:
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [1])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == []
+    assert renamed == []
+
+
+def test_compact_workspaces_noop_when_all_empty(monkeypatch) -> None:
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == []
+    assert renamed == []
+
+
+def test_compact_workspaces_single_trailing_empty_no_rename(
+        monkeypatch) -> None:
+    # A0(windows, current), A1(empty) → visit A1, return to A0, no renames
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data1 = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+    ws_data2 = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+    ]
+
+    call_count = [0]
+
+    def mock_ws_data():
+        call_count[0] += 1
+        return ws_data1 if call_count[0] == 1 else ws_data2
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+                        lambda ws: [] if ws == 'A1' else [1])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == ['A1', 'A0']
+    assert renamed == []
+
+
+def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
+    # A0(windows, current), A1(windows), A3(windows) — gap at A2
+    # Expected: no focus calls, A3 renamed to A2
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+    ws_data = [
+        {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
+        {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
+        {'name': 'A3', 'output': 'DP-1', 'visible': False, 'focused': False},
+    ]
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [1])
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.compact_workspaces()
+
+    assert focused == []
+    assert renamed == [('A3', 'A2')]
+
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------

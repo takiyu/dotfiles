@@ -53,6 +53,8 @@ def run_action(action: str, opt: str = '') -> None:
         insert_workspace_before_current()
     elif action == 'delete_current_workspace_if_empty':
         delete_current_workspace_if_empty()
+    elif action == 'compact_workspaces':
+        compact_workspaces()
     elif action == 'focus_next_display':
         focus_nei_display(+1)
     elif action == 'focus_prev_display':
@@ -331,6 +333,64 @@ def delete_current_workspace_if_empty() -> None:
     prev_ws = workspaces[(workspaces.index(cur_ws) - 1) % len(workspaces)]
     if prev_ws != cur_ws:
         focus_workspace(prev_ws)
+
+
+def compact_workspaces() -> None:
+    '''Delete all empty workspaces on the current display and renumber
+    survivors to consecutive indices per prefix group.'''
+    with _reorder_lock():
+        cur_disp = get_cur_display()
+        ws_data = _get_workspaces_data()
+        workspaces = _get_managed_workspace_names(ws_data, cur_disp)
+        if not workspaces:
+            return
+
+        # Partition into empty and non-empty workspaces
+        empty_set = {ws for ws in workspaces
+                     if not get_windows_on_workspace(ws)}
+        survivors = [ws for ws in workspaces if ws not in empty_set]
+
+        if not survivors:
+            return  # refuse to delete every workspace
+
+        cur_ws = _get_visible_workspace_name(ws_data, cur_disp)
+
+        # If the current workspace is empty, switch to first survivor so sway
+        # auto-deletes cur_ws when focus leaves it.
+        if cur_ws in empty_set:
+            anchor = survivors[0]
+            focus_workspace(anchor)
+        else:
+            anchor = cur_ws
+
+        # Visit each remaining empty workspace then return to anchor;
+        # sway auto-deletes empty workspaces on focus loss.
+        for empty in sorted(empty_set - {cur_ws}, key=ws_sort_key):
+            focus_workspace(empty)
+            focus_workspace(anchor)
+
+        # Re-read post-deletion state; also covers the no-empty case
+        # (actual_survivors == survivors when nothing was deleted).
+        ws_data2 = _get_workspaces_data()
+        current_names = set(_get_managed_workspace_names(ws_data2, cur_disp))
+        actual_survivors = [ws for ws in survivors if ws in current_names]
+
+        # Rename survivors to consecutive indices per prefix group.
+        # Iterate lowest source index first; rename target is always free.
+        prefix_groups: dict[str, list[str]] = {}
+        for ws in actual_survivors:
+            parts = _split_workspace_name(ws)
+            if parts is None:
+                continue
+            prefix, _ = parts
+            prefix_groups.setdefault(prefix, []).append(ws)
+
+        for prefix, group in prefix_groups.items():
+            for new_idx, ws_name in enumerate(
+                    sorted(group, key=ws_sort_key)):
+                new_name = f'{prefix}{new_idx}'
+                if ws_name != new_name:
+                    rename_workspace(ws_name, new_name)
 
 
 def focus_nei_display(offset: int = 1) -> None:
