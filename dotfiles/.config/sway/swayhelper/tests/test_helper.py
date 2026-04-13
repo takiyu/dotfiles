@@ -179,6 +179,41 @@ def test_focus_valid_nei_workspace_loops_existing_workspaces(
     assert focused == ['A0', 'A1']
 
 
+def test_move_valid_nei_workspace_moves_to_existing_workspace(
+        monkeypatch) -> None:
+    # Should call move_workspace with the cyclic next/prev valid workspace.
+    moved: list[str] = []
+
+    monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_workspace_cycle',
+                        lambda _display: (['A0', 'A1', 'A3'], 'A1'))
+    monkeypatch.setattr(helper, 'move_workspace',
+                        lambda ws_name: moved.append(ws_name))
+
+    helper.move_valid_nei_workspace(+1)
+    helper.move_valid_nei_workspace(-1)
+
+    assert moved == ['A3', 'A0']
+
+
+def test_move_valid_nei_workspace_noop_when_single_workspace(
+        monkeypatch) -> None:
+    # When only one workspace exists, moving should be a no-op.
+    moved: list[str] = []
+
+    monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
+    monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
+    monkeypatch.setattr(helper, 'get_workspace_cycle',
+                        lambda _display: (['A0'], 'A0'))
+    monkeypatch.setattr(helper, 'move_workspace',
+                        lambda ws_name: moved.append(ws_name))
+
+    helper.move_valid_nei_workspace(+1)
+
+    assert moved == []
+
+
 def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
         monkeypatch) -> None:
     # When a window is focused, move_workspace must issue ONE swaymsg that

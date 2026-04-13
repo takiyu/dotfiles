@@ -45,6 +45,10 @@ def run_action(action: str, opt: str = '') -> None:
         focus_valid_nei_workspace(+1)
     elif action == 'focus_prev_valid_workspace':
         focus_valid_nei_workspace(-1)
+    elif action == 'move_next_valid_workspace':
+        move_valid_nei_workspace(+1)
+    elif action == 'move_prev_valid_workspace':
+        move_valid_nei_workspace(-1)
     elif action == 'insert_workspace_before_current':
         insert_workspace_before_current()
     elif action == 'delete_current_workspace_if_empty':
@@ -253,6 +257,23 @@ def focus_valid_nei_workspace(offset: int = 1) -> None:
         return
     nxt_ws = ws[(ws.index(cur_ws) + offset) % len(ws)]
     focus_workspace(nxt_ws)
+
+
+def move_valid_nei_workspace(offset: int = 1) -> None:
+    ''' Move focused window to valid neighbor workspace on current display.
+
+    Only targets workspaces that already exist; no new workspace is created.
+    Serialised by _move_lock to avoid focus-state races on rapid keypresses.
+    '''
+    with _move_lock():
+        cur_disp = get_cur_display()
+        ws, cur_ws = get_workspace_cycle(cur_disp)
+        if not ws or cur_ws not in ws:
+            return
+        nxt_ws = ws[(ws.index(cur_ws) + offset) % len(ws)]
+        if nxt_ws == cur_ws:
+            return
+        move_workspace(nxt_ws)
 
 
 def insert_workspace_before_current() -> None:
