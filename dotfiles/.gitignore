@@ -8,3 +8,5 @@
 .xmonad/history
 .xmonad/prompt-history
 .xmonad/xmonad.state
+
+__pycache__

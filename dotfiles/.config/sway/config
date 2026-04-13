@@ -8,11 +8,10 @@ set $suspend "bash -c suspend.sh"
 
 ### Startup applications
 exec fcitx5 -r -d
-# Start swaymonad
-exec_always "pkill -f 'python3? .+/swaymonad.py';  ~/.config/sway/swaymonad/swaymonad.py"
+# Start sway tiling daemon
+exec_always "make -C ~/.config/sway/swayhelper daemon"
 # Initial setups
-exec_always nop set_layout tall
-exec_always "python3 ~/.config/sway/sway_helper.py setup"
+exec_always "make -C ~/.config/sway/swayhelper setup"
 
 ### Output configuration
 # Default wallpaper
@@ -72,25 +71,29 @@ bindsym $mod+t nop transpose
 bindsym $mod+Shift+t nop set_layout tall
 
 # Xmonad-like key bindings (helper)
-bindsym $mod+h exec "python3 ~/.config/sway/sway_helper.py focus_prev_workspace"
-bindsym $mod+l exec "python3 ~/.config/sway/sway_helper.py focus_next_workspace"
-bindsym $mod+n exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
-bindsym $mod+p exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
-bindsym $mod+s exec "python3 ~/.config/sway/sway_helper.py focus_next_display"
-bindsym $mod+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_prev_workspace"
-bindsym $mod+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_next_workspace"
-bindsym $mod+Shift+s exec "python3 ~/.config/sway/sway_helper.py move_next_display"
-bindsym $mod+Ctrl+h exec "python3 ~/.config/sway/sway_helper.py focus_display --opt 0"
-bindsym $mod+Ctrl+k exec "python3 ~/.config/sway/sway_helper.py focus_display --opt 1"
-bindsym $mod+Ctrl+j exec "python3 ~/.config/sway/sway_helper.py focus_display --opt 2"
-bindsym $mod+Ctrl+l exec "python3 ~/.config/sway/sway_helper.py focus_display --opt 3"
-bindsym $mod+Ctrl+Shift+h exec "python3 ~/.config/sway/sway_helper.py move_display --opt 0"
-bindsym $mod+Ctrl+Shift+k exec "python3 ~/.config/sway/sway_helper.py move_display --opt 1"
-bindsym $mod+Ctrl+Shift+j exec "python3 ~/.config/sway/sway_helper.py move_display --opt 2"
-bindsym $mod+Ctrl+Shift+l exec "python3 ~/.config/sway/sway_helper.py move_display --opt 3"
+bindsym $mod+h exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_prev_workspace"
+bindsym $mod+l exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_next_workspace"
+bindsym $mod+i exec "make -C ~/.config/sway/swayhelper helper ACTION=insert_workspace_before_current"
+bindsym $mod+d exec "make -C ~/.config/sway/swayhelper helper ACTION=compact_workspaces"
+bindsym $mod+n exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_prev_valid_workspace"
+bindsym $mod+p exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_next_valid_workspace"
+bindsym $mod+Shift+n exec "make -C ~/.config/sway/swayhelper helper ACTION=move_prev_valid_workspace"
+bindsym $mod+Shift+p exec "make -C ~/.config/sway/swayhelper helper ACTION=move_next_valid_workspace"
+bindsym $mod+s exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_next_display"
+bindsym $mod+Shift+h exec "make -C ~/.config/sway/swayhelper helper ACTION=move_prev_workspace"
+bindsym $mod+Shift+l exec "make -C ~/.config/sway/swayhelper helper ACTION=move_next_workspace"
+bindsym $mod+Shift+s exec "make -C ~/.config/sway/swayhelper helper ACTION=move_next_display"
+bindsym $mod+Ctrl+h exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_display OPT=0"
+bindsym $mod+Ctrl+k exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_display OPT=1"
+bindsym $mod+Ctrl+j exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_display OPT=2"
+bindsym $mod+Ctrl+l exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_display OPT=3"
+bindsym $mod+Ctrl+Shift+h exec "make -C ~/.config/sway/swayhelper helper ACTION=move_display OPT=0"
+bindsym $mod+Ctrl+Shift+k exec "make -C ~/.config/sway/swayhelper helper ACTION=move_display OPT=1"
+bindsym $mod+Ctrl+Shift+j exec "make -C ~/.config/sway/swayhelper helper ACTION=move_display OPT=2"
+bindsym $mod+Ctrl+Shift+l exec "make -C ~/.config/sway/swayhelper helper ACTION=move_display OPT=3"
 # Mouse
-bindsym --whole-window button6 exec "python3 ~/.config/sway/sway_helper.py focus_prev_valid_workspace"
-bindsym --whole-window button7 exec "python3 ~/.config/sway/sway_helper.py focus_next_valid_workspace"
+bindsym --whole-window button6 exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_prev_valid_workspace"
+bindsym --whole-window button7 exec "make -C ~/.config/sway/swayhelper helper ACTION=focus_next_valid_workspace"
 
 # Window Resize
 bindsym $mod+9 nop resize_master shrink width 30px
