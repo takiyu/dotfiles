@@ -415,6 +415,13 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState) -> None:
         _reset_ws_state(state)
         return
 
+    # Save focused window ID BEFORE reflow: _reflow_ncol uses move/swap
+    # commands that can cause sway to silently shift focus to the master,
+    # so ws.find_focused() called after the loop would return the wrong window.
+    pre_focused = ws.find_focused()
+    pre_focused_id: Optional[int] = (pre_focused.id
+                                     if pre_focused is not None else None)
+
     while True:
         ws = _refetch(i3, ws)
         if ws is None:
@@ -425,7 +432,11 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState) -> None:
     ws = _refetch(i3, ws)
     focused_ws = _get_focused_workspace(i3)
     if ws and focused_ws and ws.id == focused_ws.id:
-        focused = ws.find_focused()
+        # Restore focus to the window that was focused before the reflow
+        focused = (i3.get_tree().find_by_id(pre_focused_id)
+                   if pre_focused_id is not None else None)
+        if focused is None:
+            focused = ws.find_focused()
         if focused:
             _refocus_window(i3, focused)
 

@@ -249,3 +249,86 @@ def test_get_master_window_respects_reflectx_order() -> None:
     master = daemon._get_master_window(ws, state)
     assert master is not None
     assert master.id == right.id
+
+
+def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
+    # After _reflow_ncol moves windows around, sway's internal focus may
+    # drift to a different window (e.g. the master). _run_ncol_layout must
+    # restore focus to the window that was focused BEFORE the reflow, not
+    # whatever sway happens to have focused after the layout moves.
+    refocused_ids: list[int] = []
+
+    MASTER_ID = 1
+    MOVED_WIN_ID = 42
+    WS_ID = 99
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.fullscreen_mode = 0
+            self.floating = 'user_off'
+            self.type = 'con'
+
+        def command(self, _payload: str) -> None:
+            pass
+
+        def leaves(self) -> list['FakeLeaf']:
+            return [self]
+
+    master_leaf = FakeLeaf(MASTER_ID)
+    moved_leaf = FakeLeaf(MOVED_WIN_ID)
+
+    class FakeWorkspace:
+        def __init__(self, focused_leaf: FakeLeaf) -> None:
+            self.id = WS_ID
+            self.layout = 'splith'
+            self._focused = focused_leaf
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [master_leaf, moved_leaf]
+
+        def find_focused(self) -> FakeLeaf:
+            return self._focused
+
+    # Initial state: moved window is focused (set by atomic swaymsg in helper)
+    ws_before_reflow = FakeWorkspace(focused_leaf=moved_leaf)
+    # After reflow: sway shifted focus to master due to layout move commands
+    ws_after_reflow = FakeWorkspace(focused_leaf=master_leaf)
+
+    state = daemon.WorkspaceState(ws_id=WS_ID)
+
+    monkeypatch.setattr(daemon, '_refetch',
+                        lambda _i3, _con: ws_after_reflow)
+    monkeypatch.setattr(daemon, '_reflow_ncol',
+                        lambda _i3, _state, _ws: False)
+    monkeypatch.setattr(daemon, '_get_focused_workspace',
+                        lambda _i3: ws_after_reflow)
+    monkeypatch.setattr(daemon, '_refocus_window',
+                        lambda _i3, win: refocused_ids.append(win.id))
+
+    # Track calls to get_tree().find_by_id: first call (ws lookup) returns
+    # ws_before_reflow so that ws.find_focused() yields moved_leaf;
+    # subsequent find_by_id(MOVED_WIN_ID) calls for focus-restoration
+    # return moved_leaf directly.
+    ws_lookup_done = [False]
+
+    class FakeTree2:
+        def find_by_id(self, con_id: int) -> Any:
+            if con_id == WS_ID and not ws_lookup_done[0]:
+                ws_lookup_done[0] = True
+                return ws_before_reflow
+            if con_id == MOVED_WIN_ID:
+                return moved_leaf
+            return ws_after_reflow
+
+    class FakeConn2:
+        def get_tree(self) -> FakeTree2:
+            return FakeTree2()
+
+        def get_workspaces(self) -> list[SimpleNamespace]:
+            return [SimpleNamespace(ipc_data={'id': WS_ID}, focused=True)]
+
+    daemon._run_ncol_layout(cast(daemon.SwayConn, FakeConn2()), state)
+
+    assert refocused_ids == [MOVED_WIN_ID], (
+        f'Expected focus on moved window {MOVED_WIN_ID}, got {refocused_ids}')

@@ -4,6 +4,8 @@ Provides CLI commands for workspace/display focus and move operations.
 Invoke as: python3 -m swayhelper.helper <action> [--opt <value>]
 '''
 import argparse
+import contextlib
+import fcntl
 import json
 import os
 import os.path as osp
@@ -17,6 +19,12 @@ from typing import Any, Optional
 # -----------------------------------------------------------------------------
 # Persistent file (per-user, survives sway reload but cleared on reboot)
 WS_DISP_MAP_FILE = f'/tmp/sway_wsdisp_map_{os.getuid()}.json'
+# Lock file to serialise concurrent fix_workspace_order invocations
+_REORDER_LOCK_FILE = f'/tmp/sway_wsreorder_{os.getuid()}.lock'
+# Lock file to serialise concurrent move_nei_workspace invocations
+_MOVE_LOCK_FILE = f'/tmp/sway_wsmove_{os.getuid()}.lock'
+# Temporary workspace prefix used during workspace order correction
+_WS_REORDER_TMP = '__swh_tmp_'
 
 
 # -----------------------------------------------------------------------------
@@ -65,6 +73,8 @@ def setup_workspace_names() -> None:
     all_disps = get_displays()
     # Ensure persistent display-letter map is up to date
     disp_to_letter = _update_display_map(all_disps)
+    # Recover windows from any orphaned temp workspaces before restoration
+    _cleanup_temp_workspaces(all_disps)
     # Move any misplaced workspaces back to their home display
     _restore_workspace_assignments(all_disps, disp_to_letter)
     # Pass 1: rename to tmp names, preserving original workspace numbers
@@ -127,6 +137,20 @@ def _restore_workspace_assignments(all_disps: list[str],
         focus_workspace(orig_focused)
 
 
+def _cleanup_temp_workspaces(all_disps: list[str]) -> None:
+    '''Move windows from orphaned temp workspaces to their real targets.
+
+    Handles both the current _WS_REORDER_TMP prefix and the legacy _t
+    prefix left by older versions, enabling recovery on restart. '''
+    for disp in all_disps:
+        for ws_name in list(get_workspaces_raw(disp)):
+            real_name = _strip_reorder_tmp_prefix(ws_name)
+            if real_name == ws_name or not _is_managed_workspace(real_name):
+                continue
+            for win_id in get_windows_on_workspace(ws_name):
+                move_window_to_workspace(win_id, real_name)
+
+
 def focus_nei_workspace(offset: int = 1) -> None:
     ''' Focus to neighbor workspace on current display. '''
     cur_disp = get_cur_display()
@@ -143,18 +167,27 @@ def focus_nei_workspace(offset: int = 1) -> None:
 
 
 def move_nei_workspace(offset: int = 1) -> None:
-    ''' Move to neighbor workspace on current display. '''
-    cur_disp = get_cur_display()
-    cur_ws = get_cur_workspace(cur_disp)
-    nxt_ws = _shift_workspace_name(cur_ws, offset)
-    if nxt_ws == cur_ws:
-        return
-    # Record existing workspaces before creation
-    ws_before = set(get_workspaces_raw(cur_disp))
-    move_workspace(nxt_ws)
-    # Fix sway's internal order if a new workspace was created
-    if nxt_ws not in ws_before:
-        fix_workspace_order(cur_disp, nxt_ws)
+    ''' Move to neighbor workspace on current display.
+
+    Serialised by _move_lock so rapid keypresses don't race: the second
+    invocation waits until the first (including fix_workspace_order's focus
+    shuffling) finishes, then re-reads the correct post-move state. '''
+    with _move_lock():
+        cur_disp = get_cur_display()
+        cur_ws = get_cur_workspace(cur_disp)
+        nxt_ws = _shift_workspace_name(cur_ws, offset)
+        if nxt_ws == cur_ws:
+            return
+        # Record existing workspaces before creation
+        ws_before = set(get_workspaces_raw(cur_disp))
+        win_id = move_workspace(nxt_ws)
+        # Fix sway's internal order if a new workspace was created
+        if nxt_ws not in ws_before:
+            fix_workspace_order(cur_disp, nxt_ws)
+            # fix_workspace_order temporarily focuses other workspaces;
+            # restore focus to the moved window after all fixup is done.
+            if win_id is not None:
+                focus_window(win_id)
 
 
 def fix_workspace_order(display: str, new_ws: str) -> None:
@@ -162,40 +195,54 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
 
     When B1 is created after B0,B2, sway appends it: B0,B2,B1.
     This evacuates B2 to a temp WS (sway auto-deletes the empty B2),
-    then recreates it in sorted position: B0,B1,B2. '''
-    ws_actual = get_workspaces_raw(display)
-    if new_ws not in ws_actual:
-        return
-    new_ws_pos = ws_actual.index(new_ws)
+    then recreates it in sorted position: B0,B1,B2.
 
-    # Workspaces placed before new_ws in sway's list that should come after it
-    ws_to_reorder = [ws for ws in ws_actual[:new_ws_pos]
-                     if ws_sort_key(ws) > ws_sort_key(new_ws)]
-    if not ws_to_reorder:
-        return
+    Concurrent calls are serialised by a file lock; state is re-read under
+    the lock so each invocation operates on a consistent snapshot. '''
+    with _reorder_lock():
+        ws_actual = get_workspaces_raw(display)
+        if new_ws not in ws_actual:
+            return
+        new_ws_pos = ws_actual.index(new_ws)
 
-    # Evacuate each out-of-order workspace's windows to a temp workspace
-    saved_windows: dict[str, list] = {}
-    for ws in ws_to_reorder:
-        saved_windows[ws] = get_windows_on_workspace(ws)
-        for win_id in saved_windows[ws]:
-            move_window_to_workspace(win_id, f'_t{ws}')
-    # Poll until out-of-order workspaces are auto-deleted (usually instant)
-    for _ in range(15):
-        if not (set(get_workspaces_raw(display)) & set(ws_to_reorder)):
-            break
-        time.sleep(0.02)
+        # Only consider managed workspaces to prevent _t*-name cascade
+        ws_to_reorder = [ws for ws in ws_actual[:new_ws_pos]
+                         if ws_sort_key(ws) > ws_sort_key(new_ws)
+                         and _is_managed_workspace(ws)]
+        if not ws_to_reorder:
+            return
 
-    # Recreate workspaces in sorted order (focusing an unknown WS creates it)
-    for ws in sorted(ws_to_reorder, key=ws_sort_key):
-        focus_workspace(ws)
-    # Return focus to the newly created workspace
-    focus_workspace(new_ws)
+        # Evacuate each out-of-order workspace's windows to a temp workspace
+        saved_windows: dict[str, list] = {}
+        for ws in ws_to_reorder:
+            saved_windows[ws] = get_windows_on_workspace(ws)
+            for win_id in saved_windows[ws]:
+                move_window_to_workspace(win_id, f'{_WS_REORDER_TMP}{ws}')
+        # Poll until out-of-order workspaces are auto-deleted (usually instant)
+        evacuated = False
+        for _ in range(15):
+            if not (set(get_workspaces_raw(display)) & set(ws_to_reorder)):
+                evacuated = True
+                break
+            time.sleep(0.02)
 
-    # Restore windows to their correct workspaces
-    for ws in ws_to_reorder:
-        for win_id in saved_windows[ws]:
-            move_window_to_workspace(win_id, ws)
+        if not evacuated:
+            # Timed out: restore windows to original workspaces and abort
+            for ws in ws_to_reorder:
+                for win_id in saved_windows[ws]:
+                    move_window_to_workspace(win_id, ws)
+            return
+
+        # Recreate workspaces in sorted order (focusing unknown WS creates it)
+        for ws in sorted(ws_to_reorder, key=ws_sort_key):
+            focus_workspace(ws)
+        # Return focus to the newly created workspace
+        focus_workspace(new_ws)
+
+        # Restore windows to their correct workspaces
+        for ws in ws_to_reorder:
+            for win_id in saved_windows[ws]:
+                move_window_to_workspace(win_id, ws)
 
 
 def focus_valid_nei_workspace(offset: int = 1) -> None:
@@ -377,6 +424,14 @@ def get_cur_workspace(display: Optional[str] = None) -> str:
     return _get_visible_workspace_name(workspaces, display)
 
 
+def get_focused_window_id() -> Optional[int]:
+    ''' Return con_id of the currently focused window, or None. '''
+    tree = json.loads(run_cmd('swaymsg -t get_tree'))
+    node = _find_node(tree, lambda n: n.get(
+        'focused') and n.get('type') == 'con')
+    return node['id'] if node is not None else None
+
+
 # -----------------------------------------------------------------------------
 # ---------------------------- Sway Action Wrappers ---------------------------
 # -----------------------------------------------------------------------------
@@ -388,14 +443,30 @@ def focus_workspace(ws: str) -> None:
     run_cmd(f"swaymsg 'workspace {ws}'")
 
 
-def move_workspace(ws: str) -> None:
-    run_cmd(f"swaymsg 'move container to workspace {ws}'")  # Move
-    focus_workspace(ws)  # Focus
+def move_workspace(ws: str) -> Optional[int]:
+    # Combine move + workspace-switch + focus into one atomic swaymsg call.
+    # Sway is single-threaded for IPC, so the daemon's layout re-tile
+    # (triggered by WINDOW_MOVE) can only query the tree AFTER all three
+    # sub-commands have been applied, guaranteeing it sees our window focused
+    # instead of the master on the destination workspace.
+    win_id = get_focused_window_id()
+    if win_id is not None:
+        run_cmd(f"swaymsg 'move container to workspace {ws}; "
+                f"workspace {ws}; [con_id={win_id}] focus'")
+    else:
+        run_cmd(f"swaymsg 'move container to workspace {ws}'")
+        focus_workspace(ws)
+    return win_id
 
 
 def move_window_to_workspace(win_id: int, ws_name: str) -> None:
     ''' Move a specific window by con_id to a target workspace. '''
     run_cmd(f"swaymsg '[con_id={win_id}] move to workspace {ws_name}'")
+
+
+def focus_window(win_id: int) -> None:
+    ''' Focus a specific window by con_id. '''
+    run_cmd(f"swaymsg '[con_id={win_id}] focus'")
 
 
 # -----------------------------------------------------------------------------
@@ -520,6 +591,44 @@ def run_cmd(cmd: str) -> str:
 def idx2char(idx: int) -> str:
     ''' Convert index to capital letter. '''
     return chr(65 + idx)
+
+
+@contextlib.contextmanager
+def _reorder_lock():  # type: ignore[return]
+    '''Exclusive file lock to serialise fix_workspace_order calls.'''
+    fd = open(_REORDER_LOCK_FILE, 'w')
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(fd, fcntl.LOCK_UN)
+        fd.close()
+
+
+@contextlib.contextmanager
+def _move_lock():  # type: ignore[return]
+    '''Exclusive file lock to serialise move_nei_workspace calls.
+
+    Prevents a second keypress from reading focus state while the first
+    invocation's fix_workspace_order is temporarily shuffling focus. '''
+    fd = open(_MOVE_LOCK_FILE, 'w')
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(fd, fcntl.LOCK_UN)
+        fd.close()
+
+
+def _strip_reorder_tmp_prefix(name: str) -> str:
+    '''Strip all reorder temp prefixes (_WS_REORDER_TMP, legacy _t).'''
+    prev = None
+    while prev != name:
+        prev = name
+        for prefix in (_WS_REORDER_TMP, '_t'):
+            if name.startswith(prefix):
+                name = name[len(prefix):]
+    return name
 
 
 # -----------------------------------------------------------------------------
