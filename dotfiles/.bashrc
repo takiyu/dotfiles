@@ -647,8 +647,9 @@ case "$MODE" in *wsl)
     export PATH="/usr/lib/wsl/lib/:$PATH"
 
     # Display
-    HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
-    export DISPLAY="$HOST_IP:0"
+    # HOST_IP=`grep nameserver /etc/resolv.conf | cut -d " " -f 2`
+    # export DISPLAY="$HOST_IP:0"
+    export DISPLAY=$(ip route | awk '/default/{print $3}'):0
 
     # Wrap the git command to either run windows git or linux
     function IsWinDir {
