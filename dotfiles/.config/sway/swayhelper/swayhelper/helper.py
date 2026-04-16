@@ -25,6 +25,8 @@ _REORDER_LOCK_FILE = f'/tmp/sway_wsreorder_{os.getuid()}.lock'
 _MOVE_LOCK_FILE = f'/tmp/sway_wsmove_{os.getuid()}.lock'
 # Temporary workspace prefix used during workspace order correction
 _WS_REORDER_TMP = '__swh_tmp_'
+# Temporary workspace prefix used during setup_workspace_names pass 1
+_WS_SETUP_TMP = '__ws_'
 
 
 # -----------------------------------------------------------------------------
@@ -106,14 +108,14 @@ def setup_workspace_names() -> None:
                 num = next_free
                 used_nums.add(num)
                 next_free += 1
-            rename_workspace(old_name, f'__ws_{letter}{num}')
+            rename_workspace(old_name, f'{_WS_SETUP_TMP}{letter}{num}')
     # Pass 2: strip the tmp prefix to restore final names
     for disp in all_disps:
         letter = disp_to_letter[disp]
-        prefix = f'__ws_{letter}'
+        prefix = f'{_WS_SETUP_TMP}{letter}'
         for ws_name in get_workspaces_raw(disp):
             if ws_name.startswith(prefix):
-                rename_workspace(ws_name, ws_name[len('__ws_'):])
+                rename_workspace(ws_name, ws_name[len(_WS_SETUP_TMP):])
 
 
 def _restore_workspace_assignments(all_disps: list[str],
@@ -756,11 +758,12 @@ def _move_lock():  # type: ignore[return]
 
 
 def _strip_reorder_tmp_prefix(name: str) -> str:
-    '''Strip all reorder temp prefixes (_WS_REORDER_TMP, legacy _t).'''
+    '''Strip all reorder temp prefixes
+    (_WS_REORDER_TMP, _WS_SETUP_TMP, legacy _t).'''
     prev = None
     while prev != name:
         prev = name
-        for prefix in (_WS_REORDER_TMP, '_t'):
+        for prefix in (_WS_REORDER_TMP, _WS_SETUP_TMP, '_t'):
             if name.startswith(prefix):
                 name = name[len(prefix):]
     return name

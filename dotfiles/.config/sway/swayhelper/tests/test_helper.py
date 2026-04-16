@@ -387,7 +387,10 @@ def test_move_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
     assert moved == []
 
 
-def test_strip_reorder_tmp_prefix_removes_new_prefix() -> None:
+def test_strip_reorder_tmp_prefix_removes_setup_prefix() -> None:
+    assert helper._strip_reorder_tmp_prefix('__ws_A1') == 'A1'
+    assert helper._strip_reorder_tmp_prefix('__ws_B0') == 'B0'
+
     assert helper._strip_reorder_tmp_prefix('__swh_tmp_A1') == 'A1'
 
 
@@ -462,9 +465,25 @@ def test_cleanup_temp_workspaces_skips_non_managed_real_names(
     assert not moved
 
 
-# -----------------------------------------------------------------------------
-# ----------------------- fix_workspace_order (new) --------------------------
-# -----------------------------------------------------------------------------
+def test_cleanup_temp_workspaces_moves_windows_from_setup_temp(
+        monkeypatch) -> None:
+    # __ws_B0 is an orphan left by a crashed setup_workspace_names pass 1;
+    # its windows must be moved to B0 on the next cleanup call.
+    moved: list[tuple[int, str]] = []
+    ws_by_disp: dict[str, list[str]] = {'DP-1': ['A0', '__ws_B0']}
+
+    monkeypatch.setattr(helper, 'get_workspaces_raw',
+                        lambda disp: ws_by_disp.get(disp, []))
+    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+                        lambda ws: [7] if ws == '__ws_B0' else [])
+    monkeypatch.setattr(helper, 'move_window_to_workspace',
+                        lambda wid, ws: moved.append((wid, ws)))
+
+    helper._cleanup_temp_workspaces(['DP-1'])
+
+    assert moved == [(7, 'B0')]
+
+
 def test_fix_workspace_order_ignores_temp_workspace(monkeypatch) -> None:
     # _tB2 must be excluded from ws_to_reorder; otherwise reordering would
     # create _t_tB2 and cascade into deeper temp names on rapid switching.

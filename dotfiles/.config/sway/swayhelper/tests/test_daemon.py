@@ -10,11 +10,12 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
     class FakeConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
             return [
-                SimpleNamespace(ipc_data={'id': 11}),
-                SimpleNamespace(ipc_data={'id': 22}),
+                SimpleNamespace(ipc_data={'id': 11}, focused=False, name='A0'),
+                SimpleNamespace(ipc_data={'id': 22}, focused=False, name='B0'),
             ]
 
-    def fake_run_layout(_i3: object, ws_id: int) -> None:
+    def fake_run_layout(_i3: object, ws_id: int,
+                        _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
     monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
@@ -24,7 +25,34 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
     assert calls == [11, 22]
 
 
+def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
+    '''Workspaces with temp helper prefixes must not be laid out.'''
+    calls: list[int] = []
+
+    class FakeTempConn:
+        def get_workspaces(self) -> list[SimpleNamespace]:
+            return [
+                SimpleNamespace(ipc_data={'id': 10}, focused=False, name='A0'),
+                SimpleNamespace(ipc_data={'id': 20}, focused=False,
+                                name='__ws_B0'),
+                SimpleNamespace(ipc_data={'id': 30}, focused=False,
+                                name='__swh_tmp_A1'),
+            ]
+
+    def fake_run_layout(_i3: object, ws_id: int,
+                        _focused_ws_id: Optional[int] = None) -> None:
+        calls.append(ws_id)
+
+    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+
+    daemon._run_existing_layouts(cast(daemon.SwayConn, FakeTempConn()))
+
+    # Only the real workspace A0 must be laid out; temp workspaces skipped
+    assert calls == [10]
+
+
 def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
+    '''Daemon-initiated move (container in _daemon_move_ids) is suppressed.'''
     actions: list[str] = []
 
     class FakeConn:
@@ -34,15 +62,17 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._move_count[0] = 1
+    daemon._daemon_move_ids.clear()
+    daemon._daemon_move_ids.add(42)
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='move'))
+    event = cast(Any, SimpleNamespace(change='move',
+                                      container=SimpleNamespace(id=42)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
-    assert daemon._move_count[0] == 0
-    assert actions == []
+    assert 42 not in daemon._daemon_move_ids  # entry consumed
+    assert actions == []  # no buffering/reflow/flush
 
 
 def test_on_window_retiles_after_close(monkeypatch) -> None:
@@ -55,11 +85,12 @@ def test_on_window_retiles_after_close(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._move_count[0] = 0
+    daemon._daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='close'))
+    event = cast(Any, SimpleNamespace(change='close',
+                                      container=SimpleNamespace(id=55)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'run', 'flush']
@@ -76,7 +107,7 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._move_count[0] = 0
+    daemon._daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_swap_new_before_prev',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -285,7 +316,8 @@ def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
 
     monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
 
-    assert daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws)
+    assert daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws,
+                               is_focused=True)
     assert slave.commands == ['move right']
     assert master.commands == ['focus']
 
@@ -333,7 +365,10 @@ def test_get_resize_target_uses_master_pane_not_biggest_window() -> None:
     assert target.id == master.id
 
 
-def test_run_ncol_layout_resets_state_on_single_window() -> None:
+def test_run_ncol_layout_preserves_state_on_single_window() -> None:
+    # Layout state (kind/n_masters/transforms) must survive a single-window
+    # workspace; resetting here would clear custom layouts on other displays
+    # whenever a window event fires globally via _run_existing_layouts.
     class FakeLeaf:
         floating = 'user_off'
         type = 'con'
@@ -356,12 +391,14 @@ def test_run_ncol_layout_resets_state_on_single_window() -> None:
 
     daemon._run_ncol_layout(cast(daemon.SwayConn, FakeConn()), state)
 
-    assert state.kind == daemon._LAYOUT_BY_NAME.get(daemon.DEFAULT_LAYOUT)
-    assert state.n_masters == 1
-    assert state.transforms == set()
+    assert state.kind == daemon.LayoutKind.THREE_COL
+    assert state.n_masters == 2
+    assert state.transforms == {daemon.Transform.REFLECTX}
 
 
-def test_run_nop_layout_resets_state_on_single_window() -> None:
+def test_run_nop_layout_preserves_state_on_single_window() -> None:
+    # Layout state must survive a single-window workspace; same cross-display
+    # reset hazard as in the ncol case above.
     class FakeLeaf:
         floating = 'user_off'
         type = 'con'
@@ -384,9 +421,208 @@ def test_run_nop_layout_resets_state_on_single_window() -> None:
 
     daemon._run_nop_layout(cast(daemon.SwayConn, FakeConn()), state)
 
-    assert state.kind == daemon._LAYOUT_BY_NAME.get(daemon.DEFAULT_LAYOUT)
-    assert state.n_masters == 1
-    assert state.transforms == set()
+    assert state.kind == daemon.LayoutKind.NOP
+    assert state.n_masters == 3
+    assert state.transforms == {daemon.Transform.TRANSPOSE}
+
+
+def test_run_nop_layout_no_focus_steal_on_non_focused_ws() -> None:
+    # Non-focused NOP workspaces must not call focused.command('focus');
+    # focused NOP workspaces must still restore focus as expected.
+    focus_commands: list[int] = []
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+
+        def command(self, payload: str) -> None:
+            if payload == 'focus':
+                focus_commands.append(self.id)
+
+        def leaves(self) -> list['FakeLeaf']:
+            return [self]
+
+    leaf1 = FakeLeaf(1)
+    leaf2 = FakeLeaf(2)
+
+    class FakeWorkspace:
+        id = 99
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [leaf1, leaf2]
+
+        def find_focused(self) -> FakeLeaf:
+            return leaf1
+
+    class FakeTree:
+        def find_by_id(self, _con_id: int) -> FakeWorkspace:
+            return FakeWorkspace()
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    state = daemon.WorkspaceState(ws_id=99, kind=daemon.LayoutKind.NOP)
+
+    # Non-focused case: focused_ws_id belongs to a different workspace
+    daemon._run_nop_layout(cast(daemon.SwayConn, FakeConn()), state,
+                           focused_ws_id=55)
+    assert focus_commands == [], (
+        'Non-focused NOP workspace must not steal focus')
+
+    # Focused case: focused_ws_id matches this workspace
+    daemon._run_nop_layout(cast(daemon.SwayConn, FakeConn()), state,
+                           focused_ws_id=99)
+    assert focus_commands == [leaf1.id], (
+        'Focused NOP workspace should restore focus')
+
+
+def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
+        monkeypatch) -> None:
+    # Regression: when _run_existing_layouts processes all workspaces after
+    # a window move, the non-focused workspace (source) must pass
+    # is_focused=False to _reflow_ncol, while the focused workspace
+    # (destination) passes is_focused=True.
+    WS_A_ID = 10  # source workspace (non-focused)
+    WS_B_ID = 20  # destination workspace (focused)
+
+    reflow_calls: list[tuple[int, bool]] = []
+
+    class FakeLeaf:
+        floating = 'user_off'
+        type = 'con'
+
+    class FakeWs:
+        def __init__(self, ws_id: int) -> None:
+            self.id = ws_id
+            self.layout = 'splith'
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [FakeLeaf(), FakeLeaf()]
+
+        def find_focused(self) -> None:
+            return None
+
+        def workspace(self) -> 'FakeWs':
+            return self
+
+    ws_a = FakeWs(WS_A_ID)
+    ws_b = FakeWs(WS_B_ID)
+
+    def fake_reflow(_i3: Any, _state: Any, ws: Any,
+                    is_focused: bool = False) -> bool:
+        reflow_calls.append((ws.id, is_focused))
+        return False
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> object:
+            return ws_a if con_id == WS_A_ID else ws_b
+
+    class FakeConn:
+        def get_workspaces(self) -> list:
+            from types import SimpleNamespace
+            return [
+                SimpleNamespace(ipc_data={'id': WS_A_ID}, focused=False,
+                                name='A0'),
+                SimpleNamespace(ipc_data={'id': WS_B_ID}, focused=True,
+                                name='B0'),
+            ]
+
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    monkeypatch.setattr(daemon, '_reflow_ncol', fake_reflow)
+    monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
+    monkeypatch.setattr(daemon, '_refocus_window', lambda _i3, _win: None)
+
+    daemon._ws_states[WS_A_ID] = daemon.WorkspaceState(ws_id=WS_A_ID)
+    daemon._ws_states[WS_B_ID] = daemon.WorkspaceState(ws_id=WS_B_ID)
+    try:
+        daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
+    finally:
+        daemon._ws_states.pop(WS_A_ID, None)
+        daemon._ws_states.pop(WS_B_ID, None)
+
+    a_calls = [c for c in reflow_calls if c[0] == WS_A_ID]
+    b_calls = [c for c in reflow_calls if c[0] == WS_B_ID]
+    assert a_calls and not a_calls[0][1], (
+        f'WS_A (non-focused) must have is_focused=False, got {a_calls}')
+    assert b_calls and b_calls[0][1], (
+        f'WS_B (focused) must have is_focused=True, got {b_calls}')
+
+
+def test_run_existing_layouts_does_not_reset_state_on_sparse_workspace(
+        monkeypatch) -> None:
+    # Regression: window open/close on any display triggers
+    # _run_existing_layouts for ALL workspaces. Workspaces with <=1 tiling
+    # window must NOT have their
+    # layout state reset. Without this fix, custom n_masters/kind/transforms
+    # on displays other than the active one were silently cleared.
+    WS_A_ID = 42   # workspace with >=2 windows (active layout)
+    WS_B_ID = 77   # workspace with 1 window on "other display"
+
+    class FakeLeaf:
+        floating = 'user_off'
+        type = 'con'
+
+    class FakeWsA:
+        id = WS_A_ID
+        layout = 'splith'
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [FakeLeaf(), FakeLeaf()]
+
+        def find_focused(self) -> None:
+            return None
+
+    class FakeWsB:
+        id = WS_B_ID
+        layout = 'splith'
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [FakeLeaf()]
+
+        def find_focused(self) -> None:
+            return None
+
+    ws_a_inst = FakeWsA()
+    ws_b_inst = FakeWsB()
+
+    class FakeTree:
+        def find_by_id(self, ws_id: int) -> object:
+            return ws_a_inst if ws_id == WS_A_ID else ws_b_inst
+
+    class FakeConn:
+        def get_workspaces(self) -> list:
+            from types import SimpleNamespace
+            return [SimpleNamespace(ipc_data={'id': WS_A_ID}, name='A0'),
+                    SimpleNamespace(ipc_data={'id': WS_B_ID}, name='B0')]
+
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    # Set custom state on ws_b (the "other display")
+    state_b = daemon.WorkspaceState(
+        ws_id=WS_B_ID, kind=daemon.LayoutKind.THREE_COL,
+        n_masters=2, transforms={daemon.Transform.REFLECTX})
+    daemon._ws_states[WS_B_ID] = state_b
+
+    # _reflow_ncol must not block (returns False = nothing moved)
+    monkeypatch.setattr(daemon, '_reflow_ncol',
+                        lambda _i3, _s, _ws, _if=False: False)
+    monkeypatch.setattr(daemon, '_get_focused_workspace', lambda _i3: None)
+
+    try:
+        daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
+    finally:
+        daemon._ws_states.pop(WS_B_ID, None)
+
+    # ws_b's state must be completely unchanged
+    assert state_b.kind == daemon.LayoutKind.THREE_COL
+    assert state_b.n_masters == 2
+    assert state_b.transforms == {daemon.Transform.REFLECTX}
 
 
 def test_get_master_window_respects_reflectx_order() -> None:
@@ -480,9 +716,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_refetch',
                         lambda _i3, _con: ws_after_reflow)
     monkeypatch.setattr(daemon, '_reflow_ncol',
-                        lambda _i3, _state, _ws: False)
-    monkeypatch.setattr(daemon, '_get_focused_workspace',
-                        lambda _i3: ws_after_reflow)
+                        lambda _i3, _state, _ws, _if=False: False)
     monkeypatch.setattr(daemon, '_refocus_window',
                         lambda _i3, win: refocused_ids.append(win.id))
 
@@ -508,7 +742,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
         def get_workspaces(self) -> list[SimpleNamespace]:
             return [SimpleNamespace(ipc_data={'id': WS_ID}, focused=True)]
 
-    daemon._run_ncol_layout(cast(daemon.SwayConn, FakeConn2()), state)
+    daemon._run_ncol_layout(cast(daemon.SwayConn, FakeConn2()), state, WS_ID)
 
     assert refocused_ids == [MOVED_WIN_ID], (
         f'Expected focus on moved window {MOVED_WIN_ID}, got {refocused_ids}')
@@ -528,7 +762,7 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._move_count[0] = 0
+    daemon._daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_swap_moved_before_active',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -539,6 +773,58 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'swap', 'run', 'flush']
+
+
+def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
+    '''Move event for a container NOT in _daemon_move_ids is processed.'''
+    actions: list[str] = []
+
+    class FakeConn:
+        def start_buffering(self) -> None:
+            actions.append('start')
+
+        def flush(self) -> None:
+            actions.append('flush')
+
+    daemon._daemon_move_ids.clear()
+    daemon._daemon_move_ids.add(99)  # different container
+    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+                        lambda _i3, _id: actions.append('swap'))
+    monkeypatch.setattr(daemon, '_run_existing_layouts',
+                        lambda _i3: actions.append('run'))
+
+    event = cast(Any, SimpleNamespace(change='move',
+                                      container=SimpleNamespace(id=77)))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+
+    # container 77 not in set → user move processed normally
+    assert actions == ['start', 'swap', 'run', 'flush']
+    # container 99 still in set (different ID, not consumed)
+    assert 99 in daemon._daemon_move_ids
+
+
+def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
+    '''Close event removes a stale _daemon_move_ids entry.'''
+    actions: list[str] = []
+
+    class FakeConn:
+        def start_buffering(self) -> None:
+            actions.append('start')
+
+        def flush(self) -> None:
+            actions.append('flush')
+
+    daemon._daemon_move_ids.clear()
+    daemon._daemon_move_ids.add(55)  # stale entry simulating closed container
+    monkeypatch.setattr(daemon, '_run_existing_layouts',
+                        lambda _i3: actions.append('run'))
+
+    event = cast(Any, SimpleNamespace(change='close',
+                                      container=SimpleNamespace(id=55)))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+
+    assert 55 not in daemon._daemon_move_ids  # cleaned up
+    assert actions == ['start', 'run', 'flush']  # reflow still happens
 
 
 def test_swap_moved_before_active_swaps_with_predecessor(
