@@ -533,6 +533,51 @@ def test_fix_workspace_order_aborts_on_evacuation_timeout(
     assert not focused
 
 
+def test_fix_workspace_order_renames_without_refocus(monkeypatch) -> None:
+    # Verifies that fix_workspace_order renames temp workspaces back instead
+    # of using focus+recreate, so an empty new_ws is never auto-deleted.
+    # Regression test for: navigating to a predecessor workspace gets stuck
+    # because new_ws is repeatedly destroyed and recreated at wrong position.
+    moved: list[tuple[int, str]] = []
+    focused: list[str] = []
+    renamed: list[tuple[str, str]] = []
+
+    monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
+
+    # Call 1: initial workspace snapshot (A2 out-of-order, A1 is new empty ws)
+    # Call 2: stale temp check (no stale temps present initially)
+    # Call 3+: post-evacuation (A2 gone, temp exists; A1 still alive since
+    #          we never moved focus away from it)
+    call_count = [0]
+
+    def mock_ws_raw(_d: str) -> list[str]:
+        call_count[0] += 1
+        if call_count[0] <= 2:
+            return ['A0', 'A2', 'A1']
+        return ['A0', 'A1', f'{helper._WS_REORDER_TMP}A2']
+
+    monkeypatch.setattr(helper, 'get_workspaces_raw', mock_ws_raw)
+    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+                        lambda ws: [42] if ws == 'A2' else [])
+    monkeypatch.setattr(helper, 'move_window_to_workspace',
+                        lambda wid, ws: moved.append((wid, ws)))
+    monkeypatch.setattr(helper, 'focus_workspace',
+                        lambda ws: focused.append(ws))
+    monkeypatch.setattr(helper, 'rename_workspace',
+                        lambda old, new: renamed.append((old, new)))
+
+    helper.fix_workspace_order('DP-1', 'A1')
+
+    # A2's window evacuated to temp workspace
+    assert (42, f'{helper._WS_REORDER_TMP}A2') in moved
+    # Temp workspace renamed back (not refocused + window-restored)
+    assert (f'{helper._WS_REORDER_TMP}A2', 'A2') in renamed
+    # No individual window restore move (rename keeps windows in place)
+    assert (42, 'A2') not in moved
+    # Focus called exactly once: at end for new_ws (never for A2)
+    assert focused == ['A1']
+
+
 # -----------------------------------------------------------------------------
 # ----------------------------- compact_workspaces ----------------------------
 # -----------------------------------------------------------------------------

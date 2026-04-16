@@ -155,8 +155,11 @@ def _cleanup_temp_workspaces(all_disps: list[str]) -> None:
             real_name = _strip_reorder_tmp_prefix(ws_name)
             if real_name == ws_name or not _is_managed_workspace(real_name):
                 continue
-            for win_id in get_windows_on_workspace(ws_name):
-                move_window_to_workspace(win_id, real_name)
+            try:
+                for win_id in get_windows_on_workspace(ws_name):
+                    move_window_to_workspace(win_id, real_name)
+            except Exception:
+                pass  # Best-effort; leave windows in place on IPC error
 
 
 def focus_nei_workspace(offset: int = 1) -> None:
@@ -204,8 +207,8 @@ def move_nei_workspace(offset: int = 1) -> None:
         # Fix sway's internal order if a new workspace was created
         if nxt_ws not in ws_before:
             fix_workspace_order(cur_disp, nxt_ws)
-            # fix_workspace_order temporarily focuses other workspaces;
-            # restore focus to the moved window after all fixup is done.
+            # fix_workspace_order ends with focus_workspace(new_ws);
+            # focus the moved window explicitly to ensure correct focus.
             if win_id is not None:
                 focus_window(win_id)
 
@@ -213,9 +216,11 @@ def move_nei_workspace(offset: int = 1) -> None:
 def fix_workspace_order(display: str, new_ws: str) -> None:
     ''' Reorder sway's workspace list after a new one is created mid-sequence.
 
-    When B1 is created after B0,B2, sway appends it: B0,B2,B1.
-    This evacuates B2 to a temp WS (sway auto-deletes the empty B2),
-    then recreates it in sorted position: B0,B1,B2.
+    When B4 is created after B0,B3,B5, sway appends it: [B0,B3,B5,B4].
+    We evacuate out-of-order workspaces (B5) to temp names in sorted order
+    so each temp workspace is appended right after new_ws.  Then we rename
+    them back in place — no focus change required, so new_ws can never be
+    auto-deleted (sway only deletes empty workspaces on focus-away).
 
     Concurrent calls are serialised by a file lock; state is re-read under
     the lock so each invocation operates on a consistent snapshot. '''
@@ -225,19 +230,41 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
             return
         new_ws_pos = ws_actual.index(new_ws)
 
-        # Only consider managed workspaces to prevent _t*-name cascade
-        ws_to_reorder = [ws for ws in ws_actual[:new_ws_pos]
-                         if ws_sort_key(ws) > ws_sort_key(new_ws)
-                         and _is_managed_workspace(ws)]
+        # Only consider managed workspaces to prevent _t*-name cascade.
+        # Read windows now to filter out empty workspaces — empty ones have
+        # no temp created for them and would cause poll timeouts.
+        candidates = [ws for ws in ws_actual[:new_ws_pos]
+                      if ws_sort_key(ws) > ws_sort_key(new_ws)
+                      and _is_managed_workspace(ws)]
+        if not candidates:
+            return
+        saved_windows = {ws: get_windows_on_workspace(ws) for ws in candidates}
+        ws_to_reorder = [ws for ws in candidates if saved_windows[ws]]
         if not ws_to_reorder:
             return
 
-        # Evacuate each out-of-order workspace's windows to a temp workspace
-        saved_windows: dict[str, list] = {}
-        for ws in ws_to_reorder:
-            saved_windows[ws] = get_windows_on_workspace(ws)
+        # Pre-clean any stale temp workspaces from prior crashes.
+        # Stale temps sit at an unknown position (not end of list), so reusing
+        # them would break the sorted-append invariant of the rename approach.
+        stale_tmps = {f'{_WS_REORDER_TMP}{ws}' for ws in ws_to_reorder}
+        if set(get_workspaces_raw(display)) & stale_tmps:
+            for ws in sorted(ws_to_reorder, key=ws_sort_key):
+                tmp = f'{_WS_REORDER_TMP}{ws}'
+                for win_id in get_windows_on_workspace(tmp):
+                    move_window_to_workspace(win_id, ws)
+            for _ in range(10):
+                if not (set(get_workspaces_raw(display)) & stale_tmps):
+                    break
+                time.sleep(0.02)
+            else:
+                return  # Stale temps still present; abort to avoid mis-order
+
+        # Evacuate in sorted order: sway appends each new temp workspace at
+        # the end, so sorted evacuation places temps in correct positions.
+        for ws in sorted(ws_to_reorder, key=ws_sort_key):
             for win_id in saved_windows[ws]:
                 move_window_to_workspace(win_id, f'{_WS_REORDER_TMP}{ws}')
+
         # Poll until out-of-order workspaces are auto-deleted (usually instant)
         evacuated = False
         for _ in range(15):
@@ -253,16 +280,12 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
                     move_window_to_workspace(win_id, ws)
             return
 
-        # Recreate workspaces in sorted order (focusing unknown WS creates it)
+        # Rename temps back — preserves positions, no focus change needed.
         for ws in sorted(ws_to_reorder, key=ws_sort_key):
-            focus_workspace(ws)
-        # Return focus to the newly created workspace
-        focus_workspace(new_ws)
-
-        # Restore windows to their correct workspaces
-        for ws in ws_to_reorder:
-            for win_id in saved_windows[ws]:
-                move_window_to_workspace(win_id, ws)
+            rename_workspace(f'{_WS_REORDER_TMP}{ws}', ws)
+        # Re-focus new_ws only if it still exists (guard: don't recreate it)
+        if new_ws in get_workspaces_raw(display):
+            focus_workspace(new_ws)
 
 
 def focus_valid_nei_workspace(offset: int = 1) -> None:
@@ -433,22 +456,14 @@ def move_display(index: int) -> None:
 # ---------------------------- Sway Getter Wrappers ---------------------------
 # -----------------------------------------------------------------------------
 def get_displays() -> list[str]:
-    # Get display info with positions
-    output_json = run_cmd("swaymsg -t get_outputs")
-    outputs = json.loads(output_json)
-
-    # Extract display names and their x positions
+    ''' Return active display names sorted by x then y position. '''
+    outputs = json.loads(run_cmd("swaymsg -t get_outputs"))
     display_positions = [(output['name'],
                           output['rect']['x'],
                           output['rect']['y'])
                          for output in outputs if output['active']]
-
-    # Sort by x position
     display_positions.sort(key=lambda x: (x[1], x[2]))
-
-    # Return just the display names in sorted order
-    all_disps = [name for name, _, _ in display_positions]
-    return all_disps
+    return [name for name, _, _ in display_positions]
 
 
 def get_cur_display() -> str:

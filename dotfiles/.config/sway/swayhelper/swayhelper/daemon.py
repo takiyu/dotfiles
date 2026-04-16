@@ -9,7 +9,7 @@ import enum
 import logging
 import math
 import shlex
-import traceback
+import time
 from typing import Any, Callable, Optional, cast
 
 import i3ipc
@@ -24,6 +24,14 @@ DEFAULT_LAYOUT = 'tall'       # Layout for workspaces with no explicit setting
 # Workspace name prefixes used by helper.py for temporary rename operations.
 # These workspaces must be skipped during layout to avoid tiling zombies.
 _TEMP_WS_PREFIXES = ('__ws_', '__swh_tmp_')
+
+# Maximum reflow iterations per window; scales the convergence guard in
+# _run_ncol_layout to handle large workspaces without false timeouts.
+MAX_REFLOW_ITERS_PER_WIN = 3
+
+# Time-to-live for daemon-move suppression entries (seconds).
+# Generous bound; sway events typically arrive within milliseconds.
+_MOVE_ID_TTL = 2.0
 
 
 # -----------------------------------------------------------------------------
@@ -90,13 +98,11 @@ class WorkspaceState:
 # Per-workspace layout states, keyed by workspace con_id
 _ws_states: dict[int, WorkspaceState] = {}
 
-# Container IDs of pending daemon-initiated moves. On each such move, the
-# container's ID is recorded so that the resulting WINDOW_MOVE event can be
-# identified and suppressed, preventing infinite reflow cycles.  Using per-ID
-# tracking (rather than a plain counter) means rapid user keypresses that
-# arrive between a daemon move and its event cannot accidentally consume the
-# suppression slot intended for that daemon event.
-_daemon_move_ids: set[int] = set()
+# Pending daemon-initiated moves: container_id -> expiry time (monotonic).
+# The resulting WINDOW_MOVE event is suppressed to prevent infinite reflow.
+# Entries expire after _MOVE_ID_TTL seconds so a sway-dropped event never
+# permanently suppresses future user moves on the same container.
+_daemon_move_ids: dict[int, float] = {}
 
 
 # -----------------------------------------------------------------------------
@@ -134,33 +140,32 @@ class SwayConn(i3ipc.Connection):
         self._buf.clear()
         return super().command(payload)
 
+    def discard(self) -> None:
+        '''Discard buffered commands without sending; disable buffering.'''
+        self._buffering = False
+        self._buf.clear()
+
     def get_tree(self) -> Con:  # type: ignore[override]
         # Flush pending moves before reading tree to get a consistent view
         was_buffering = self._buffering
         self.flush()
-        tree = super().get_tree()
-        if was_buffering:
-            self.start_buffering()
+        try:
+            tree = super().get_tree()
+        finally:
+            if was_buffering:
+                self.start_buffering()
         return tree  # type: ignore[return-value]
 
     def get_workspaces(self) -> list:  # type: ignore[override]
         was_buffering = self._buffering
         self.flush()
-        workspaces = super().get_workspaces()
-        if was_buffering:
-            self.start_buffering()
+        try:
+            workspaces = super().get_workspaces()
+        finally:
+            if was_buffering:
+                self.start_buffering()
         return workspaces
 
-
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# ------------------------------ Implementation -------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
 # ----------------------------- Event Dispatchers -----------------------------
@@ -178,25 +183,25 @@ def on_binding(i3: SwayConn, event: BindingEvent) -> None:
                 handler(i3, event, *argv[1:])
         i3.flush()
     except Exception:
-        traceback.print_exc()
+        i3.discard()
+        logging.exception('binding error: %s', event.binding.command)
 
 
 def on_window(i3: SwayConn, event: WindowEvent) -> None:
     '''Re-tile existing workspaces after any relevant window event.'''
     try:
         if event.change == 'move':
-            # Suppress WINDOW_MOVE events fired by daemon-initiated rebalancing
-            # moves (move right/left, move-to-mark).  Per-container tracking
-            # ensures rapid user keypresses on *other* windows are never
-            # mistaken for these daemon events (unlike a plain counter).
+            # Suppress WINDOW_MOVE events from daemon-initiated rebalancing.
+            # TTL prevents a sway-dropped event from permanently blocking
+            # future user moves on the same container.
             container = event.container
-            if container.id in _daemon_move_ids:
-                _daemon_move_ids.discard(container.id)
+            expiry = _daemon_move_ids.pop(container.id, None)
+            if expiry is not None and time.monotonic() < expiry:
                 return
         elif event.change == 'close':
-            # Clean up any stale entry so closed containers don't linger.
+            # Remove stale entry so closed containers don't linger.
             closed: Any = event.container
-            _daemon_move_ids.discard(closed.id)
+            _daemon_move_ids.pop(closed.id, None)
         i3.start_buffering()
         if event.change == 'new':
             # Swap the new window before its sway-assigned predecessor so it
@@ -212,7 +217,8 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
         _run_existing_layouts(i3)
         i3.flush()
     except Exception:
-        traceback.print_exc()
+        i3.discard()
+        logging.exception('window event error (%s)', event.change)
 
 
 # -----------------------------------------------------------------------------
@@ -414,7 +420,15 @@ def _run_existing_layouts(i3: SwayConn) -> None:
         # to prevent the layout engine from tiling transient/zombie workspaces.
         if any(reply.name.startswith(p) for p in _TEMP_WS_PREFIXES):
             continue
-        _run_layout(i3, int(reply.ipc_data['id']), focused_ws_id)
+        try:
+            _run_layout(i3, int(reply.ipc_data['id']), focused_ws_id)
+        except Exception:
+            # One broken workspace must not abort layout for all others.
+            # Discard stale commands and re-enable buffering for the next
+            # workspace so it still benefits from command batching.
+            i3.discard()
+            i3.start_buffering()
+            logging.exception('layout error on workspace %s', reply.name)
 
 
 def _run_layout(i3: SwayConn, ws_id: int,
@@ -452,7 +466,8 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
     if ws is None:
         return
     # Nothing to tile; preserve state so it survives until more windows open
-    if len([leaf for leaf in ws.leaves() if not _is_floating(leaf)]) <= 1:
+    n_tiling = len([leaf for leaf in ws.leaves() if not _is_floating(leaf)])
+    if n_tiling <= 1:
         return
 
     is_focused = (state.ws_id == focused_ws_id)
@@ -464,12 +479,18 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
     pre_focused_id: Optional[int] = (pre_focused.id
                                      if pre_focused is not None else None)
 
-    while True:
+    # Scale the iteration cap with workspace size: one structural change per
+    # pass means O(n_windows) passes in the worst case.
+    max_iters = max(20, n_tiling * MAX_REFLOW_ITERS_PER_WIN)
+    for _ in range(max_iters):
         ws = _refetch(i3, ws)
         if ws is None:
             return
         if not _reflow_ncol(i3, state, ws, is_focused):
             break
+    else:
+        logging.warning('reflow did not converge for ws %d (%d windows)',
+                        state.ws_id, n_tiling)
 
     ws = _refetch(i3, ws)
     if ws and is_focused:
@@ -516,7 +537,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
         if i == 0:  # master pane
             if n == 1 and len(col.nodes) > state.n_masters:
                 # Single column overflows: push one window right to new col
-                _daemon_move_ids.add(col.nodes[-1].id)
+                _daemon_move_ids[col.nodes[-1].id] = (
+                    time.monotonic() + _MOVE_ID_TTL)
                 focused = ws.find_focused() if ws else None
                 col.nodes[-1].command(_transform_cmd(state, 'move right'))
                 if is_focused and focused:
@@ -533,7 +555,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
             if len(col.nodes) > 1:
                 if n < state.n_columns:
                     # Too few columns: expand rightward
-                    _daemon_move_ids.add(col.nodes[-1].id)
+                    _daemon_move_ids[col.nodes[-1].id] = (
+                        time.monotonic() + _MOVE_ID_TTL)
                     focused = ws.find_focused() if ws else None
                     col.nodes[-1].command(
                         _transform_cmd(state, 'move right'))
@@ -542,7 +565,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                     return True
                 elif n > state.n_columns:
                     # Too many columns: collapse leftward
-                    _daemon_move_ids.add(col.nodes[0].id)
+                    _daemon_move_ids[col.nodes[0].id] = (
+                        time.monotonic() + _MOVE_ID_TTL)
                     focused = ws.find_focused() if ws else None
                     col.nodes[0].command(
                         _transform_cmd(state, 'move left'))
@@ -766,6 +790,12 @@ def _swap_moved_before_active(i3: SwayConn, moved_win_id: int) -> None:
     ws = moved_win.workspace()
     if ws is None:
         return
+    # Skip helper-initiated evacuation moves to temp workspaces.
+    # Moving to __swh_tmp_* is done by fix_workspace_order in the helper;
+    # focusing those windows would steal focus from the (possibly empty)
+    # new_ws, triggering sway's auto-deletion of new_ws.
+    if any(ws.name.startswith(p) for p in _TEMP_WS_PREFIXES):
+        return
     leaves = [leaf for leaf in ws.leaves() if not _is_floating(leaf)]
     if len(leaves) < 2:
         return
@@ -837,7 +867,7 @@ def _get_resize_target(ws: Con, state: WorkspaceState) -> Optional[Con]:
 # -----------------------------------------------------------------------------
 def _move_container(src: Con, dst: Con) -> None:
     '''Teleport src to be placed adjacent to dst using a temporary mark.'''
-    _daemon_move_ids.add(src.id)
+    _daemon_move_ids[src.id] = time.monotonic() + _MOVE_ID_TTL
     dst.command(f'mark {MOVE_MARK}')
     src.command(f'move window to mark {MOVE_MARK}')
     dst.command(f'unmark {MOVE_MARK}')

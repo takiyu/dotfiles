@@ -63,7 +63,7 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
             actions.append('flush')
 
     daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids.add(42)
+    daemon._daemon_move_ids[42] = float('inf')  # non-expiring entry
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
@@ -787,7 +787,7 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
             actions.append('flush')
 
     daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids.add(99)  # different container
+    daemon._daemon_move_ids[99] = float('inf')  # different container
     monkeypatch.setattr(daemon, '_swap_moved_before_active',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -815,7 +815,8 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
             actions.append('flush')
 
     daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids.add(55)  # stale entry simulating closed container
+    # stale entry simulating closed container
+    daemon._daemon_move_ids[55] = float('inf')
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
@@ -854,6 +855,7 @@ def test_swap_moved_before_active_swaps_with_predecessor(
 
     class FakeWsCon:
         id = 1
+        name = 'A0'
 
         def leaves(self) -> list[FakeLeaf]:
             return [prev_leaf, moved_leaf, after_leaf]
@@ -900,6 +902,7 @@ def test_swap_moved_before_active_swaps_when_predecessor_is_last(
 
     class FakeWsCon:
         id = 1
+        name = 'A0'
 
         def leaves(self) -> list[FakeLeaf]:
             return [prev_leaf, moved_leaf]
@@ -942,6 +945,7 @@ def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
 
     class FakeWsCon:
         id = 1
+        name = 'A0'
 
         def leaves(self) -> list[FakeLeaf]:
             return [moved_leaf, other_leaf]
@@ -957,6 +961,117 @@ def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     assert moved_leaf.commands == []
+
+
+def test_swap_moved_before_active_skips_temp_workspace() -> None:
+    '''_swap_moved_before_active does nothing when destination is a temp ws.
+
+    Evacuation moves in fix_workspace_order land on __swh_tmp_* workspaces.
+    Focusing those windows would steal focus from the (possibly empty)
+    new_ws and trigger sway's auto-deletion of new_ws.
+    '''
+    MOVED_ID = 30
+    PREV_ID = 20
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.floating = 'user_off'
+            self.type = 'con'
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+
+    prev_leaf = FakeLeaf(PREV_ID)
+    moved_leaf = FakeLeaf(MOVED_ID)
+
+    class FakeTree:
+        def find_by_id(self, con_id: int) -> Optional[FakeLeaf]:
+            return moved_leaf if con_id == MOVED_ID else None
+
+    # Destination workspace is a temp evacuation workspace
+    class FakeWsCon:
+        id = 1
+        name = '__swh_tmp_B5'
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [prev_leaf, moved_leaf]
+
+    moved_leaf.workspace = (  # type: ignore[method-assign]
+        lambda: FakeWsCon())
+
+    class FakeConn:
+        def get_tree(self) -> FakeTree:
+            return FakeTree()
+
+    daemon._swap_moved_before_active(
+        cast(daemon.SwayConn, FakeConn()), MOVED_ID)
+
+    # No swap and no focus change should have occurred
+    assert moved_leaf.commands == []
+
+
+def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
+    '''An expired _daemon_move_ids entry must not suppress a user move.'''
+    actions: list[str] = []
+
+    class FakeConn:
+        def start_buffering(self) -> None:
+            actions.append('start')
+
+        def flush(self) -> None:
+            actions.append('flush')
+
+    daemon._daemon_move_ids.clear()
+    daemon._daemon_move_ids[42] = -1.0  # already expired (negative monotonic)
+    monkeypatch.setattr(daemon, '_run_existing_layouts',
+                        lambda _i3: actions.append('run'))
+    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+                        lambda _i3, _id: actions.append('swap'))
+
+    event = cast(Any, SimpleNamespace(change='move',
+                                      container=SimpleNamespace(id=42)))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+
+    assert 42 not in daemon._daemon_move_ids   # entry consumed regardless
+    assert actions == ['start', 'swap', 'run', 'flush']  # treated as user move
+
+
+def test_run_existing_layouts_continues_after_workspace_error(
+        monkeypatch) -> None:
+    '''A layout error on one workspace must not abort tiling of the others.'''
+    calls: list[int] = []
+
+    class FakeConn:
+        def get_workspaces(self) -> list[SimpleNamespace]:
+            return [
+                SimpleNamespace(ipc_data={'id': 11}, focused=False,
+                                name='A0'),
+                SimpleNamespace(ipc_data={'id': 22}, focused=False,
+                                name='B0'),
+                SimpleNamespace(ipc_data={'id': 33}, focused=False,
+                                name='C0'),
+            ]
+
+        def discard(self) -> None:
+            pass
+
+        def start_buffering(self) -> None:
+            pass
+
+    def fake_run_layout(_i3: object, ws_id: int,
+                        _focused_ws_id: Optional[int] = None) -> None:
+        if ws_id == 22:
+            raise RuntimeError('simulated workspace error')
+        calls.append(ws_id)
+
+    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    monkeypatch.setattr(daemon, '_get_focused_workspace', lambda _i3: None)
+
+    daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
+
+    assert calls == [11, 33]  # workspace 22 failed, but 33 still executed
 
 
 # -----------------------------------------------------------------------------
