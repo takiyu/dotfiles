@@ -20,7 +20,7 @@ from swayhelper.constants import MOVE_MARK
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
-DEFAULT_LAYOUT = 'tall'       # Layout for workspaces with no explicit setting
+DEFAULT_LAYOUT = 'tall'  # Default for landscape; portrait auto-uses 'stack'
 # Workspace name prefixes used by helper.py for temporary rename operations.
 # These workspaces must be skipped during layout to avoid tiling zombies.
 _TEMP_WS_PREFIXES = ('__ws_', '__swh_tmp_')
@@ -39,6 +39,7 @@ _MOVE_ID_TTL = 2.0
 # -----------------------------------------------------------------------------
 class LayoutKind(enum.Enum):
     TALL = 'tall'
+    STACK = 'stack'
     THREE_COL = '3_col'
     NOP = 'nop'
 
@@ -52,6 +53,7 @@ class Transform(enum.Enum):
 # Number of tiling columns per layout kind (NOP has no column-based tiling)
 _LAYOUT_COLS: dict[LayoutKind, int] = {
     LayoutKind.TALL: 2,
+    LayoutKind.STACK: 1,
     LayoutKind.THREE_COL: 3,
 }
 
@@ -415,13 +417,28 @@ def _run_existing_layouts(i3: SwayConn) -> None:
     # Snapshot focused workspace once to avoid cross-display focus theft
     focused_ws = _get_focused_workspace(i3)
     focused_ws_id: Optional[int] = focused_ws.id if focused_ws else None
+    # Cache output rects once for portrait-detection on new workspaces
+    outputs: dict[str, Any] = {
+        out.name: out   # type: ignore[attr-defined]
+        for out in i3.get_outputs()
+    }
     for reply in i3.get_workspaces():
         # Skip orphaned helper temp workspaces (e.g. __ws_B0, __swh_tmp_A1)
         # to prevent the layout engine from tiling transient/zombie workspaces.
         if any(reply.name.startswith(p) for p in _TEMP_WS_PREFIXES):
             continue
+        ws_id = int(reply.ipc_data['id'])
+        # On first encounter initialise with orientation-aware default.
+        # Portrait outputs (height > width) default to 'stack' (1 column).
+        if ws_id not in _ws_states:
+            out = outputs.get(getattr(reply, 'output', ''))
+            is_portrait = (out is not None
+                           and out.rect.height   # type: ignore[union-attr]
+                           > out.rect.width)     # type: ignore[union-attr]
+            _get_ws_state(ws_id,
+                          LayoutKind.STACK if is_portrait else None)
         try:
-            _run_layout(i3, int(reply.ipc_data['id']), focused_ws_id)
+            _run_layout(i3, ws_id, focused_ws_id)
         except Exception:
             # One broken workspace must not abort layout for all others.
             # Discard stale commands and re-enable buffering for the next
@@ -510,6 +527,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
     Columns are top-level vertical-split containers in the workspace.
     The first column holds n_masters windows; each remaining column
     holds an equal share of the slave windows.
+    For n_columns == 1 (stack layout) all windows stay in one column.
     '''
     ws: Any = ws_in
     if len(ws.leaves()) <= 1:
@@ -523,6 +541,18 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
     ws = _refetch(i3, ws)
     if ws is None:
         return False
+
+    # Stack layout: collapse extra columns into a single vertical column
+    if state.n_columns <= 1:
+        if len(ws.nodes) <= 1:
+            return False
+        node = ws.nodes[-1].nodes[0]
+        _daemon_move_ids[node.id] = time.monotonic() + _MOVE_ID_TTL
+        focused = ws.find_focused() if is_focused else None
+        node.command('move left')
+        if is_focused and focused:
+            focused.command('focus')
+        return True
 
     n_leaves = len(ws.leaves())
     n_slaves = max(0, n_leaves - state.n_masters)
@@ -939,10 +969,18 @@ def _is_floating(con: Con) -> bool:
             or con.type == 'floating_con')
 
 
-def _get_ws_state(ws_id: int) -> WorkspaceState:
-    '''Return (creating if absent) the layout state for a workspace.'''
+def _get_ws_state(ws_id: int,
+                  default_kind: Optional[LayoutKind] = None
+                  ) -> WorkspaceState:
+    '''Return (creating if absent) the layout state for a workspace.
+
+    ``default_kind`` sets the initial layout kind when creating the state for
+    the first time.  When None the global DEFAULT_LAYOUT name is used.
+    '''
     if ws_id not in _ws_states:
-        kind = _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT, LayoutKind.TALL)
+        kind = (default_kind
+                if default_kind is not None
+                else _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT, LayoutKind.TALL))
         _ws_states[ws_id] = WorkspaceState(ws_id=ws_id, kind=kind)
     return _ws_states[ws_id]
 

@@ -10,15 +10,25 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
     class FakeConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
             return [
-                SimpleNamespace(ipc_data={'id': 11}, focused=False, name='A0'),
-                SimpleNamespace(ipc_data={'id': 22}, focused=False, name='B0'),
+                SimpleNamespace(ipc_data={'id': 11}, focused=False, name='A0',
+                                output='DP-1'),
+                SimpleNamespace(ipc_data={'id': 22}, focused=False, name='B0',
+                                output='DP-1'),
             ]
+
+        def get_outputs(self) -> list[SimpleNamespace]:
+            return [SimpleNamespace(
+                name='DP-1', rect=SimpleNamespace(width=1920, height=1080),
+            )]
 
     def fake_run_layout(_i3: object, ws_id: int,
                         _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
     monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    # Ensure fresh state for these workspace IDs
+    daemon._ws_states.pop(11, None)
+    daemon._ws_states.pop(22, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
 
@@ -32,23 +42,62 @@ def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
     class FakeTempConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
             return [
-                SimpleNamespace(ipc_data={'id': 10}, focused=False, name='A0'),
+                SimpleNamespace(ipc_data={'id': 10}, focused=False, name='A0',
+                                output='DP-1'),
                 SimpleNamespace(ipc_data={'id': 20}, focused=False,
-                                name='__ws_B0'),
+                                name='__ws_B0', output='DP-1'),
                 SimpleNamespace(ipc_data={'id': 30}, focused=False,
-                                name='__swh_tmp_A1'),
+                                name='__swh_tmp_A1', output='DP-1'),
             ]
+
+        def get_outputs(self) -> list[SimpleNamespace]:
+            return [SimpleNamespace(
+                name='DP-1', rect=SimpleNamespace(width=1920, height=1080),
+            )]
 
     def fake_run_layout(_i3: object, ws_id: int,
                         _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
     monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    daemon._ws_states.pop(10, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeTempConn()))
 
     # Only the real workspace A0 must be laid out; temp workspaces skipped
     assert calls == [10]
+
+
+def test_run_existing_layouts_uses_stack_for_portrait_output(
+        monkeypatch) -> None:
+    '''Portrait display (height > width) must default to STACK layout.'''
+    calls: list[int] = []
+
+    class FakePortraitConn:
+        def get_workspaces(self) -> list[SimpleNamespace]:
+            # Use fresh IDs (9001+) to avoid collisions with other tests
+            return [
+                SimpleNamespace(ipc_data={'id': 9001}, focused=False,
+                                name='A0', output='DP-2'),
+            ]
+
+        def get_outputs(self) -> list[SimpleNamespace]:
+            # Portrait: height (1920) > width (1080)
+            return [SimpleNamespace(
+                name='DP-2', rect=SimpleNamespace(width=1080, height=1920),
+            )]
+
+    def fake_run_layout(_i3: object, ws_id: int,
+                        _focused_ws_id: Optional[int] = None) -> None:
+        calls.append(ws_id)
+
+    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    daemon._ws_states.pop(9001, None)
+
+    daemon._run_existing_layouts(cast(daemon.SwayConn, FakePortraitConn()))
+
+    assert calls == [9001]
+    assert daemon._ws_states[9001].kind == daemon.LayoutKind.STACK
 
 
 def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
@@ -322,6 +371,59 @@ def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
     assert master.commands == ['focus']
 
 
+def test_reflow_ncol_stack_collapses_extra_column(monkeypatch) -> None:
+    '''Stack layout (n_columns=1): extra column triggers "move left".'''
+    actions: list[str] = []
+
+    class FakeLeaf:
+        def __init__(self, con_id: int) -> None:
+            self.id = con_id
+            self.commands: list[str] = []
+
+        def command(self, payload: str) -> None:
+            self.commands.append(payload)
+            actions.append(payload)
+
+    class FakeColumn:
+        def __init__(self, nodes: list[FakeLeaf]) -> None:
+            self.nodes = nodes
+            self.layout = 'splitv'
+
+        def command(self, payload: str) -> None:
+            actions.append(payload)
+
+    class FakeWorkspace:
+        def __init__(self, cols: list[FakeColumn]) -> None:
+            self.nodes = cols
+            self.layout = 'splith'
+
+        def leaves(self) -> list[FakeLeaf]:
+            return [n for col in self.nodes for n in col.nodes]
+
+        def find_focused(self) -> FakeLeaf:
+            return self.nodes[0].nodes[0]
+
+    left_win = FakeLeaf(10)
+    right_win = FakeLeaf(11)
+    left_col = FakeColumn([left_win])
+    right_col = FakeColumn([right_win])
+    ws = FakeWorkspace([left_col, right_col])
+    state = daemon.WorkspaceState(ws_id=99,
+                                  kind=daemon.LayoutKind.STACK)
+
+    monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
+
+    # Two columns → should move right_win left and return True
+    result = daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws)
+    assert result is True
+    assert right_win.commands == ['move left']
+
+    # Single column → already converged, must return False
+    ws2 = FakeWorkspace([left_col])
+    result2 = daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws2)
+    assert result2 is False
+
+
 def test_get_resize_target_uses_master_pane_not_biggest_window() -> None:
     class FakeLeaf:
         def __init__(self, con_id: int, area: int = 1) -> None:
@@ -525,13 +627,20 @@ def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
             from types import SimpleNamespace
             return [
                 SimpleNamespace(ipc_data={'id': WS_A_ID}, focused=False,
-                                name='A0'),
+                                name='A0', output='DP-1'),
                 SimpleNamespace(ipc_data={'id': WS_B_ID}, focused=True,
-                                name='B0'),
+                                name='B0', output='DP-1'),
             ]
 
         def get_tree(self) -> FakeTree:
             return FakeTree()
+
+        def get_outputs(self) -> list:
+            from types import SimpleNamespace
+            return [SimpleNamespace(
+                name='DP-1',
+                rect=SimpleNamespace(width=1920, height=1080),
+            )]
 
     monkeypatch.setattr(daemon, '_reflow_ncol', fake_reflow)
     monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
@@ -597,11 +706,20 @@ def test_run_existing_layouts_does_not_reset_state_on_sparse_workspace(
     class FakeConn:
         def get_workspaces(self) -> list:
             from types import SimpleNamespace
-            return [SimpleNamespace(ipc_data={'id': WS_A_ID}, name='A0'),
-                    SimpleNamespace(ipc_data={'id': WS_B_ID}, name='B0')]
+            return [SimpleNamespace(ipc_data={'id': WS_A_ID}, name='A0',
+                                    output='DP-1'),
+                    SimpleNamespace(ipc_data={'id': WS_B_ID}, name='B0',
+                                    output='DP-1')]
 
         def get_tree(self) -> FakeTree:
             return FakeTree()
+
+        def get_outputs(self) -> list:
+            from types import SimpleNamespace
+            return [SimpleNamespace(
+                name='DP-1',
+                rect=SimpleNamespace(width=1920, height=1080),
+            )]
 
     # Set custom state on ws_b (the "other display")
     state_b = daemon.WorkspaceState(
@@ -1047,11 +1165,11 @@ def test_run_existing_layouts_continues_after_workspace_error(
         def get_workspaces(self) -> list[SimpleNamespace]:
             return [
                 SimpleNamespace(ipc_data={'id': 11}, focused=False,
-                                name='A0'),
+                                name='A0', output='DP-1'),
                 SimpleNamespace(ipc_data={'id': 22}, focused=False,
-                                name='B0'),
+                                name='B0', output='DP-1'),
                 SimpleNamespace(ipc_data={'id': 33}, focused=False,
-                                name='C0'),
+                                name='C0', output='DP-1'),
             ]
 
         def discard(self) -> None:
@@ -1059,6 +1177,12 @@ def test_run_existing_layouts_continues_after_workspace_error(
 
         def start_buffering(self) -> None:
             pass
+
+        def get_outputs(self) -> list[SimpleNamespace]:
+            return [SimpleNamespace(
+                name='DP-1',
+                rect=SimpleNamespace(width=1920, height=1080),
+            )]
 
     def fake_run_layout(_i3: object, ws_id: int,
                         _focused_ws_id: Optional[int] = None) -> None:
