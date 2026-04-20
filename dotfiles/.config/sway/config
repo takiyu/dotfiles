@@ -52,7 +52,7 @@ bindsym $mod+r exec $menu
 bindsym $mod+Shift+c kill
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-bindsym $mod+Shift+o exec $suspend
+bindsym $mod+Shift+Escape exec $suspend
 
 # Layout
 floating_modifier $mod normal
