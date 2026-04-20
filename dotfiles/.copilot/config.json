@@ -1,16 +1,29 @@
 {
   "banner": "never",
-  "last_logged_in_user": {
+  "lastLoggedInUser": {
     "host": "https://github.com",
     "login": "takiyu"
   },
   "renderMarkdown": true,
   "theme": "auto",
-  "trusted_folders": [
+  "trustedFolders": [
     "/home/takiyu/dotfiles/dotfiles"
   ],
   "alt_screen": false,
   "effortLevel": "high",
   "firstLaunchAt": "2026-03-11T00:00:00.000Z",
-  "experimental": true
+  "experimental": true,
+  "loggedInUsers": [
+    {
+      "host": "https://github.com",
+      "login": "takiyu"
+    }
+  ],
+  "footer": {
+    "show_model_effort": true,
+    "show_directory": true,
+    "show_branch": true,
+    "show_context_window": true,
+    "show_quota": true
+  }
 }
