@@ -103,9 +103,7 @@ if [ $platform == 'Linux' ]; then
     done
 
     # Install fonts
-    if [ "`$exist_command fc-cache`" == 'exist' ]; then
-        ./fonts/scripts/install-font-linux.sh
-    fi
+    ./fonts/scripts/install-font-linux.sh
 
 elif [ $platform == 'Windows' ]; then
     # Windows setup
