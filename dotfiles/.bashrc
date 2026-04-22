@@ -614,7 +614,7 @@ alias ca_gpt5.4="copilot_allow_all --model gpt-5.4"
 alias ca_free="copilot_allow_all --model gpt-5-mini"
 
 # Aliases for github copilot local
-copilot_allow_all_local() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
+copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 alias ca_local="copilot_allow_all_local"
 
 # Aliases for opencode
