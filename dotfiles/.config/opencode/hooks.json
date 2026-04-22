@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "tool.execute.after": [
+      {
+        "bash": "$HOME/.config/opencode/hooks/lint-on-write.sh",
+        "timeoutSec": 30
+      }
+    ],
+    "session.idle": [
+      {
+        "bash": "$HOME/.config/opencode/hooks/session-end-diary.sh",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

@@ -612,12 +612,13 @@ alias ca_sonnet4.6="copilot_allow_all --model claude-sonnet-4.6"
 alias ca_gpt5.3codex="copilot_allow_all --model gpt-5.3-codex"
 alias ca_gpt5.4="copilot_allow_all --model gpt-5.4"
 alias ca_free="copilot_allow_all --model gpt-5-mini"
-# Copilot installer
-ca_install() {
-    mkdir -p "$PWD/.github"
-    ln -s "$HOME/.copilot/copilot-instructions.md" "$PWD/.github/copilot-instructions.md"
-    ln -s "$HOME/.copilot/mcp-config.json" "$PWD/.github/mcp-config.json"
-}
+
+# Aliases for github copilot local
+copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
+alias ca_local="copilot_allow_all_local"
+
+# Aliases for opencode
+alias ocl="opencode_local.sh"
 
 # ------------------------------------------------------------------------------
 # -------------------------- Mode Dependent Settings ---------------------------
