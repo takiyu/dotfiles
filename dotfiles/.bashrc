@@ -619,6 +619,9 @@ ca_install() {
     ln -s "$HOME/.copilot/mcp-config.json" "$PWD/.github/mcp-config.json"
 }
 
+# Aliases for opencode
+alias ocl="opencode_local.sh"
+
 # ------------------------------------------------------------------------------
 # -------------------------- Mode Dependent Settings ---------------------------
 # ------------------------------------------------------------------------------
