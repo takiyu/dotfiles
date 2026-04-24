@@ -49,6 +49,8 @@ if [ $platform == 'Linux' ]; then
         export CUDA_HOME=/usr/local/cuda
     elif [ -e /opt/cuda ]; then
         export CUDA_HOME=/opt/cuda
+    else
+        export CUDA_HOME=$(ls -d $HOME/cuda* 2>/dev/null | head -n 1)  # ~/cuda*
     fi
     if [ "$CUDA_HOME" != "" ]; then
         export CUDA_PATH=$CUDA_HOME
