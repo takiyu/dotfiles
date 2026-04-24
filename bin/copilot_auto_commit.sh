@@ -1,6 +1,13 @@
 #!/bin/bash
 # Auto-commit: shell handles diff/IO/git, copilot does text-only analysis (fast single inference)
 
+# Check if local version flag is provided
+USE_LOCAL=false
+if [ "$1" = "--local" ] || [ "$1" = "-l" ]; then
+    USE_LOCAL=true
+    shift
+fi
+
 DIFF_FULL=$(git diff --cached --submodule=diff)
 if [ -z "$DIFF_FULL" ]; then
     echo "No staged changes to commit."
@@ -34,7 +41,12 @@ echo ""
 
 # Single text-only LLM inference with diff pre-embedded (no tool calls -> fast)
 echo "Analyzing..."
-RESULT=$(copilot --allow-all --model gpt-5-mini -p \
+if [ "$USE_LOCAL" = true ]; then
+    COPILOT_CMD="copilot_local.sh"
+else
+    COPILOT_CMD="copilot --allow-all --model gpt-5-mini"
+fi
+RESULT=$($COPILOT_CMD -p \
 "Output EXACTLY two lines and nothing else:
 COMMIT: Feature/Fix/Docs/Style/Refactor/Test: <one-line description>
 QUALITY: OK (or issues in Japanese with [高]/[中]/[低] labels, use / as separator)
