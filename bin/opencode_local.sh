@@ -1,9 +1,9 @@
 #!/bin/bash
 
-API_PORT="${API_PORT:-8001}"
-MODEL=$(curl -sf "http://localhost:${API_PORT}/v1/models" | jq -r '.data[0].id')
+API_HOST="${API_HOST:-localhost:8001}"
+MODEL=$(curl -sf "http://${API_HOST}/v1/models" | jq -r '.data[0].id')
 
-export OPENCODE_PROVIDER_BASE_URL="http://localhost:${API_PORT}/v1"
+export OPENCODE_PROVIDER_BASE_URL="http://${API_HOST}/v1"
 export OPENCODE_PROVIDER_API_KEY="local"
 export OPENCODE_MODEL="$MODEL"
 
