@@ -10,3 +10,4 @@
 .xmonad/xmonad.state
 
 __pycache__
+.copilot/config.json

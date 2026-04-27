@@ -86,7 +86,7 @@ if [ $platform == 'Linux' ]; then
              .clang-tidy .jshintrc .pep8 .tmux.conf .mplayer  .mime.types \
              .lesskey .vsnip .xbindkeysrc \
              .copilot/copilot-instructions.md .copilot/mcp-config.json \
-             .copilot/config.json .copilot/skills \
+             .copilot/settings.json .copilot/skills \
              .config/matplotlib .config/nvim .config/pycodestyle  \
              .config/zathura .config/pypoetry .config/sway .config/fuzzel
              .config/foot .config/waybar .config/xfce4/terminal \
