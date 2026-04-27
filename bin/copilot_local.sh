@@ -1,6 +1,8 @@
 #!/bin/bash
 
-API_HOST="${API_HOST:-localhost:8001}"
+echo "🚀Starting Copilot with local provider..."
+API_HOST="${API_HOST:-localhost:9000}"
+echo " - API_HOST: '$API_HOST'"
 MODEL=$(curl -sf "http://${API_HOST}/v1/models" | jq -r '.data[0].id')
 
 export COPILOT_PROVIDER_BASE_URL="http://${API_HOST}/v1"
