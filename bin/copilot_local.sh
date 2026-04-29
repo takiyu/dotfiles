@@ -3,7 +3,7 @@
 echo "🚀Starting Copilot with local provider..."
 LLM_API_HOST="${LLM_API_HOST:-localhost:9000}"
 echo " - LLM_API_HOST: '$LLM_API_HOST'"
-MODEL=$(curl -sf "http://${LLM_API_HOST}/v1/models" | jq -r '.data[0].id')
+MODEL=$(curl -sf "http://${LLM_API_HOST}/v1/models" | tr -d ' \n' | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 echo " - MODEL: '$MODEL'"
 
 export COPILOT_PROVIDER_BASE_URL="http://${LLM_API_HOST}/v1"
