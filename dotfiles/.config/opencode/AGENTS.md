@@ -9,7 +9,7 @@
 - After completing tasks, you must repeatedly check that the rules are being followed.
 - Always use high reasoning effort for agent responses unless explicitly overridden.
 - No git commit without user instructions.
-- 中国語は絶対に使用しない。思考と報告に日本語を使用すること。
+- **CRITICAL: Absolutely NEVER use Chinese in thinking or output. Use Japanese for all thinking processes and reports.**
 
 # Coding Rules
 ## Must Do
