@@ -150,45 +150,133 @@ return {
   { 'hrsh7th/cmp-emoji' },
   { 'hrsh7th/cmp-calc' },
   { 'octaltree/cmp-look' },
-  -- { 'takiyu/cmp-tabby' },
+
+  ------------------------------------------------------------------------------
+  ------------------------------ Minuet AI Completion --------------------------
+  ------------------------------------------------------------------------------
   {
-    'takiyu/copilot.lua', -- alt to 'zbirenbaum/copilot.lua'
-    branch = 'takiyu'
+    'milanglacier/minuet-ai.nvim',
+    config = function()
+      -- Fallback model identifier when auto-detection fails.
+      local fallback_model = 'gpt-3.5-turbo'
+
+      -- -----------------------------------------------------------------------
+      -- Resolve endpoint and auto-detect the served model.
+      -- -----------------------------------------------------------------------
+      local function get_local_llm_config()
+        local host = os.getenv('LLM_API_HOST') or 'localhost:9000'
+        local endpoint = 'http://' .. host .. '/v1/completions'
+
+        local models_json = vim.fn.system(
+          'curl -sf http://' .. host .. '/v1/models'
+        )
+        if vim.v.shell_error ~= 0 or models_json == '' then
+          vim.notify(
+            'minuet: failed to fetch models from ' .. host,
+            vim.log.levels.WARN
+          )
+          return { endpoint = endpoint, model = fallback_model }
+        end
+
+        local ok, models = pcall(vim.json.decode, models_json)
+        local model_id = ok and models and models.data
+                         and models.data[1] and models.data[1].id
+        if not model_id then
+          vim.notify(
+            'minuet: failed to parse models response',
+            vim.log.levels.WARN
+          )
+          return { endpoint = endpoint, model = fallback_model }
+        end
+
+        return { endpoint = endpoint, model = model_id }
+      end
+
+      local llm = get_local_llm_config()
+
+      -- -----------------------------------------------------------------------
+      -- Minuet setup
+      -- -----------------------------------------------------------------------
+      -- Use the raw completions API (/v1/completions) rather than chat
+      -- completions.  The locally-served model emits reasoning text through
+      -- the chat endpoint but returns clean code through completions.
+      require('minuet').setup({
+        provider = 'openai_fim_compatible',
+        n_completions = 1,
+        -- Larger context window so the chat model sees enough code to
+        -- recognize patterns and produce relevant completions.
+        context_window = 4096,
+        context_ratio = 0.75,
+        before_cursor_filter_length = 15,
+        after_cursor_filter_length = 100,
+        -- With streaming enabled, a shorter timeout allows faster retrieval
+        -- of partial completions if the model is slow.
+        request_timeout = 3,
+
+        provider_options = {
+          openai_fim_compatible = {
+            name = 'LocalLLM',
+            end_point = llm.endpoint,
+            model = llm.model,
+            -- Dummy key for unauthenticated local endpoints.
+            api_key = 'TERM',
+            stream = true,
+            template = {
+              -- vLLM does not support `suffix` on /v1/completions; disable
+              -- it so the request does not 400.
+              suffix = false,
+              prompt = function(context_before_cursor, _, _)
+                local language = require('minuet.utils').add_language_comment()
+                local tab = require('minuet.utils').add_tab_comment()
+                context_before_cursor = language .. '\n' .. tab .. '\n'
+                                    .. context_before_cursor
+                return context_before_cursor
+              end,
+            },
+            optional = {
+              max_tokens = 256,
+              temperature = 0.1,
+              top_p = 0.99,
+              -- Stop at the first line comment (`//`).  The model tends to
+              -- switch to test cases or analysis text after emitting a `//`
+              -- line; stopping here keeps the completion focused on code.
+              stop = { '\n//' },
+            },
+            -- Add language-specific stop sequences so non-C++ files also
+            -- avoid over-generation into test cases or analysis text.
+            transform = {
+              function(data)
+                local ft = vim.bo.filetype
+                local stops = vim.deepcopy(data.body.stop or {})
+                if ft == 'python' or ft == 'sh' or ft == 'ruby' or ft == 'yaml' then
+                  table.insert(stops, '\n# ')
+                elseif ft == 'lua' or ft == 'sql' then
+                  table.insert(stops, '\n-- ')
+                elseif ft == 'vim' then
+                  table.insert(stops, '\n" ')
+                end
+                data.body.stop = stops
+                return data
+              end,
+            },
+          },
+        },
+
+        -- Reduce throttle/debounce for faster auto-completion response.
+        throttle = 300,
+        debounce = 150,
+      })
+    end,
   },
-  {
-    'litoj/cmp-copilot', -- alt to 'zbirenbaum/copilot-cmp'
-    dependency = { 'copilot.lua' },
-  },
+
   {
     'hrsh7th/nvim-cmp',
     dependency = { 'cmp-nvim-lsp', 'vim-vsnip', 'cmp-vsnip', 'cmp-buffer',
       'cmp-path', 'cmp-cmdline', 'cmp-emoji', 'cmp-calc',
-      'cmp-look', 'cmp-tabby', 'cmp-copilot', 'lspkind.nvim' },
+      'cmp-look', 'lspkind.nvim', 'minuet-ai.nvim' },
     config = function()
       local cmp = require('cmp')
       local compare = require('cmp.config.compare')
-
-      -- Copilot
-      require('copilot').setup({
-        suggestion = { enabled = false },
-        panel = {
-          layout = {
-            position = 'float',
-            ratio = 0.5,
-          }
-        },
-        copilot_node_command = 'node'
-      })
-      require('cmp_copilot').setup()
-      -- Copilot keymap
-      vim.api.nvim_set_keymap('i', '<C-H>', '<ESC>:Copilot panel<CR>', { noremap = true })
-
-      -- Tabby
-      -- local tabby = require('cmp_tabby.config')
-      -- tabby:setup({
-      --   host = 'http://localhost:8080',
-      --   max_lines = 200,
-      -- })
 
       -- lspkind
       require('lspkind').init({
@@ -224,6 +312,10 @@ return {
 
       -- nvim-cmp: Completion for general
       cmp.setup({
+        -- Allow extra time for local LLM responses
+        performance = {
+          fetching_timeout = 2000,
+        },
         snippet = {
           expand = function(args)
             vim.fn['vsnip#anonymous'](args.body)
@@ -231,7 +323,7 @@ return {
         },
         sources = cmp.config.sources({
           -- Source group 1
-          { name = 'copilot' },
+          { name = 'minuet', priority = 100 },
           { name = 'calc' },
           { name = 'vsnip' },
           { name = 'path' },
@@ -259,12 +351,10 @@ return {
               -- Confirm visible completion
               return cmp.confirm({ select = true })
             else
-              -- Start AUTO completion
+              -- Trigger minuet-only completion manually
               return cmp.complete({
                 config = {
-                  sources = {
-                    { name = 'copilot' }
-                  }
+                  sources = { { name = 'minuet' } }
                 }
               })
             end
@@ -283,10 +373,9 @@ return {
             maxwidth = 50,
             -- Custom Icons
             before = function(entry, vim_item)
-              if entry.source.name == 'copilot' then
-                vim_item.kind = '🎁 Copilot'
-              elseif entry.source.name == 'cmp_tabby' then
-                vim_item.kind = '🎁 Tabby'
+              -- Assign a distinctive icon to minuet suggestions
+              if entry.source.name == 'minuet' then
+                vim_item.kind = '🎁 Minuet'
               end
               return vim_item
             end
@@ -295,9 +384,7 @@ return {
         sorting = {
           priority_weight = 2,
           comparators = {
-            require("cmp_copilot.comparators").prioritize,
             compare.offset,
-            -- compare.exact,  -- Disable exact match for copilot
             compare.score,
             compare.recently_used,
             compare.kind,
