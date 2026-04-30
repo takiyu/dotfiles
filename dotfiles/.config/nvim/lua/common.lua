@@ -157,7 +157,7 @@ vim.api.nvim_set_keymap('n', '<F2>',
 vim.api.nvim_set_keymap('n', '<F1>', ':%s///gc<Left><Left><Left><Left>', {})
 
 ------------------------------ Custom line limits ------------------------------
-colorcolumn_mode = 0
+local colorcolumn_mode = 0
 function NextColorColumn()
   colorcolumn_mode = (colorcolumn_mode + 1) % 4
   if colorcolumn_mode == 0 then
