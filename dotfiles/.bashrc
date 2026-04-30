@@ -605,6 +605,10 @@ alias ca=ca_local
 # Aliases for opencode
 alias ocl="opencode_local.sh"
 alias oc=ocl
+alias oc_serve="ocl serve"
+
+# Alias for agent
+alias a=oc
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
