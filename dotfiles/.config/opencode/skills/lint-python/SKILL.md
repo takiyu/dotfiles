@@ -105,6 +105,11 @@ One per line in this format:
 - Sentence-style names with prepositions (e.g. `load_and_parse`)
 - Multi-line ternary expression (`x = (val\n    if cond else other)`);
   rewrite as `if/else` block instead
+- Section header (`# ---`) followed by blank line(s) before code —
+  the separator line ending the header must be immediately followed
+  by the first line of that section (no blank lines)
+- File missing closing `# ---` x3 at EOF — every source file must end
+  with exactly three `# -----------------------------------------------------------------------------` lines
 
 **[低] Nice to fix:**
 - Params or args split one-per-line when packing fits within 79 chars
