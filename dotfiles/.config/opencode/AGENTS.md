@@ -2,9 +2,6 @@
 - For tasks with multiple independent subtasks, use the task tool to delegate work to subagents.
 - Delegate exploration, research, and code review to subagents when parallelization helps.
 
-# Reporting
-- 作業完了時は必ず日本語で報告する。
-
 # Task Rules
 - Never give up until finished the task including behavior check and testing without relying on users. (important)
 - Must check the code behavior by running or testing it. (important)
@@ -12,6 +9,7 @@
 - After completing tasks, you must repeatedly check that the rules are being followed.
 - Always use high reasoning effort for agent responses unless explicitly overridden.
 - No git commit without user instructions.
+- 中国語は絶対に使用しない。思考と報告に日本語を使用すること。
 
 # Coding Rules
 ## Must Do
