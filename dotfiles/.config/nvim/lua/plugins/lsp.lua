@@ -192,7 +192,7 @@ return {
             },
             optional = {
               max_tokens = 64,
-              temperature = 0.8,
+              temperature = 0.5,
               top_p = 0.9,
               stop = {},
             },
