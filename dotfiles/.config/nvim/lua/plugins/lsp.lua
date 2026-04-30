@@ -13,15 +13,6 @@ return {
         return org_func(contents, syntax, opts, ...)
       end
 
-      -- Diagnostic appearance
-      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-        vim.lsp.diagnostic.on_publish_diagnostics, {
-          virtual_text = false, -- Hide virtual text
-          signs = true,
-          underline = true,
-          update_in_insert = false,
-        }
-      )
       -- Diagnostic gutter
       local signs = { Error = "🔥", Warn = "🚧", Hint = "🐬", Info = "🖊️" }
       for type, icon in pairs(signs) do
@@ -49,6 +40,7 @@ return {
       })
       -- Set diagnostic signs
       vim.diagnostic.config({
+        virtual_text = false,
         signs = {
           text = {
             [vim.diagnostic.severity.ERROR] = '🔥',
@@ -57,6 +49,8 @@ return {
             [vim.diagnostic.severity.INFO] = '🖊️',
           },
         },
+        underline = true,
+        update_in_insert = false,
       })
     end
   },
