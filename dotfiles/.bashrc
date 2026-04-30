@@ -127,22 +127,10 @@ alias sl=ls
 
 # Aliases for cd
 function cd {
-    if [ $# -eq 0 ]; then
-        builtin cd ~ && ls;
-    else
-        pushd "$@" && ls;
-    fi
+    builtin cd "$@" && ls
     # Emit OSC 7 escape sequence
     printf '\e]7;file://%s%s\a' "$HOSTNAME" "$PWD"
 }
-function pushd() { command pushd "$@" > /dev/null; }  # silent `pushd`
-function popd() { command popd "$@" > /dev/null; }    # silent `popd`
-alias dirs='dirs -v'  # enumerating directory stack with numbers
-alias d=dirs
-for i in {0..10}; do
-    alias "$i"="cd +$i"
-    alias cd"$i"="cd +$i"
-done
 alias c=cd
 alias -- -='cd -'
 alias cd-="cd -"
