@@ -22,7 +22,7 @@ git_prompt=$dotfiles/utils/git/git-prompt.sh
 git_completion=$dotfiles/utils/git/git-completion.bash
 
 # determine the platform
-platform=`$determ_platform`
+platform=$($determ_platform)
 
 # ------------------------------------------------------------------------------
 # ---------------------------- VS Code Integration -----------------------------
@@ -154,14 +154,13 @@ alias cd..........="cd ../../../../../../../../.."
 alias c-="cd -"
 alias c..="cd .."
 alias c...="cd ../.."
-alias c...="cd ../../.."
-alias c....="cd ../../../.."
-alias c.....="cd ../../../../.."
-alias c......="cd ../../../../../.."
-alias c.......="cd ../../../../../../.."
-alias c........="cd ../../../../../../../.."
-alias c.........="cd ../../../../../../../../.."
-alias c..........="cd ../../../../../../../../../.."
+alias c....="cd ../../.."
+alias c.....="cd ../../../.."
+alias c......="cd ../../../../.."
+alias c.......="cd ../../../../../.."
+alias c........="cd ../../../../../../.."
+alias c.........="cd ../../../../../../../.."
+alias c..........="cd ../../../../../../../../.."
 
 # Aliases for clear
 alias cl=clear
@@ -305,11 +304,11 @@ PROMPT_COMMAND="post_cmd_handler"
 alias g='git'
 alias ginit='git init && git commit --allow-empty -m "First commit"'
 alias gs='git status'
-function gga() { git graph --color=always --all $* | less -EFRSX; }
-function ggl() { git graph --color=always $* | less -EFRSX; }
+function gga() { git graph --color=always --all "$@" | less -EFRSX; }
+function ggl() { git graph --color=always "$@" | less -EFRSX; }
 alias gg=gga
-function gl() { git log --color=always --graph $* | less -EFRX; }
-function gla() { git log --color=always --graph --all $* | less -EFRX; }
+function gl() { git log --color=always --graph "$@" | less -EFRX; }
+function gla() { git log --color=always --graph --all "$@" | less -EFRX; }
 alias gb='git branch'
 alias gbd='git branch -D'
 alias gbD='git branch -D'
@@ -357,24 +356,24 @@ alias gp='git pull'
 alias gP='git push'
 alias gpo='git pull origin'
 alias gPo='git push origin'
-alias gpoc='git pull origin `gbc`'
-alias gPoc='git push origin `gbc`'
-function gPoA() { git push origin :"$*"; git push origin "$*"; }
-function gPoR() { git push origin :"$*"; git push origin "$*"; }
-function gPoAc() { git push origin :`gbc`; git push origin `gbc`; }
-function gPoRc() { git push origin :`gbc`; git push origin `gbc`; }
-function gPocA() { git push origin :`gbc`; git push origin `gbc`; }
-function gPocR() { git push origin :`gbc`; git push origin `gbc`; }
+alias gpoc='git pull origin $(gbc)'
+alias gPoc='git push origin $(gbc)'
+function gPoA() { git push origin :"$1"; git push origin "$1"; }
+function gPoR() { git push origin :"$1"; git push origin "$1"; }
+function gPoAc() { git push origin :$(gbc); git push origin $(gbc); }
+function gPoRc() { git push origin :$(gbc); git push origin $(gbc); }
+function gPocA() { git push origin :$(gbc); git push origin $(gbc); }
+function gPocR() { git push origin :$(gbc); git push origin $(gbc); }
 function gPoD() { git push origin :"$*"; }
-alias gPocD='git push origin :`gbc`'
+alias gPocD='git push origin :$(gbc)'
 alias gpom='git pull origin master'
 alias gPom='git push origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
-function gro() { git reset origin/"$*"; }
-function gRo() { git reset origin/"$*" --hard; }
-alias groc='git reset `gbc`'
-alias gRoc='git reset --hard `gbc`'
+function gro() { git reset origin/"$1"; }
+function gRo() { git reset origin/"$1" --hard; }
+alias groc='git reset $(gbc)'
+alias gRoc='git reset --hard $(gbc)'
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 alias gst='git stash'
@@ -484,7 +483,7 @@ alias km=make
 # ------------------------------------------------------------------------------
 # -------------------------------- Vim Commands --------------------------------
 # ------------------------------------------------------------------------------
-if [ "`$exist_command nvim`" == 'exist' ]; then
+if [ "$($exist_command nvim)" = 'exist' ]; then
     # Set nvim for all
     alias vim=nvim
     alias gvim=nvim
@@ -587,7 +586,7 @@ alias f...='filer ...'
 alias p=python
 
 # Trizen
-if [ "`$exist_command trizen`" == 'exist' ]; then
+if [ "$($exist_command trizen)" = 'exist' ]; then
     alias trizen-noconfirm="trizen -Syu -y --noconfirm"
 fi
 
@@ -620,11 +619,11 @@ case "$MODE" in *wsl)
     export DISPLAY=$(ip route | awk '/default/{print $3}'):0
 
     # Wrap the git command to either run windows git or linux
-    function IsWinDir {
-        p=`realpath $PWD`
+    function IsWinDir() {
+        p=$(realpath "$PWD")
         case $p/ in
-            /mnt/*) return $(true);;
-            *) return $(false);;
+            /mnt/*) return 0 ;;
+            *) return 1 ;;
         esac
     }
     function git {
