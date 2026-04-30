@@ -129,15 +129,15 @@ return {
           end,
         },
         sources = cmp.config.sources({
-          -- Source group 1
+          -- Source group 1: LSP completion should be first
           { name = 'minuet', priority = 100 },
           { name = 'calc' },
           { name = 'vsnip' },
           { name = 'path' },
           { name = 'emoji',  insert = true },
-        }, {
-          -- Source group 2
           { name = 'nvim_lsp' },
+        }, {
+          -- Source group 2: Fallback sources
           { name = 'buffer',  max_item_count = 10 },
           {
             name = 'look',
