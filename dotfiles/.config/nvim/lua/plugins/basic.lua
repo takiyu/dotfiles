@@ -59,7 +59,7 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim', -- Telescope
-    dependency = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('telescope').setup {}
       vim.keymap.set('n', '<F3>', '<cmd>Telescope live_grep<cr>')
@@ -68,7 +68,7 @@ return {
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    dependency = { 'nvim-telescope/telescope.nvim' },
+    dependencies = { 'nvim-telescope/telescope.nvim' },
   },
 
   ------------------------------------------------------------------------------
