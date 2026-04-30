@@ -2,14 +2,6 @@
 - For tasks with multiple independent subtasks, use the task tool to delegate work to subagents.
 - Delegate exploration, research, and code review to subagents when parallelization helps.
 
-# Task Diary
-- Upon completing a task, write a diary entry to `.task_diary/` in the project root (git root).
-- Filename format: `YYYYMMDD_HHMMSS.md`
-- Content: what was attempted, what succeeded, what failed, the reason, and key learnings.
-
-# Reporting
-- 作業完了時は必ず日本語で報告する。
-
 # Task Rules
 - Never give up until finished the task including behavior check and testing without relying on users. (important)
 - Must check the code behavior by running or testing it. (important)
@@ -17,6 +9,7 @@
 - After completing tasks, you must repeatedly check that the rules are being followed.
 - Always use high reasoning effort for agent responses unless explicitly overridden.
 - No git commit without user instructions.
+- **CRITICAL: Absolutely NEVER use Chinese in thinking or output. Use Japanese for all thinking processes and reports.**
 
 # Coding Rules
 ## Must Do

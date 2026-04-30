@@ -59,7 +59,7 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim', -- Telescope
-    dependency = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('telescope').setup {}
       vim.keymap.set('n', '<F3>', '<cmd>Telescope live_grep<cr>')
@@ -68,21 +68,25 @@ return {
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    dependency = { 'nvim-telescope/telescope.nvim' },
+    dependencies = { 'nvim-telescope/telescope.nvim' },
   },
 
   ------------------------------------------------------------------------------
   ------------------------------------ Git -------------------------------------
   ------------------------------------------------------------------------------
   {
-    'airblade/vim-gitgutter', -- Git差分ガイド
+    'lewis6991/gitsigns.nvim', -- Git差分ガイド
     config = function()
-      vim.g.gitgutter_max_signs = 200
-      vim.g.gitgutter_sign_added = '++'
-      vim.g.gitgutter_sign_modified = '-+'
-      vim.g.gitgutter_sign_removed = '__'
-      vim.g.gitgutter_sign_modified_removed = '+_'
-      vim.g.gitgutter_async = 1
+      require('gitsigns').setup {
+        signs = {
+          add          = { text = '++' },
+          change       = { text = '-+' },
+          delete       = { text = '__' },
+          topdelete    = { text = '__' },
+          changedelete = { text = '+_' },
+        },
+        max_file_length = 2000,
+      }
     end
   },
   { 'tpope/vim-fugitive' }, -- Git補助
@@ -153,24 +157,36 @@ return {
     end
   },
   {
-    'yuttie/comfortable-motion.vim', -- Smooth scroll
-    init = function()
-      vim.g.comfortable_motion_no_default_key_mappings = 1
-      vim.g.comfortable_motion_friction = 120.0
-      vim.g.comfortable_motion_air_drag = 3.0
-    end,
+    'karb94/neoscroll.nvim', -- Smooth scroll
     config = function()
-      -- Large motion
-      vim.api.nvim_set_keymap('n', '<Space>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Space>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<PageDown>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<PageUp>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Down>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Up>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      -- Small motion
-      vim.api.nvim_set_keymap('n', '<ScrollWheelDown>', ':call comfortable_motion#flick(40)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<ScrollWheelUp>', ':call comfortable_motion#flick(-40)<CR>', { silent = true })
-    end,
+      local neoscroll = require('neoscroll')
+      neoscroll.setup({
+        mappings = {},  -- disable default mappings
+        hide_cursor = true,
+        stop_eof = true,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = true,
+      })
+
+      -- Helper to register scroll keymaps with dynamic line evaluation
+      local function map_scroll(key, lines_fn, duration)
+        vim.keymap.set('n', key, function()
+          neoscroll.scroll(lines_fn(),
+                           { move_cursor = true, duration = duration })
+        end, { silent = true })
+      end
+
+      -- Large motion (full-page)
+      map_scroll('<Space>', function() return vim.fn.winheight(0) - 2 end, 300)
+      map_scroll('<S-Space>', function() return -(vim.fn.winheight(0) - 2) end, 300)
+      map_scroll('<PageDown>', function() return vim.fn.winheight(0) - 2 end, 300)
+      map_scroll('<PageUp>', function() return -(vim.fn.winheight(0) - 2) end, 300)
+      -- Small motion (mouse wheel)
+      map_scroll('<S-Down>', function() return vim.wo.scroll end, 300)
+      map_scroll('<S-Up>', function() return -vim.wo.scroll end, 300)
+      map_scroll('<ScrollWheelDown>', function() return vim.wo.scroll end, 300)
+      map_scroll('<ScrollWheelUp>', function() return -vim.wo.scroll end, 300)
+    end
   },
 
   ------------------------------------------------------------------------------

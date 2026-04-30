@@ -10,11 +10,7 @@ esac
 # ------------------------------------------------------------------------------
 # ------------------------------- Configurations -------------------------------
 # ------------------------------------------------------------------------------
-export MODE='Home_linux'
-export PS1_PREFIX=''
-# export PS1_PREFIX="$HOSTNAME "
-# export PROXY_USER=''
-# export PROXY_PASS=''
+export MODE='home_linux'
 
 # ------------------------------------------------------------------------------
 # ------------------------------ Utility scripts -------------------------------
@@ -26,12 +22,28 @@ git_prompt=$dotfiles/utils/git/git-prompt.sh
 git_completion=$dotfiles/utils/git/git-completion.bash
 
 # determine the platform
-platform=`$determ_platform`
+platform=$($determ_platform)
 
 # ------------------------------------------------------------------------------
 # ---------------------------- VS Code Integration -----------------------------
 # ------------------------------------------------------------------------------
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path bash)"
+
+# ------------------------------------------------------------------------------
+# --------------------------------- PS1 Prefix ---------------------------------
+# ------------------------------------------------------------------------------
+case "$MODE" in *remote*)
+    export PS1_PREFIX="$HOSTNAME "
+    ;;
+esac
+
+# ------------------------------------------------------------------------------
+# ------------------------------ Proxy Forwarding ------------------------------
+# ------------------------------------------------------------------------------
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+export ftp_proxy=$FTP_PROXY
+export no_proxy=$NO_PROXY
 
 # ------------------------------------------------------------------------------
 # --------------------------- Linux Default Settings ---------------------------
@@ -123,22 +135,10 @@ alias sl=ls
 
 # Aliases for cd
 function cd {
-    if [ $# -eq 0 ]; then
-        builtin cd ~ && ls;
-    else
-        pushd "$@" && ls;
-    fi
+    builtin cd "$@" && ls
     # Emit OSC 7 escape sequence
     printf '\e]7;file://%s%s\a' "$HOSTNAME" "$PWD"
 }
-function pushd() { command pushd "$@" > /dev/null; }  # silent `pushd`
-function popd() { command popd "$@" > /dev/null; }    # silent `popd`
-alias dirs='dirs -v'  # enumerating directory stack with numbers
-alias d=dirs
-for i in {0..10}; do
-    alias "$i"="cd +$i"
-    alias cd"$i"="cd +$i"
-done
 alias c=cd
 alias -- -='cd -'
 alias cd-="cd -"
@@ -154,14 +154,13 @@ alias cd..........="cd ../../../../../../../../.."
 alias c-="cd -"
 alias c..="cd .."
 alias c...="cd ../.."
-alias c...="cd ../../.."
-alias c....="cd ../../../.."
-alias c.....="cd ../../../../.."
-alias c......="cd ../../../../../.."
-alias c.......="cd ../../../../../../.."
-alias c........="cd ../../../../../../../.."
-alias c.........="cd ../../../../../../../../.."
-alias c..........="cd ../../../../../../../../../.."
+alias c....="cd ../../.."
+alias c.....="cd ../../../.."
+alias c......="cd ../../../../.."
+alias c.......="cd ../../../../../.."
+alias c........="cd ../../../../../../.."
+alias c.........="cd ../../../../../../../.."
+alias c..........="cd ../../../../../../../../.."
 
 # Aliases for clear
 alias cl=clear
@@ -305,11 +304,11 @@ PROMPT_COMMAND="post_cmd_handler"
 alias g='git'
 alias ginit='git init && git commit --allow-empty -m "First commit"'
 alias gs='git status'
-function gga() { git graph --color=always --all $* | less -EFRSX; }
-function ggl() { git graph --color=always $* | less -EFRSX; }
+function gga() { git graph --color=always --all "$@" | less -EFRSX; }
+function ggl() { git graph --color=always "$@" | less -EFRSX; }
 alias gg=gga
-function gl() { git log --color=always --graph $* | less -EFRX; }
-function gla() { git log --color=always --graph --all $* | less -EFRX; }
+function gl() { git log --color=always --graph "$@" | less -EFRX; }
+function gla() { git log --color=always --graph --all "$@" | less -EFRX; }
 alias gb='git branch'
 alias gbd='git branch -D'
 alias gbD='git branch -D'
@@ -357,24 +356,24 @@ alias gp='git pull'
 alias gP='git push'
 alias gpo='git pull origin'
 alias gPo='git push origin'
-alias gpoc='git pull origin `gbc`'
-alias gPoc='git push origin `gbc`'
-function gPoA() { git push origin :"$*"; git push origin "$*"; }
-function gPoR() { git push origin :"$*"; git push origin "$*"; }
-function gPoAc() { git push origin :`gbc`; git push origin `gbc`; }
-function gPoRc() { git push origin :`gbc`; git push origin `gbc`; }
-function gPocA() { git push origin :`gbc`; git push origin `gbc`; }
-function gPocR() { git push origin :`gbc`; git push origin `gbc`; }
+alias gpoc='git pull origin $(gbc)'
+alias gPoc='git push origin $(gbc)'
+function gPoA() { git push origin :"$1"; git push origin "$1"; }
+function gPoR() { git push origin :"$1"; git push origin "$1"; }
+function gPoAc() { git push origin :$(gbc); git push origin $(gbc); }
+function gPoRc() { git push origin :$(gbc); git push origin $(gbc); }
+function gPocA() { git push origin :$(gbc); git push origin $(gbc); }
+function gPocR() { git push origin :$(gbc); git push origin $(gbc); }
 function gPoD() { git push origin :"$*"; }
-alias gPocD='git push origin :`gbc`'
+alias gPocD='git push origin :$(gbc)'
 alias gpom='git pull origin master'
 alias gPom='git push origin master'
 alias gr='git reset'
 alias gR='git reset --hard'
-function gro() { git reset origin/"$*"; }
-function gRo() { git reset origin/"$*" --hard; }
-alias groc='git reset `gbc`'
-alias gRoc='git reset --hard `gbc`'
+function gro() { git reset origin/"$1"; }
+function gRo() { git reset origin/"$1" --hard; }
+alias groc='git reset $(gbc)'
+alias gRoc='git reset --hard $(gbc)'
 alias grom='git reset origin/master'
 alias gRom='git reset --hard origin/master'
 alias gst='git stash'
@@ -452,7 +451,7 @@ __git_complete gbis_start _git_branch
 __git_complete gbis_start_with_script _git_branch
 
 # ------------------------------------------------------------------------------
-# ----------------------------- Additional Aliases -----------------------------
+# -------------------------------- Make Aliases --------------------------------
 # ------------------------------------------------------------------------------
 # aliases for make
 alias maek=make
@@ -480,12 +479,11 @@ alias ekma=make
 alias ekam=make
 alias mk=make
 alias km=make
-# aliases for ninja
-alias nin=ninja
-alias ni=ninja
 
-# aliases for editors
-if [ "`$exist_command nvim`" == 'exist' ]; then
+# ------------------------------------------------------------------------------
+# -------------------------------- Vim Commands --------------------------------
+# ------------------------------------------------------------------------------
+if [ "$($exist_command nvim)" = 'exist' ]; then
     # Set nvim for all
     alias vim=nvim
     alias gvim=nvim
@@ -569,11 +567,15 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     alias gdvd=gdvimdiff
 fi
 
-# aliases for applications
+# ------------------------------------------------------------------------------
+# ---------------------------- Application Aliases -----------------------------
+# ------------------------------------------------------------------------------
 if [ $platform == 'Linux' ]; then
+    # Linux Specific Aliases
     function filer() { command thunar "$@" & 2> /dev/null; disown; }
     function zathura() { command zathura "$@" & 2> /dev/null; disown; }
 elif [ $platform == 'Windows' ]; then
+    # Windows Specific Aliases
     function filer() { command explorer "$@" & 2> /dev/null; disown; }
     alias w=winpty
 fi
@@ -582,65 +584,31 @@ alias f.='filer .'
 alias f..='filer ..'
 alias f...='filer ...'
 alias p=python
-alias p2=python2
-alias p3=python3
 
 # Trizen
-if [ "`$exist_command trizen`" == 'exist' ]; then
+if [ "$($exist_command trizen)" = 'exist' ]; then
     alias trizen-noconfirm="trizen -Syu -y --noconfirm"
 fi
 
-# Synaptics and Game pad
-if [ $platform == 'Linux' ]; then
-    if [ "`$exist_command synclient`" == 'exist' ]; then
-        # bg for speed up
-        function synclient_bg() { command synclient $@ & 2> /dev/null; disown; }
-        synclient_bg VertScrollDelta=-30 HorizScrollDelta=-30
-        synclient_bg MaxSpeed=2.0 AccelFactor=0.10
-    fi
-    export SDL_JOYSTICK_DEVICE=/dev/input/js0
-    export SDL_GAMECONTROLLERCONFIG='030000008f0e00000300000010010000,GreenAsia Inc.    USB Joystick,platform:Linux,a:b1,b:b2,x:b3,y:b0,back:b8,start:b9,leftstick:b10,rightstick:b11,leftshoulder:b6,rightshoulder:b7,dpup:h0.1,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,leftx:a0,lefty:a1,rightx:a3,righty:a2,lefttrigger:b4,righttrigger:b5,'  # Generated by `controllermap 0`
-fi
-
 # Aliases for github copilot
-alias gcmA=copilot_auto_commit.sh
 alias gcmAl='copilot_auto_commit.sh --local'
-alias c=copilot_chat.sh
-copilot_allow_all() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
-# copilot_allow_all() { copilot --allow-all --no-auto-update --enable-all-github-mcp-tools "$@"; }  # noupdate
-alias ca_opus4.6="copilot_allow_all --model claude-opus-4.6"
-alias ca_sonnet4.6="copilot_allow_all --model claude-sonnet-4.6"
-alias ca_gpt5.3codex="copilot_allow_all --model gpt-5.3-codex"
-alias ca_gpt5.4="copilot_allow_all --model gpt-5.4"
-alias ca_free="copilot_allow_all --model gpt-5-mini"
-
-# Aliases for github copilot local
+alias gcmAo='copilot_auto_commit.sh'
+alias gcmA=gcmAl
 copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 alias ca_local="copilot_allow_all_local"
+copilot_allow_all_official() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
+alias ca_opus4.6="copilot_allow_all_official --model claude-opus-4.6"
+alias ca_sonnet4.6="copilot_allow_all_official --model claude-sonnet-4.6"
+alias ca_free="copilot_allow_all_official --model gpt-5-mini"
+alias ca=ca_local
 
 # Aliases for opencode
 alias ocl="opencode_local.sh"
+alias oc=ocl
+alias oc_serve="ocl serve"
 
-# ------------------------------------------------------------------------------
-# -------------------------- Mode Dependent Settings ---------------------------
-# ------------------------------------------------------------------------------
-# if [ "$MODE" == 'Home_linux' ]; then
-#     # Mouse mapping for a trackball Huge
-#     if [ "`$exist_command xinput`" == 'exist' ]; then
-#         xinput set-button-map 12 1 3 2 4 5 6 7 8 9 10 11 3
-#     fi
-#     if [ "`$exist_command xbindkeys`" == 'exist' ]; then
-#         xbindkeys
-#     fi
-# fi
-
-# ------------------------------------------------------------------------------
-# ------------------------------ Proxy Forwarding ------------------------------
-# ------------------------------------------------------------------------------
-export http_proxy=$HTTP_PROXY
-export https_proxy=$HTTPS_PROXY
-export ftp_proxy=$FTP_PROXY
-export no_proxy=$NO_PROXY
+# Alias for agent
+alias a=oc
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
@@ -655,11 +623,11 @@ case "$MODE" in *wsl)
     export DISPLAY=$(ip route | awk '/default/{print $3}'):0
 
     # Wrap the git command to either run windows git or linux
-    function IsWinDir {
-        p=`realpath $PWD`
+    function IsWinDir() {
+        p=$(realpath "$PWD")
         case $p/ in
-            /mnt/*) return $(true);;
-            *) return $(false);;
+            /mnt/*) return 0 ;;
+            *) return 1 ;;
         esac
     }
     function git {

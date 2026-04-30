@@ -61,7 +61,7 @@ vim.cmd('set foldlevel=0')
 vim.cmd('set foldcolumn=2')
 
 -------------------------------- Preview Window --------------------------------
-vim.cmd('set completeopt=menuone,longest,preview') -- プレビューウインドウで表示
+vim.opt.completeopt = { 'menuone', 'longest', 'preview' } -- Show in preview window
 vim.cmd('set previewheight=1')                     -- プレビューウインドウの高さ
 vim.cmd('set splitbelow')                          -- 下に表示
 vim.cmd('set laststatus=2')                        -- ステータスラインを常に表示
@@ -157,7 +157,7 @@ vim.api.nvim_set_keymap('n', '<F2>',
 vim.api.nvim_set_keymap('n', '<F1>', ':%s///gc<Left><Left><Left><Left>', {})
 
 ------------------------------ Custom line limits ------------------------------
-colorcolumn_mode = 0
+local colorcolumn_mode = 0
 function NextColorColumn()
   colorcolumn_mode = (colorcolumn_mode + 1) % 4
   if colorcolumn_mode == 0 then

@@ -1,12 +1,18 @@
 #!/bin/bash
 
-echo "🚀Starting OpenCode with local provider..."
-API_HOST="${API_HOST:-localhost:9000}"
-echo " - API_HOST: '$API_HOST'"
-MODEL=$(curl -sf "http://${API_HOST}/v1/models" | jq -r '.data[0].id')
+echo "Starting OpenCode with local provider..."
+LLM_API_HOST="${LLM_API_HOST:-localhost:9000}"
+echo " - LLM_API_HOST: '$LLM_API_HOST'"
 
-export OPENCODE_PROVIDER_BASE_URL="http://${API_HOST}/v1"
-export OPENCODE_PROVIDER_API_KEY="local"
-export OPENCODE_MODEL="$MODEL"
+if [ -z "$LLM_MODEL" ]; then
+    LLM_MODEL=$(curl -sf "http://${LLM_API_HOST}/v1/models" | tr -d ' \n' | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+fi
+echo " - MODEL: '$LLM_MODEL'"
+
+export LLM_API_HOST
+export LLM_MODEL
+
+export OPENCODE_DISABLE_MODELS_FETCH=true
+export OPENCODE_PURE=true
 
 exec opencode "$@"
