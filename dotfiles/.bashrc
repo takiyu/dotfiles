@@ -603,23 +603,20 @@ if [ $platform == 'Linux' ]; then
 fi
 
 # Aliases for github copilot
-alias gcmA=copilot_auto_commit.sh
 alias gcmAl='copilot_auto_commit.sh --local'
-alias c=copilot_chat.sh
-copilot_allow_all() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
-# copilot_allow_all() { copilot --allow-all --no-auto-update --enable-all-github-mcp-tools "$@"; }  # noupdate
-alias ca_opus4.6="copilot_allow_all --model claude-opus-4.6"
-alias ca_sonnet4.6="copilot_allow_all --model claude-sonnet-4.6"
-alias ca_gpt5.3codex="copilot_allow_all --model gpt-5.3-codex"
-alias ca_gpt5.4="copilot_allow_all --model gpt-5.4"
-alias ca_free="copilot_allow_all --model gpt-5-mini"
-
-# Aliases for github copilot local
+alias gcmAo='copilot_auto_commit.sh'
+alias gcmA=gcmAl
 copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 alias ca_local="copilot_allow_all_local"
+copilot_allow_all_official() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
+alias ca_opus4.6="copilot_allow_all_official --model claude-opus-4.6"
+alias ca_sonnet4.6="copilot_allow_all_official --model claude-sonnet-4.6"
+alias ca_free="copilot_allow_all_official --model gpt-5-mini"
+alias ca=ca_local
 
 # Aliases for opencode
 alias ocl="opencode_local.sh"
+alias oc=ocl
 
 # ------------------------------------------------------------------------------
 # -------------------------- Mode Dependent Settings ---------------------------
