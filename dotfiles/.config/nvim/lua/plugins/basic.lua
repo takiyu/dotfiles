@@ -75,14 +75,18 @@ return {
   ------------------------------------ Git -------------------------------------
   ------------------------------------------------------------------------------
   {
-    'airblade/vim-gitgutter', -- Git差分ガイド
+    'lewis6991/gitsigns.nvim', -- Git差分ガイド
     config = function()
-      vim.g.gitgutter_max_signs = 200
-      vim.g.gitgutter_sign_added = '++'
-      vim.g.gitgutter_sign_modified = '-+'
-      vim.g.gitgutter_sign_removed = '__'
-      vim.g.gitgutter_sign_modified_removed = '+_'
-      vim.g.gitgutter_async = 1
+      require('gitsigns').setup {
+        signs = {
+          add          = { text = '++' },
+          change       = { text = '-+' },
+          delete       = { text = '__' },
+          topdelete    = { text = '__' },
+          changedelete = { text = '+_' },
+        },
+        max_file_length = 2000,
+      }
     end
   },
   { 'tpope/vim-fugitive' }, -- Git補助

@@ -63,9 +63,13 @@ return {
             try
                 if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler'
                     " 変更行数表示
-                    if exists('*GitGutterGetHunkSummary') && get(g:, 'gitgutter_enabled', 0)
+                    let s:dict = get(b:, 'gitsigns_status_dict', {})
+                    if !empty(s:dict)
                         let symbols = ['++', '-+', '--']
-                        let hunks = GitGutterGetHunkSummary()
+                        let hunks = [
+                            \ get(s:dict, 'added', 0),
+                            \ get(s:dict, 'changed', 0),
+                            \ get(s:dict, 'removed', 0)]
                         for i in range(3)
                             if hunks[i] > 0
                                 call add(ret, symbols[i] . hunks[i])
