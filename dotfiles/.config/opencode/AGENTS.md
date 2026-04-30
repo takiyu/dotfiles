@@ -2,11 +2,6 @@
 - For tasks with multiple independent subtasks, use the task tool to delegate work to subagents.
 - Delegate exploration, research, and code review to subagents when parallelization helps.
 
-# Task Diary
-- Upon completing a task, write a diary entry to `.task_diary/` in the project root (git root).
-- Filename format: `YYYYMMDD_HHMMSS.md`
-- Content: what was attempted, what succeeded, what failed, the reason, and key learnings.
-
 # Reporting
 - 作業完了時は必ず日本語で報告する。
 
