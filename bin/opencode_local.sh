@@ -24,4 +24,9 @@ export OPENCODE_CONFIG_CONTENT="{
   \"small_model\": \"local/${MODEL}\"
 }"
 
+export OPENCODE_DISABLE_SHARE=true
+export OPENCODE_DISABLE_MODELS_FETCH=true
+export OPENCODE_DISABLE_AUTOUPDATE=true
+export OPENCODE_PURE=true
+
 exec opencode "$@"
