@@ -234,9 +234,9 @@ return {
               end,
             },
             optional = {
-              max_tokens = 256,
-              temperature = 0.1,
-              top_p = 0.99,
+              max_tokens = 64,
+              temperature = 0.8,
+              top_p = 0.9,
               -- Stop at the first line comment (`//`).  The model tends to
               -- switch to test cases or analysis text after emitting a `//`
               -- line; stopping here keeps the completion focused on code.
