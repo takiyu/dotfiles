@@ -38,6 +38,14 @@ case "$MODE" in *remote*)
 esac
 
 # ------------------------------------------------------------------------------
+# ------------------------------ Proxy Forwarding ------------------------------
+# ------------------------------------------------------------------------------
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+export ftp_proxy=$FTP_PROXY
+export no_proxy=$NO_PROXY
+
+# ------------------------------------------------------------------------------
 # --------------------------- Linux Default Settings ---------------------------
 # ------------------------------------------------------------------------------
 # don't put duplicate lines or lines starting with space in the history.
@@ -444,7 +452,7 @@ __git_complete gbis_start _git_branch
 __git_complete gbis_start_with_script _git_branch
 
 # ------------------------------------------------------------------------------
-# ----------------------------- Additional Aliases -----------------------------
+# -------------------------------- Make Aliases --------------------------------
 # ------------------------------------------------------------------------------
 # aliases for make
 alias maek=make
@@ -472,11 +480,10 @@ alias ekma=make
 alias ekam=make
 alias mk=make
 alias km=make
-# aliases for ninja
-alias nin=ninja
-alias ni=ninja
 
-# aliases for editors
+# ------------------------------------------------------------------------------
+# -------------------------------- Vim Commands --------------------------------
+# ------------------------------------------------------------------------------
 if [ "`$exist_command nvim`" == 'exist' ]; then
     # Set nvim for all
     alias vim=nvim
@@ -561,11 +568,15 @@ if [ "`$exist_command nvim`" == 'exist' ]; then
     alias gdvd=gdvimdiff
 fi
 
-# aliases for applications
+# ------------------------------------------------------------------------------
+# ---------------------------- Application Aliases -----------------------------
+# ------------------------------------------------------------------------------
 if [ $platform == 'Linux' ]; then
+    # Linux Specific Aliases
     function filer() { command thunar "$@" & 2> /dev/null; disown; }
     function zathura() { command zathura "$@" & 2> /dev/null; disown; }
 elif [ $platform == 'Windows' ]; then
+    # Windows Specific Aliases
     function filer() { command explorer "$@" & 2> /dev/null; disown; }
     alias w=winpty
 fi
@@ -574,8 +585,6 @@ alias f.='filer .'
 alias f..='filer ..'
 alias f...='filer ...'
 alias p=python
-alias p2=python2
-alias p3=python3
 
 # Trizen
 if [ "`$exist_command trizen`" == 'exist' ]; then
@@ -597,14 +606,6 @@ alias ca=ca_local
 # Aliases for opencode
 alias ocl="opencode_local.sh"
 alias oc=ocl
-
-# ------------------------------------------------------------------------------
-# ------------------------------ Proxy Forwarding ------------------------------
-# ------------------------------------------------------------------------------
-export http_proxy=$HTTP_PROXY
-export https_proxy=$HTTPS_PROXY
-export ftp_proxy=$FTP_PROXY
-export no_proxy=$NO_PROXY
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
