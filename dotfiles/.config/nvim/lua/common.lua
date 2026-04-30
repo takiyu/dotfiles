@@ -61,7 +61,7 @@ vim.cmd('set foldlevel=0')
 vim.cmd('set foldcolumn=2')
 
 -------------------------------- Preview Window --------------------------------
-vim.cmd('set completeopt=menuone,longest,preview') -- プレビューウインドウで表示
+vim.opt.completeopt = { 'menuone', 'longest', 'preview' } -- Show in preview window
 vim.cmd('set previewheight=1')                     -- プレビューウインドウの高さ
 vim.cmd('set splitbelow')                          -- 下に表示
 vim.cmd('set laststatus=2')                        -- ステータスラインを常に表示
