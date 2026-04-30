@@ -1,11 +1,45 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "share": "disabled",
-  "disabled_providers": ["opencode", "openai", "anthropic", "github-copilot", "openrouter"],
+  "autoupdate": true,
+  "disabled_providers": [
+    "opencode",
+    "openai",
+    "anthropic",
+    "github-copilot",
+    "openrouter"
+  ],
+  "provider": {
+    "local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local LLM",
+      "options": {
+        "baseURL": "http://{env:LLM_API_HOST}/v1",
+        "apiKey": "local"
+      },
+      "models": {
+        "{env:LLM_MODEL}": {}
+      }
+    }
+  },
+  "model": "local/{env:LLM_MODEL}",
+  "small_model": "local/{env:LLM_MODEL}",
+  "agent": {
+    "build": {
+      "permission": {
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow"
+      }
+    }
+  },
   "mcp": {
     "playwright": {
       "type": "local",
-      "command": ["npx", "@playwright/mcp@latest"],
+      "command": [
+        "npx",
+        "@playwright/mcp@latest"
+      ],
       "enabled": true
     }
   }
