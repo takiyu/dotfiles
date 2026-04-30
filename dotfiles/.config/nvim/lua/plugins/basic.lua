@@ -153,24 +153,36 @@ return {
     end
   },
   {
-    'yuttie/comfortable-motion.vim', -- Smooth scroll
-    init = function()
-      vim.g.comfortable_motion_no_default_key_mappings = 1
-      vim.g.comfortable_motion_friction = 120.0
-      vim.g.comfortable_motion_air_drag = 3.0
-    end,
+    'karb94/neoscroll.nvim', -- Smooth scroll
     config = function()
-      -- Large motion
-      vim.api.nvim_set_keymap('n', '<Space>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Space>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<PageDown>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<PageUp>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Down>', ':call comfortable_motion#flick(120)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<S-Up>', ':call comfortable_motion#flick(-120)<CR>', { silent = true })
-      -- Small motion
-      vim.api.nvim_set_keymap('n', '<ScrollWheelDown>', ':call comfortable_motion#flick(40)<CR>', { silent = true })
-      vim.api.nvim_set_keymap('n', '<ScrollWheelUp>', ':call comfortable_motion#flick(-40)<CR>', { silent = true })
-    end,
+      local neoscroll = require('neoscroll')
+      neoscroll.setup({
+        mappings = {},  -- disable default mappings
+        hide_cursor = true,
+        stop_eof = true,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = true,
+      })
+
+      -- Helper to register scroll keymaps with dynamic line evaluation
+      local function map_scroll(key, lines_fn, duration)
+        vim.keymap.set('n', key, function()
+          neoscroll.scroll(lines_fn(),
+                           { move_cursor = true, duration = duration })
+        end, { silent = true })
+      end
+
+      -- Large motion (full-page)
+      map_scroll('<Space>', function() return vim.fn.winheight(0) - 2 end, 300)
+      map_scroll('<S-Space>', function() return -(vim.fn.winheight(0) - 2) end, 300)
+      map_scroll('<PageDown>', function() return vim.fn.winheight(0) - 2 end, 300)
+      map_scroll('<PageUp>', function() return -(vim.fn.winheight(0) - 2) end, 300)
+      -- Small motion (mouse wheel)
+      map_scroll('<S-Down>', function() return vim.wo.scroll end, 300)
+      map_scroll('<S-Up>', function() return -vim.wo.scroll end, 300)
+      map_scroll('<ScrollWheelDown>', function() return vim.wo.scroll end, 300)
+      map_scroll('<ScrollWheelUp>', function() return -vim.wo.scroll end, 300)
+    end
   },
 
   ------------------------------------------------------------------------------
