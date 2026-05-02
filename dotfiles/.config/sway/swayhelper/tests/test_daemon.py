@@ -27,8 +27,8 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
 
     monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
     # Ensure fresh state for these workspace IDs
-    daemon._ws_states.pop(11, None)
-    daemon._ws_states.pop(22, None)
+    daemon.ws_states.pop(11, None)
+    daemon.ws_states.pop(22, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
 
@@ -60,7 +60,7 @@ def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
         calls.append(ws_id)
 
     monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
-    daemon._ws_states.pop(10, None)
+    daemon.ws_states.pop(10, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeTempConn()))
 
@@ -92,16 +92,16 @@ def test_run_existing_layouts_uses_stack_for_portrait_output(
         calls.append(ws_id)
 
     monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
-    daemon._ws_states.pop(9001, None)
+    daemon.ws_states.pop(9001, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakePortraitConn()))
 
     assert calls == [9001]
-    assert daemon._ws_states[9001].kind == daemon.LayoutKind.STACK
+    assert daemon.ws_states[9001].kind == daemon.LayoutKind.STACK
 
 
 def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
-    # Daemon-initiated move (container in _daemon_move_ids) is suppressed.
+    # Daemon-initiated move (container in daemon_move_ids) is suppressed.
     actions: list[str] = list()
 
     class FakeConn:
@@ -111,8 +111,8 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids[42] = float('inf')  # non-expiring entry
+    daemon.daemon_move_ids.clear()
+    daemon.daemon_move_ids[42] = float('inf')  # non-expiring entry
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
@@ -121,7 +121,7 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
     daemon.on_window(cast(daemon.SwayConn, FakeConn()),
                      cast(daemon.WindowEvent, event))
 
-    assert 42 not in daemon._daemon_move_ids  # entry consumed
+    assert 42 not in daemon.daemon_move_ids  # entry consumed
     assert actions == list()  # no buffering/reflow/flush
 
 
@@ -135,7 +135,7 @@ def test_on_window_retiles_after_close(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
+    daemon.daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
@@ -158,7 +158,7 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
+    daemon.daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_swap_new_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -649,13 +649,13 @@ def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
     monkeypatch.setattr('swayhelper.layout._refocus_window',
                         lambda _i3, _win: None)
 
-    daemon._ws_states[WS_A_ID] = daemon.WorkspaceState(ws_id=WS_A_ID)
-    daemon._ws_states[WS_B_ID] = daemon.WorkspaceState(ws_id=WS_B_ID)
+    daemon.ws_states[WS_A_ID] = daemon.WorkspaceState(ws_id=WS_A_ID)
+    daemon.ws_states[WS_B_ID] = daemon.WorkspaceState(ws_id=WS_B_ID)
     try:
         daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
     finally:
-        daemon._ws_states.pop(WS_A_ID, None)
-        daemon._ws_states.pop(WS_B_ID, None)
+        daemon.ws_states.pop(WS_A_ID, None)
+        daemon.ws_states.pop(WS_B_ID, None)
 
     a_calls = [c for c in reflow_calls if c[0] == WS_A_ID]
     b_calls = [c for c in reflow_calls if c[0] == WS_B_ID]
@@ -728,7 +728,7 @@ def test_run_existing_layouts_does_not_reset_state_on_sparse_workspace(
     state_b = daemon.WorkspaceState(
         ws_id=WS_B_ID, kind=daemon.LayoutKind.THREE_COL,
         n_masters=2, transforms={daemon.Transform.REFLECTX})
-    daemon._ws_states[WS_B_ID] = state_b
+    daemon.ws_states[WS_B_ID] = state_b
 
     # _reflow_ncol must not block (returns False = nothing moved)
     monkeypatch.setattr('swayhelper.layout._reflow_ncol',
@@ -739,7 +739,7 @@ def test_run_existing_layouts_does_not_reset_state_on_sparse_workspace(
     try:
         daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
     finally:
-        daemon._ws_states.pop(WS_B_ID, None)
+        daemon.ws_states.pop(WS_B_ID, None)
 
     # ws_b's state must be completely unchanged
     assert state_b.kind == daemon.LayoutKind.THREE_COL
@@ -884,7 +884,7 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
+    daemon.daemon_move_ids.clear()
     monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -899,7 +899,7 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
 
 
 def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
-    # Move event for a container NOT in _daemon_move_ids is processed.
+    # Move event for a container NOT in daemon_move_ids is processed.
     actions: list[str] = list()
 
     class FakeConn:
@@ -909,8 +909,8 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids[99] = float('inf')  # different container
+    daemon.daemon_move_ids.clear()
+    daemon.daemon_move_ids[99] = float('inf')  # different container
     monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
@@ -924,11 +924,11 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
     # container 77 not in set → user move processed normally
     assert actions == ['start', 'swap', 'run', 'flush']
     # container 99 still in set (different ID, not consumed)
-    assert 99 in daemon._daemon_move_ids
+    assert 99 in daemon.daemon_move_ids
 
 
 def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
-    # Close event removes a stale _daemon_move_ids entry.
+    # Close event removes a stale daemon_move_ids entry.
     actions: list[str] = list()
 
     class FakeConn:
@@ -938,9 +938,9 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
+    daemon.daemon_move_ids.clear()
     # stale entry simulating closed container
-    daemon._daemon_move_ids[55] = float('inf')
+    daemon.daemon_move_ids[55] = float('inf')
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
@@ -949,7 +949,7 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
     daemon.on_window(cast(daemon.SwayConn, FakeConn()),
                      cast(daemon.WindowEvent, event))
 
-    assert 55 not in daemon._daemon_move_ids  # cleaned up
+    assert 55 not in daemon.daemon_move_ids  # cleaned up
     assert actions == ['start', 'run', 'flush']  # reflow still happens
 
 
@@ -1132,7 +1132,7 @@ def test_swap_moved_window_skips_temp_workspace() -> None:
 
 
 def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
-    # An expired _daemon_move_ids entry must not suppress a user move.
+    # An expired daemon_move_ids entry must not suppress a user move.
     actions: list[str] = list()
 
     class FakeConn:
@@ -1142,8 +1142,8 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
         def flush(self) -> None:
             actions.append('flush')
 
-    daemon._daemon_move_ids.clear()
-    daemon._daemon_move_ids[42] = -1.0  # already expired (negative monotonic)
+    daemon.daemon_move_ids.clear()
+    daemon.daemon_move_ids[42] = -1.0  # already expired (negative monotonic)
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
     monkeypatch.setattr(daemon, '_swap_moved_window',
@@ -1154,7 +1154,7 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
     daemon.on_window(cast(daemon.SwayConn, FakeConn()),
                      cast(daemon.WindowEvent, event))
 
-    assert 42 not in daemon._daemon_move_ids   # entry consumed regardless
+    assert 42 not in daemon.daemon_move_ids   # entry consumed regardless
     assert actions == ['start', 'swap', 'run', 'flush']  # treated as user move
 
 

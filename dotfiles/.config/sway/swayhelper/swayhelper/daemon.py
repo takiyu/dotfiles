@@ -7,10 +7,10 @@ import i3ipc
 
 import swayhelper.constants as _constants
 from swayhelper.commands import _COMMANDS
-from swayhelper.constants import BindingEvent, WindowEvent, _IpcHandler
+from swayhelper.constants import BindingEvent, IpcHandler, WindowEvent
 from swayhelper.ipc import SwayConn
 from swayhelper.layout import _run_existing_layouts
-from swayhelper.state import _daemon_move_ids
+from swayhelper.state import daemon_move_ids
 from swayhelper.tree_utils import _parse_nop_commands
 from swayhelper.window_ops import _swap_moved_window, _swap_new_window
 
@@ -43,13 +43,13 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
             # TTL prevents a sway-dropped event from permanently blocking
             # future user moves on the same container.
             container = event.container
-            expiry = _daemon_move_ids.pop(container.id, None)
+            expiry = daemon_move_ids.pop(container.id, None)
             if expiry is not None and time.monotonic() < expiry:
                 return
         elif event.change == 'close':
             # Remove stale entry so closed containers don't linger.
             closed: object = event.container
-            _daemon_move_ids.pop(closed.id, None)
+            daemon_move_ids.pop(closed.id, None)
         i3.start_buffering()
         if event.change == 'new':
             # Swap the new window before its sway-assigned predecessor so it
@@ -78,7 +78,7 @@ def main() -> None:
     parser.add_argument(
         '--default-layout',
         default=_constants.DEFAULT_LAYOUT.value,
-        choices=list(_constants._LAYOUT_BY_NAME),
+        choices=list(_constants.LAYOUT_BY_NAME),
         help='Layout for workspaces with no explicit setting.')
     parser.add_argument('--verbose', '-v', action='count',
                         help='Enable debug logging '
@@ -86,7 +86,7 @@ def main() -> None:
     parser.add_argument('--log-file',
                         help='Write log to file instead of stderr.')
     args = parser.parse_args()
-    _constants.DEFAULT_LAYOUT = _constants._LAYOUT_BY_NAME.get(
+    _constants.DEFAULT_LAYOUT = _constants.LAYOUT_BY_NAME.get(
         args.default_layout, _constants.LayoutKind.TALL)
 
     level = logging.DEBUG if args.verbose else logging.WARNING
@@ -96,10 +96,10 @@ def main() -> None:
                         format=fmt)
 
     i3 = SwayConn()
-    i3.on(i3ipc.Event.BINDING, cast(_IpcHandler, on_binding))
-    i3.on(i3ipc.Event.WINDOW_NEW, cast(_IpcHandler, on_window))
-    i3.on(i3ipc.Event.WINDOW_CLOSE, cast(_IpcHandler, on_window))
-    i3.on(i3ipc.Event.WINDOW_MOVE, cast(_IpcHandler, on_window))
+    i3.on(i3ipc.Event.BINDING, cast(IpcHandler, on_binding))
+    i3.on(i3ipc.Event.WINDOW_NEW, cast(IpcHandler, on_window))
+    i3.on(i3ipc.Event.WINDOW_CLOSE, cast(IpcHandler, on_window))
+    i3.on(i3ipc.Event.WINDOW_MOVE, cast(IpcHandler, on_window))
     i3.main()
 
 
@@ -114,7 +114,7 @@ from swayhelper.layout import _run_layout  # noqa: E402,F401
 from swayhelper.layout import _run_ncol_layout  # noqa: E402,F401
 from swayhelper.layout import _run_nop_layout  # noqa: E402,F401
 from swayhelper.state import WorkspaceState  # noqa: E402,F401
-from swayhelper.state import _ws_states  # noqa: E402,F401
+from swayhelper.state import ws_states  # noqa: E402,F401
 from swayhelper.window_ops import _get_master_window  # noqa: E402,F401
 from swayhelper.window_ops import _get_resize_target  # noqa: E402,F401
 

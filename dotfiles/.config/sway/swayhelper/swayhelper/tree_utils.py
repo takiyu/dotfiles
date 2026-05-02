@@ -2,9 +2,9 @@ import shlex
 from typing import Optional
 
 import swayhelper.constants as _constants
-from swayhelper.constants import _LAYOUT_BY_NAME, BindingEvent, Con, LayoutKind
+from swayhelper.constants import LAYOUT_BY_NAME, BindingEvent, Con, LayoutKind
 from swayhelper.ipc import SwayConn
-from swayhelper.state import WorkspaceState, _ws_states
+from swayhelper.state import WorkspaceState, ws_states
 
 
 # -----------------------------------------------------------------------------
@@ -45,13 +45,13 @@ def _get_ws_state(ws_id: int,
     # Return (creating if absent) the layout state for a workspace.
     # ``default_kind`` sets the initial layout kind when creating the state for
     # the first time.  When None the global DEFAULT_LAYOUT name is used.
-    if ws_id not in _ws_states:
+    if ws_id not in ws_states:
         kind = (default_kind
                 if default_kind is not None
-                else _LAYOUT_BY_NAME.get(_constants.DEFAULT_LAYOUT.value,
-                                         LayoutKind.TALL))
-        _ws_states[ws_id] = WorkspaceState(ws_id=ws_id, kind=kind)
-    return _ws_states[ws_id]
+                else LAYOUT_BY_NAME.get(_constants.DEFAULT_LAYOUT.value,
+                                        LayoutKind.TALL))
+        ws_states[ws_id] = WorkspaceState(ws_id=ws_id, kind=kind)
+    return ws_states[ws_id]
 
 
 def _parse_nop_commands(event: BindingEvent) -> list[list[str]]:

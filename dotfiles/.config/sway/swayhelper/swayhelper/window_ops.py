@@ -2,10 +2,10 @@ import math
 import time
 from typing import Optional
 
-from swayhelper.constants import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES, MOVE_MARK,
+from swayhelper.constants import (MOVE_ID_TTL, MOVE_MARK, TEMP_WS_PREFIXES,
                                   Con, LayoutKind, Transform)
 from swayhelper.ipc import SwayConn
-from swayhelper.state import WorkspaceState, _daemon_move_ids
+from swayhelper.state import WorkspaceState, daemon_move_ids
 from swayhelper.tree_utils import _get_focused_window, _is_floating
 
 
@@ -122,7 +122,7 @@ def _swap_moved_window(i3: SwayConn, moved_win_id: int) -> None:
     # Moving to __swh_tmp_* is done by fix_workspace_order in the helper;
     # focusing those windows would steal focus from the (possibly empty)
     # new_ws, triggering sway's auto-deletion of new_ws.
-    if any(ws.name.startswith(p) for p in _TEMP_WS_PREFIXES):
+    if any(ws.name.startswith(p) for p in TEMP_WS_PREFIXES):
         return
     leaves = [leaf for leaf in ws.leaves() if not _is_floating(leaf)]
     if len(leaves) < 2:
@@ -195,7 +195,7 @@ def _get_resize_target(ws: Con, state: WorkspaceState) -> Optional[Con]:
 # -----------------------------------------------------------------------------
 def _move_container(src: Con, dst: Con) -> None:
     # Teleport src to be placed adjacent to dst using a temporary mark.
-    _daemon_move_ids[src.id] = time.monotonic() + _MOVE_ID_TTL
+    daemon_move_ids[src.id] = time.monotonic() + MOVE_ID_TTL
     dst.command(f'mark {MOVE_MARK}')
     src.command(f'move window to mark {MOVE_MARK}')
     dst.command(f'unmark {MOVE_MARK}')

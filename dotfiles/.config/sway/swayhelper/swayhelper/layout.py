@@ -3,11 +3,10 @@ import math
 import time
 from typing import Optional
 
-from swayhelper.constants import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES,
-                                  MAX_REFLOW_ITERS_PER_WIN, Con, LayoutKind,
-                                  Transform)
+from swayhelper.constants import (MAX_REFLOW_ITERS_PER_WIN, MOVE_ID_TTL,
+                                  TEMP_WS_PREFIXES, Con, LayoutKind, Transform)
 from swayhelper.ipc import SwayConn
-from swayhelper.state import WorkspaceState, _daemon_move_ids, _ws_states
+from swayhelper.state import WorkspaceState, daemon_move_ids, ws_states
 from swayhelper.tree_utils import (_get_focused_window, _get_focused_workspace,
                                    _get_ws_state, _is_floating, _refetch)
 from swayhelper.window_ops import (_balance_cols, _get_layout_nodes,
@@ -30,12 +29,12 @@ def _run_existing_layouts(i3: SwayConn) -> None:
     for reply in i3.get_workspaces():
         # Skip orphaned helper temp workspaces (e.g. __ws_B0, __swh_tmp_A1)
         # to prevent the layout engine from tiling transient/zombie workspaces.
-        if any(reply.name.startswith(p) for p in _TEMP_WS_PREFIXES):
+        if any(reply.name.startswith(p) for p in TEMP_WS_PREFIXES):
             continue
         ws_id = int(reply.ipc_data['id'])
         # On first encounter initialise with orientation-aware default.
         # Portrait outputs (height > width) default to 'stack' (1 column).
-        if ws_id not in _ws_states:
+        if ws_id not in ws_states:
             out = outputs.get(getattr(reply, 'output', ''))
             is_portrait = (out is not None
                            and out.rect.height   # type: ignore[union-attr]
@@ -153,7 +152,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
         if len(ws.nodes) <= 1:
             return False
         node = ws.nodes[-1].nodes[0]
-        _daemon_move_ids[node.id] = time.monotonic() + _MOVE_ID_TTL
+        daemon_move_ids[node.id] = time.monotonic() + MOVE_ID_TTL
         focused = ws.find_focused() if is_focused else None
         node.command('move left')
         if is_focused and focused:
@@ -173,8 +172,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
         if i == 0:  # master pane
             if n == 1 and len(col.nodes) > state.n_masters:
                 # Single column overflows: push one window right to new col
-                expiry = time.monotonic() + _MOVE_ID_TTL
-                _daemon_move_ids[col.nodes[-1].id] = expiry
+                expiry = time.monotonic() + MOVE_ID_TTL
+                daemon_move_ids[col.nodes[-1].id] = expiry
                 focused = ws.find_focused() if ws else None
                 col.nodes[-1].command(_transform_cmd(state, 'move right'))
                 if is_focused and focused:
@@ -191,8 +190,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
             if len(col.nodes) > 1:
                 if n < state.n_columns:
                     # Too few columns: expand rightward
-                    expiry = time.monotonic() + _MOVE_ID_TTL
-                    _daemon_move_ids[col.nodes[-1].id] = expiry
+                    expiry = time.monotonic() + MOVE_ID_TTL
+                    daemon_move_ids[col.nodes[-1].id] = expiry
                     focused = ws.find_focused() if ws else None
                     cmd = _transform_cmd(state, 'move right')
                     col.nodes[-1].command(cmd)
@@ -201,8 +200,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
                     return True
                 elif n > state.n_columns:
                     # Too many columns: collapse leftward
-                    expiry = time.monotonic() + _MOVE_ID_TTL
-                    _daemon_move_ids[col.nodes[0].id] = expiry
+                    expiry = time.monotonic() + MOVE_ID_TTL
+                    daemon_move_ids[col.nodes[0].id] = expiry
                     focused = ws.find_focused() if ws else None
                     cmd = _transform_cmd(state, 'move left')
                     col.nodes[0].command(cmd)

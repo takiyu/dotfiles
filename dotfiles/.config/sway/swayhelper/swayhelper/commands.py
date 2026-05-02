@@ -1,7 +1,7 @@
 import logging
 
-from swayhelper.constants import (_LAYOUT_BY_NAME, BindingEvent, LayoutKind,
-                                  Transform, _CmdHandler)
+from swayhelper.constants import (LAYOUT_BY_NAME, BindingEvent, CmdHandler,
+                                  LayoutKind, Transform)
 from swayhelper.ipc import SwayConn
 from swayhelper.layout import (_apply_reflectx, _apply_reflecty,
                                _apply_transpose, _run_layout)
@@ -78,7 +78,7 @@ def _cmd_set_layout(i3: SwayConn,
     # Change the current workspace to a named layout and re-tile.
     if not args:
         return
-    kind = _LAYOUT_BY_NAME.get(args[0])
+    kind = LAYOUT_BY_NAME.get(args[0])
     if kind is None:
         logging.warning('Unknown layout: %s', args[0])
         return
@@ -178,7 +178,7 @@ def _cmd_fullscreen(i3: SwayConn,
 
 
 # Map nop command names to their handler functions
-_COMMANDS: dict[str, _CmdHandler] = {
+_COMMANDS: dict[str, CmdHandler] = {
     'promote_window':        _cmd_promote_window,
     'focus_master':          _cmd_focus_master,
     'resize_master':         _cmd_resize_master,
