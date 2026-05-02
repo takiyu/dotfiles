@@ -4,15 +4,16 @@
 DIR=$(dirname "$(readlink -f "$0")")
 PYTHON="$DIR/.venv/bin/python"
 
-# Kill previous instance via PID file
-if [ -f /tmp/swayhelper-daemon.pid ]; then
-    OLD_PID=$(cat /tmp/swayhelper-daemon.pid)
-    kill "$OLD_PID" 2>/dev/null || true
-    rm -f /tmp/swayhelper-daemon.pid
-fi
+# Kill previous swayhelper daemon instances by command pattern.
+# Escape the dot so pgrep treats it as a literal character and does not
+# match "swayhelper daemon" in make command lines.
+for pid in $(pgrep -f "swayhelper\.daemon"); do
+    if [ "$pid" -ne $$ ]; then
+        kill "$pid" 2>/dev/null || true
+    fi
+done
 
 sleep 0.2
 
-# Write PID then exec daemon (exec replaces this shell with python)
-echo $$ > /tmp/swayhelper-daemon.pid
+rm -f /tmp/swayhelper-daemon.pid
 exec "$PYTHON" -m swayhelper.daemon
