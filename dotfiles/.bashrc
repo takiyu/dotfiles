@@ -591,9 +591,6 @@ if [ "$($exist_command trizen)" = 'exist' ]; then
 fi
 
 # Aliases for opencode auto-commit
-alias gcmAl='opencode_auto_commit.sh'
-alias gcmAo='opencode_auto_commit.sh'
-alias gcmA=gcmAl
 copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 alias ca_local="copilot_allow_all_local"
 copilot_allow_all_official() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
@@ -606,6 +603,7 @@ alias ca=ca_local
 alias ocl="opencode_local.sh"
 alias oc=ocl
 alias oc_serve="ocl serve"
+alias gcmA='auto_commit_opencode.sh'
 
 # Alias for agent
 alias a=oc
