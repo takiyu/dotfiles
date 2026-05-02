@@ -89,6 +89,7 @@ One per line in this format:
 - String constants where an `enum` should be used
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
+- Private name (`_foo`) accessed from another module (excluding tests)
 
 **[中] Should fix:**
 - camelCase function/variable name (must be snake_case)
