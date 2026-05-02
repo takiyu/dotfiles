@@ -184,8 +184,8 @@ return {
       -- Small motion (mouse wheel)
       map_scroll('<S-Down>', function() return vim.wo.scroll end, 300)
       map_scroll('<S-Up>', function() return -vim.wo.scroll end, 300)
-      map_scroll('<ScrollWheelDown>', function() return vim.wo.scroll end, 300)
-      map_scroll('<ScrollWheelUp>', function() return -vim.wo.scroll end, 300)
+      map_scroll('<ScrollWheelDown>', function() return vim.wo.scroll / 4 end, 300)
+      map_scroll('<ScrollWheelUp>', function() return -vim.wo.scroll / 4 end, 300)
     end
   },
 
