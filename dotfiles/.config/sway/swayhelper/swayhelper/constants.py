@@ -21,6 +21,22 @@ MAX_REFLOW_ITERS_PER_WIN = 3
 # Generous bound; sway events typically arrive within milliseconds.
 MOVE_ID_TTL = 2.0
 
+# Fixed mapping from sway output name to workspace letter prefix.
+# This mapping is absolute and does not change when displays are
+# reconnected. Keys: sway output names (e.g. DP-2). Values: single
+# uppercase letter used as workspace prefix (e.g. A).
+OUTPUT_TO_LETTER: dict[str, str] = {
+    'DP-2': 'A',
+    'DP-1': 'B',
+    'HDMI-A-2': 'C',
+    'HDMI-A-1': 'D',
+}
+
+# Ordered list of output names for indexed display access via
+# focus_display / move_display. Index 0 corresponds to OPT=0 (h key),
+# 1 to OPT=1 (k), 2 to OPT=2 (j), 3 to OPT=3 (l).
+INDEXED_OUTPUTS: list[str] = ['DP-2', 'DP-1', 'HDMI-A-2', 'HDMI-A-1']
+
 
 # -----------------------------------------------------------------------------
 # ----------------------------------- Enums -----------------------------------

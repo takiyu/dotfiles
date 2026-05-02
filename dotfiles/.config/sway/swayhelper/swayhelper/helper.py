@@ -12,6 +12,8 @@ import subprocess
 import time
 from typing import Callable, Optional
 
+from swayhelper.constants import INDEXED_OUTPUTS, OUTPUT_TO_LETTER
+
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
@@ -429,17 +431,15 @@ def move_nei_display(offset: int = 1) -> None:
 
 
 def focus_display(index: int) -> None:
-    # Focus to display by index.
-    all_disps = get_displays()
-    nxt_disp = all_disps[index % len(all_disps)]
+    # Focus to display by fixed output mapping.
+    nxt_disp = INDEXED_OUTPUTS[index % len(INDEXED_OUTPUTS)]
     nxt_ws = get_cur_workspace(nxt_disp)
     focus_workspace(nxt_ws)
 
 
 def move_display(index: int) -> None:
-    # Move to display by index.
-    all_disps = get_displays()
-    nxt_disp = all_disps[index % len(all_disps)]
+    # Move to display by fixed output mapping.
+    nxt_disp = INDEXED_OUTPUTS[index % len(INDEXED_OUTPUTS)]
     nxt_ws = get_cur_workspace(nxt_disp)
     move_workspace(nxt_ws)
 
@@ -777,18 +777,12 @@ def _strip_reorder_tmp_prefix(name: str) -> str:
 # -------------------------------- Display Map --------------------------------
 # -----------------------------------------------------------------------------
 def _update_display_map(all_disps: list[str]) -> dict[str, str]:
-    # Load/create persistent output->letter map; add new displays.
-    disp_to_letter = _load_display_map()
-    used_letters = set(disp_to_letter.values())
-    # Assign a letter to any newly seen display (in position-sorted order)
-    for disp in all_disps:
-        if disp not in disp_to_letter:
-            for idx in range(26):
-                letter = idx2char(idx)
-                if letter not in used_letters:
-                    disp_to_letter[disp] = letter
-                    used_letters.add(letter)
-                    break
+    # Use fixed output-to-letter mapping from constants.
+    # Only include outputs that are currently active.
+    disp_to_letter = {
+        disp: letter for disp, letter in OUTPUT_TO_LETTER.items()
+        if disp in all_disps
+    }
     _save_display_map(disp_to_letter)
     return disp_to_letter
 
