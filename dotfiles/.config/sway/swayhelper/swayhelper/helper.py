@@ -1,8 +1,6 @@
-'''Sway workspace and display navigation helper.
-
-Provides CLI commands for workspace/display focus and move operations.
-Invoke as: python3 -m swayhelper.helper <action> [--opt <value>]
-'''
+# Sway workspace and display navigation helper.
+# Provides CLI commands for workspace/display focus and move operations.
+# Invoke as: python3 -m swayhelper.helper <action> [--opt <value>]
 import argparse
 import contextlib
 import fcntl
@@ -12,7 +10,7 @@ import os.path as osp
 import re
 import subprocess
 import time
-from typing import Any, Optional
+from typing import Optional
 
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
@@ -77,7 +75,7 @@ def run_action(action: str, opt: str = '') -> None:
 # --------------------- High-level Actions Implementation ---------------------
 # -----------------------------------------------------------------------------
 def setup_workspace_names() -> None:
-    ''' Rename workspaces to A0, A1, B0, B1, etc. based on display map. '''
+    # Rename workspaces to A0, A1, B0, B1, etc. based on display map.
     all_disps = get_displays()
     # Ensure persistent display-letter map is up to date
     disp_to_letter = _update_display_map(all_disps)
@@ -120,7 +118,7 @@ def setup_workspace_names() -> None:
 
 def _restore_workspace_assignments(all_disps: list[str],
                                    disp_to_letter: dict[str, str]) -> None:
-    ''' Move workspaces with known letter prefixes to their home display. '''
+    # Move workspaces with known letter prefixes to their home display.
     active_outputs = set(all_disps)
     # Build reverse map: letter -> output (only for currently active displays)
     letter_to_disp = {v: k for k, v in disp_to_letter.items()
@@ -146,10 +144,9 @@ def _restore_workspace_assignments(all_disps: list[str],
 
 
 def _cleanup_temp_workspaces(all_disps: list[str]) -> None:
-    '''Move windows from orphaned temp workspaces to their real targets.
-
-    Handles both the current _WS_REORDER_TMP prefix and the legacy _t
-    prefix left by older versions, enabling recovery on restart. '''
+    # Move windows from orphaned temp workspaces to their real targets.
+    # Handles both the current _WS_REORDER_TMP prefix and the legacy _t
+    # prefix left by older versions, enabling recovery on restart.
     for disp in all_disps:
         for ws_name in list(get_workspaces_raw(disp)):
             real_name = _strip_reorder_tmp_prefix(ws_name)
@@ -163,7 +160,7 @@ def _cleanup_temp_workspaces(all_disps: list[str]) -> None:
 
 
 def focus_nei_workspace(offset: int = 1) -> None:
-    ''' Focus to neighbor workspace on current display. '''
+    # Focus to neighbor workspace on current display.
     cur_disp = get_cur_display()
     cur_ws = get_cur_workspace(cur_disp)
     nxt_ws = _shift_workspace_name(cur_ws, offset)
@@ -184,11 +181,10 @@ def focus_nei_workspace(offset: int = 1) -> None:
 
 
 def move_nei_workspace(offset: int = 1) -> None:
-    ''' Move to neighbor workspace on current display.
-
-    Serialised by _move_lock so rapid keypresses don't race: the second
-    invocation waits until the first (including fix_workspace_order's focus
-    shuffling) finishes, then re-reads the correct post-move state. '''
+    # Move to neighbor workspace on current display.
+    # Serialised by _move_lock so rapid keypresses don't race: the second
+    # invocation waits until the first (including fix_workspace_order's focus
+    # shuffling) finishes, then re-reads the correct post-move state.
     with _move_lock():
         cur_disp = get_cur_display()
         cur_ws = get_cur_workspace(cur_disp)
@@ -214,16 +210,14 @@ def move_nei_workspace(offset: int = 1) -> None:
 
 
 def fix_workspace_order(display: str, new_ws: str) -> None:
-    ''' Reorder sway's workspace list after a new one is created mid-sequence.
-
-    When B4 is created after B0,B3,B5, sway appends it: [B0,B3,B5,B4].
-    We evacuate out-of-order workspaces (B5) to temp names in sorted order
-    so each temp workspace is appended right after new_ws.  Then we rename
-    them back in place — no focus change required, so new_ws can never be
-    auto-deleted (sway only deletes empty workspaces on focus-away).
-
-    Concurrent calls are serialised by a file lock; state is re-read under
-    the lock so each invocation operates on a consistent snapshot. '''
+    # Reorder sway's workspace list after a new one is created mid-sequence.
+    # When B4 is created after B0,B3,B5, sway appends it: [B0,B3,B5,B4].
+    # We evacuate out-of-order workspaces (B5) to temp names in sorted order
+    # so each temp workspace is appended right after new_ws.  Then we rename
+    # them back in place — no focus change required, so new_ws can never be
+    # auto-deleted (sway only deletes empty workspaces on focus-away).
+    # Concurrent calls are serialised by a file lock; state is re-read under
+    # the lock so each invocation operates on a consistent snapshot.
     with _reorder_lock():
         ws_actual = get_workspaces_raw(display)
         if new_ws not in ws_actual:
@@ -289,7 +283,7 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
 
 
 def focus_valid_nei_workspace(offset: int = 1) -> None:
-    ''' Focus to valid neighbor workspace on current display. '''
+    # Focus to valid neighbor workspace on current display.
     cur_disp = get_cur_display()
     ws, cur_ws = get_workspace_cycle(cur_disp)
     if not ws or cur_ws not in ws:
@@ -299,11 +293,9 @@ def focus_valid_nei_workspace(offset: int = 1) -> None:
 
 
 def move_valid_nei_workspace(offset: int = 1) -> None:
-    ''' Move focused window to valid neighbor workspace on current display.
-
-    Only targets workspaces that already exist; no new workspace is created.
-    Serialised by _move_lock to avoid focus-state races on rapid keypresses.
-    '''
+    # Move focused window to valid neighbor workspace on current display.
+    # Only targets workspaces that already exist; no new workspace is created.
+    # Serialised by _move_lock to avoid focus-state races on rapid keypresses.
     with _move_lock():
         cur_disp = get_cur_display()
         ws, cur_ws = get_workspace_cycle(cur_disp)
@@ -316,7 +308,7 @@ def move_valid_nei_workspace(offset: int = 1) -> None:
 
 
 def insert_workspace_before_current() -> None:
-    '''Insert a new workspace immediately before the current workspace.'''
+    # Insert a new workspace immediately before the current workspace.
     cur_disp = get_cur_display()
     ws_data = _get_workspaces_data()
     cur_ws = _get_visible_workspace_name(ws_data, cur_disp)
@@ -335,7 +327,7 @@ def insert_workspace_before_current() -> None:
 
 
 def delete_current_workspace_if_empty() -> None:
-    '''Delete an empty workspace by shifting later workspaces left.'''
+    # Delete an empty workspace by shifting later workspaces left.
     cur_disp = get_cur_display()
     ws_data = _get_workspaces_data()
     cur_ws = _get_visible_workspace_name(ws_data, cur_disp)
@@ -361,8 +353,8 @@ def delete_current_workspace_if_empty() -> None:
 
 
 def compact_workspaces() -> None:
-    '''Delete all empty workspaces on the current display and renumber
-    survivors to consecutive indices per prefix group.'''
+    # Delete all empty workspaces on the current display and renumber
+    # survivors to consecutive indices per prefix group.
     with _reorder_lock():
         cur_disp = get_cur_display()
         ws_data = _get_workspaces_data()
@@ -402,7 +394,7 @@ def compact_workspaces() -> None:
 
         # Rename survivors to consecutive indices per prefix group.
         # Iterate lowest source index first; rename target is always free.
-        prefix_groups: dict[str, list[str]] = {}
+        prefix_groups: dict[str, list[str]] = dict()
         for ws in actual_survivors:
             parts = _split_workspace_name(ws)
             if parts is None:
@@ -419,7 +411,7 @@ def compact_workspaces() -> None:
 
 
 def focus_nei_display(offset: int = 1) -> None:
-    ''' Focus to neighbor display. '''
+    # Focus to neighbor display.
     all_disps = get_displays()
     cur_disp = get_cur_display()
     nxt_disp = all_disps[(all_disps.index(cur_disp) + offset) % len(all_disps)]
@@ -428,7 +420,7 @@ def focus_nei_display(offset: int = 1) -> None:
 
 
 def move_nei_display(offset: int = 1) -> None:
-    ''' Move to neighbor display. '''
+    # Move to neighbor display.
     all_disps = get_displays()
     cur_disp = get_cur_display()
     nxt_disp = all_disps[(all_disps.index(cur_disp) + offset) % len(all_disps)]
@@ -437,7 +429,7 @@ def move_nei_display(offset: int = 1) -> None:
 
 
 def focus_display(index: int) -> None:
-    ''' Focus to display by index. '''
+    # Focus to display by index.
     all_disps = get_displays()
     nxt_disp = all_disps[index % len(all_disps)]
     nxt_ws = get_cur_workspace(nxt_disp)
@@ -445,7 +437,7 @@ def focus_display(index: int) -> None:
 
 
 def move_display(index: int) -> None:
-    ''' Move to display by index. '''
+    # Move to display by index.
     all_disps = get_displays()
     nxt_disp = all_disps[index % len(all_disps)]
     nxt_ws = get_cur_workspace(nxt_disp)
@@ -456,7 +448,7 @@ def move_display(index: int) -> None:
 # ---------------------------- Sway Getter Wrappers ---------------------------
 # -----------------------------------------------------------------------------
 def get_displays() -> list[str]:
-    ''' Return active display names sorted by x then y position. '''
+    # Return active display names sorted by x then y position.
     outputs = json.loads(run_cmd("swaymsg -t get_outputs"))
     display_positions = [(output['name'],
                           output['rect']['x'],
@@ -472,14 +464,14 @@ def get_cur_display() -> str:
 
 
 def get_workspaces(display: Optional[str] = None) -> list[str]:
-    ''' Get workspaces sorted by name. '''
+    # Get workspaces sorted by name.
     return sorted(get_workspaces_raw(display), key=ws_sort_key)
 
 
 def get_workspaces_raw(display: Optional[str] = None) -> list[str]:
-    ''' Get workspaces in sway's natural (creation) order. '''
+    # Get workspaces in sway's natural (creation) order.
     workspaces = _get_workspaces_data()
-    names: list[str] = []
+    names: list[str] = list()
     for ws in workspaces:
         if display is not None and ws.get('output') != display:
             continue
@@ -488,13 +480,13 @@ def get_workspaces_raw(display: Optional[str] = None) -> list[str]:
 
 
 def _get_all_workspaces_with_output() -> list[tuple[str, str]]:
-    ''' Return (workspace_name, output_name) pairs for all workspaces. '''
+    # Return (workspace_name, output_name) pairs for all workspaces.
     workspaces = _get_workspaces_data()
     return [(ws['name'], ws['output']) for ws in workspaces]
 
 
 def get_windows_on_workspace(ws_name: str) -> list:
-    ''' Get all window container IDs on a workspace (recursive). '''
+    # Get all window container IDs on a workspace (recursive).
     tree = json.loads(run_cmd('swaymsg -t get_tree'))
     ws_node = _find_node(tree,
                          lambda n: n.get('type') == 'workspace'
@@ -505,7 +497,7 @@ def get_windows_on_workspace(ws_name: str) -> list:
 
 
 def _find_node(node: dict, predicate) -> Optional[dict]:
-    ''' Find first node matching predicate in sway tree (DFS). '''
+    # Find first node matching predicate in sway tree (DFS).
     if predicate(node):
         return node
     children = node.get('nodes', []) + node.get('floating_nodes', [])
@@ -517,33 +509,31 @@ def _find_node(node: dict, predicate) -> Optional[dict]:
 
 
 def _collect_windows(node: dict) -> list:
-    ''' Collect all leaf window con_ids under a node. '''
+    # Collect all leaf window con_ids under a node.
     children = node.get('nodes', []) + node.get('floating_nodes', [])
     if not children:
         return [node['id']] if node.get('type') == 'con' else []
-    result = []
+    result = list()
     for child in children:
         result.extend(_collect_windows(child))
     return result
 
 
 def _collect_tiling_windows(node: dict) -> list[int]:
-    ''' Collect tiling-only leaf window con_ids under a node (DFS). '''
+    # Collect tiling-only leaf window con_ids under a node (DFS).
     children = node.get('nodes', [])
     if not children:
         return [node['id']] if node.get('type') == 'con' else []
-    result: list[int] = []
+    result: list[int] = list()
     for child in children:
         result.extend(_collect_tiling_windows(child))
     return result
 
 
 def _get_next_window_on_cur_ws(win_id: int) -> Optional[int]:
-    '''Return the next tiling window after win_id on the current workspace.
-
-    Returns the previous window if win_id is the last one, or None if it
-    is the only tiling window on the workspace.
-    '''
+    # Return the next tiling window after win_id on the current workspace.
+    # Returns the previous window if win_id is the last one, or None if it
+    # is the only tiling window on the workspace.
     tree = json.loads(run_cmd('swaymsg -t get_tree'))
     ws_node = _find_node(tree,
                          lambda n: n.get('type') == 'workspace'
@@ -569,7 +559,7 @@ def get_cur_workspace(display: Optional[str] = None) -> str:
 
 
 def get_focused_window_id() -> Optional[int]:
-    ''' Return con_id of the currently focused window, or None. '''
+    # Return con_id of the currently focused window, or None.
     tree = json.loads(run_cmd('swaymsg -t get_tree'))
     node = _find_node(tree, lambda n: n.get(
         'focused') and n.get('type') == 'con')
@@ -612,12 +602,12 @@ def move_workspace(ws: str) -> Optional[int]:
 
 
 def move_window_to_workspace(win_id: int, ws_name: str) -> None:
-    ''' Move a specific window by con_id to a target workspace. '''
+    # Move a specific window by con_id to a target workspace.
     run_cmd(f"swaymsg '[con_id={win_id}] move to workspace {ws_name}'")
 
 
 def focus_window(win_id: int) -> None:
-    ''' Focus a specific window by con_id. '''
+    # Focus a specific window by con_id.
     run_cmd(f"swaymsg '[con_id={win_id}] focus'")
 
 
@@ -625,7 +615,7 @@ def focus_window(win_id: int) -> None:
 # ---------------------------------- Utility ----------------------------------
 # -----------------------------------------------------------------------------
 def ws_sort_key(name: str) -> tuple:
-    ''' Sort key for workspace names like A0, B1, C2. '''
+    # Sort key for workspace names like A0, B1, C2.
     match = re.match(r'([A-Z]*)(\d+)', name)
     if match:
         return (match.group(1), int(match.group(2)))
@@ -633,7 +623,7 @@ def ws_sort_key(name: str) -> tuple:
 
 
 def _split_workspace_name(ws_name: str) -> Optional[tuple[str, int]]:
-    '''Split workspace name into prefix and numeric suffix.'''
+    # Split workspace name into prefix and numeric suffix.
     match = re.match(r'^([A-Z]*)(\d+)$', ws_name)
     if match is None:
         return None
@@ -641,7 +631,7 @@ def _split_workspace_name(ws_name: str) -> Optional[tuple[str, int]]:
 
 
 def _shift_workspace_name(ws_name: str, offset: int) -> str:
-    '''Shift a workspace suffix without wrapping to a fixed maximum.'''
+    # Shift a workspace suffix without wrapping to a fixed maximum.
     ws_parts = _split_workspace_name(ws_name)
     if ws_parts is None:
         return ws_name
@@ -652,7 +642,7 @@ def _shift_workspace_name(ws_name: str, offset: int) -> str:
 
 def _should_shift_workspace(ws_name: str, prefix: str,
                             min_index: int) -> bool:
-    '''Return True when a workspace must move right for insertion.'''
+    # Return True when a workspace must move right for insertion.
     ws_parts = _split_workspace_name(ws_name)
     if ws_parts is None:
         return False
@@ -661,13 +651,11 @@ def _should_shift_workspace(ws_name: str, prefix: str,
 
 
 def get_workspace_cycle(display: str) -> tuple[list[str], str]:
-    '''Return managed workspaces and the visible workspace for a display.
-
-    Sway can briefly expose a stale current workspace right after a close or
-    workspace deletion. Retry once so workspace-cycle bindings remain
-    single-shot.
-    '''
-    workspaces: list[str] = []
+    # Return managed workspaces and the visible workspace for a display.
+    # Sway can briefly expose a stale current workspace right after a close or
+    # workspace deletion. Retry once so workspace-cycle bindings remain
+    # single-shot.
+    workspaces: list[str] = list()
     current = ''
     for _ in range(2):
         ws_data = _get_workspaces_data()
@@ -679,10 +667,10 @@ def get_workspace_cycle(display: str) -> tuple[list[str], str]:
     return workspaces, current
 
 
-def _get_managed_workspace_names(workspaces: list[dict[str, Any]],
+def _get_managed_workspace_names(workspaces: list[dict[str, object]],
                                  display: Optional[str] = None) -> list[str]:
-    '''Return managed workspace names from one consistent snapshot.'''
-    names: list[str] = []
+    # Return managed workspace names from one consistent snapshot.
+    names: list[str] = list()
     for ws in workspaces:
         if display is not None and ws.get('output') != display:
             continue
@@ -693,13 +681,13 @@ def _get_managed_workspace_names(workspaces: list[dict[str, Any]],
 
 
 def _is_managed_workspace(ws_name: str) -> bool:
-    '''Return True for normal named workspaces used by the helper.'''
+    # Return True for normal named workspaces used by the helper.
     return bool(re.match(r'^[A-Z]+\d+$', ws_name)
                 or re.match(r'^\d+$', ws_name))
 
 
 def _is_native_ws(ws_name: str, letter: str) -> bool:
-    ''' Return True if workspace belongs to the display with given letter. '''
+    # Return True if workspace belongs to the display with given letter.
     if re.match(rf'^{letter}\d+$', ws_name):
         return True  # Matches this display's letter prefix
     if re.match(r'^\d+$', ws_name):
@@ -707,25 +695,25 @@ def _is_native_ws(ws_name: str, letter: str) -> bool:
     return False
 
 
-def _get_workspaces_data() -> list[dict[str, Any]]:
-    '''Return the raw `get_workspaces` JSON payload as Python objects.'''
+def _get_workspaces_data() -> list[dict[str, object]]:
+    # Return the raw `get_workspaces` JSON payload as Python objects.
     data = json.loads(run_cmd('swaymsg -t get_workspaces'))
     if not isinstance(data, list):
         raise ValueError('swaymsg -t get_workspaces did not return a list')
     return data
 
 
-def _get_focused_workspace_name(workspaces: list[dict[str, Any]]) -> str:
-    '''Return the focused workspace name from get_workspaces payload.'''
+def _get_focused_workspace_name(workspaces: list[dict[str, object]]) -> str:
+    # Return the focused workspace name from get_workspaces payload.
     for ws in workspaces:
         if ws.get('focused'):
             return str(ws['name'])
     raise RuntimeError('No focused workspace found')
 
 
-def _get_visible_workspace_name(workspaces: list[dict[str, Any]],
+def _get_visible_workspace_name(workspaces: list[dict[str, object]],
                                 display: str) -> str:
-    '''Return the visible workspace name for a specific display.'''
+    # Return the visible workspace name for a specific display.
     for ws in workspaces:
         if ws.get('output') == display and ws.get('visible'):
             return str(ws['name'])
@@ -741,13 +729,13 @@ def run_cmd(cmd: str) -> str:
 
 
 def idx2char(idx: int) -> str:
-    ''' Convert index to capital letter. '''
+    # Convert index to capital letter.
     return chr(65 + idx)
 
 
 @contextlib.contextmanager
 def _reorder_lock():  # type: ignore[return]
-    '''Exclusive file lock to serialise fix_workspace_order calls.'''
+    # Exclusive file lock to serialise fix_workspace_order calls.
     fd = open(_REORDER_LOCK_FILE, 'w')
     try:
         fcntl.flock(fd, fcntl.LOCK_EX)
@@ -759,10 +747,9 @@ def _reorder_lock():  # type: ignore[return]
 
 @contextlib.contextmanager
 def _move_lock():  # type: ignore[return]
-    '''Exclusive file lock to serialise move_nei_workspace calls.
-
-    Prevents a second keypress from reading focus state while the first
-    invocation's fix_workspace_order is temporarily shuffling focus. '''
+    # Exclusive file lock to serialise move_nei_workspace calls.
+    # Prevents a second keypress from reading focus state while the first
+    # invocation's fix_workspace_order is temporarily shuffling focus.
     fd = open(_MOVE_LOCK_FILE, 'w')
     try:
         fcntl.flock(fd, fcntl.LOCK_EX)
@@ -773,8 +760,8 @@ def _move_lock():  # type: ignore[return]
 
 
 def _strip_reorder_tmp_prefix(name: str) -> str:
-    '''Strip all reorder temp prefixes
-    (_WS_REORDER_TMP, _WS_SETUP_TMP, legacy _t).'''
+    # Strip all reorder temp prefixes
+    # (_WS_REORDER_TMP, _WS_SETUP_TMP, legacy _t).
     prev = None
     while prev != name:
         prev = name
@@ -788,7 +775,7 @@ def _strip_reorder_tmp_prefix(name: str) -> str:
 # -------------------------------- Display Map --------------------------------
 # -----------------------------------------------------------------------------
 def _update_display_map(all_disps: list[str]) -> dict[str, str]:
-    ''' Load/create persistent output->letter map; add new displays. '''
+    # Load/create persistent output->letter map; add new displays.
     disp_to_letter = _load_display_map()
     used_letters = set(disp_to_letter.values())
     # Assign a letter to any newly seen display (in position-sorted order)
@@ -805,7 +792,7 @@ def _update_display_map(all_disps: list[str]) -> dict[str, str]:
 
 
 def _load_display_map() -> dict[str, str]:
-    ''' Load display map from file; return {} on missing or invalid data. '''
+    # Load display map from file; return {} on missing or invalid data.
     if not osp.exists(WS_DISP_MAP_FILE):
         return {}
     try:
@@ -825,7 +812,7 @@ def _load_display_map() -> dict[str, str]:
 
 
 def _save_display_map(disp_to_letter: dict[str, str]) -> None:
-    ''' Save display map to persistent JSON file. '''
+    # Save display map to persistent JSON file.
     with open(WS_DISP_MAP_FILE, 'w') as f:
         json.dump(disp_to_letter, f, indent=2)
 
@@ -843,8 +830,9 @@ def main() -> None:
     run_action(argv.action, argv.opt)
 
 
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
 if __name__ == '__main__':
     main()
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------

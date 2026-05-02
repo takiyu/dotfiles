@@ -32,9 +32,9 @@ def test_shift_workspace_name_clamps_at_zero() -> None:
 
 def test_insert_workspace_before_current_shifts_current_and_later(
         monkeypatch) -> None:
-    renamed: list[tuple[str, str]] = []
-    focused: list[str] = []
-    fixed: list[tuple[str, str]] = []
+    renamed: list[tuple[str, str]] = list()
+    focused: list[str] = list()
+    fixed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
         {'name': 'A2', 'output': 'DP-1', 'visible': True, 'focused': True},
@@ -61,8 +61,8 @@ def test_insert_workspace_before_current_shifts_current_and_later(
 
 def test_delete_current_workspace_if_empty_shifts_later_workspaces_left(
         monkeypatch) -> None:
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
         {'name': 'A2', 'output': 'DP-1', 'visible': True, 'focused': True},
@@ -87,8 +87,8 @@ def test_delete_current_workspace_if_empty_shifts_later_workspaces_left(
 
 def test_delete_current_workspace_if_empty_noop_when_not_empty(
         monkeypatch) -> None:
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
         {'name': 'A2', 'output': 'DP-1', 'visible': True, 'focused': True},
@@ -106,14 +106,14 @@ def test_delete_current_workspace_if_empty_noop_when_not_empty(
 
     helper.delete_current_workspace_if_empty()
 
-    assert focused == []
-    assert renamed == []
+    assert focused == list()
+    assert renamed == list()
 
 
 def test_delete_current_workspace_if_empty_last_workspace_moves_previous(
         monkeypatch) -> None:
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
         {'name': 'A2', 'output': 'DP-1', 'visible': True, 'focused': True},
@@ -131,7 +131,7 @@ def test_delete_current_workspace_if_empty_last_workspace_moves_previous(
     helper.delete_current_workspace_if_empty()
 
     assert focused == ['A0']
-    assert renamed == []
+    assert renamed == list()
 
 
 def test_get_workspace_cycle_retries_until_current_is_stable(
@@ -165,7 +165,7 @@ def test_get_workspace_cycle_retries_until_current_is_stable(
 
 def test_focus_valid_nei_workspace_loops_existing_workspaces(
         monkeypatch) -> None:
-    focused: list[str] = []
+    focused: list[str] = list()
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, 'get_workspace_cycle',
@@ -182,7 +182,7 @@ def test_focus_valid_nei_workspace_loops_existing_workspaces(
 def test_move_valid_nei_workspace_moves_to_existing_workspace(
         monkeypatch) -> None:
     # Should call move_workspace with the cyclic next/prev valid workspace.
-    moved: list[str] = []
+    moved: list[str] = list()
 
     monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
@@ -200,7 +200,7 @@ def test_move_valid_nei_workspace_moves_to_existing_workspace(
 def test_move_valid_nei_workspace_noop_when_single_workspace(
         monkeypatch) -> None:
     # When only one workspace exists, moving should be a no-op.
-    moved: list[str] = []
+    moved: list[str] = list()
 
     monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
@@ -211,14 +211,14 @@ def test_move_valid_nei_workspace_noop_when_single_workspace(
 
     helper.move_valid_nei_workspace(+1)
 
-    assert moved == []
+    assert moved == list()
 
 
 def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
         monkeypatch) -> None:
     # When a window is focused and no next window exists, move_workspace must
     # issue ONE swaymsg combining move + workspace-switch + focus.
-    cmds: list[str] = []
+    cmds: list[str] = list()
     FOCUSED_WIN_ID = 42
 
     monkeypatch.setattr(helper, 'get_focused_window_id',
@@ -242,7 +242,7 @@ def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
 
 def test_move_workspace_falls_back_when_no_window(monkeypatch) -> None:
     # When there is no focused window, fall back to separate move + workspace.
-    calls: list[str] = []
+    calls: list[str] = list()
 
     monkeypatch.setattr(helper, 'get_focused_window_id', lambda: None)
     monkeypatch.setattr(helper, 'focus_workspace',
@@ -261,7 +261,7 @@ def test_move_nei_workspace_refocuses_after_fix_workspace_order(
     # When fix_workspace_order is triggered (new workspace creation),
     # move_nei_workspace must call focus_window after the fixup to
     # restore focus to the moved window.
-    focused_wins: list[int] = []
+    focused_wins: list[int] = list()
     FOCUSED_WIN_ID = 99
 
     monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
@@ -284,7 +284,7 @@ def test_move_nei_workspace_serialises_concurrent_calls(
         monkeypatch) -> None:
     # Verify _move_lock is acquired so concurrent calls see correct state.
     # Simulate: first call updates cur_ws; second call sees updated workspace.
-    call_order: list[str] = []
+    call_order: list[str] = list()
     lock_entered = 0
 
     class _TrackingLock:
@@ -316,7 +316,7 @@ def test_move_nei_workspace_serialises_concurrent_calls(
 # -----------------------------------------------------------------------------
 def test_focus_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
     # On ws0, pressing prev (offset=-1) should focus the last workspace.
-    focused: list[str] = []
+    focused: list[str] = list()
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
@@ -335,7 +335,7 @@ def test_focus_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
 
 def test_focus_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
     # Single workspace: wrap has nowhere to go; must be a no-op.
-    focused: list[str] = []
+    focused: list[str] = list()
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, 'get_cur_workspace', lambda _d: 'A0')
@@ -346,12 +346,12 @@ def test_focus_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
 
     helper.focus_nei_workspace(-1)
 
-    assert focused == []
+    assert focused == list()
 
 
 def test_move_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
     # On ws0, pressing move-prev (offset=-1) should move window to last ws.
-    moved: list[str] = []
+    moved: list[str] = list()
 
     monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
@@ -372,7 +372,7 @@ def test_move_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
 
 def test_move_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
     # Single workspace: move-wrap has nowhere to go; must be a no-op.
-    moved: list[str] = []
+    moved: list[str] = list()
 
     monkeypatch.setattr(helper, '_move_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
@@ -384,7 +384,7 @@ def test_move_nei_workspace_noop_when_only_one_ws(monkeypatch) -> None:
 
     helper.move_nei_workspace(-1)
 
-    assert moved == []
+    assert moved == list()
 
 
 def test_strip_reorder_tmp_prefix_removes_setup_prefix() -> None:
@@ -415,7 +415,7 @@ def test_strip_reorder_tmp_prefix_leaves_plain_workspace_unchanged() -> None:
 # -----------------------------------------------------------------------------
 def test_cleanup_temp_workspaces_moves_windows_from_legacy_temp(
         monkeypatch) -> None:
-    moved: list[tuple[int, str]] = []
+    moved: list[tuple[int, str]] = list()
     ws_by_disp: dict[str, list[str]] = {'DP-1': ['A0', '_tA1', 'A2']}
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
@@ -432,7 +432,7 @@ def test_cleanup_temp_workspaces_moves_windows_from_legacy_temp(
 
 def test_cleanup_temp_workspaces_handles_nested_temp_names(
         monkeypatch) -> None:
-    moved: list[tuple[int, str]] = []
+    moved: list[tuple[int, str]] = list()
     ws_by_disp: dict[str, list[str]] = {'DP-1': ['_t_tA1']}
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
@@ -449,7 +449,7 @@ def test_cleanup_temp_workspaces_handles_nested_temp_names(
 
 def test_cleanup_temp_workspaces_skips_non_managed_real_names(
         monkeypatch) -> None:
-    moved: list[tuple[int, str]] = []
+    moved: list[tuple[int, str]] = list()
     # _tsomething -> 'something' is not a managed workspace; must be skipped
     ws_by_disp: dict[str, list[str]] = {'DP-1': ['_tsomething']}
 
@@ -469,7 +469,7 @@ def test_cleanup_temp_workspaces_moves_windows_from_setup_temp(
         monkeypatch) -> None:
     # __ws_B0 is an orphan left by a crashed setup_workspace_names pass 1;
     # its windows must be moved to B0 on the next cleanup call.
-    moved: list[tuple[int, str]] = []
+    moved: list[tuple[int, str]] = list()
     ws_by_disp: dict[str, list[str]] = {'DP-1': ['A0', '__ws_B0']}
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
@@ -487,8 +487,8 @@ def test_cleanup_temp_workspaces_moves_windows_from_setup_temp(
 def test_fix_workspace_order_ignores_temp_workspace(monkeypatch) -> None:
     # _tB2 must be excluded from ws_to_reorder; otherwise reordering would
     # create _t_tB2 and cascade into deeper temp names on rapid switching.
-    moved: list[tuple[int, str]] = []
-    focused: list[str] = []
+    moved: list[tuple[int, str]] = list()
+    focused: list[str] = list()
 
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_workspaces_raw',
@@ -510,8 +510,8 @@ def test_fix_workspace_order_aborts_on_evacuation_timeout(
         monkeypatch) -> None:
     # When evacuated workspaces never disappear, windows must be restored
     # to their original workspace and the function must return early.
-    moved: list[tuple[int, str]] = []
-    focused: list[str] = []
+    moved: list[tuple[int, str]] = list()
+    focused: list[str] = list()
 
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     # A2 is always present (never auto-deleted), simulating timeout
@@ -538,9 +538,9 @@ def test_fix_workspace_order_renames_without_refocus(monkeypatch) -> None:
     # of using focus+recreate, so an empty new_ws is never auto-deleted.
     # Regression test for: navigating to a predecessor workspace gets stuck
     # because new_ws is repeatedly destroyed and recreated at wrong position.
-    moved: list[tuple[int, str]] = []
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    moved: list[tuple[int, str]] = list()
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
 
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
 
@@ -584,8 +584,8 @@ def test_fix_workspace_order_renames_without_refocus(monkeypatch) -> None:
 def test_compact_workspaces_deletes_and_renames(monkeypatch) -> None:
     # A0(empty), A1(windows, current), A2(empty), A3(windows)
     # Expected: visit A0/A2, rename A1→A0, A3→A1
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data1 = [
         {'name': 'A0', 'output': 'DP-1', 'visible': False, 'focused': False},
         {'name': 'A1', 'output': 'DP-1', 'visible': True, 'focused': True},
@@ -622,8 +622,8 @@ def test_compact_workspaces_deletes_and_renames(monkeypatch) -> None:
 def test_compact_workspaces_handles_empty_current_ws(monkeypatch) -> None:
     # A0(empty, current), A1(windows), A2(windows)
     # Expected: immediately focus A1, then rename A1→A0, A2→A1
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data1 = [
         {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
         {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
@@ -657,8 +657,8 @@ def test_compact_workspaces_handles_empty_current_ws(monkeypatch) -> None:
 
 
 def test_compact_workspaces_noop_when_no_empty(monkeypatch) -> None:
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
         {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
@@ -675,13 +675,13 @@ def test_compact_workspaces_noop_when_no_empty(monkeypatch) -> None:
 
     helper.compact_workspaces()
 
-    assert focused == []
-    assert renamed == []
+    assert focused == list()
+    assert renamed == list()
 
 
 def test_compact_workspaces_noop_when_all_empty(monkeypatch) -> None:
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
         {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
@@ -698,15 +698,15 @@ def test_compact_workspaces_noop_when_all_empty(monkeypatch) -> None:
 
     helper.compact_workspaces()
 
-    assert focused == []
-    assert renamed == []
+    assert focused == list()
+    assert renamed == list()
 
 
 def test_compact_workspaces_single_trailing_empty_no_rename(
         monkeypatch) -> None:
     # A0(windows, current), A1(empty) → visit A1, return to A0, no renames
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data1 = [
         {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
         {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
@@ -734,14 +734,14 @@ def test_compact_workspaces_single_trailing_empty_no_rename(
     helper.compact_workspaces()
 
     assert focused == ['A1', 'A0']
-    assert renamed == []
+    assert renamed == list()
 
 
 def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
     # A0(windows, current), A1(windows), A3(windows) — gap at A2
     # Expected: no focus calls, A3 renamed to A2
-    focused: list[str] = []
-    renamed: list[tuple[str, str]] = []
+    focused: list[str] = list()
+    renamed: list[tuple[str, str]] = list()
     ws_data = [
         {'name': 'A0', 'output': 'DP-1', 'visible': True, 'focused': True},
         {'name': 'A1', 'output': 'DP-1', 'visible': False, 'focused': False},
@@ -759,7 +759,7 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
 
     helper.compact_workspaces()
 
-    assert focused == []
+    assert focused == list()
     assert renamed == [('A3', 'A2')]
 
 
@@ -785,7 +785,7 @@ def test_collect_tiling_windows_excludes_floating() -> None:
 
 def test_collect_tiling_windows_returns_empty_for_empty_workspace() -> None:
     node = {'type': 'workspace', 'nodes': [], 'floating_nodes': []}
-    assert helper._collect_tiling_windows(node) == []
+    assert helper._collect_tiling_windows(node) == list()
 
 
 def test_get_next_window_on_cur_ws_returns_next(monkeypatch) -> None:
@@ -873,7 +873,7 @@ def test_move_workspace_focuses_next_window_on_source_ws(
         monkeypatch) -> None:
     # When there is a next tiling window, the atomic command must set
     # focus to that window on the source workspace before switching.
-    cmds: list[str] = []
+    cmds: list[str] = list()
     FOCUSED_WIN_ID = 42
     NEXT_WIN_ID = 55
 

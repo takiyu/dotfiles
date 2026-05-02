@@ -1,11 +1,11 @@
 from types import SimpleNamespace
-from typing import Any, Optional, cast
+from typing import Optional, cast
 
 from swayhelper import daemon
 
 
 def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
-    calls: list[int] = []
+    calls: list[int] = list()
 
     class FakeConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
@@ -36,8 +36,8 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
 
 
 def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
-    '''Workspaces with temp helper prefixes must not be laid out.'''
-    calls: list[int] = []
+    # Workspaces with temp helper prefixes must not be laid out.
+    calls: list[int] = list()
 
     class FakeTempConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
@@ -70,8 +70,8 @@ def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
 
 def test_run_existing_layouts_uses_stack_for_portrait_output(
         monkeypatch) -> None:
-    '''Portrait display (height > width) must default to STACK layout.'''
-    calls: list[int] = []
+    # Portrait display (height > width) must default to STACK layout.
+    calls: list[int] = list()
 
     class FakePortraitConn:
         def get_workspaces(self) -> list[SimpleNamespace]:
@@ -101,8 +101,8 @@ def test_run_existing_layouts_uses_stack_for_portrait_output(
 
 
 def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
-    '''Daemon-initiated move (container in _daemon_move_ids) is suppressed.'''
-    actions: list[str] = []
+    # Daemon-initiated move (container in _daemon_move_ids) is suppressed.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -116,16 +116,16 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='move',
-                                      container=SimpleNamespace(id=42)))
+    event = cast(object, SimpleNamespace(change='move',
+                                         container=SimpleNamespace(id=42)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert 42 not in daemon._daemon_move_ids  # entry consumed
-    assert actions == []  # no buffering/reflow/flush
+    assert actions == list()  # no buffering/reflow/flush
 
 
 def test_on_window_retiles_after_close(monkeypatch) -> None:
-    actions: list[str] = []
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -138,16 +138,16 @@ def test_on_window_retiles_after_close(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='close',
-                                      container=SimpleNamespace(id=55)))
+    event = cast(object, SimpleNamespace(change='close',
+                                         container=SimpleNamespace(id=55)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'run', 'flush']
 
 
 def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
-    '''New window is inserted before its predecessor before layout reflow.'''
-    actions: list[str] = []
+    # New window is inserted before its predecessor before layout reflow.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -162,15 +162,15 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='new',
-                                      container=SimpleNamespace(id=99)))
+    event = cast(object, SimpleNamespace(change='new',
+                                         container=SimpleNamespace(id=99)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'swap', 'run', 'flush']
 
 
 def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
-    '''_swap_new_before_prev swaps new window with the leaf just before it.'''
+    # _swap_new_before_prev swaps new window with the leaf just before it.
     NEW_ID = 30
     PREV_ID = 20
     AFTER_ID = 40
@@ -180,7 +180,7 @@ def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -218,7 +218,7 @@ def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
 
 def test_swap_new_before_prev_skips_when_predecessor_is_last(
         monkeypatch) -> None:
-    '''_swap_new_before_prev does nothing when the predecessor was last.'''
+    # _swap_new_before_prev does nothing when the predecessor was last.
     NEW_ID = 30
     PREV_ID = 20
 
@@ -227,7 +227,7 @@ def test_swap_new_before_prev_skips_when_predecessor_is_last(
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -256,11 +256,11 @@ def test_swap_new_before_prev_skips_when_predecessor_is_last(
 
     daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
-    assert new_leaf.commands == []
+    assert new_leaf.commands == list()
 
 
 def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
-    '''_swap_new_before_prev does nothing when new window is already first.'''
+    # _swap_new_before_prev does nothing when new window is already first.
     NEW_ID = 10
 
     class FakeLeaf:
@@ -268,7 +268,7 @@ def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -293,11 +293,11 @@ def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
 
     daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
-    assert new_leaf.commands == []
+    assert new_leaf.commands == list()
 
 
 def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
-    '''_swap_new_before_prev does nothing for floating new windows.'''
+    # _swap_new_before_prev does nothing for floating new windows.
     NEW_ID = 42
 
     class FakeLeaf:
@@ -305,7 +305,7 @@ def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
             self.id = con_id
             self.floating = 'user_on'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -322,16 +322,16 @@ def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
 
     daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
-    assert new_leaf.commands == []
+    assert new_leaf.commands == list()
 
 
 def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
-    actions: list[str] = []
+    actions: list[str] = list()
 
     class FakeLeaf:
         def __init__(self, con_id: int) -> None:
             self.id = con_id
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -372,13 +372,13 @@ def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
 
 
 def test_reflow_ncol_stack_collapses_extra_column(monkeypatch) -> None:
-    '''Stack layout (n_columns=1): extra column triggers "move left".'''
-    actions: list[str] = []
+    # Stack layout (n_columns=1): extra column triggers "move left".
+    actions: list[str] = list()
 
     class FakeLeaf:
         def __init__(self, con_id: int) -> None:
             self.id = con_id
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -449,7 +449,7 @@ def test_get_resize_target_uses_master_pane_not_biggest_window() -> None:
             self._focused = focused
 
         def leaves(self) -> list[FakeLeaf]:
-            leaves: list[FakeLeaf] = []
+            leaves: list[FakeLeaf] = list()
             for node in self.nodes:
                 leaves.extend(node.leaves())
             return leaves
@@ -531,7 +531,7 @@ def test_run_nop_layout_preserves_state_on_single_window() -> None:
 def test_run_nop_layout_no_focus_steal_on_non_focused_ws() -> None:
     # Non-focused NOP workspaces must not call focused.command('focus');
     # focused NOP workspaces must still restore focus as expected.
-    focus_commands: list[int] = []
+    focus_commands: list[int] = list()
 
     class FakeLeaf:
         def __init__(self, con_id: int) -> None:
@@ -571,7 +571,7 @@ def test_run_nop_layout_no_focus_steal_on_non_focused_ws() -> None:
     # Non-focused case: focused_ws_id belongs to a different workspace
     daemon._run_nop_layout(cast(daemon.SwayConn, FakeConn()), state,
                            focused_ws_id=55)
-    assert focus_commands == [], (
+    assert focus_commands == list(), (
         'Non-focused NOP workspace must not steal focus')
 
     # Focused case: focused_ws_id matches this workspace
@@ -590,7 +590,7 @@ def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
     WS_A_ID = 10  # source workspace (non-focused)
     WS_B_ID = 20  # destination workspace (focused)
 
-    reflow_calls: list[tuple[int, bool]] = []
+    reflow_calls: list[tuple[int, bool]] = list()
 
     class FakeLeaf:
         floating = 'user_off'
@@ -613,7 +613,7 @@ def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
     ws_a = FakeWs(WS_A_ID)
     ws_b = FakeWs(WS_B_ID)
 
-    def fake_reflow(_i3: Any, _state: Any, ws: Any,
+    def fake_reflow(_i3: object, _state: object, ws: object,
                     is_focused: bool = False) -> bool:
         reflow_calls.append((ws.id, is_focused))
         return False
@@ -766,7 +766,7 @@ def test_get_master_window_respects_reflectx_order() -> None:
             self.layout = 'splith'
 
         def leaves(self) -> list[FakeLeaf]:
-            leaves: list[FakeLeaf] = []
+            leaves: list[FakeLeaf] = list()
             for node in self.nodes:
                 leaves.extend(node.leaves())
             return leaves
@@ -790,7 +790,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
     # drift to a different window (e.g. the master). _run_ncol_layout must
     # restore focus to the window that was focused BEFORE the reflow, not
     # whatever sway happens to have focused after the layout moves.
-    refocused_ids: list[int] = []
+    refocused_ids: list[int] = list()
 
     MASTER_ID = 1
     MOVED_WIN_ID = 42
@@ -845,7 +845,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
     ws_lookup_done = [False]
 
     class FakeTree2:
-        def find_by_id(self, con_id: int) -> Any:
+        def find_by_id(self, con_id: int) -> object:
             if con_id == WS_ID and not ws_lookup_done[0]:
                 ws_lookup_done[0] = True
                 return ws_before_reflow
@@ -870,8 +870,8 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
 # --------- on_window move / _swap_moved_before_active -----------------------
 # -----------------------------------------------------------------------------
 def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
-    '''User-initiated move swaps moved window before active, then reflows.'''
-    actions: list[str] = []
+    # User-initiated move swaps moved window before active, then reflows.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -886,16 +886,16 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='move',
-                                      container=SimpleNamespace(id=77)))
+    event = cast(object, SimpleNamespace(change='move',
+                                         container=SimpleNamespace(id=77)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert actions == ['start', 'swap', 'run', 'flush']
 
 
 def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
-    '''Move event for a container NOT in _daemon_move_ids is processed.'''
-    actions: list[str] = []
+    # Move event for a container NOT in _daemon_move_ids is processed.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -911,8 +911,8 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='move',
-                                      container=SimpleNamespace(id=77)))
+    event = cast(object, SimpleNamespace(change='move',
+                                         container=SimpleNamespace(id=77)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     # container 77 not in set → user move processed normally
@@ -922,8 +922,8 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
 
 
 def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
-    '''Close event removes a stale _daemon_move_ids entry.'''
-    actions: list[str] = []
+    # Close event removes a stale _daemon_move_ids entry.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -938,8 +938,8 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(Any, SimpleNamespace(change='close',
-                                      container=SimpleNamespace(id=55)))
+    event = cast(object, SimpleNamespace(change='close',
+                                         container=SimpleNamespace(id=55)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert 55 not in daemon._daemon_move_ids  # cleaned up
@@ -948,7 +948,7 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
 
 def test_swap_moved_before_active_swaps_with_predecessor(
         monkeypatch) -> None:
-    '''_swap_moved_before_active swaps moved window with the leaf before it.'''
+    # _swap_moved_before_active swaps moved window with the leaf before it.
     MOVED_ID = 30
     PREV_ID = 20
     AFTER_ID = 40
@@ -958,7 +958,7 @@ def test_swap_moved_before_active_swaps_with_predecessor(
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -994,10 +994,8 @@ def test_swap_moved_before_active_swaps_with_predecessor(
 
 def test_swap_moved_before_active_swaps_when_predecessor_is_last(
         monkeypatch) -> None:
-    '''_swap_moved_before_active swaps even when moved window is last.
-
-    Unlike _swap_new_before_prev, there is no idx==len-1 early-return.
-    '''
+    # _swap_moved_before_active swaps even when moved window is last.
+    # Unlike _swap_new_before_prev, there is no idx==len-1 early-return.
     MOVED_ID = 30
     PREV_ID = 20
 
@@ -1006,7 +1004,7 @@ def test_swap_moved_before_active_swaps_when_predecessor_is_last(
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -1040,7 +1038,7 @@ def test_swap_moved_before_active_swaps_when_predecessor_is_last(
 
 
 def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
-    '''_swap_moved_before_active does nothing when moved window is first.'''
+    # _swap_moved_before_active does nothing when moved window is first.
     MOVED_ID = 10
     OTHER_ID = 20
 
@@ -1049,7 +1047,7 @@ def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -1078,16 +1076,14 @@ def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
     daemon._swap_moved_before_active(
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
-    assert moved_leaf.commands == []
+    assert moved_leaf.commands == list()
 
 
 def test_swap_moved_before_active_skips_temp_workspace() -> None:
-    '''_swap_moved_before_active does nothing when destination is a temp ws.
-
-    Evacuation moves in fix_workspace_order land on __swh_tmp_* workspaces.
-    Focusing those windows would steal focus from the (possibly empty)
-    new_ws and trigger sway's auto-deletion of new_ws.
-    '''
+    # _swap_moved_before_active does nothing when destination is a temp ws.
+    # Evacuation moves in fix_workspace_order land on __swh_tmp_* workspaces.
+    # Focusing those windows would steal focus from the (possibly empty)
+    # new_ws and trigger sway's auto-deletion of new_ws.
     MOVED_ID = 30
     PREV_ID = 20
 
@@ -1096,7 +1092,7 @@ def test_swap_moved_before_active_skips_temp_workspace() -> None:
             self.id = con_id
             self.floating = 'user_off'
             self.type = 'con'
-            self.commands: list[str] = []
+            self.commands: list[str] = list()
 
         def command(self, payload: str) -> None:
             self.commands.append(payload)
@@ -1127,12 +1123,12 @@ def test_swap_moved_before_active_skips_temp_workspace() -> None:
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     # No swap and no focus change should have occurred
-    assert moved_leaf.commands == []
+    assert moved_leaf.commands == list()
 
 
 def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
-    '''An expired _daemon_move_ids entry must not suppress a user move.'''
-    actions: list[str] = []
+    # An expired _daemon_move_ids entry must not suppress a user move.
+    actions: list[str] = list()
 
     class FakeConn:
         def start_buffering(self) -> None:
@@ -1148,8 +1144,8 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_swap_moved_before_active',
                         lambda _i3, _id: actions.append('swap'))
 
-    event = cast(Any, SimpleNamespace(change='move',
-                                      container=SimpleNamespace(id=42)))
+    event = cast(object, SimpleNamespace(change='move',
+                                         container=SimpleNamespace(id=42)))
     daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
 
     assert 42 not in daemon._daemon_move_ids   # entry consumed regardless
@@ -1158,8 +1154,8 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
 
 def test_run_existing_layouts_continues_after_workspace_error(
         monkeypatch) -> None:
-    '''A layout error on one workspace must not abort tiling of the others.'''
-    calls: list[int] = []
+    # A layout error on one workspace must not abort tiling of the others.
+    calls: list[int] = list()
 
     class FakeConn:
         def get_workspaces(self) -> list[SimpleNamespace]:

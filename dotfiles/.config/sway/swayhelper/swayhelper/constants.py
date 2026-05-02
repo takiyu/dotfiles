@@ -1,4 +1,4 @@
-'''Package-wide constants shared between daemon and helper modules.'''
+# Package-wide constants shared between daemon and helper modules.
 
 
 # -----------------------------------------------------------------------------

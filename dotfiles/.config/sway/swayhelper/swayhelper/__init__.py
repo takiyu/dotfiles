@@ -1,1 +1,1 @@
-'''Sway IPC tiling daemon and workspace helper package.'''
+# Sway IPC tiling daemon and workspace helper package.
