@@ -182,10 +182,10 @@ return {
       map_scroll('<PageDown>', function() return vim.fn.winheight(0) - 2 end, 300)
       map_scroll('<PageUp>', function() return -(vim.fn.winheight(0) - 2) end, 300)
       -- Small motion (mouse wheel)
-      map_scroll('<S-Down>', function() return vim.wo.scroll end, 300)
-      map_scroll('<S-Up>', function() return -vim.wo.scroll end, 300)
-      map_scroll('<ScrollWheelDown>', function() return vim.wo.scroll / 4 end, 300)
-      map_scroll('<ScrollWheelUp>', function() return -vim.wo.scroll / 4 end, 300)
+      map_scroll('<S-Down>', function() return 5 end, 50)
+      map_scroll('<S-Up>', function() return -5 end, 50)
+      map_scroll('<ScrollWheelDown>', function() return 5 end, 50)
+      map_scroll('<ScrollWheelUp>', function() return -5 end, 50)
     end
   },
 
