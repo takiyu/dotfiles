@@ -74,8 +74,6 @@ _IpcHandler = Callable[
 # -----------------------------------------------------------------------------
 # ------------------------------ Workspace State ------------------------------
 # -----------------------------------------------------------------------------
-
-
 class WorkspaceState:
     # Tiling layout state for a single sway workspace.
 
@@ -206,12 +204,12 @@ def on_window(i3: SwayConn, event: WindowEvent) -> None:
             # appears before the focused window; done before reflow so the
             # layout engine settles on the intended final order in one pass.
             container: object = event.container
-            _swap_new_before_prev(i3, container.id)
+            _swap_new_window(i3, container.id)
         elif event.change == 'move':
             # User-initiated move: swap the moved window before the
             # previously-active window on the destination workspace.
             container = event.container
-            _swap_moved_before_active(i3, container.id)
+            _swap_moved_window(i3, container.id)
         _run_existing_layouts(i3)
         i3.flush()
     except Exception:
@@ -273,12 +271,12 @@ def _cmd_focus_prev_window(i3: SwayConn,
 
 def _cmd_swap_next_window(i3: SwayConn,
                           event: BindingEvent, *args: str) -> None:
-    _swap_with_window(i3, offset=+1)
+    _swap_window(i3, offset=+1)
 
 
 def _cmd_swap_prev_window(i3: SwayConn,
                           event: BindingEvent, *args: str) -> None:
-    _swap_with_window(i3, offset=-1)
+    _swap_window(i3, offset=-1)
 
 
 def _cmd_set_layout(i3: SwayConn,
@@ -744,9 +742,9 @@ def _focus_window(i3: SwayConn, offset: int,
         target.command('fullscreen')
 
 
-def _swap_with_window(i3: SwayConn, offset: int,
-                      win: Optional[Con] = None,
-                      focus_after: bool = True) -> None:
+def _swap_window(i3: SwayConn, offset: int,
+                 win: Optional[Con] = None,
+                 focus_after: bool = True) -> None:
     # Swap win (or focused) with the leaf at cyclic offset.
     src = win or _get_focused_window(i3)
     if src is None:
@@ -761,7 +759,7 @@ def _swap_with_window(i3: SwayConn, offset: int,
             target.command('fullscreen')
 
 
-def _swap_new_before_prev(i3: SwayConn, new_win_id: int) -> None:
+def _swap_new_window(i3: SwayConn, new_win_id: int) -> None:
     # Swap the newly opened window before its sway-assigned predecessor.
     # Sway places new windows immediately after the focused window, so
     # leaves()[idx-1] is the previously focused window.  Swapping puts
@@ -792,12 +790,12 @@ def _swap_new_before_prev(i3: SwayConn, new_win_id: int) -> None:
     new_win.command('focus')
 
 
-def _swap_moved_before_active(i3: SwayConn, moved_win_id: int) -> None:
+def _swap_moved_window(i3: SwayConn, moved_win_id: int) -> None:
     # Swap the moved window before the active window on the destination ws.
     # Sway places moved containers immediately after the focused window, so
     # leaves()[idx-1] is the previously focused window.  Swapping puts the
     # moved window in the focused window's slot (before it).
-    # Unlike _swap_new_before_prev, this always swaps even when the moved
+    # Unlike _swap_new_window, this always swaps even when the moved
     # window lands at the last position, preserving the intended stack order.
     tree = i3.get_tree()
     moved_win = tree.find_by_id(moved_win_id)
@@ -889,7 +887,7 @@ def _move_container(src: Con, dst: Con) -> None:
     dst.command(f'unmark {MOVE_MARK}')
 
 
-def _add_to_front(i3: SwayConn, container: Con, node: Con) -> None:
+def _prepend_child(i3: SwayConn, container: Con, node: Con) -> None:
     # Prepend node to the front of container's children via pairwise swaps.
     _move_container(node, container)
     # node landed at the end; bubble it to position 0
@@ -916,7 +914,7 @@ def _balance_cols(i3: SwayConn, col1: Con, expected: int,
         _move_container(col2.nodes[0], col1)
         return True
     if len(col1.nodes) > expected and len(col1.nodes) > 1:
-        _add_to_front(i3, col2, col1.nodes[-1])
+        _prepend_child(i3, col2, col1.nodes[-1])
         return True
     return False
 

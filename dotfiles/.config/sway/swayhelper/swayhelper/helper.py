@@ -49,10 +49,10 @@ def run_action(action: str, opt: str = '') -> None:
         move_valid_nei_workspace(+1)
     elif action == 'move_prev_valid_workspace':
         move_valid_nei_workspace(-1)
-    elif action == 'insert_workspace_before_current':
-        insert_workspace_before_current()
-    elif action == 'delete_current_workspace_if_empty':
-        delete_current_workspace_if_empty()
+    elif action == 'insert_workspace':
+        insert_workspace()
+    elif action == 'delete_empty_workspace':
+        delete_empty_workspace()
     elif action == 'compact_workspaces':
         compact_workspaces()
     elif action == 'focus_next_display':
@@ -123,7 +123,7 @@ def _restore_workspace_assignments(all_disps: list[str],
     # Build reverse map: letter -> output (only for currently active displays)
     letter_to_disp = {v: k for k, v in disp_to_letter.items()
                       if k in active_outputs}
-    ws_info = _get_all_workspaces_with_output()
+    ws_info = _get_workspace_output_pairs()
     orig_focused = get_cur_workspace()
     moved_any = False
     for ws_name, current_output in ws_info:
@@ -153,8 +153,8 @@ def _cleanup_temp_workspaces(all_disps: list[str]) -> None:
             if real_name == ws_name or not _is_managed_workspace(real_name):
                 continue
             try:
-                for win_id in get_windows_on_workspace(ws_name):
-                    move_window_to_workspace(win_id, real_name)
+                for win_id in list_workspace_windows(ws_name):
+                    relocate_window(win_id, real_name)
             except Exception:
                 pass  # Best-effort; leave windows in place on IPC error
 
@@ -232,7 +232,7 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
                       and _is_managed_workspace(ws)]
         if not candidates:
             return
-        saved_windows = {ws: get_windows_on_workspace(ws) for ws in candidates}
+        saved_windows = {ws: list_workspace_windows(ws) for ws in candidates}
         ws_to_reorder = [ws for ws in candidates if saved_windows[ws]]
         if not ws_to_reorder:
             return
@@ -244,8 +244,8 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
         if set(get_workspaces_raw(display)) & stale_tmps:
             for ws in sorted(ws_to_reorder, key=ws_sort_key):
                 tmp = f'{_WS_REORDER_TMP}{ws}'
-                for win_id in get_windows_on_workspace(tmp):
-                    move_window_to_workspace(win_id, ws)
+                for win_id in list_workspace_windows(tmp):
+                    relocate_window(win_id, ws)
             for _ in range(10):
                 if not (set(get_workspaces_raw(display)) & stale_tmps):
                     break
@@ -257,7 +257,7 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
         # the end, so sorted evacuation places temps in correct positions.
         for ws in sorted(ws_to_reorder, key=ws_sort_key):
             for win_id in saved_windows[ws]:
-                move_window_to_workspace(win_id, f'{_WS_REORDER_TMP}{ws}')
+                relocate_window(win_id, f'{_WS_REORDER_TMP}{ws}')
 
         # Poll until out-of-order workspaces are auto-deleted (usually instant)
         evacuated = False
@@ -271,7 +271,7 @@ def fix_workspace_order(display: str, new_ws: str) -> None:
             # Timed out: restore windows to original workspaces and abort
             for ws in ws_to_reorder:
                 for win_id in saved_windows[ws]:
-                    move_window_to_workspace(win_id, ws)
+                    relocate_window(win_id, ws)
             return
 
         # Rename temps back — preserves positions, no focus change needed.
@@ -307,7 +307,7 @@ def move_valid_nei_workspace(offset: int = 1) -> None:
         move_workspace(nxt_ws)
 
 
-def insert_workspace_before_current() -> None:
+def insert_workspace() -> None:
     # Insert a new workspace immediately before the current workspace.
     cur_disp = get_cur_display()
     ws_data = _get_workspaces_data()
@@ -326,7 +326,7 @@ def insert_workspace_before_current() -> None:
     fix_workspace_order(cur_disp, inserted_ws)
 
 
-def delete_current_workspace_if_empty() -> None:
+def delete_empty_workspace() -> None:
     # Delete an empty workspace by shifting later workspaces left.
     cur_disp = get_cur_display()
     ws_data = _get_workspaces_data()
@@ -334,7 +334,7 @@ def delete_current_workspace_if_empty() -> None:
     workspaces = _get_managed_workspace_names(ws_data, cur_disp)
     if cur_ws not in workspaces or len(workspaces) <= 1:
         return
-    if 0 < len(get_windows_on_workspace(cur_ws)):
+    if 0 < len(list_workspace_windows(cur_ws)):
         return
     ws_parts = _split_workspace_name(cur_ws)
     if ws_parts is None:
@@ -364,7 +364,7 @@ def compact_workspaces() -> None:
 
         # Partition into empty and non-empty workspaces
         empty_set = {ws for ws in workspaces
-                     if not get_windows_on_workspace(ws)}
+                     if not list_workspace_windows(ws)}
         survivors = [ws for ws in workspaces if ws not in empty_set]
 
         if not survivors:
@@ -479,13 +479,13 @@ def get_workspaces_raw(display: Optional[str] = None) -> list[str]:
     return names
 
 
-def _get_all_workspaces_with_output() -> list[tuple[str, str]]:
+def _get_workspace_output_pairs() -> list[tuple[str, str]]:
     # Return (workspace_name, output_name) pairs for all workspaces.
     workspaces = _get_workspaces_data()
     return [(ws['name'], ws['output']) for ws in workspaces]
 
 
-def get_windows_on_workspace(ws_name: str) -> list:
+def list_workspace_windows(ws_name: str) -> list:
     # Get all window container IDs on a workspace (recursive).
     tree = json.loads(run_cmd('swaymsg -t get_tree'))
     ws_node = _find_node(tree,
@@ -530,7 +530,7 @@ def _collect_tiling_windows(node: dict) -> list[int]:
     return result
 
 
-def _get_next_window_on_cur_ws(win_id: int) -> Optional[int]:
+def _get_next_window(win_id: int) -> Optional[int]:
     # Return the next tiling window after win_id on the current workspace.
     # Returns the previous window if win_id is the last one, or None if it
     # is the only tiling window on the workspace.
@@ -588,7 +588,7 @@ def move_workspace(ws: str) -> Optional[int]:
         run_cmd(f"swaymsg 'move container to workspace {ws}'")
         focus_workspace(ws)
         return None
-    next_win_id = _get_next_window_on_cur_ws(win_id)
+    next_win_id = _get_next_window(win_id)
     if next_win_id is not None:
         # After the move we are still on the source workspace; focusing
         # next_win_id here sets the source-ws focus without switching.
@@ -601,7 +601,7 @@ def move_workspace(ws: str) -> Optional[int]:
     return win_id
 
 
-def move_window_to_workspace(win_id: int, ws_name: str) -> None:
+def relocate_window(win_id: int, ws_name: str) -> None:
     # Move a specific window by con_id to a target workspace.
     run_cmd(f"swaymsg '[con_id={win_id}] move to workspace {ws_name}'")
 

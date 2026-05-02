@@ -157,7 +157,7 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
             actions.append('flush')
 
     daemon._daemon_move_ids.clear()
-    monkeypatch.setattr(daemon, '_swap_new_before_prev',
+    monkeypatch.setattr(daemon, '_swap_new_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
@@ -169,8 +169,8 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
     assert actions == ['start', 'swap', 'run', 'flush']
 
 
-def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
-    # _swap_new_before_prev swaps new window with the leaf just before it.
+def test_swap_new_window_swaps_with_predecessor(monkeypatch) -> None:
+    # _swap_new_window swaps new window with the leaf just before it.
     NEW_ID = 30
     PREV_ID = 20
     AFTER_ID = 40
@@ -210,15 +210,15 @@ def test_swap_new_before_prev_swaps_with_predecessor(monkeypatch) -> None:
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+    daemon._swap_new_window(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
     assert f'swap container with con_id {PREV_ID}' in new_leaf.commands
     assert 'focus' in new_leaf.commands
 
 
-def test_swap_new_before_prev_skips_when_predecessor_is_last(
+def test_swap_new_window_skips_when_predecessor_is_last(
         monkeypatch) -> None:
-    # _swap_new_before_prev does nothing when the predecessor was last.
+    # _swap_new_window does nothing when the predecessor was last.
     NEW_ID = 30
     PREV_ID = 20
 
@@ -254,13 +254,13 @@ def test_swap_new_before_prev_skips_when_predecessor_is_last(
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+    daemon._swap_new_window(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
     assert new_leaf.commands == list()
 
 
-def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
-    # _swap_new_before_prev does nothing when new window is already first.
+def test_swap_new_window_skips_when_first(monkeypatch) -> None:
+    # _swap_new_window does nothing when new window is already first.
     NEW_ID = 10
 
     class FakeLeaf:
@@ -291,13 +291,13 @@ def test_swap_new_before_prev_skips_when_first(monkeypatch) -> None:
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+    daemon._swap_new_window(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
     assert new_leaf.commands == list()
 
 
-def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
-    # _swap_new_before_prev does nothing for floating new windows.
+def test_swap_new_window_skips_floating(monkeypatch) -> None:
+    # _swap_new_window does nothing for floating new windows.
     NEW_ID = 42
 
     class FakeLeaf:
@@ -320,7 +320,7 @@ def test_swap_new_before_prev_skips_floating(monkeypatch) -> None:
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_new_before_prev(cast(daemon.SwayConn, FakeConn()), NEW_ID)
+    daemon._swap_new_window(cast(daemon.SwayConn, FakeConn()), NEW_ID)
 
     assert new_leaf.commands == list()
 
@@ -867,7 +867,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# --------- on_window move / _swap_moved_before_active -----------------------
+# --------- on_window move / _swap_moved_window -----------------------
 # -----------------------------------------------------------------------------
 def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
     # User-initiated move swaps moved window before active, then reflows.
@@ -881,7 +881,7 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
             actions.append('flush')
 
     daemon._daemon_move_ids.clear()
-    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+    monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
@@ -906,7 +906,7 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
 
     daemon._daemon_move_ids.clear()
     daemon._daemon_move_ids[99] = float('inf')  # different container
-    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+    monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
@@ -946,9 +946,9 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
     assert actions == ['start', 'run', 'flush']  # reflow still happens
 
 
-def test_swap_moved_before_active_swaps_with_predecessor(
+def test_swap_moved_window_swaps_with_predecessor(
         monkeypatch) -> None:
-    # _swap_moved_before_active swaps moved window with the leaf before it.
+    # _swap_moved_window swaps moved window with the leaf before it.
     MOVED_ID = 30
     PREV_ID = 20
     AFTER_ID = 40
@@ -985,17 +985,17 @@ def test_swap_moved_before_active_swaps_with_predecessor(
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_moved_before_active(
+    daemon._swap_moved_window(
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     assert f'swap container with con_id {PREV_ID}' in moved_leaf.commands
     assert 'focus' in moved_leaf.commands
 
 
-def test_swap_moved_before_active_swaps_when_predecessor_is_last(
+def test_swap_moved_window_swaps_when_predecessor_is_last(
         monkeypatch) -> None:
-    # _swap_moved_before_active swaps even when moved window is last.
-    # Unlike _swap_new_before_prev, there is no idx==len-1 early-return.
+    # _swap_moved_window swaps even when moved window is last.
+    # Unlike _swap_new_window, there is no idx==len-1 early-return.
     MOVED_ID = 30
     PREV_ID = 20
 
@@ -1030,15 +1030,15 @@ def test_swap_moved_before_active_swaps_when_predecessor_is_last(
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_moved_before_active(
+    daemon._swap_moved_window(
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     assert f'swap container with con_id {PREV_ID}' in moved_leaf.commands
     assert 'focus' in moved_leaf.commands
 
 
-def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
-    # _swap_moved_before_active does nothing when moved window is first.
+def test_swap_moved_window_skips_when_first(monkeypatch) -> None:
+    # _swap_moved_window does nothing when moved window is first.
     MOVED_ID = 10
     OTHER_ID = 20
 
@@ -1073,14 +1073,14 @@ def test_swap_moved_before_active_skips_when_first(monkeypatch) -> None:
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_moved_before_active(
+    daemon._swap_moved_window(
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     assert moved_leaf.commands == list()
 
 
-def test_swap_moved_before_active_skips_temp_workspace() -> None:
-    # _swap_moved_before_active does nothing when destination is a temp ws.
+def test_swap_moved_window_skips_temp_workspace() -> None:
+    # _swap_moved_window does nothing when destination is a temp ws.
     # Evacuation moves in fix_workspace_order land on __swh_tmp_* workspaces.
     # Focusing those windows would steal focus from the (possibly empty)
     # new_ws and trigger sway's auto-deletion of new_ws.
@@ -1119,7 +1119,7 @@ def test_swap_moved_before_active_skips_temp_workspace() -> None:
         def get_tree(self) -> FakeTree:
             return FakeTree()
 
-    daemon._swap_moved_before_active(
+    daemon._swap_moved_window(
         cast(daemon.SwayConn, FakeConn()), MOVED_ID)
 
     # No swap and no focus change should have occurred
@@ -1141,7 +1141,7 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
     daemon._daemon_move_ids[42] = -1.0  # already expired (negative monotonic)
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
-    monkeypatch.setattr(daemon, '_swap_moved_before_active',
+    monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
 
     event = cast(object, SimpleNamespace(change='move',

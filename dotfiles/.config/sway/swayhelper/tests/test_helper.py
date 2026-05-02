@@ -30,7 +30,7 @@ def test_shift_workspace_name_clamps_at_zero() -> None:
     assert helper._shift_workspace_name('A1', -1) == 'A0'
 
 
-def test_insert_workspace_before_current_shifts_current_and_later(
+def test_insert_workspace_shifts_current_and_later(
         monkeypatch) -> None:
     renamed: list[tuple[str, str]] = list()
     focused: list[str] = list()
@@ -52,14 +52,14 @@ def test_insert_workspace_before_current_shifts_current_and_later(
                         lambda display, ws_name: fixed.append(
                             (display, ws_name)))
 
-    helper.insert_workspace_before_current()
+    helper.insert_workspace()
 
     assert renamed == [('A3', 'A4'), ('A2', 'A3')]
     assert focused == ['A2']
     assert fixed == [('DP-1', 'A2')]
 
 
-def test_delete_current_workspace_if_empty_shifts_later_workspaces_left(
+def test_delete_empty_workspace_shifts_later_workspaces_left(
         monkeypatch) -> None:
     focused: list[str] = list()
     renamed: list[tuple[str, str]] = list()
@@ -72,20 +72,20 @@ def test_delete_current_workspace_if_empty_shifts_later_workspaces_left(
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws_name: [] if ws_name == 'A2' else [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws_name: focused.append(ws_name))
     monkeypatch.setattr(helper, 'rename_workspace',
                         lambda old, new: renamed.append((old, new)))
 
-    helper.delete_current_workspace_if_empty()
+    helper.delete_empty_workspace()
 
     assert focused == ['A3']
     assert renamed == [('A3', 'A2'), ('A4', 'A3')]
 
 
-def test_delete_current_workspace_if_empty_noop_when_not_empty(
+def test_delete_empty_workspace_noop_when_not_empty(
         monkeypatch) -> None:
     focused: list[str] = list()
     renamed: list[tuple[str, str]] = list()
@@ -97,20 +97,20 @@ def test_delete_current_workspace_if_empty_noop_when_not_empty(
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda _ws_name: [42])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws_name: focused.append(ws_name))
     monkeypatch.setattr(helper, 'rename_workspace',
                         lambda old, new: renamed.append((old, new)))
 
-    helper.delete_current_workspace_if_empty()
+    helper.delete_empty_workspace()
 
     assert focused == list()
     assert renamed == list()
 
 
-def test_delete_current_workspace_if_empty_last_workspace_moves_previous(
+def test_delete_empty_workspace_last_workspace_moves_previous(
         monkeypatch) -> None:
     focused: list[str] = list()
     renamed: list[tuple[str, str]] = list()
@@ -121,14 +121,14 @@ def test_delete_current_workspace_if_empty_last_workspace_moves_previous(
 
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda _ws_name: [])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws_name: focused.append(ws_name))
     monkeypatch.setattr(helper, 'rename_workspace',
                         lambda old, new: renamed.append((old, new)))
 
-    helper.delete_current_workspace_if_empty()
+    helper.delete_empty_workspace()
 
     assert focused == ['A0']
     assert renamed == list()
@@ -223,7 +223,7 @@ def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
 
     monkeypatch.setattr(helper, 'get_focused_window_id',
                         lambda: FOCUSED_WIN_ID)
-    monkeypatch.setattr(helper, '_get_next_window_on_cur_ws', lambda _: None)
+    monkeypatch.setattr(helper, '_get_next_window', lambda _: None)
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda _ws: (_ for _ in ()).throw(
                             AssertionError('focus_workspace must not be '
@@ -420,9 +420,9 @@ def test_cleanup_temp_workspaces_moves_windows_from_legacy_temp(
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda disp: ws_by_disp.get(disp, []))
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [42] if ws == '_tA1' else [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
 
     helper._cleanup_temp_workspaces(['DP-1'])
@@ -437,9 +437,9 @@ def test_cleanup_temp_workspaces_handles_nested_temp_names(
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda disp: ws_by_disp.get(disp, []))
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [99] if ws == '_t_tA1' else [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
 
     helper._cleanup_temp_workspaces(['DP-1'])
@@ -455,9 +455,9 @@ def test_cleanup_temp_workspaces_skips_non_managed_real_names(
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda disp: ws_by_disp.get(disp, []))
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda _ws: [1])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
 
     helper._cleanup_temp_workspaces(['DP-1'])
@@ -474,9 +474,9 @@ def test_cleanup_temp_workspaces_moves_windows_from_setup_temp(
 
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda disp: ws_by_disp.get(disp, []))
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [7] if ws == '__ws_B0' else [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
 
     helper._cleanup_temp_workspaces(['DP-1'])
@@ -493,8 +493,8 @@ def test_fix_workspace_order_ignores_temp_workspace(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda _d: ['A0', '_tB2', 'A1'])
-    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows', lambda _ws: [])
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -517,9 +517,9 @@ def test_fix_workspace_order_aborts_on_evacuation_timeout(
     # A2 is always present (never auto-deleted), simulating timeout
     monkeypatch.setattr(helper, 'get_workspaces_raw',
                         lambda _d: ['A0', 'A2', 'A1'])
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [42] if ws == 'A2' else [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -557,9 +557,9 @@ def test_fix_workspace_order_renames_without_refocus(monkeypatch) -> None:
         return ['A0', 'A1', f'{helper._WS_REORDER_TMP}A2']
 
     monkeypatch.setattr(helper, 'get_workspaces_raw', mock_ws_raw)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [42] if ws == 'A2' else [])
-    monkeypatch.setattr(helper, 'move_window_to_workspace',
+    monkeypatch.setattr(helper, 'relocate_window',
                         lambda wid, ws: moved.append((wid, ws)))
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -606,7 +606,7 @@ def test_compact_workspaces_deletes_and_renames(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [] if ws in ('A0', 'A2') else [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -643,7 +643,7 @@ def test_compact_workspaces_handles_empty_current_ws(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [] if ws == 'A0' else [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -667,7 +667,7 @@ def test_compact_workspaces_noop_when_no_empty(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [1])
+    monkeypatch.setattr(helper, 'list_workspace_windows', lambda _ws: [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
     monkeypatch.setattr(helper, 'rename_workspace',
@@ -690,7 +690,7 @@ def test_compact_workspaces_noop_when_all_empty(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [])
+    monkeypatch.setattr(helper, 'list_workspace_windows', lambda _ws: [])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
     monkeypatch.setattr(helper, 'rename_workspace',
@@ -724,7 +724,7 @@ def test_compact_workspaces_single_trailing_empty_no_rename(
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', mock_ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace',
+    monkeypatch.setattr(helper, 'list_workspace_windows',
                         lambda ws: [] if ws == 'A1' else [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
@@ -751,7 +751,7 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
     monkeypatch.setattr(helper, '_reorder_lock', contextlib.nullcontext)
     monkeypatch.setattr(helper, 'get_cur_display', lambda: 'DP-1')
     monkeypatch.setattr(helper, '_get_workspaces_data', lambda: ws_data)
-    monkeypatch.setattr(helper, 'get_windows_on_workspace', lambda _ws: [1])
+    monkeypatch.setattr(helper, 'list_workspace_windows', lambda _ws: [1])
     monkeypatch.setattr(helper, 'focus_workspace',
                         lambda ws: focused.append(ws))
     monkeypatch.setattr(helper, 'rename_workspace',
@@ -764,7 +764,7 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# --------- _collect_tiling_windows / _get_next_window_on_cur_ws --------------
+# --------- _collect_tiling_windows / _get_next_window --------------
 # -----------------------------------------------------------------------------
 def test_collect_tiling_windows_excludes_floating() -> None:
     # Floating nodes must not appear in the tiling window list.
@@ -788,7 +788,7 @@ def test_collect_tiling_windows_returns_empty_for_empty_workspace() -> None:
     assert helper._collect_tiling_windows(node) == list()
 
 
-def test_get_next_window_on_cur_ws_returns_next(monkeypatch) -> None:
+def test_get_next_window_returns_next(monkeypatch) -> None:
     # When win_id is not last, returns the next tiling window.
     tree = {
         'type': 'root',
@@ -813,11 +813,11 @@ def test_get_next_window_on_cur_ws_returns_next(monkeypatch) -> None:
     import json
     monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
 
-    assert helper._get_next_window_on_cur_ws(10) == 20
-    assert helper._get_next_window_on_cur_ws(20) == 30
+    assert helper._get_next_window(10) == 20
+    assert helper._get_next_window(20) == 30
 
 
-def test_get_next_window_on_cur_ws_wraps_to_prev_when_last(
+def test_get_next_window_wraps_to_prev_when_last(
         monkeypatch) -> None:
     # When win_id is the last window, falls back to the previous window.
     tree = {
@@ -841,10 +841,10 @@ def test_get_next_window_on_cur_ws_wraps_to_prev_when_last(
     import json
     monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
 
-    assert helper._get_next_window_on_cur_ws(20) == 10
+    assert helper._get_next_window(20) == 10
 
 
-def test_get_next_window_on_cur_ws_returns_none_when_only_window(
+def test_get_next_window_returns_none_when_only_window(
         monkeypatch) -> None:
     # When win_id is the only tiling window, returns None.
     tree = {
@@ -866,7 +866,7 @@ def test_get_next_window_on_cur_ws_returns_none_when_only_window(
     import json
     monkeypatch.setattr(helper, 'run_cmd', lambda _cmd: json.dumps(tree))
 
-    assert helper._get_next_window_on_cur_ws(10) is None
+    assert helper._get_next_window(10) is None
 
 
 def test_move_workspace_focuses_next_window_on_source_ws(
@@ -879,7 +879,7 @@ def test_move_workspace_focuses_next_window_on_source_ws(
 
     monkeypatch.setattr(helper, 'get_focused_window_id',
                         lambda: FOCUSED_WIN_ID)
-    monkeypatch.setattr(helper, '_get_next_window_on_cur_ws',
+    monkeypatch.setattr(helper, '_get_next_window',
                         lambda _: NEXT_WIN_ID)
     monkeypatch.setattr(helper, 'run_cmd', lambda cmd: cmds.append(cmd))
 
