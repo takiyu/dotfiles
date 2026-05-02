@@ -219,8 +219,7 @@ def test_swap_new_window_swaps_with_predecessor(monkeypatch) -> None:
     assert 'focus' in new_leaf.commands
 
 
-def test_swap_new_window_skips_when_predecessor_is_last(
-        monkeypatch) -> None:
+def test_swap_new_window_skips_when_predecessor_is_last(monkeypatch) -> None:
     # _swap_new_window does nothing when the predecessor was last.
     NEW_ID = 30
     PREV_ID = 20
@@ -952,8 +951,7 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
     assert actions == ['start', 'run', 'flush']  # reflow still happens
 
 
-def test_swap_moved_window_swaps_with_predecessor(
-        monkeypatch) -> None:
+def test_swap_moved_window_swaps_with_predecessor(monkeypatch) -> None:
     # _swap_moved_window swaps moved window with the leaf before it.
     MOVED_ID = 30
     PREV_ID = 20
@@ -998,8 +996,7 @@ def test_swap_moved_window_swaps_with_predecessor(
     assert 'focus' in moved_leaf.commands
 
 
-def test_swap_moved_window_swaps_when_predecessor_is_last(
-        monkeypatch) -> None:
+def test_swap_moved_window_swaps_when_predecessor_is_last(monkeypatch) -> None:
     # _swap_moved_window swaps even when moved window is last.
     # Unlike _swap_new_window, there is no idx==len-1 early-return.
     MOVED_ID = 30

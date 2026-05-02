@@ -10,7 +10,7 @@ import os.path as osp
 import re
 import subprocess
 import time
-from typing import Optional
+from typing import Callable, Optional
 
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
@@ -403,8 +403,8 @@ def compact_workspaces() -> None:
             prefix_groups.setdefault(prefix, []).append(ws)
 
         for prefix, group in prefix_groups.items():
-            for new_idx, ws_name in enumerate(
-                    sorted(group, key=ws_sort_key)):
+            for new_idx, ws_name in enumerate(sorted(group,
+                                                     key=ws_sort_key)):
                 new_name = f'{prefix}{new_idx}'
                 if ws_name != new_name:
                     rename_workspace(ws_name, new_name)
@@ -496,7 +496,8 @@ def list_workspace_windows(ws_name: str) -> list:
     return _collect_windows(ws_node)
 
 
-def _find_node(node: dict, predicate) -> Optional[dict]:
+def _find_node(node: dict,
+               predicate: Callable[[dict], object]) -> Optional[dict]:
     # Find first node matching predicate in sway tree (DFS).
     if predicate(node):
         return node
@@ -561,8 +562,8 @@ def get_cur_workspace(display: Optional[str] = None) -> str:
 def get_focused_window_id() -> Optional[int]:
     # Return con_id of the currently focused window, or None.
     tree = json.loads(run_cmd('swaymsg -t get_tree'))
-    node = _find_node(tree, lambda n: n.get(
-        'focused') and n.get('type') == 'con')
+    node = _find_node(tree, lambda n: n.get('focused')
+                      and n.get('type') == 'con')
     return node['id'] if node is not None else None
 
 
@@ -724,6 +725,7 @@ def _get_visible_workspace_name(workspaces: list[dict[str, object]],
 
 
 def run_cmd(cmd: str) -> str:
+    # Run a shell command and return stdout as a string.
     return subprocess.run(cmd, shell=True, check=True,
                           stdout=subprocess.PIPE).stdout.decode('utf-8')
 

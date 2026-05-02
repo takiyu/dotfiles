@@ -12,7 +12,7 @@ install:
 	poetry install
 
 lint:
-	poetry run isort *.py ./**/*.py
+	poetry run isort .
 	poetry run autopep8 --in-place --recursive .
 	poetry run pyright
 	poetry run flake8 --exclude=.venv,*/.venv/* .

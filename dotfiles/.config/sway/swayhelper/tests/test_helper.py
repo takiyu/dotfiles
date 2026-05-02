@@ -30,8 +30,7 @@ def test_shift_workspace_name_clamps_at_zero() -> None:
     assert helper._shift_workspace_name('A1', -1) == 'A0'
 
 
-def test_insert_workspace_shifts_current_and_later(
-        monkeypatch) -> None:
+def test_insert_workspace_shifts_current_and_later(monkeypatch) -> None:
     renamed: list[tuple[str, str]] = list()
     focused: list[str] = list()
     fixed: list[tuple[str, str]] = list()
@@ -85,8 +84,7 @@ def test_delete_empty_workspace_shifts_later_workspaces_left(
     assert renamed == [('A3', 'A2'), ('A4', 'A3')]
 
 
-def test_delete_empty_workspace_noop_when_not_empty(
-        monkeypatch) -> None:
+def test_delete_empty_workspace_noop_when_not_empty(monkeypatch) -> None:
     focused: list[str] = list()
     renamed: list[tuple[str, str]] = list()
     ws_data = [
@@ -224,11 +222,10 @@ def test_move_workspace_uses_atomic_swaymsg_when_window_focused(
     monkeypatch.setattr(helper, 'get_focused_window_id',
                         lambda: FOCUSED_WIN_ID)
     monkeypatch.setattr(helper, '_get_next_window', lambda _: None)
+    err = AssertionError('focus_workspace must not be called separately '
+                         'when win_id is available')
     monkeypatch.setattr(helper, 'focus_workspace',
-                        lambda _ws: (_ for _ in ()).throw(
-                            AssertionError('focus_workspace must not be '
-                                           'called separately when win_id '
-                                           'is available')))
+                        lambda _ws: (_ for _ in ()).throw(err))
     monkeypatch.setattr(helper, 'run_cmd', lambda cmd: cmds.append(cmd))
 
     result = helper.move_workspace('B0')
@@ -280,8 +277,7 @@ def test_move_nei_workspace_refocuses_after_fix_workspace_order(
     assert FOCUSED_WIN_ID in focused_wins
 
 
-def test_move_nei_workspace_serialises_concurrent_calls(
-        monkeypatch) -> None:
+def test_move_nei_workspace_serialises_concurrent_calls(monkeypatch) -> None:
     # Verify _move_lock is acquired so concurrent calls see correct state.
     # Simulate: first call updates cur_ws; second call sees updated workspace.
     call_order: list[str] = list()
@@ -506,8 +502,7 @@ def test_fix_workspace_order_ignores_temp_workspace(monkeypatch) -> None:
     assert not focused
 
 
-def test_fix_workspace_order_aborts_on_evacuation_timeout(
-        monkeypatch) -> None:
+def test_fix_workspace_order_aborts_on_evacuation_timeout(monkeypatch) -> None:
     # When evacuated workspaces never disappear, windows must be restored
     # to their original workspace and the function must return early.
     moved: list[tuple[int, str]] = list()
@@ -817,8 +812,7 @@ def test_get_next_window_returns_next(monkeypatch) -> None:
     assert helper._get_next_window(20) == 30
 
 
-def test_get_next_window_wraps_to_prev_when_last(
-        monkeypatch) -> None:
+def test_get_next_window_wraps_to_prev_when_last(monkeypatch) -> None:
     # When win_id is the last window, falls back to the previous window.
     tree = {
         'type': 'root',
@@ -844,8 +838,7 @@ def test_get_next_window_wraps_to_prev_when_last(
     assert helper._get_next_window(20) == 10
 
 
-def test_get_next_window_returns_none_when_only_window(
-        monkeypatch) -> None:
+def test_get_next_window_returns_none_when_only_window(monkeypatch) -> None:
     # When win_id is the only tiling window, returns None.
     tree = {
         'type': 'root',
@@ -869,8 +862,7 @@ def test_get_next_window_returns_none_when_only_window(
     assert helper._get_next_window(10) is None
 
 
-def test_move_workspace_focuses_next_window_on_source_ws(
-        monkeypatch) -> None:
+def test_move_workspace_focuses_next_window_on_source_ws(monkeypatch) -> None:
     # When there is a next tiling window, the atomic command must set
     # focus to that window on the source workspace before switching.
     cmds: list[str] = list()

@@ -18,7 +18,6 @@ from swayhelper.constants import MOVE_MARK
 # -----------------------------------------------------------------------------
 # --------------------------------- Constants ---------------------------------
 # -----------------------------------------------------------------------------
-DEFAULT_LAYOUT = 'tall'  # Default for landscape; portrait auto-uses 'stack'
 # Workspace name prefixes used by helper.py for temporary rename operations.
 # These workspaces must be skipped during layout to avoid tiling zombies.
 _TEMP_WS_PREFIXES = ('__ws_', '__swh_tmp_')
@@ -40,6 +39,9 @@ class LayoutKind(enum.Enum):
     STACK = 'stack'
     THREE_COL = '3_col'
     NOP = 'nop'
+
+
+DEFAULT_LAYOUT = LayoutKind.TALL
 
 
 class Transform(enum.Enum):
@@ -68,8 +70,8 @@ BindingEvent = i3ipc.events.BindingEvent
 _CmdHandler = Callable[..., None]
 
 # Callable type matching i3ipc.Connection.on() handler signature
-_IpcHandler = Callable[
-    [i3ipc.Connection, i3ipc.events.IpcBaseEvent], None]
+_IpcHandler = Callable[[i3ipc.Connection,
+                        i3ipc.events.IpcBaseEvent], None]
 
 # -----------------------------------------------------------------------------
 # ------------------------------ Workspace State ------------------------------
@@ -86,8 +88,9 @@ class WorkspaceState:
         self.ws_id = ws_id
         self.kind = kind
         self.n_masters = n_masters
-        self.transforms: set[Transform] = (
-            set() if transforms is None else set(transforms))
+        self.transforms: set[Transform] = (set()
+                                           if transforms is None
+                                           else set(transforms))
 
     @property
     def n_columns(self) -> int:
@@ -489,8 +492,11 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
     # commands that can cause sway to silently shift focus to the master,
     # so ws.find_focused() called after the loop would return the wrong window.
     pre_focused = ws.find_focused()
-    pre_focused_id: Optional[int] = (pre_focused.id
-                                     if pre_focused is not None else None)
+    pre_focused_id: Optional[int]
+    if pre_focused is not None:
+        pre_focused_id = pre_focused.id
+    else:
+        pre_focused_id = None
 
     # Scale the iteration cap with workspace size: one structural change per
     # pass means O(n_windows) passes in the worst case.
@@ -561,8 +567,8 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
         if i == 0:  # master pane
             if n == 1 and len(col.nodes) > state.n_masters:
                 # Single column overflows: push one window right to new col
-                _daemon_move_ids[col.nodes[-1].id] = (
-                    time.monotonic() + _MOVE_ID_TTL)
+                expiry = time.monotonic() + _MOVE_ID_TTL
+                _daemon_move_ids[col.nodes[-1].id] = expiry
                 focused = ws.find_focused() if ws else None
                 col.nodes[-1].command(_transform_cmd(state, 'move right'))
                 if is_focused and focused:
@@ -579,21 +585,21 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
             if len(col.nodes) > 1:
                 if n < state.n_columns:
                     # Too few columns: expand rightward
-                    _daemon_move_ids[col.nodes[-1].id] = (
-                        time.monotonic() + _MOVE_ID_TTL)
+                    expiry = time.monotonic() + _MOVE_ID_TTL
+                    _daemon_move_ids[col.nodes[-1].id] = expiry
                     focused = ws.find_focused() if ws else None
-                    col.nodes[-1].command(
-                        _transform_cmd(state, 'move right'))
+                    cmd = _transform_cmd(state, 'move right')
+                    col.nodes[-1].command(cmd)
                     if is_focused and focused:
                         focused.command('focus')
                     return True
                 elif n > state.n_columns:
                     # Too many columns: collapse leftward
-                    _daemon_move_ids[col.nodes[0].id] = (
-                        time.monotonic() + _MOVE_ID_TTL)
+                    expiry = time.monotonic() + _MOVE_ID_TTL
+                    _daemon_move_ids[col.nodes[0].id] = expiry
                     focused = ws.find_focused() if ws else None
-                    col.nodes[0].command(
-                        _transform_cmd(state, 'move left'))
+                    cmd = _transform_cmd(state, 'move left')
+                    col.nodes[0].command(cmd)
                     if is_focused and focused:
                         focused.command('focus')
                     return True
@@ -962,7 +968,8 @@ def _get_ws_state(ws_id: int,
     if ws_id not in _ws_states:
         kind = (default_kind
                 if default_kind is not None
-                else _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT, LayoutKind.TALL))
+                else _LAYOUT_BY_NAME.get(DEFAULT_LAYOUT.value,
+                                         LayoutKind.TALL))
         _ws_states[ws_id] = WorkspaceState(ws_id=ws_id, kind=kind)
     return _ws_states[ws_id]
 
@@ -997,26 +1004,24 @@ def _parse_nop_commands(event: BindingEvent) -> list[list[str]]:
 # -----------------------------------------------------------------------------
 def main() -> None:
     global DEFAULT_LAYOUT
-    parser = argparse.ArgumentParser(
-        description='Sway IPC tiling daemon (swaymonad replacement).')
-    parser.add_argument(
-        '--default-layout', default=DEFAULT_LAYOUT,
-        choices=list(_LAYOUT_BY_NAME),
-        help='Layout for workspaces with no explicit setting.')
-    parser.add_argument(
-        '--verbose', '-v', action='count',
-        help='Enable debug logging (repeat for more verbose output).')
-    parser.add_argument(
-        '--log-file',
-        help='Write log to file instead of stderr.')
+    parser = argparse.ArgumentParser(description=(
+        'Sway IPC tiling daemon (swaymonad replacement).'))
+    parser.add_argument('--default-layout', default=DEFAULT_LAYOUT.value,
+                        choices=list(_LAYOUT_BY_NAME),
+                        help='Layout for workspaces with no explicit setting.')
+    parser.add_argument('--verbose', '-v', action='count',
+                        help='Enable debug logging '
+                        '(repeat for more verbose output).')
+    parser.add_argument('--log-file',
+                        help='Write log to file instead of stderr.')
     args = parser.parse_args()
-    DEFAULT_LAYOUT = args.default_layout
+    DEFAULT_LAYOUT = _LAYOUT_BY_NAME.get(args.default_layout, LayoutKind.TALL)
 
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.WARNING,
-        filename=args.log_file,
-        format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d]'
-               ' %(message)s')
+    level = logging.DEBUG if args.verbose else logging.WARNING
+    fmt = '%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s'
+    logging.basicConfig(level=level,
+                        filename=args.log_file,
+                        format=fmt)
 
     i3 = SwayConn()
     i3.on(i3ipc.Event.BINDING, cast(_IpcHandler, on_binding))
