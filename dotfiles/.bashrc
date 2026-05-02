@@ -590,9 +590,9 @@ if [ "$($exist_command trizen)" = 'exist' ]; then
     alias trizen-noconfirm="trizen -Syu -y --noconfirm"
 fi
 
-# Aliases for github copilot
-alias gcmAl='copilot_auto_commit.sh --local'
-alias gcmAo='copilot_auto_commit.sh'
+# Aliases for opencode auto-commit
+alias gcmAl='opencode_auto_commit.sh'
+alias gcmAo='opencode_auto_commit.sh'
 alias gcmA=gcmAl
 copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
 alias ca_local="copilot_allow_all_local"
