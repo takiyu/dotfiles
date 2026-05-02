@@ -75,6 +75,8 @@ Implementation code here
 - 79 chars/line, PEP 8 (important)
 - PascalCase classes, snake_case functions/variables
 - Use type hints, single quotes
+- Type annotations are mandatory; never omit them to avoid `Any`.
+- `Any` is discouraged, but permitted when no other suitable type exists.
 - `import os.path as osp` not Path
 - Use built-in generics (`dict[K, V]`, `list[X]`, `tuple[X, Y]`) and `Optional[X]` for type hints
 - Align continuation lines to the opening delimiter (`(`, `[`, `{`), not hanging indent

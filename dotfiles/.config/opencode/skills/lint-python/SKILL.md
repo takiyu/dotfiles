@@ -84,8 +84,10 @@ One per line in this format:
 
 **[高] Must fix:**
 - Docstrings present (forbidden)
-- `typing.Dict/List/Tuple/Union/Any` (use `dict[]/list[]/tuple[]/Optional[X]`)
-- Missing type hints on params or return type
+- Missing type hints on params or return type (never omit annotations)
+- `typing.Dict/List/Tuple/Union` (use `dict[]/list[]/tuple[]/Optional[X]`)
+- `typing.Any` — discouraged, but permitted when no other suitable type
+  exists; never omit annotations to avoid `Any`
 - String constants where an `enum` should be used
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
