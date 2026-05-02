@@ -25,7 +25,7 @@ def test_run_existing_layouts_retiles_all_workspaces(monkeypatch) -> None:
                         _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
-    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
     # Ensure fresh state for these workspace IDs
     daemon._ws_states.pop(11, None)
     daemon._ws_states.pop(22, None)
@@ -59,7 +59,7 @@ def test_run_existing_layouts_skips_temp_workspaces(monkeypatch) -> None:
                         _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
-    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
     daemon._ws_states.pop(10, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeTempConn()))
@@ -91,7 +91,7 @@ def test_run_existing_layouts_uses_stack_for_portrait_output(
                         _focused_ws_id: Optional[int] = None) -> None:
         calls.append(ws_id)
 
-    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
+    monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
     daemon._ws_states.pop(9001, None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakePortraitConn()))
@@ -365,7 +365,7 @@ def test_reflow_ncol_expands_single_column(monkeypatch) -> None:
     ws = FakeWorkspace(col, master)
     state = daemon.WorkspaceState(ws_id=1)
 
-    monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
+    monkeypatch.setattr('swayhelper.layout._refetch', lambda _i3, con: con)
 
     assert daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws,
                                is_focused=True)
@@ -413,7 +413,7 @@ def test_reflow_ncol_stack_collapses_extra_column(monkeypatch) -> None:
     state = daemon.WorkspaceState(ws_id=99,
                                   kind=daemon.LayoutKind.STACK)
 
-    monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
+    monkeypatch.setattr('swayhelper.layout._refetch', lambda _i3, con: con)
 
     # Two columns → should move right_win left and return True
     result = daemon._reflow_ncol(cast(daemon.SwayConn, object()), state, ws)
@@ -644,9 +644,10 @@ def test_run_existing_layouts_no_focus_steal_on_non_focused_ws(
                 rect=SimpleNamespace(width=1920, height=1080),
             )]
 
-    monkeypatch.setattr(daemon, '_reflow_ncol', fake_reflow)
-    monkeypatch.setattr(daemon, '_refetch', lambda _i3, con: con)
-    monkeypatch.setattr(daemon, '_refocus_window', lambda _i3, _win: None)
+    monkeypatch.setattr('swayhelper.layout._reflow_ncol', fake_reflow)
+    monkeypatch.setattr('swayhelper.layout._refetch', lambda _i3, con: con)
+    monkeypatch.setattr('swayhelper.layout._refocus_window',
+                        lambda _i3, _win: None)
 
     daemon._ws_states[WS_A_ID] = daemon.WorkspaceState(ws_id=WS_A_ID)
     daemon._ws_states[WS_B_ID] = daemon.WorkspaceState(ws_id=WS_B_ID)
@@ -730,9 +731,10 @@ def test_run_existing_layouts_does_not_reset_state_on_sparse_workspace(
     daemon._ws_states[WS_B_ID] = state_b
 
     # _reflow_ncol must not block (returns False = nothing moved)
-    monkeypatch.setattr(daemon, '_reflow_ncol',
+    monkeypatch.setattr('swayhelper.layout._reflow_ncol',
                         lambda _i3, _s, _ws, _if=False: False)
-    monkeypatch.setattr(daemon, '_get_focused_workspace', lambda _i3: None)
+    monkeypatch.setattr(
+        'swayhelper.layout._get_focused_workspace', lambda _i3: None)
 
     try:
         daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
@@ -833,11 +835,11 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
 
     state = daemon.WorkspaceState(ws_id=WS_ID)
 
-    monkeypatch.setattr(daemon, '_refetch',
+    monkeypatch.setattr('swayhelper.layout._refetch',
                         lambda _i3, _con: ws_after_reflow)
-    monkeypatch.setattr(daemon, '_reflow_ncol',
+    monkeypatch.setattr('swayhelper.layout._reflow_ncol',
                         lambda _i3, _state, _ws, _if=False: False)
-    monkeypatch.setattr(daemon, '_refocus_window',
+    monkeypatch.setattr('swayhelper.layout._refocus_window',
                         lambda _i3, win: refocused_ids.append(win.id))
 
     # Track calls to get_tree().find_by_id: first call (ws lookup) returns
@@ -1190,8 +1192,9 @@ def test_run_existing_layouts_continues_after_workspace_error(
             raise RuntimeError('simulated workspace error')
         calls.append(ws_id)
 
-    monkeypatch.setattr(daemon, '_run_layout', fake_run_layout)
-    monkeypatch.setattr(daemon, '_get_focused_workspace', lambda _i3: None)
+    monkeypatch.setattr('swayhelper.layout._run_layout', fake_run_layout)
+    monkeypatch.setattr(
+        'swayhelper.layout._get_focused_workspace', lambda _i3: None)
 
     daemon._run_existing_layouts(cast(daemon.SwayConn, FakeConn()))
 
