@@ -1,6 +1,6 @@
 import i3ipc
 
-from swayhelper.state import Con
+from swayhelper.constants import Con
 
 
 # -----------------------------------------------------------------------------

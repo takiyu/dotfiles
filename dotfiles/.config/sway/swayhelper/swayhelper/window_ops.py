@@ -2,10 +2,10 @@ import math
 import time
 from typing import Optional
 
-from swayhelper.constants import MOVE_MARK
+from swayhelper.constants import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES, MOVE_MARK,
+                                  Con, LayoutKind, Transform)
 from swayhelper.ipc import SwayConn
-from swayhelper.state import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES, Con, LayoutKind,
-                              Transform, WorkspaceState, _daemon_move_ids)
+from swayhelper.state import WorkspaceState, _daemon_move_ids
 from swayhelper.tree_utils import _get_focused_window, _is_floating
 
 

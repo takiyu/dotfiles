@@ -5,12 +5,12 @@ from typing import cast
 
 import i3ipc
 
-import swayhelper.state as _state
+import swayhelper.constants as _constants
 from swayhelper.commands import _COMMANDS
+from swayhelper.constants import BindingEvent, WindowEvent, _IpcHandler
 from swayhelper.ipc import SwayConn
 from swayhelper.layout import _run_existing_layouts
-from swayhelper.state import (BindingEvent, WindowEvent, _daemon_move_ids,
-                              _IpcHandler)
+from swayhelper.state import _daemon_move_ids
 from swayhelper.tree_utils import _parse_nop_commands
 from swayhelper.window_ops import _swap_moved_window, _swap_new_window
 
@@ -77,8 +77,8 @@ def main() -> None:
         'Sway IPC tiling daemon (swaymonad replacement).'))
     parser.add_argument(
         '--default-layout',
-        default=_state.DEFAULT_LAYOUT.value,
-        choices=list(_state._LAYOUT_BY_NAME),
+        default=_constants.DEFAULT_LAYOUT.value,
+        choices=list(_constants._LAYOUT_BY_NAME),
         help='Layout for workspaces with no explicit setting.')
     parser.add_argument('--verbose', '-v', action='count',
                         help='Enable debug logging '
@@ -86,8 +86,8 @@ def main() -> None:
     parser.add_argument('--log-file',
                         help='Write log to file instead of stderr.')
     args = parser.parse_args()
-    _state.DEFAULT_LAYOUT = _state._LAYOUT_BY_NAME.get(
-        args.default_layout, _state.LayoutKind.TALL)
+    _constants.DEFAULT_LAYOUT = _constants._LAYOUT_BY_NAME.get(
+        args.default_layout, _constants.LayoutKind.TALL)
 
     level = logging.DEBUG if args.verbose else logging.WARNING
     fmt = '%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s'
@@ -107,12 +107,12 @@ if __name__ == '__main__':
     main()
 
 # Backward compat re-exports for tests still importing from daemon
+from swayhelper.constants import LayoutKind  # noqa: E402,F401
+from swayhelper.constants import Transform  # noqa: E402,F401
 from swayhelper.layout import _reflow_ncol  # noqa: E402,F401
 from swayhelper.layout import _run_layout  # noqa: E402,F401
 from swayhelper.layout import _run_ncol_layout  # noqa: E402,F401
 from swayhelper.layout import _run_nop_layout  # noqa: E402,F401
-from swayhelper.state import LayoutKind  # noqa: E402,F401
-from swayhelper.state import Transform  # noqa: E402,F401
 from swayhelper.state import WorkspaceState  # noqa: E402,F401
 from swayhelper.state import _ws_states  # noqa: E402,F401
 from swayhelper.window_ops import _get_master_window  # noqa: E402,F401

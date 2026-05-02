@@ -3,11 +3,11 @@ import math
 import time
 from typing import Optional
 
+from swayhelper.constants import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES,
+                                  MAX_REFLOW_ITERS_PER_WIN, Con, LayoutKind,
+                                  Transform)
 from swayhelper.ipc import SwayConn
-from swayhelper.state import (_MOVE_ID_TTL, _TEMP_WS_PREFIXES,
-                              MAX_REFLOW_ITERS_PER_WIN, Con, LayoutKind,
-                              Transform, WorkspaceState, _daemon_move_ids,
-                              _ws_states)
+from swayhelper.state import WorkspaceState, _daemon_move_ids, _ws_states
 from swayhelper.tree_utils import (_get_focused_window, _get_focused_workspace,
                                    _get_ws_state, _is_floating, _refetch)
 from swayhelper.window_ops import (_balance_cols, _get_layout_nodes,
