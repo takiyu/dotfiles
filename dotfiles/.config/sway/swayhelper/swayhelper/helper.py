@@ -51,20 +51,12 @@ def run_action(action: str, opt: str = '') -> None:
         move_valid_nei_workspace(+1)
     elif action == 'move_prev_valid_workspace':
         move_valid_nei_workspace(-1)
-    elif action == 'insert_workspace':
-        insert_workspace()
-    elif action == 'delete_empty_workspace':
-        delete_empty_workspace()
     elif action == 'compact_workspaces':
         compact_workspaces()
     elif action == 'focus_next_display':
         focus_nei_display(+1)
-    elif action == 'focus_prev_display':
-        focus_nei_display(-1)
     elif action == 'move_next_display':
         move_nei_display(+1)
-    elif action == 'move_prev_display':
-        move_nei_display(-1)
     elif action == 'focus_display':
         focus_display(int(opt))
     elif action == 'move_display':
@@ -307,51 +299,6 @@ def move_valid_nei_workspace(offset: int = 1) -> None:
         if nxt_ws == cur_ws:
             return
         move_workspace(nxt_ws)
-
-
-def insert_workspace() -> None:
-    # Insert a new workspace immediately before the current workspace.
-    cur_disp = get_cur_display()
-    ws_data = _get_workspaces_data()
-    cur_ws = _get_visible_workspace_name(ws_data, cur_disp)
-    ws_parts = _split_workspace_name(cur_ws)
-    if ws_parts is None:
-        return
-    prefix, cur_index = ws_parts
-    workspaces = _get_managed_workspace_names(ws_data, cur_disp)
-    affected = [ws_name for ws_name in workspaces
-                if _should_shift_workspace(ws_name, prefix, cur_index)]
-    for ws_name in sorted(affected, key=ws_sort_key, reverse=True):
-        rename_workspace(ws_name, _shift_workspace_name(ws_name, +1))
-    inserted_ws = f'{prefix}{cur_index}'
-    focus_workspace(inserted_ws)
-    fix_workspace_order(cur_disp, inserted_ws)
-
-
-def delete_empty_workspace() -> None:
-    # Delete an empty workspace by shifting later workspaces left.
-    cur_disp = get_cur_display()
-    ws_data = _get_workspaces_data()
-    cur_ws = _get_visible_workspace_name(ws_data, cur_disp)
-    workspaces = _get_managed_workspace_names(ws_data, cur_disp)
-    if cur_ws not in workspaces or len(workspaces) <= 1:
-        return
-    if 0 < len(list_workspace_windows(cur_ws)):
-        return
-    ws_parts = _split_workspace_name(cur_ws)
-    if ws_parts is None:
-        return
-    prefix, cur_index = ws_parts
-    later = [ws_name for ws_name in workspaces
-             if _should_shift_workspace(ws_name, prefix, cur_index + 1)]
-    if later:
-        focus_workspace(later[0])
-        for ws_name in later:
-            rename_workspace(ws_name, _shift_workspace_name(ws_name, -1))
-        return
-    prev_ws = workspaces[(workspaces.index(cur_ws) - 1) % len(workspaces)]
-    if prev_ws != cur_ws:
-        focus_workspace(prev_ws)
 
 
 def compact_workspaces() -> None:
@@ -639,16 +586,6 @@ def _shift_workspace_name(ws_name: str, offset: int) -> str:
     prefix, index = ws_parts
     next_index = max(0, index + offset)
     return f'{prefix}{next_index}'
-
-
-def _should_shift_workspace(ws_name: str, prefix: str,
-                            min_index: int) -> bool:
-    # Return True when a workspace must move right for insertion.
-    ws_parts = _split_workspace_name(ws_name)
-    if ws_parts is None:
-        return False
-    ws_prefix, ws_index = ws_parts
-    return ws_prefix == prefix and min_index <= ws_index
 
 
 def get_workspace_cycle(display: str) -> tuple[list[str], str]:
