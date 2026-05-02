@@ -116,9 +116,10 @@ def test_on_window_skips_layout_generated_move(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='move',
-                                         container=SimpleNamespace(id=42)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='move',
+                            container=SimpleNamespace(id=42))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert 42 not in daemon._daemon_move_ids  # entry consumed
     assert actions == list()  # no buffering/reflow/flush
@@ -138,9 +139,10 @@ def test_on_window_retiles_after_close(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='close',
-                                         container=SimpleNamespace(id=55)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='close',
+                            container=SimpleNamespace(id=55))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert actions == ['start', 'run', 'flush']
 
@@ -162,9 +164,10 @@ def test_on_window_new_swaps_before_reflow(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='new',
-                                         container=SimpleNamespace(id=99)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='new',
+                            container=SimpleNamespace(id=99))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert actions == ['start', 'swap', 'run', 'flush']
 
@@ -886,9 +889,10 @@ def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='move',
-                                         container=SimpleNamespace(id=77)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='move',
+                            container=SimpleNamespace(id=77))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert actions == ['start', 'swap', 'run', 'flush']
 
@@ -911,9 +915,10 @@ def test_on_window_move_different_id_not_suppressed(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='move',
-                                         container=SimpleNamespace(id=77)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='move',
+                            container=SimpleNamespace(id=77))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     # container 77 not in set → user move processed normally
     assert actions == ['start', 'swap', 'run', 'flush']
@@ -938,9 +943,10 @@ def test_on_window_close_cleans_up_daemon_move_id(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_run_existing_layouts',
                         lambda _i3: actions.append('run'))
 
-    event = cast(object, SimpleNamespace(change='close',
-                                         container=SimpleNamespace(id=55)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='close',
+                            container=SimpleNamespace(id=55))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert 55 not in daemon._daemon_move_ids  # cleaned up
     assert actions == ['start', 'run', 'flush']  # reflow still happens
@@ -1144,9 +1150,10 @@ def test_on_window_expired_daemon_move_not_suppressed(monkeypatch) -> None:
     monkeypatch.setattr(daemon, '_swap_moved_window',
                         lambda _i3, _id: actions.append('swap'))
 
-    event = cast(object, SimpleNamespace(change='move',
-                                         container=SimpleNamespace(id=42)))
-    daemon.on_window(cast(daemon.SwayConn, FakeConn()), event)
+    event = SimpleNamespace(change='move',
+                            container=SimpleNamespace(id=42))
+    daemon.on_window(cast(daemon.SwayConn, FakeConn()),
+                     cast(daemon.WindowEvent, event))
 
     assert 42 not in daemon._daemon_move_ids   # entry consumed regardless
     assert actions == ['start', 'swap', 'run', 'flush']  # treated as user move

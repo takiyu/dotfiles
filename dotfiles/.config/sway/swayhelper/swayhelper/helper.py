@@ -482,7 +482,7 @@ def get_workspaces_raw(display: Optional[str] = None) -> list[str]:
 def _get_workspace_output_pairs() -> list[tuple[str, str]]:
     # Return (workspace_name, output_name) pairs for all workspaces.
     workspaces = _get_workspaces_data()
-    return [(ws['name'], ws['output']) for ws in workspaces]
+    return [(str(ws['name']), str(ws['output'])) for ws in workspaces]
 
 
 def list_workspace_windows(ws_name: str) -> list:

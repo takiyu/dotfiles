@@ -5,20 +5,16 @@ description = "Sway IPC tiling daemon and workspace helper"
 authors = ["takiyu <takiyu1025.txu.development@gmail.com>"]
 packages = [{include = "swayhelper"}]
 
-[tool.poetry.scripts]
-sway-tiling-daemon = "swayhelper.daemon:main"
-sway-helper = "swayhelper.helper:main"
-
 [tool.poetry.dependencies]
-python = ">=3.10,<3.14"
+python = "<3.14,>=3.10"
 i3ipc = "^2.2.1"
 
 [tool.poetry.group.dev.dependencies]
-pyright = "^1.1.356"
+pytest = "^8.3.5"
 flake8 = "^7.0.0"
 autopep8 = "^2.0.4"
 isort = "^5.13.2"
-pytest = "^8.3.5"
+pyright = "^1.1.356"
 
 [build-system]
 requires = ["poetry-core"]
@@ -31,6 +27,7 @@ testpaths = ["tests"]
 max_line_length = 79
 aggressive = 1
 indent_size = 4
+ignore = []
 recursive = true
 experimental = true
 
@@ -46,14 +43,15 @@ force_single_line = false
 
 [tool.flake8]
 max-line-length = 79
+extend-ignore = []
 
 [tool.pycodestyle]
-ignore = ["E112", "E123", "E126", "E133", "E226", "E241", "E242",
-          "E704", "W503", "W504", "W505"]
+ignore = ["E112", "E123", "E126", "E133", "E226", "E241", "E242", "E704", "W503", "W504", "W505"]
 
 [tool.pyright]
-include = ["swayhelper", "tests"]
+include = ["swayhelper", "tests", "**/*.py"]
 exclude = ["**/__pycache__", "**/.venv"]
 typeCheckingMode = "standard"
 reportMissingImports = true
 reportMissingTypeStubs = false
+reportAttributeAccessIssue = false
