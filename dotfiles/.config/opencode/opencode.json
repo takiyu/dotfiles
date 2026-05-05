@@ -18,7 +18,18 @@
         "apiKey": "local"
       },
       "models": {
-        "{env:LLM_MODEL}": {}
+        "{env:LLM_MODEL}": {
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        }
       }
     }
   },
