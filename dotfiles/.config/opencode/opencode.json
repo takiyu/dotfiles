@@ -35,6 +35,9 @@
   },
   "model": "local/{env:LLM_MODEL}",
   "small_model": "local/{env:LLM_MODEL}",
+  "plugin": [
+    "$HOME/.config/opencode/plugins/hooks.js"
+  ],
   "agent": {
     "build": {
       "permission": {

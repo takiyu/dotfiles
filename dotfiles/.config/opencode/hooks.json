@@ -6,6 +6,12 @@
         "timeoutSec": 30
       }
     ],
+    "permission.ask": [
+      {
+        "bash": "$HOME/.config/opencode/hooks/notify-permission-ask.sh",
+        "timeoutSec": 5
+      }
+    ],
     "session.idle": [
       {
         "bash": "$HOME/.config/opencode/hooks/notify-task-complete.sh",
