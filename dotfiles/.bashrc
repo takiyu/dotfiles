@@ -602,7 +602,7 @@ alias ca=ca_local
 # Aliases for opencode
 alias ocl="opencode_local.sh"
 alias oc=ocl
-alias oc_serve="ocl serve"
+alias oc_serve="ocl serve --hostname 0.0.0.0"
 alias gcmA='auto_commit_opencode.sh'
 
 # Alias for agent
