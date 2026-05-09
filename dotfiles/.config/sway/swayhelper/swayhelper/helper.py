@@ -169,8 +169,11 @@ def focus_nei_workspace(offset: int = 1) -> None:
     # Record existing workspaces before creation
     ws_before = set(get_workspaces_raw(cur_disp))
     focus_workspace(nxt_ws)
-    # Fix sway's internal order if a new workspace was created
-    if nxt_ws not in ws_before:
+    # Fix sway's internal order if a new workspace was created.
+    # Skip reordering for empty workspaces: sway auto-deletes them when
+    # focus leaves, and relocating all later workspaces is wasteful and
+    # can cause focus to jump away from the empty workspace mid-reorder.
+    if nxt_ws not in ws_before and list_workspace_windows(nxt_ws):
         fix_workspace_order(cur_disp, nxt_ws)
 
 
@@ -194,8 +197,11 @@ def move_nei_workspace(offset: int = 1) -> None:
         # Record existing workspaces before creation
         ws_before = set(get_workspaces_raw(cur_disp))
         win_id = move_workspace(nxt_ws)
-        # Fix sway's internal order if a new workspace was created
-        if nxt_ws not in ws_before:
+        # Fix sway's internal order if a new workspace was created.
+        # Skip reordering for empty workspaces: sway auto-deletes them when
+        # focus leaves, and relocating all later workspaces is wasteful and
+        # can cause focus to jump away from the empty workspace mid-reorder.
+        if nxt_ws not in ws_before and list_workspace_windows(nxt_ws):
             fix_workspace_order(cur_disp, nxt_ws)
             # fix_workspace_order ends with focus_workspace(new_ws);
             # focus the moved window explicitly to ensure correct focus.
