@@ -18,6 +18,7 @@ function load_hooks() {
     const raw = readFileSync(HOOKS_JSON, 'utf8');
     return JSON.parse(raw).hooks || {};
   } catch (_) {
+    console.error('[HooksPlugin] Failed to load hooks.json:', _);
     return {};
   }
 }
@@ -34,13 +35,29 @@ function run_script(script_path, input_json, timeout_sec) {
   return new Promise((resolve_promise) => {
     const script = expand_env(script_path);
     const proc = spawn('bash', [script], {
-      stdio: ['pipe', 'inherit', 'inherit'],
+      stdio: ['pipe', 'pipe', 'pipe'],
       timeout: (timeout_sec || 30) * 1000,
+      env: process.env,
     });
     proc.stdin.write(JSON.stringify(input_json));
     proc.stdin.end();
-    proc.on('close', resolve_promise);
-    proc.on('error', resolve_promise);
+
+    let stderr_data = '';
+    proc.stderr.on('data', (data) => { stderr_data += data; });
+
+    proc.on('close', (code) => {
+      if (code !== 0) {
+        console.error(
+          `[HooksPlugin] Script exited with code ${code}:`+
+          ` ${script_path} stderr:`, stderr_data
+        );
+      }
+      resolve_promise();
+    });
+    proc.on('error', (err) => {
+      console.error(`[HooksPlugin] Failed to spawn script:`, err);
+      resolve_promise();
+    });
   });
 }
 
@@ -70,19 +87,23 @@ export const HooksPlugin = async ({ directory }) => {
 
     // sessionEnd equivalent: run when session becomes idle
     'session.idle': async (event) => {
+      console.log('[HooksPlugin] session.idle event received:',
+        event);
       await run_hooks_for('session.idle', {
         cwd: directory,
-        sessionId: event?.properties?.sessionID || '',
+        sessionId: event?.sessionID || '',
       });
     },
 
     // Permission-ask equivalent: notify user before permission dialog appears
-    'permission.ask': async (input, _output) => {
+    'permission.asked': async (input) => {
+      console.log('[HooksPlugin] permission.asked event received:',
+        input);
       await run_hooks_for('permission.ask', {
         permissionId: input.id,
         permissionType: input.type,
         title: input.title,
-        patterns: input.pattern || [],
+        patterns: input.patterns || [],
         cwd: directory,
       });
     },

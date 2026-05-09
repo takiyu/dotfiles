@@ -13,6 +13,5 @@ export LLM_API_HOST
 export LLM_MODEL
 
 export OPENCODE_DISABLE_MODELS_FETCH=true
-export OPENCODE_PURE=true
 
 exec opencode "$@"
