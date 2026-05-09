@@ -77,6 +77,12 @@ for i in $(seq 1 "$MAX_RETRIES"); do
     COMMIT_MSG=$(echo "$CLEAN_RESULT" | grep 'COMMIT:' | tail -1 | sed 's/.*COMMIT:[[:space:]]*//')
     QUALITY=$(echo "$CLEAN_RESULT" | grep 'QUALITY:' | tail -1 | sed 's/.*QUALITY:[[:space:]]*//')
 
+    # Trim whitespace/newlines from QUALITY for robust comparison
+    QUALITY=$(echo "$QUALITY" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+    # Normalize QUALITY to uppercase for case-insensitive comparison
+    QUALITY_UPPER=$(echo "$QUALITY" | tr '[:lower:]' '[:upper:]')
+
     # Validate that output is not a copy of the instructions
     if [ -n "$COMMIT_MSG" ] && {
         ! echo "$COMMIT_MSG" | grep -qE '^(Feature|Fix|Docs|Style|Refactor|Test): .+' ||
@@ -140,7 +146,7 @@ if [ -z "$COMMIT_MSG" ]; then
 fi
 
 # Skip confirmation if quality is OK; ask only when issues are found
-if [ "$QUALITY" != "OK" ]; then
+if [ "$QUALITY_UPPER" != "OK" ]; then
     read -rp "Commit? [y/N]: " CONFIRM
     if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
         echo "コミットを中止しました。"
