@@ -90,8 +90,7 @@ if [ $platform == 'Linux' ]; then
              .config/matplotlib .config/nvim .config/pycodestyle  \
              .config/zathura .config/pypoetry .config/sway .config/fuzzel
              .config/foot .config/waybar .config/xfce4/terminal \
-             .config/opencode/AGENTS.md .config/opencode/hooks \
-             .config/opencode/hooks.json .config/opencode/skills \
+             .config/opencode/AGENTS.md .config/opencode/skills \
              .config/opencode/plugins .config/opencode/opencode.json)
     TARGET_DIRS=(.copilot .config/opencode)
 
