@@ -11,19 +11,16 @@ const URGENCY_CRITICAL = 'critical';
 // ---------------------------------------------------------------------------
 // ------------------------------- Interfaces ----------------------------------
 // ---------------------------------------------------------------------------
-// Build a human-readable summary of the current project context.
-function buildProjectSubtitle(project, directory, worktree) {
+// Build a concise subtitle containing only description and worktree.
+function buildSubtitle(project, worktree) {
     const parts = [];
-    if (project && project.name) {
-        parts.push(`Project: ${project.name}`);
+    if (project && project.description) {
+        parts.push(project.description);
     }
     if (worktree) {
-        parts.push(`Worktree: ${worktree}`);
+        parts.push(worktree);
     }
-    if (directory) {
-        parts.push(`Dir: ${directory}`);
-    }
-    return parts.length > 0 ? parts.join(' | ') : '';
+    return parts.join(' | ');
 }
 
 // ---------------------------------------------------------------------------
@@ -48,7 +45,7 @@ async function sendNotification($, title, status, urgency, subtitle) {
 export const NotificationPlugin = async (
     { project, $, directory, worktree }
 ) => {
-    const subtitle = buildProjectSubtitle(project, directory, worktree);
+    const subtitle = buildSubtitle(project, worktree);
     // Use directory basename as project name when project.name is unavailable.
     const dirName = directory ? path.basename(directory) : null;
     const title = project && project.name
