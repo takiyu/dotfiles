@@ -77,6 +77,8 @@ def setup_workspace_names() -> None:
     _cleanup_temp_workspaces(all_disps)
     # Move any misplaced workspaces back to their home display
     _restore_workspace_assignments(all_disps, disp_to_letter)
+    # Remove unmanaged workspaces (e.g. stray named workspaces)
+    _delete_unmanaged_workspaces(all_disps)
     # Pass 1: rename to tmp names, preserving original workspace numbers
     for disp in all_disps:
         letter = disp_to_letter[disp]
@@ -108,6 +110,22 @@ def setup_workspace_names() -> None:
         for ws_name in get_workspaces_raw(disp):
             if ws_name.startswith(prefix):
                 rename_workspace(ws_name, ws_name[len(_WS_SETUP_TMP):])
+
+
+def _delete_unmanaged_workspaces(all_disps: list[str]) -> None:
+    # Delete non-managed workspaces so stray names don't persist across reloads.
+    for disp in all_disps:
+        disp_ws = list(get_workspaces_raw(disp))
+        managed = [w for w in disp_ws if _is_managed_workspace(w)]
+        for ws_name in disp_ws:
+            if _is_managed_workspace(ws_name):
+                continue
+            for win_id in list_workspace_windows(ws_name):
+                run_cmd(f"swaymsg '[con_id={win_id}] kill'")
+            # Focus away so sway auto-deletes the now-empty workspace.
+            if managed:
+                focus_workspace(ws_name)
+                focus_workspace(managed[0])
 
 
 def _restore_workspace_assignments(all_disps: list[str],
