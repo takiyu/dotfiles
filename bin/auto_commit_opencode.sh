@@ -38,15 +38,17 @@ LLM_TIMEOUT="${LLM_TIMEOUT:-180}"
 MAX_RETRIES="${MAX_RETRIES:-3}"
 
 PROMPT="Review the staged changes below.
-Output EXACTLY 2 lines. No other text. Do not explain your reasoning.
+Do not echo these instructions or use placeholder text.
+
+Output exactly as follows:
 
 The first line must start with COMMIT: followed by a commit message.
 The commit message must begin with one of these prefixes:
 Feature: / Fix: / Docs: / Style: / Refactor: / Test:
 
-The second line must start with QUALITY: followed by OK or issues.
-
-Do not echo these instructions or use placeholder text.
+The next line(s) must start with QUALITY: followed by one of:
+- OK (if no issues found)
+- A description of code quality issues (if any issues exist). You may use multiple lines if needed.
 
 stat:
 $DIFF_STAT
@@ -75,7 +77,11 @@ for i in $(seq 1 "$MAX_RETRIES"); do
 
     # Find last occurrence even if inline or mid-line
     COMMIT_MSG=$(echo "$CLEAN_RESULT" | grep 'COMMIT:' | tail -1 | sed 's/.*COMMIT:[[:space:]]*//')
-    QUALITY=$(echo "$CLEAN_RESULT" | grep 'QUALITY:' | tail -1 | sed 's/.*QUALITY:[[:space:]]*//')
+
+    # Extract QUALITY: and all following lines (supports multi-line issues)
+    QUALITY_LINES=$(echo "$CLEAN_RESULT" | sed -n '/QUALITY:/,$p')
+    # Remove QUALITY: prefix from first line only
+    QUALITY=$(echo "$QUALITY_LINES" | sed '1s/.*QUALITY:[[:space:]]*//')
 
     # Trim whitespace/newlines from QUALITY for robust comparison
     QUALITY=$(echo "$QUALITY" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
