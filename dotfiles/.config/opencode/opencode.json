@@ -43,7 +43,10 @@
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
-        "codesearch": "allow"
+        "codesearch": "allow",
+        "external_directory": {
+          "/tmp": "allow"
+        }
       }
     }
   },
