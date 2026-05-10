@@ -127,6 +127,10 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
 - Private name (`_foo`) accessed from another module (excluding tests)
+- Section delimiter (`# ---`) line length or alignment wrong: every line
+  must be exactly 79 chars. Lines 1 and 3 must be `# ` + 77 `-`.
+  Line 2 must center the section name with left and right `-` counts
+  equal or differing by exactly 1
 
 **[中] Should fix:**
 - camelCase function/variable name (must be snake_case)

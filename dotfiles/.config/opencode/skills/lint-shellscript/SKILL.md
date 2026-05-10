@@ -104,6 +104,10 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 - Unquoted variable expansions (`$VAR` instead of `"$VAR"`) in contexts where word-splitting/globbing is dangerous
 - `source` command without `set -e` or error handling
 - Unsupported shell features in POSIX `sh` scripts (arrays `()`, `[[ ]]`, `$'...'`, etc.)
+- Section delimiter (`# ---`) line length or alignment wrong: every line
+  must be exactly 80 chars. Lines 1 and 3 must be `# ` + 78 `-`.
+  Line 2 must center the section name with left and right `-` counts
+  equal or differing by exactly 1
 
 **[中] Should fix:**
 - Missing `set -euo pipefail` (bash) or `set -eu` (sh) at start of script
