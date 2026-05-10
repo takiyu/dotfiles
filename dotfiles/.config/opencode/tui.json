@@ -6,9 +6,7 @@
   },
   "theme": "tango-lx",
   "keybinds": {
-    "display_thinking": {
-      "name": "t",
-      "ctrl": true
-    }
+    "display_thinking": "ctrl+t",
+    "sidebar_toggle": "ctrl+f"
   }
 }
