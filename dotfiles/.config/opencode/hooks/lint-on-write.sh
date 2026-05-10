@@ -166,6 +166,91 @@ $(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] Type all function parameters
 fi
 
 # -----------------------------------------------------------------------------
+# JavaScript / JSX checks
+# -----------------------------------------------------------------------------
+if echo "$FILE_PATH" | grep -qE '\.(js|jsx)$'; then
+
+    # Class-based React component (use function component)
+    MATCH=$(grep -nE 'extends\s+(React\.)?(Component|PureComponent)\b' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [高] Use function component, not class component"
+    fi
+
+    # Mixed module systems (require + import/export in same file)
+    HAS_REQUIRE=$(grep -cE '\brequire\s*\(' "$FILE_PATH" 2>/dev/null || echo 0)
+    HAS_IMPORT=$(grep -cE '\bimport\s+' "$FILE_PATH" 2>/dev/null || echo 0)
+    HAS_REQUIRE=$(echo "$HAS_REQUIRE" | tr -d '[:space:]')
+    HAS_IMPORT=$(echo "$HAS_IMPORT" | tr -d '[:space:]')
+    if [ "$HAS_REQUIRE" -gt 0 ] && [ "$HAS_IMPORT" -gt 0 ]; then
+        VIOLATIONS="$VIOLATIONS
+$FILE_PATH:0: [高] Mixed module systems: do not mix require() and import/export"
+    fi
+
+    # Hook defined outside component but missing use prefix
+    MATCH=$(grep -nP '^(export\s+)?(async\s+)?function\s+(?!use)[A-Z][a-zA-Z0-9_]*\s*\([^)]*\)\s*\{' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] Non-component function with PascalCase; use camelCase or add use prefix for hooks"
+    fi
+
+    # console.log left in production code
+    MATCH=$(grep -nE '\bconsole\.(log|warn|error|info)\s*\(' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [低] Remove console.log/debug statements from production code"
+    fi
+
+    # Mutable module-level state (let/var at top level)
+    MATCH=$(grep -nP '^(export\s+)?(let|var)\s+\w+' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] Avoid mutable module-level state (let/var at top level)"
+    fi
+fi
+
+# -----------------------------------------------------------------------------
+# Shell script checks
+# -----------------------------------------------------------------------------
+if echo "$FILE_PATH" | grep -qE '\.sh$'; then
+
+    # Missing shebang
+    HEAD=$(head -n1 "$FILE_PATH" 2>/dev/null || true)
+    if ! echo "$HEAD" | grep -qE '^#!/bin/(bash|sh)'; then
+        VIOLATIONS="$VIOLATIONS
+$FILE_PATH:1: [高] Missing shebang (#!/bin/bash or #!/bin/sh) at top of file"
+    fi
+
+    # eval usage
+    MATCH=$(grep -nE '\beval\s' "$FILE_PATH" 2>/dev/null || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [高] Avoid eval; use indirect expansion or arrays instead"
+    fi
+
+    # Missing set -euo pipefail (bash) or set -eu (sh)
+    if echo "$HEAD" | grep -qF '#!/bin/bash'; then
+        if ! grep -qE '^set\s+-euo?\s+pipefail' "$FILE_PATH" 2>/dev/null; then
+            VIOLATIONS="$VIOLATIONS
+$FILE_PATH:0: [中] Missing 'set -euo pipefail' at start of script"
+        fi
+    elif echo "$HEAD" | grep -qF '#!/bin/sh'; then
+        if ! grep -qE '^set\s+-eu' "$FILE_PATH" 2>/dev/null; then
+            VIOLATIONS="$VIOLATIONS
+$FILE_PATH:0: [中] Missing 'set -eu' at start of script"
+        fi
+    fi
+
+    # cd without error check
+    MATCH=$(grep -nE '^\s*cd\s+\S+' "$FILE_PATH" 2>/dev/null \
+        | grep -v '||' | grep -v '&&' || true)
+    if [ -n "$MATCH" ]; then
+        VIOLATIONS="$VIOLATIONS
+$(echo "$MATCH" | sed "s|^|$FILE_PATH:|") → [中] cd without error check; use 'cd dir || exit 1'"
+    fi
+fi
+
+# -----------------------------------------------------------------------------
 # Output violations
 # -----------------------------------------------------------------------------
 if [ -n "$VIOLATIONS" ]; then
