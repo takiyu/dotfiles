@@ -119,10 +119,18 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 - `interface` used for props/state (use `type`)
 - camelCase variable that should be snake_case (non-function, non-component variables)
 - PascalCase function that is not a React component or hook
-- Section delimiter (`# ---` or `// ---`) line length or alignment wrong:
-  every line must be exactly 80 chars. Lines 1 and 3 must be `# ` + 78 `-`
-  (or `// ` + 78 `-`). Line 2 must center the section name with left and
-  right `-` counts equal or differing by exactly 1
+- Named section header (`# ---` x3 with centered name) not preceded by
+  exactly 2 blank lines, OR followed by any blank lines — must have 2
+  empty lines before and 0 after (code starts immediately)
+- Separator block (`# ---` x3 with no name, e.g. interface/impl divider or
+  EOF terminator) not preceded by exactly 2 blank lines, OR not followed
+  by exactly 1 blank line — must have 2 empty lines before and 1 after
+- Section delimiter line length or alignment wrong: every line must be
+  exactly 80 chars. Lines 1 and 3 must be `# ` + 78 `-` (or `// ` +
+  78 `-`). Line 2 must center the section name with left and right
+  `-` counts equal or differing by exactly 1
+- File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------`
+  (each 80 chars) with no trailing newline after the last line
 
 **[中] Should fix:**
 - Test file not named `test_*.ts` / `test_*.tsx` (vitest convention)

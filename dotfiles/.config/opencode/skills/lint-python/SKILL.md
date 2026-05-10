@@ -127,10 +127,18 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
 - Private name (`_foo`) accessed from another module (excluding tests)
-- Section delimiter (`# ---`) line length or alignment wrong: every line
-  must be exactly 79 chars. Lines 1 and 3 must be `# ` + 77 `-`.
-  Line 2 must center the section name with left and right `-` counts
-  equal or differing by exactly 1
+- Named section header (`# ---` x3 with centered name) not preceded by
+  exactly 2 blank lines, OR followed by any blank lines — must have 2
+  empty lines before and 0 after (code starts immediately)
+- Separator block (`# ---` x3 with no name, e.g. interface/impl divider or
+  EOF terminator) not preceded by exactly 2 blank lines, OR not followed
+  by exactly 1 blank line — must have 2 empty lines before and 1 after
+- Section delimiter line length or alignment wrong: every line must be
+  exactly 79 chars. Lines 1 and 3 must be `# ` + 77 `-`. Line 2 must
+  center the section name with left and right `-` counts equal or
+  differing by exactly 1
+- File does not end with exactly 3 lines of `# -----------------------------------------------------------------------------`
+  (each 79 chars) with no trailing newline after the last line
 
 **[中] Should fix:**
 - camelCase function/variable name (must be snake_case)
@@ -147,13 +155,6 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 - Sentence-style names with prepositions (e.g. `load_and_parse`)
 - Multi-line ternary expression (`x = (val\n    if cond else other)`);
   rewrite as `if/else` block instead
-- Section header (`# ---`) followed by blank line(s) before code —
-  the separator line ending the header must be immediately followed
-  by the first line of that section (no blank lines)
-- File missing closing `# ---` x3 at EOF — every source file must end
-  with exactly three `# -----------------------------------------------------------------------------` lines
-
-**[低] Nice to fix:**
 - Params or args split one-per-line when packing fits within 79 chars
   (usually a symptom of the hanging-indent `[中]` issue above)
 
