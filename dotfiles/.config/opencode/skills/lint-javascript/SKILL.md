@@ -68,41 +68,26 @@ npx eslint --fix . 2>&1 || true
 
 
 # ------------------------------------------------------------------------------
-# ---------------------------- Step 3: Show Diff -------------------------------
-# ------------------------------------------------------------------------------
-
-# Show statistics of auto-fixed changes.
-
-```sh
-# Show git diff statistics for auto-fixed changes
-git diff --stat 2>/dev/null || true
-```
-
-
-# ------------------------------------------------------------------------------
-# --------------------------- Step 4: Find Files -------------------------------
+# --------------------------- Step 3: Find Files -------------------------------
 # ------------------------------------------------------------------------------
 
 # Discover and display relevant source files for review.
 
 ```sh
-# Find modified or all relevant source files for review
-FILES=$(git diff --name-only HEAD -- . 2>/dev/null | grep -E '\.(js|jsx)$')
-if [ -z "$FILES" ]; then
-    FILES=$(find . -maxdepth 5 \
-        \( -name '*.js' -o -name '*.jsx' \) \
-        ! -path '*/node_modules/*' ! -path '*/.git/*' \
-        ! -path '*/dist/*' ! -path '*/dist_*/*' ! -path '*/coverage/*')
-fi
+# Find relevant source files for review
+FILES=$(find . -maxdepth 5 \
+    \( -name '*.js' -o -name '*.jsx' \) \
+    ! -path '*/node_modules/*' ! -path '*/.git/*' \
+    ! -path '*/dist/*' ! -path '*/dist_*/*' ! -path '*/coverage/*')
 for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 ```
 
 
 # ------------------------------------------------------------------------------
-# ---------------------- Step 5: Custom Rules Check ----------------------------
+# ---------------------- Step 4: Custom Rules Check ----------------------------
 # ------------------------------------------------------------------------------
 
-# Review Steps 2–4 output. Report violations the tools **cannot** auto-fix.
+# Review Steps 2–3 output. Report violations the tools **cannot** auto-fix.
 # One per line in this format:
 
 ```
@@ -142,7 +127,7 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 
 
 # ------------------------------------------------------------------------------
-# --------------------------- Step 6: Print Summary ----------------------------
+# --------------------------- Step 5: Print Summary ----------------------------
 # ------------------------------------------------------------------------------
 
 # Print final summary of lint results.
