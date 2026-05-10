@@ -69,6 +69,19 @@ export const NotificationPlugin = async (
                     description
                 );
             }
+
+            if (event.type === 'permission.asked') {
+                const status = event.message
+                    || 'Task paused — permission requested';
+                await sendNotification(
+                    $,
+                    title,
+                    status,
+                    URGENCY_NORMAL,
+                    description
+                );
+            }
         },
+    };
     };
 };
