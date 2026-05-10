@@ -119,9 +119,10 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
   EOF terminator) not preceded by exactly 2 blank lines, OR not followed
   by exactly 1 blank line — must have 2 empty lines before and 1 after
 - Section delimiter line length or alignment wrong: every line must be
-  exactly 79 chars. Lines 1 and 3 must be `# ` + 77 `-`. Line 2 must
-  center the section name with left and right `-` counts equal or
-  differing by exactly 1
+  exactly 79 chars with no trailing whitespace. Lines 1 and 3 must be
+  `# ` + 77 `-`. Line 2 must center the section name with left and right
+  `-` counts equal or differing by exactly 1 (right side gets the extra
+  `-` when total is odd, never a trailing space)
 - File does not end with exactly 3 lines of `# -----------------------------------------------------------------------------`
   (each 79 chars) with no trailing newline after the last line
 

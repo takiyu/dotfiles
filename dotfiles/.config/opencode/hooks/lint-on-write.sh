@@ -2,10 +2,9 @@
 set -euo pipefail
 
 
-# -----------------------------------------------------------------------------
-# ------------------------------- Entry point ---------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# -------------------------------- Entry point ---------------------------------
+# ------------------------------------------------------------------------------
 main() {
     # Main entry: parse JSON input and dispatch file-type checks
     local input tool_name cwd file_path
@@ -62,10 +61,9 @@ main() {
 }
 
 
-# -----------------------------------------------------------------------------
-# --------------------------- Violation formatting ----------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# ---------------------------- Violation formatting ----------------------------
+# ------------------------------------------------------------------------------
 output_violations() {
     # Print collected violations framed with a header to stderr
     local file_path="$1"
@@ -80,10 +78,9 @@ output_violations() {
 }
 
 
-# -----------------------------------------------------------------------------
-# -------------------------------- Helpers ------------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# ---------------------------------- Helpers -----------------------------------
+# ------------------------------------------------------------------------------
 extract_tool_name() {
     # Extract toolName field from JSON input via jq
     echo "$1" | jq -r '.toolName' 2>/dev/null || echo ''
@@ -143,10 +140,9 @@ format_violation() {
 }
 
 
-# -----------------------------------------------------------------------------
-# ----------------------------- Python checks ---------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# ------------------------------- Python checks --------------------------------
+# ------------------------------------------------------------------------------
 check_python() {
     # Run all Python-specific lint checks and return combined violations
     local file_path="$1"
@@ -322,10 +318,9 @@ check_python_multiline_ternary() {
 }
 
 
-# -----------------------------------------------------------------------------
-# --------------------------- TypeScript checks -------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# ----------------------------- TypeScript checks ------------------------------
+# ------------------------------------------------------------------------------
 check_typescript() {
     # Run all TypeScript-specific lint checks and return combined violations
     local file_path="$1"
@@ -395,10 +390,9 @@ check_typescript_untyped_params() {
 }
 
 
-# -----------------------------------------------------------------------------
-# ---------------------------- JavaScript checks ------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# ----------------------------- JavaScript checks ------------------------------
+# ------------------------------------------------------------------------------
 check_javascript() {
     # Run all JavaScript-specific lint checks and return combined violations
     local file_path="$1"
@@ -489,10 +483,9 @@ check_javascript_module_level_let() {
 }
 
 
-# -----------------------------------------------------------------------------
-# ----------------------------- Shell checks ----------------------------------
-# -----------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# -------------------------------- Shell checks --------------------------------
+# ------------------------------------------------------------------------------
 check_shell() {
     # Run all shell-specific lint checks and return combined violations
     local file_path="$1"
@@ -506,6 +499,8 @@ check_shell() {
         "$(check_shell_strict_mode "$file_path")")
     result=$(append_violations "$result" \
         "$(check_shell_cd_error "$file_path")")
+    result=$(append_violations "$result" \
+        "$(check_shell_section_delimiters "$file_path")")
 
     echo "$result"
 }
@@ -568,9 +563,66 @@ check_shell_cd_error() {
 }
 
 
+check_shell_section_delimiters() {
+    # Check section delimiter lines: must be exactly 80 chars, no trailing spaces
+    local file_path="$1"
+    local line_num=0
+    local line
+    local len
+    local content
+    local in_delimiter=0
+    local delim_start=0
+
+    while IFS= read -r line || [ -n "$line" ]; do
+        line_num=$((line_num + 1))
+        len=$(printf '%s' "$line" | wc -c)
+
+        # Check for section header lines (start with # followed by dashes)
+        if echo "$line" | grep -qE '^# --+'; then
+            if [ "$len" -ne 80 ]; then
+                printf '%s:%s: -> [\u9ad8] Section delimiter must be exactly 80 chars (got %s)\n' \
+                    "$file_path" "$line_num" "$len"
+            fi
+            # Check for trailing spaces
+            if echo "$line" | grep -qE ' $'; then
+                printf '%s:%s: -> [\u9ad8] Section delimiter has trailing space\n' \
+                    "$file_path" "$line_num"
+            fi
+            # Check named section header format (line 2 of a 3-line block)
+            # Line 2 must have equal or nearly-equal hyphens on both sides
+            # We skip pure separator lines (no text between hyphens)
+            if echo "$line" | grep -qE '^# --+ [^ -].*[^ -] --+$'; then
+                # Extract the name part (between hyphens)
+                local left_dashes
+                local right_dashes
+                left_dashes=$(echo "$line" | sed 's/^# \(-*\) .*/\1/')
+                right_dashes=$(echo "$line" | sed 's/.* \(-*\)$/\1/')
+                local left_len
+                local right_len
+                left_len=$(printf '%s' "$left_dashes" | wc -c)
+                right_len=$(printf '%s' "$right_dashes" | wc -c)
+                local diff=$((left_len - right_len))
+                if [ "$diff" -lt 0 ]; then
+                    diff=$((-diff))
+                fi
+                if [ "$diff" -gt 1 ]; then
+                    printf '%s:%s: -> [\u9ad8] Section header hyphens unbalanced: left=%s, right=%s\n' \
+                        "$file_path" "$line_num" "$left_len" "$right_len"
+                fi
+                # Right side should be >= left side when odd difference
+                if [ "$right_len" -lt "$left_len" ]; then
+                    printf '%s:%s: -> [\u9ad8] Section header: right side should have more hyphens than left\n' \
+                        "$file_path" "$line_num"
+                fi
+            fi
+        fi
+    done < "$file_path"
+}
+
+
 main "$@"
 
 
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
