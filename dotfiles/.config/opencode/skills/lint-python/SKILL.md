@@ -4,38 +4,55 @@ description: Run Python lint/format tools (make lint → poetry run isort/autope
 allowed-tools: bash
 ---
 
-# Lint
+# ------------------------------------------------------------------------------
+# ------------------------------------ Lint ------------------------------------
+# ------------------------------------------------------------------------------
 
-Run formatters, linters, and custom coding rule checks.
+# Run formatters, linters, and custom coding rule checks.
 
-## Steps
 
-### 1. Detect project setup
+# ------------------------------------------------------------------------------
+# ------------------------------- Step 1: Detect -------------------------------
+# ------------------------------------------------------------------------------
+
+# Detect available tools and project configuration.
 
 ```sh
+# Detect available lint/format tools
 echo "=== tools available ==="
 for t in make poetry isort autopep8 pyright flake8 pycodestyle; do
     command -v "$t" >/dev/null 2>&1 \
         && echo "$t: $(command -v $t)" || echo "$t: not found"
 done
+
+# Check for Makefile lint target
 echo "=== Makefile lint target ==="
 grep -c '^lint:' Makefile 2>/dev/null \
     && echo "Makefile has lint target" || echo "no Makefile lint"
+
+# Check for Poetry project configuration
 echo "=== pyproject.toml ==="
 grep '\[tool\.poetry\]' pyproject.toml 2>/dev/null \
     && echo "Poetry project" || echo "no pyproject.toml"
 ```
 
-### 2. Run tools — choose ONE branch based on Step 1
+
+# ------------------------------------------------------------------------------
+# ------------------------------- Step 2: Run ----------------------------------
+# ------------------------------------------------------------------------------
+
+# Choose ONE branch based on Step 1 detection results.
 
 **Branch A** — Makefile has `lint:` target:
 ```sh
+# Load environment variables if .env exists, then run make lint
 [ -f .env ] && . ./.env || true
 make lint 2>&1
 ```
 
 **Branch B** — Poetry project (`[tool.poetry]` in pyproject.toml, `poetry` available):
 ```sh
+# Run Poetry-based linting and formatting tools
 poetry run isort . 2>&1 || true
 poetry run autopep8 --in-place --recursive . 2>&1 || true
 poetry run pyright 2>&1 || true
@@ -44,8 +61,11 @@ poetry run flake8 --exclude=.venv,*/.venv/* . 2>&1 || true
 
 **Branch C** — system tools only (use only tools marked "available" in Step 1):
 ```sh
+# Run system-level autopep8 formatter
 command -v autopep8 >/dev/null 2>&1 \
     && autopep8 --in-place --recursive . 2>&1 || true
+
+# Run system-level pycodestyle checker
 command -v pycodestyle >/dev/null 2>&1 \
     && pycodestyle --max-line-length=79 \
        $(find . -maxdepth 5 -name '*.py' \
@@ -54,16 +74,28 @@ command -v pycodestyle >/dev/null 2>&1 \
 
 **Do NOT run `pip install`, create `.venv`, or use any tool not found in Step 1.**
 
-### 3. Show auto-fix diff
+
+# ------------------------------------------------------------------------------
+# ---------------------------- Step 3: Show Diff -------------------------------
+# ------------------------------------------------------------------------------
+
+# Show statistics of auto-fixed changes.
 
 ```sh
+# Show git diff statistics for auto-fixed changes
 git diff --stat 2>/dev/null || true
 ```
 
-### 4. Find and show source files
+
+# ------------------------------------------------------------------------------
+# --------------------------- Step 4: Find Files -------------------------------
+# ------------------------------------------------------------------------------
+
+# Discover and display relevant source files for review.
 
 ```sh
-FILES=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(py|ts|tsx)$')
+# Find modified or all relevant source files for review
+FILES=$(git diff --name-only HEAD -- . 2>/dev/null | grep -E '\.(py|ts|tsx)$')
 if [ -z "$FILES" ]; then
     FILES=$(find . -maxdepth 5 \
         \( -name '*.py' -o -name '*.ts' -o -name '*.tsx' \) \
@@ -73,10 +105,13 @@ fi
 for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 ```
 
-### 5. Check custom coding rules
 
-Review Steps 2–4 output. Report violations the tools **cannot** auto-fix.
-One per line in this format:
+# ------------------------------------------------------------------------------
+# ---------------------- Step 5: Custom Rules Check ----------------------------
+# ------------------------------------------------------------------------------
+
+# Review Steps 2–4 output. Report violations the tools **cannot** auto-fix.
+# One per line in this format:
 
 ```
 <file>:<line>: [<severity>] <message>
@@ -86,7 +121,8 @@ One per line in this format:
 - Docstrings present (forbidden)
 - Missing type hints on params or return type (never omit annotations)
 - `typing.Dict/List/Tuple/Union` (use `dict[]/list[]/tuple[]/Optional[X]`)
-- `typing.Any` — discouraged, but permitted when no other suitable type exists; never omit annotations to avoid `Any`
+- `typing.Any` — discouraged, but permitted when no other suitable type exists;
+  never omit annotations to avoid `Any`
 - String constants where an `enum` should be used
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
@@ -117,7 +153,12 @@ One per line in this format:
 - Params or args split one-per-line when packing fits within 79 chars
   (usually a symptom of the hanging-indent `[中]` issue above)
 
-### 6. Print summary
+
+# ------------------------------------------------------------------------------
+# --------------------------- Step 6: Print Summary ----------------------------
+# ------------------------------------------------------------------------------
+
+# Print final summary of lint results.
 
 ```
 ==================================================
@@ -129,3 +170,8 @@ One per line in this format:
  [低] Minor     : <N>
 ==================================================
 ```
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------

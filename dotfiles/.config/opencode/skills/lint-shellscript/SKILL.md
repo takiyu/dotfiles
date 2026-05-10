@@ -4,35 +4,49 @@ description: Run shell script lint tools (make lint → bash -n), then check cus
 allowed-tools: bash
 ---
 
-# Lint Shell Script
+# ------------------------------------------------------------------------------
+# ------------------------------ Lint Shell Script -----------------------------
+# ------------------------------------------------------------------------------
 
-Run linters and custom coding rule checks for shell script files.
+# Run linters and custom coding rule checks for shell script files.
 
-## Steps
 
-### 1. Detect project setup
+# ------------------------------------------------------------------------------
+# ------------------------------- Step 1: Detect -------------------------------
+# ------------------------------------------------------------------------------
+
+# Detect available tools and project configuration.
 
 ```sh
+# Detect available shell tools
 echo "=== tools available ==="
 for t in make bash sh; do
     command -v "$t" >/dev/null 2>&1 \
         && echo "$t: $(command -v $t)" || echo "$t: not found"
 done
+
+# Check for Makefile lint target
 echo "=== Makefile lint target ==="
 grep -c '^lint:' Makefile 2>/dev/null \
     && echo "Makefile has lint target" || echo "no Makefile lint"
 ```
 
-### 2. Run tools — choose ONE branch based on Step 1
+
+# ------------------------------------------------------------------------------
+# ------------------------------- Step 2: Run ----------------------------------
+# ------------------------------------------------------------------------------
+
+# Choose ONE branch based on Step 1 detection results.
 
 **Branch A** — Makefile has `lint:` target:
 ```sh
+# Run make lint target
 make lint 2>&1
 ```
 
 **Branch B** — fallback to bash syntax check + shellcheck (if available):
 ```sh
-# Syntax check with bash/sh
+# Syntax check with bash/sh and optionally shellcheck
 for f in $(find . -maxdepth 5 -name '*.sh' ! -path '*/.git/*'); do
     echo "=== checking $f ==="
     bash -n "$f" 2>&1 || true
@@ -43,16 +57,28 @@ done
 
 **Do NOT run `apt install`, `pip install`, or use any tool not found in Step 1.**
 
-### 3. Show auto-fix diff
+
+# ------------------------------------------------------------------------------
+# ---------------------------- Step 3: Show Diff -------------------------------
+# ------------------------------------------------------------------------------
+
+# Show statistics of auto-fixed changes.
 
 ```sh
+# Show git diff statistics for auto-fixed changes
 git diff --stat 2>/dev/null || true
 ```
 
-### 4. Find and show source files
+
+# ------------------------------------------------------------------------------
+# --------------------------- Step 4: Find Files -------------------------------
+# ------------------------------------------------------------------------------
+
+# Discover and display relevant source files for review.
 
 ```sh
-FILES=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.sh$')
+# Find modified or all relevant shell script files for review
+FILES=$(git diff --name-only HEAD -- . 2>/dev/null | grep -E '\.sh$')
 if [ -z "$FILES" ]; then
     FILES=$(find . -maxdepth 5 -name '*.sh' \
         ! -path '*/.git/*' ! -path '*/node_modules/*')
@@ -60,10 +86,13 @@ fi
 for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 ```
 
-### 5. Check custom coding rules
 
-Review Steps 2–4 output. Report violations the tools **cannot** auto-fix.
-One per line in this format:
+# ------------------------------------------------------------------------------
+# ---------------------- Step 5: Custom Rules Check ----------------------------
+# ------------------------------------------------------------------------------
+
+# Review Steps 2–4 output. Report violations the tools **cannot** auto-fix.
+# One per line in this format:
 
 ```
 <file>:<line>: [<severity>] <message>
@@ -89,7 +118,12 @@ One per line in this format:
 - Long pipeline chains exceeding ~3 stages without intermediate variables
 - `echo` with unescaped special characters (use `printf` instead)
 
-### 6. Print summary
+
+# ------------------------------------------------------------------------------
+# --------------------------- Step 6: Print Summary ----------------------------
+# ------------------------------------------------------------------------------
+
+# Print final summary of lint results.
 
 ```
 ==================================================
@@ -101,3 +135,8 @@ One per line in this format:
  [低] Minor     : <N>
 ==================================================
 ```
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
