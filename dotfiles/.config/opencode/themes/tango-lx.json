@@ -18,35 +18,53 @@
     "cyan": "#66D9EF",
     "lightblue": "#bbddff",
     "blue": "#9494ff",
-    "darkblue": "#335b82"
+    "darkblue": "#335b82",
+
+    "lnb_base03": "#12124c",
+    "lnb_base023": "#262626",
+    "lnb_base02": "#4e4e4e",
+    "lnb_base01": "#606060",
+    "lnb_base00": "#767676",
+    "lnb_base0": "#949494",
+    "lnb_base1": "#b2b2b2",
+    "lnb_base2": "#c6c6c6",
+    "lnb_base23": "#d0d0d0",
+    "lnb_base3": "#eaeaea",
+    "lnb_red": "#d54e53",
+    "lnb_orange": "#e78c45",
+    "lnb_yellow": "#e7c547",
+    "lnb_green": "#b9ca4a",
+    "lnb_cyan": "#70c0b1",
+    "lnb_blue": "#7aa6da",
+    "lnb_magenta": "#c397d8"
   },
   "theme": {
     "primary": {
-      "dark": "yellow",
+      "dark": "lnb_blue",
       "light": "darkblue"
     },
     "secondary": {
-      "dark": "green",
-      "light": "black"
+      "dark": "lnb_blue",
+      "light": "lnb_blue"
     },
     "accent": {
-      "dark": "cyan",
-      "light": "blue"
+      "dark": "lnb_blue",
+      "light": "lnb_blue"
     },
     "error": {
-      "dark": "magenta",
+      "dark": "lnb_red",
       "light": "red"
     },
     "warning": {
-      "dark": "orange",
+      "dark": "lnb_yellow",
       "light": "yellow"
     },
     "success": {
-      "dark": "lightgreen",
+      "dark": "lnb_green",
       "light": "green"
     },
     "info": {
-      "dark": "blue",
+      "dark": "lnb_cyan",
       "light": "darkblue"
     },
     "text": {
@@ -62,20 +80,20 @@
       "light": "white"
     },
     "backgroundPanel": {
-      "dark": "gray",
+      "dark": "black",
       "light": "lightgray"
     },
     "backgroundElement": {
-      "dark": "black",
+      "dark": "gray",
       "light": "white"
     },
     "border": {
-      "dark": "gray",
-      "light": "lightgray"
+      "dark": "lnb_blue",
+      "light": "lnb_blue"
     },
     "borderActive": {
-      "dark": "yellow",
-      "light": "orange"
+      "dark": "lnb_blue",
+      "light": "lnb_blue"
     },
     "borderSubtle": {
       "dark": "darkgray",
@@ -90,11 +108,11 @@
       "light": "red"
     },
     "diffContext": {
-      "dark": "gray",
-      "light": "lightgray"
+      "dark": "lightgray",
+      "light": "gray"
     },
     "diffHunkHeader": {
-      "dark": "cyan",
+      "dark": "darkblue",
       "light": "darkblue"
     },
     "diffHighlightAdded": {
@@ -114,7 +132,7 @@
       "light": "#ffe6e6"
     },
     "diffContextBg": {
-      "dark": "darkgray",
+      "dark": "darkblue",
       "light": "white"
     },
     "diffLineNumber": {
@@ -202,7 +220,7 @@
       "light": "darkblue"
     },
     "syntaxString": {
-      "dark": "lightgreen",
+      "dark": "orange",
       "light": "green"
     },
     "syntaxNumber": {
@@ -210,11 +228,11 @@
       "light": "darkblue"
     },
     "syntaxType": {
-      "dark": "cyan",
-      "light": "blue"
+      "dark": "lightgreen",
+      "light": "darkblue"
     },
     "syntaxOperator": {
-      "dark": "yellow",
+      "dark": "white",
       "light": "darkblue"
     },
     "syntaxPunctuation": {
