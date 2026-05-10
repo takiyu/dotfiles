@@ -83,5 +83,4 @@ export const NotificationPlugin = async (
             }
         },
     };
-    };
 };
