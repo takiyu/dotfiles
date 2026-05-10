@@ -4,5 +4,11 @@
   "scroll_acceleration": {
     "enabled": true
   },
-  "theme": "tango-lx"
+  "theme": "tango-lx",
+  "keybinds": {
+    "display_thinking": {
+      "name": "t",
+      "ctrl": true
+    }
+  }
 }
