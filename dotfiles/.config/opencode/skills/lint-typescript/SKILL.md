@@ -18,6 +18,8 @@ for t in make npm npx tsc; do
     command -v "$t" >/dev/null 2>&1 \
         && echo "$t: $(command -v $t)" || echo "$t: not found"
 done
+echo "=== npx eslint ==="
+npx eslint --version 2>/dev/null || echo "npx eslint: not available"
 echo "=== Makefile lint target ==="
 grep -c '^lint:' Makefile 2>/dev/null \
     && echo "Makefile has lint target" || echo "no Makefile lint"
