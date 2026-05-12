@@ -8,8 +8,10 @@ set $suspend "bash -c suspend.sh"
 
 ### Startup applications
 # Portal environment setup for screen sharing (fixes Zoom/browser screen share)
-exec_always systemctl --user import-environment XDG_CURRENT_DESKTOP WAYLAND_DISPLAY DISPLAY
-exec_always systemctl --user --now start xdg-desktop-portal-wlr
+# Import critical env vars to systemd user session for portal services
+exec_always systemctl --user import-environment XDG_CURRENT_DESKTOP WAYLAND_DISPLAY DISPLAY DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR
+# Start xdg-desktop-portal-wlr once (not on every reload to avoid restart)
+exec systemctl --user --now start xdg-desktop-portal-wlr
 exec fcitx5 -r -d
 # Start sway tiling daemon
 exec_always "make -C ~/.config/sway/swayhelper daemon"
