@@ -4,7 +4,9 @@ import path from 'path';
 const APP_NAME = 'opencode';
 const FALLBACK_TITLE = 'OpenCode';
 const ICON = 'dialog-information';
+const ICON_COMPLETE = 'emblem-default';
 const ICON_ERROR = 'dialog-error';
+const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
 
@@ -12,11 +14,14 @@ const URGENCY_CRITICAL = 'critical';
 // ------------------------------- Interfaces ----------------------------------
 // ---------------------------------------------------------------------------
 // Send a desktop notification via `notify-send`.
-async function sendNotification($, title, status, urgency, description) {
+async function sendNotification($, title, status, urgency, description,
+                                iconOverride) {
+    const icon = iconOverride
+        || (urgency === URGENCY_CRITICAL ? ICON_ERROR : ICON);
     const args = [
         '-a', APP_NAME,
         '-u', urgency,
-        '-i', urgency === URGENCY_CRITICAL ? ICON_ERROR : ICON,
+        '-i', icon,
     ];
     const body = description
         ? `${status}\n${description}`
@@ -53,7 +58,8 @@ export const NotificationPlugin = async (
                     title,
                     status,
                     URGENCY_NORMAL,
-                    description
+                    description,
+                    ICON_COMPLETE
                 );
             }
 
@@ -78,7 +84,8 @@ export const NotificationPlugin = async (
                     title,
                     status,
                     URGENCY_NORMAL,
-                    description
+                    description,
+                    ICON_PERMISSION
                 );
             }
         },
