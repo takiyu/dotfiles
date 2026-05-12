@@ -83,6 +83,11 @@ if vim.fn.has('persistent_undo') then
   vim.cmd('set undofile')
 end
 
+----------------------------------- Swap File ----------------------------------
+-- Configure swap directory to prevent "Too many swap files" error
+vim.opt.directory = vim.fn.stdpath('cache') .. '/swap//'
+vim.fn.mkdir(vim.opt.directory:get()[1], 'p')
+
 ----------------------------------- Quickfix -----------------------------------
 vim.api.nvim_create_autocmd({ 'QuickfixCmdPost' }, {
   pattern = { 'make', 'grep', 'grapadd', 'vimgrep' },
