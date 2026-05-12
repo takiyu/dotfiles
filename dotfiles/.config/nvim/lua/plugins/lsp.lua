@@ -14,6 +14,15 @@ return {
       end
     end,
     config = function()
+      -- Limit lsp.log size by truncating if it exceeds threshold
+      local lsp_log_path = vim.fn.stdpath('state') .. '/lsp.log'
+      local max_size_bytes = 1 * 1024 * 1024  -- 1MB
+      local stat = vim.loop.fs_stat(lsp_log_path)
+      if stat and max_size_bytes < stat.size then
+        local f = io.open(lsp_log_path, 'w')
+        if f then f:close() end
+      end
+
       -- Key mappings
       local opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '{', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
