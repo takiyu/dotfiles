@@ -27,7 +27,7 @@ async function sendNotification($, title, status, urgency, description,
         ? `${status}\n${description}`
         : status;
     try {
-        await $`notify-send ${args} ${title} ${body}`;
+        await $`notify-send ${args} ${title} ${body} 2>/dev/null`;
     } catch (_e) {
         // silent fail — notification daemon may be unavailable
     }
