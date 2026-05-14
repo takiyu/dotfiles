@@ -133,7 +133,11 @@ echo ""
 echo "------------------------------------------------------------------"
 echo "---------------------- Quality Check by LLM ----------------------"
 echo "------------------------------------------------------------------"
-echo " > $QUALITY"
+if [ "$QUALITY_UPPER" = "OK" ]; then
+    echo " ✅ $QUALITY"
+else
+    echo " ⚠️  $QUALITY"
+fi
 echo ""
 
 # Fallback: if LLM output is unusable, ask user for manual input
@@ -153,7 +157,7 @@ fi
 
 # Skip confirmation if quality is OK; ask only when issues are found
 if [ "$QUALITY_UPPER" != "OK" ]; then
-    read -rp "Commit? [y/N]: " CONFIRM
+    read -rp "⚠️  Commit? [y/N]: " CONFIRM
     if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
         echo "コミットを中止しました。"
         exit 0
