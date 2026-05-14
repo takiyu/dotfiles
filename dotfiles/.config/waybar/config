@@ -3,38 +3,41 @@
     "layer": "top",
     "position": "top",
     "modules-left": [
-	"sway/workspaces",
-	"custom/right-arrow-dark",
-	"sway/mode"
+        "sway/workspaces",
+        "custom/right-arrow-dark",
+        "sway/mode",
+        "custom/right-arrow-light",
+        "sway/window",
+        "custom/right-arrow-dark"
     ],
     "modules-center": [
-	"custom/left-arrow-dark",
-	"clock",
-	"custom/right-arrow-dark",
+        "custom/left-arrow-dark",
+        "clock",
+        "custom/right-arrow-dark"
     ],
     "modules-right": [
-	"custom/left-arrow-dark",
+        "custom/left-arrow-dark",
         "idle_inhibitor",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "pulseaudio",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "cpu",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "memory",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "disk",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "temperature",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "network",
-	"custom/left-arrow-light",
-	"custom/left-arrow-dark",
+        "custom/left-arrow-light",
+        "custom/left-arrow-dark",
         "tray"
 
         // "backlight",
@@ -45,16 +48,24 @@
     "sway/workspaces": {
         "disable-scroll": false,
         "all-outputs": false,
-        "format": " {name} ",
+        "format": " {name} "
     },
     "sway/mode": {
         "format": " <span style=\"italic\">Mode:{}</span>"
     },
-    // "sway/window": {
-    //     "format": "{title}",
-    // },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 100,
+        "tooltip": false,
+        "rewrite": {
+            "terminal - (.*)": "💻 $1",
+            "(.*) Mozilla Firefox": "🌎 $1",
+            "(.*) Mozilla Firefox Private.*": "🌎",      // Hide title for private
+            "(.*) Mozilla Firefox プライベート.*": "🌎"  // Hide title for private
+        }
+    },
     "clock": {
-	"interval": 1,
+        "interval": 1,
         "format": "<big>{:%Y/%m/%d %H:%M:%S}</big>",
         "tooltip-format": "<big>{calendar}</big>",
         "calendar": {
