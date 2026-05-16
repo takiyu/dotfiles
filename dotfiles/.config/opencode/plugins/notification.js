@@ -10,12 +10,14 @@ const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
 
+const SOUND_DIR = '/usr/share/sounds/freedesktop/stereo';
+
 // ---------------------------------------------------------------------------
 // ------------------------------- Interfaces ----------------------------------
 // ---------------------------------------------------------------------------
 // Send a desktop notification via `notify-send`.
 async function sendNotification($, title, status, urgency, description,
-                                iconOverride) {
+                                iconOverride, soundFile) {
     const icon = iconOverride
         || (urgency === URGENCY_CRITICAL ? ICON_ERROR : ICON);
     const args = [
@@ -30,6 +32,14 @@ async function sendNotification($, title, status, urgency, description,
         await $`notify-send ${args} ${title} ${body} 2>/dev/null`;
     } catch (_e) {
         // silent fail — notification daemon may be unavailable
+    }
+
+    if (soundFile) {
+        try {
+            await $`paplay ${soundFile} 2>/dev/null`;
+        } catch (_e) {
+            // silent fail — audio may be unavailable
+        }
     }
 }
 
@@ -59,7 +69,8 @@ export const NotificationPlugin = async (
                     status,
                     URGENCY_NORMAL,
                     description,
-                    ICON_COMPLETE
+                    ICON_COMPLETE,
+                    `${SOUND_DIR}/complete.oga`
                 );
             }
 
@@ -72,7 +83,9 @@ export const NotificationPlugin = async (
                     title,
                     status,
                     URGENCY_CRITICAL,
-                    description
+                    description,
+                    null,
+                    `${SOUND_DIR}/dialog-error.oga`
                 );
             }
 
