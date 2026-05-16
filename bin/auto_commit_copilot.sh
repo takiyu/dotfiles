@@ -57,7 +57,9 @@ The first line must start with COMMIT: followed by a commit message.
 The commit message must begin with one of these prefixes:
 Feature: / Fix: / Docs: / Style: / Refactor: / Test:
 
-The second line must start with QUALITY: followed by OK or issues.
+The second line must start with QUALITY: followed by OK or Japanese issues.
+Severity labels [高]/[中]/[低] must be used if any issues exist.
+All text after QUALITY: must be in Japanese.
 
 Do not echo these instructions or use placeholder text.
 

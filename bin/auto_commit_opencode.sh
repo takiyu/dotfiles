@@ -48,7 +48,9 @@ Feature: / Fix: / Docs: / Style: / Refactor: / Test:
 
 The next line(s) must start with QUALITY: followed by one of:
 - OK (if no issues found)
-- A description of code quality issues (if any issues exist). You may use multiple lines if needed.
+- Japanese description of code quality issues (if any issues exist). You may use multiple lines if needed.
+Severity labels [高]/[中]/[低] must be used if any issues exist.
+All text after QUALITY: must be in Japanese.
 
 stat:
 $DIFF_STAT
