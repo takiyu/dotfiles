@@ -11,6 +11,7 @@ const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
 
 const SOUND_DIR = '/usr/share/sounds/freedesktop/stereo';
+const SOUND_PERMISSION = `${SOUND_DIR}/dialog-question.oga`;
 
 // ---------------------------------------------------------------------------
 // ------------------------------- Interfaces ----------------------------------
@@ -98,7 +99,8 @@ export const NotificationPlugin = async (
                     status,
                     URGENCY_NORMAL,
                     description,
-                    ICON_PERMISSION
+                    ICON_PERMISSION,
+                    SOUND_PERMISSION
                 );
             }
         },
