@@ -166,8 +166,16 @@ check_python() {
         "$(check_python_closing_paren_arrow "$file_path")")
     result=$(append_violations "$result" \
         "$(check_python_multiline_ternary "$file_path")")
+    result=$(append_violations "$result" \
+        "$(check_python_section_delimiters "$file_path")")
 
     echo "$result"
+}
+
+
+check_python_section_delimiters() {
+    # Run section delimiter checks for Python files (79 chars, # prefix)
+    _check_file_section_delimiters "$1" 79 '# '
 }
 
 
@@ -334,8 +342,22 @@ check_typescript() {
         "$(check_typescript_interface_props "$file_path")")
     result=$(append_violations "$result" \
         "$(check_typescript_untyped_params "$file_path")")
+    result=$(append_violations "$result" \
+        "$(check_typescript_section_delimiters "$file_path")")
 
     echo "$result"
+}
+
+
+check_typescript_section_delimiters() {
+    # Check section delimiter lines for TypeScript files (80 chars, // prefix)
+    _check_file_section_delimiters "$1" 80 '// '
+}
+
+
+check_javascript_section_delimiters() {
+    # Check section delimiter lines for JavaScript files (80 chars, // prefix)
+    _check_file_section_delimiters "$1" 80 '// '
 }
 
 
@@ -408,6 +430,8 @@ check_javascript() {
         "$(check_javascript_console_logs "$file_path")")
     result=$(append_violations "$result" \
         "$(check_javascript_module_level_let "$file_path")")
+    result=$(append_violations "$result" \
+        "$(check_javascript_section_delimiters "$file_path")")
 
     echo "$result"
 }
@@ -506,6 +530,12 @@ check_shell() {
 }
 
 
+check_shell_section_delimiters() {
+    # Check section delimiter lines: must be exactly 80 chars, no trailing spaces
+    _check_file_section_delimiters "$1" 80 '# '
+}
+
+
 check_shell_shebang() {
     # Verify the file starts with a valid bash or sh shebang
     local file_path="$1"
@@ -563,40 +593,60 @@ check_shell_cd_error() {
 }
 
 
-check_shell_section_delimiters() {
-    # Check section delimiter lines: must be exactly 80 chars, no trailing spaces
+_check_file_section_delimiters() {
+    # Shared section delimiter check for any file type.
+    # Arguments: file_path, expected_length, comment_prefix
     local file_path="$1"
+    local expected_length="$2"
+    local comment_prefix="$3"
     local line_num=0
     local line
     local len
-    local content
-    local in_delimiter=0
-    local delim_start=0
 
+    # Read all lines into an array to allow lookahead/lookbehind
+    local -a lines=()
     while IFS= read -r line || [ -n "$line" ]; do
-        line_num=$((line_num + 1))
+        lines+=("$line")
+    done < "$file_path"
+    local total_lines=${#lines[@]}
+
+    local prefix_pattern
+    prefix_pattern=$(printf '%s' "$comment_prefix" | sed 's/\//\\\//g')
+
+    for ((line_num = 0; line_num < total_lines; line_num++)); do
+        line="${lines[$line_num]}"
         len=$(printf '%s' "$line" | wc -c)
 
-        # Check for section header lines (start with # followed by dashes)
-        if echo "$line" | grep -qE '^# --+'; then
-            if [ "$len" -ne 80 ]; then
-                printf '%s:%s: -> [\u9ad8] Section delimiter must be exactly 80 chars (got %s)\n' \
-                    "$file_path" "$line_num" "$len"
+        # Skip non-comment lines
+        if [[ "$line" != "$comment_prefix"* ]]; then
+            continue
+        fi
+
+        # Extract the content after the comment prefix
+        local content
+        content=$(printf '%s' "$line" | sed "s/^$prefix_pattern//")
+        local content_len
+        content_len=$(printf '%s' "$content" | wc -c)
+
+        if printf '%s' "$content" | grep -qE '^-+'; then
+            # This line starts with dashes: check delimiter/separator rules
+            if [ "$len" -ne "$expected_length" ]; then
+                printf '%s:%s: -> [\u9ad8] Section delimiter must be exactly %s chars (got %s)\n' \
+                    "$file_path" "$((line_num + 1))" "$expected_length" "$len"
             fi
             # Check for trailing spaces
-            if echo "$line" | grep -qE ' $'; then
+            if printf '%s' "$line" | grep -qE ' $'; then
                 printf '%s:%s: -> [\u9ad8] Section delimiter has trailing space\n' \
-                    "$file_path" "$line_num"
+                    "$file_path" "$((line_num + 1))"
             fi
             # Check named section header format (line 2 of a 3-line block)
-            # Line 2 must have equal or nearly-equal hyphens on both sides
             # We skip pure separator lines (no text between hyphens)
-            if echo "$line" | grep -qE '^# --+ [^ -].*[^ -] --+$'; then
+            if printf '%s' "$content" | grep -qE '^--+ [^ -].*[^ -] --+$'; then
                 # Extract the name part (between hyphens)
                 local left_dashes
                 local right_dashes
-                left_dashes=$(echo "$line" | sed 's/^# \(-*\) .*/\1/')
-                right_dashes=$(echo "$line" | sed 's/.* \(-*\)$/\1/')
+                left_dashes=$(printf '%s' "$content" | sed 's/\(-*\) .*/\1/')
+                right_dashes=$(printf '%s' "$content" | sed 's/.* \(-*\)$/\1/')
                 local left_len
                 local right_len
                 left_len=$(printf '%s' "$left_dashes" | wc -c)
@@ -607,16 +657,44 @@ check_shell_section_delimiters() {
                 fi
                 if [ "$diff" -gt 1 ]; then
                     printf '%s:%s: -> [\u9ad8] Section header hyphens unbalanced: left=%s, right=%s\n' \
-                        "$file_path" "$line_num" "$left_len" "$right_len"
+                        "$file_path" "$((line_num + 1))" "$left_len" "$right_len"
                 fi
                 # Right side should be >= left side when odd difference
                 if [ "$right_len" -lt "$left_len" ]; then
                     printf '%s:%s: -> [\u9ad8] Section header: right side should have more hyphens than left\n' \
-                        "$file_path" "$line_num"
+                        "$file_path" "$((line_num + 1))"
+                fi
+            fi
+        else
+            # Content does NOT start with dashes.
+            # Only flag as a broken section header when sandwiched between
+            # two separator lines (comment lines content is all dashes).
+            if [ "$content_len" -gt 0 ]; then
+                local prev_idx=$((line_num - 1))
+                local next_idx=$((line_num + 1))
+                local prev_content
+                local next_content
+                local is_flanked=0
+
+                if [ "$prev_idx" -ge 0 ] \
+                    && [ "$next_idx" -lt "$total_lines" ]; then
+                    prev_content=$(printf '%s' "${lines[$prev_idx]}" \
+                        | sed "s/^$prefix_pattern//")
+                    next_content=$(printf '%s' "${lines[$next_idx]}" \
+                        | sed "s/^$prefix_pattern//")
+                    if printf '%s' "$prev_content" | grep -qE '^--+$' \
+                        && printf '%s' "$next_content" | grep -qE '^--+$'; then
+                        is_flanked=1
+                    fi
+                fi
+
+                if [ "$is_flanked" -eq 1 ]; then
+                    printf '%s:%s: -> [\u9ad8] Missing section delimiter dashes (expected %s chars)\n' \
+                        "$file_path" "$((line_num + 1))" "$expected_length"
                 fi
             fi
         fi
-    done < "$file_path"
+    done
 }
 
 
