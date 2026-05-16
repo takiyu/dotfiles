@@ -5,7 +5,7 @@ from swayhelper.state import WorkspaceState
 
 
 # -----------------------------------------------------------------------------
-# Fake containers
+# ------------------------------ Fake containers ------------------------------
 # -----------------------------------------------------------------------------
 class FakeLeaf:
     def __init__(self, con_id: int, floating: str = 'user_off') -> None:
@@ -36,7 +36,7 @@ class FakeWs:
 
 
 # -----------------------------------------------------------------------------
-# _cmd_promote_window
+# ---------------------------- _cmd_promote_window ----------------------------
 # -----------------------------------------------------------------------------
 def test_promote_window_inserts_before_master(monkeypatch) -> None:
     # Focused is behind master; should bubble up to master position.

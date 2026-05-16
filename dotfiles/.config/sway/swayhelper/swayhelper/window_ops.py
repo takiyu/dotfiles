@@ -10,7 +10,7 @@ from swayhelper.tree_utils import _get_focused_window, _is_floating
 
 
 # -----------------------------------------------------------------------------
-# ------------------------------- Window Cycling ------------------------------
+# ------------------------------ Window Cycling -------------------------------
 # -----------------------------------------------------------------------------
 def _find_offset_window(win: Optional[Con],
                         offset: int) -> Optional[Con]:
@@ -191,7 +191,7 @@ def _get_resize_target(ws: Con, state: WorkspaceState) -> Optional[Con]:
 
 
 # -----------------------------------------------------------------------------
-# --------------------------- Container Move Helpers --------------------------
+# -------------------------- Container Move Helpers ---------------------------
 # -----------------------------------------------------------------------------
 def _move_container(src: Con, dst: Con) -> None:
     # Teleport src to be placed adjacent to dst using a temporary mark.

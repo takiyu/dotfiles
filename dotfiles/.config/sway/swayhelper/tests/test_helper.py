@@ -206,7 +206,7 @@ def test_move_nei_workspace_serialises_concurrent_calls(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# ------------ focus_nei_workspace / move_nei_workspace wrap-to-last ----------
+# ----------- focus_nei_workspace / move_nei_workspace wrap-to-last -----------
 # -----------------------------------------------------------------------------
 def test_focus_nei_workspace_wraps_to_last_on_ws0(monkeypatch) -> None:
     # On ws0, pressing prev (offset=-1) should focus the last workspace.
@@ -307,6 +307,7 @@ def test_strip_reorder_tmp_prefix_leaves_plain_workspace_unchanged() -> None:
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
+
 def test_cleanup_temp_workspaces_moves_windows_from_legacy_temp(
         monkeypatch) -> None:
     moved: list[tuple[int, str]] = list()
@@ -472,7 +473,7 @@ def test_fix_workspace_order_renames_without_refocus(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# ----------------------------- compact_workspaces ----------------------------
+# ---------------------------- compact_workspaces -----------------------------
 # -----------------------------------------------------------------------------
 def test_compact_workspaces_deletes_and_renames(monkeypatch) -> None:
     # A0(empty), A1(windows, current), A2(empty), A3(windows)
@@ -659,6 +660,7 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
+
 def test_collect_tiling_windows_excludes_floating() -> None:
     # Floating nodes must not appear in the tiling window list.
     node = {

@@ -871,7 +871,7 @@ def test_run_ncol_layout_restores_pre_reflow_focus(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# --------- on_window move / _swap_moved_window ---------------
+# -------------------- on_window move / _swap_moved_window --------------------
 # -----------------------------------------------------------------------------
 def test_on_window_move_swaps_before_reflow(monkeypatch) -> None:
     # User-initiated move swaps moved window before active, then reflows.

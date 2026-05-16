@@ -14,7 +14,7 @@ from swayhelper.window_ops import (_balance_cols, _get_layout_nodes,
 
 
 # -----------------------------------------------------------------------------
-# -------------------------------- Layout Engine ------------------------------
+# ------------------------------- Layout Engine -------------------------------
 # -----------------------------------------------------------------------------
 def _run_existing_layouts(i3: SwayConn) -> None:
     # Re-tile each currently existing workspace with managed state.
@@ -220,7 +220,7 @@ def _reflow_ncol(i3: SwayConn, state: WorkspaceState,
 
 
 # -----------------------------------------------------------------------------
-# ----------------------------- Transformations -------------------------------
+# ------------------------------ Transformations ------------------------------
 # -----------------------------------------------------------------------------
 def _apply_transpose(i3: SwayConn, ws: Con) -> None:
     # Physically transpose the workspace container tree.

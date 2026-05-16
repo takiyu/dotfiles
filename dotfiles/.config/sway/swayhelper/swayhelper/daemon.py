@@ -118,6 +118,7 @@ from swayhelper.state import ws_states  # noqa: E402,F401
 from swayhelper.window_ops import _get_master_window  # noqa: E402,F401
 from swayhelper.window_ops import _get_resize_target  # noqa: E402,F401
 
+
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------

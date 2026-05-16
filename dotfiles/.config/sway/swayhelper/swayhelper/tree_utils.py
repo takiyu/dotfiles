@@ -8,7 +8,7 @@ from swayhelper.state import WorkspaceState, ws_states
 
 
 # -----------------------------------------------------------------------------
-# ----------------------- Sway Tree Utilities / State -------------------------
+# ------------------------ Sway Tree Utilities / State ------------------------
 # -----------------------------------------------------------------------------
 def _get_focused_workspace(i3: SwayConn) -> Optional[Con]:
     # Return the currently focused workspace container.
