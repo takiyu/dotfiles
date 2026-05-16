@@ -6,7 +6,7 @@ from swayhelper.ipc import SwayConn
 from swayhelper.layout import (_apply_reflectx, _apply_reflecty,
                                _apply_transpose, _run_layout)
 from swayhelper.tree_utils import (_get_focused_window, _get_focused_workspace,
-                                   _get_ws_state, _refetch)
+                                   _get_ws_state, _is_floating, _refetch)
 from swayhelper.window_ops import (_focus_window, _get_master_window,
                                    _get_resize_target, _swap_window)
 
@@ -16,16 +16,29 @@ from swayhelper.window_ops import (_focus_window, _get_master_window,
 # -----------------------------------------------------------------------------
 def _cmd_promote_window(i3: SwayConn,
                         event: BindingEvent, *args: str) -> None:
-    # Swap the focused window with the primary master window.
+    # Insert the focused window before the primary master window.
     ws = _get_focused_workspace(i3)
     focused = _get_focused_window(i3)
     if ws is None or focused is None:
+        return
+    if _is_floating(focused):
         return
     state = _get_ws_state(ws.id)
     master = _get_master_window(ws, state)
     if master is None or focused.id == master.id:
         return
-    focused.command(f'swap container with con_id {master.id}')
+    leaves = [leaf for leaf in ws.leaves() if not _is_floating(leaf)]
+    ids = [leaf.id for leaf in leaves]
+    try:
+        focused_idx = ids.index(focused.id)
+        master_idx = ids.index(master.id)
+    except ValueError:
+        return
+    if focused_idx <= master_idx:
+        return
+    # Bubble the focused window backward to the master's position.
+    for target in reversed(leaves[master_idx:focused_idx]):
+        focused.command(f'swap container with con_id {target.id}')
     focused.command('focus')
 
 

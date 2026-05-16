@@ -119,8 +119,10 @@ def _run_ncol_layout(i3: SwayConn, state: WorkspaceState,
     ws = _refetch(i3, ws)
     if ws and is_focused:
         # Restore focus to the window that was focused before the reflow
-        focused = (i3.get_tree().find_by_id(pre_focused_id)
-                   if pre_focused_id is not None else None)
+        if pre_focused_id is not None:
+            focused = i3.get_tree().find_by_id(pre_focused_id)
+        else:
+            focused = None
         if focused is None:
             focused = ws.find_focused()
         if focused:

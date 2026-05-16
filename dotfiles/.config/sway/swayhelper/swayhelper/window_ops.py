@@ -155,7 +155,7 @@ def _get_master_windows(ws: Con, state: WorkspaceState) -> list[Con]:
     # Return windows that belong to the logical master pane.
     leaves = [node for node in ws.leaves() if not _is_floating(node)]
     if not leaves:
-        return []
+        return list()
     if state.kind == LayoutKind.NOP:
         return [leaves[0]]
     nodes = _get_layout_nodes(state, ws)

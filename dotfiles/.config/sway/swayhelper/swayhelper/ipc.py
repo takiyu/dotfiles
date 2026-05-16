@@ -20,7 +20,7 @@ class SwayConn(i3ipc.Connection):
     def command(self, payload: str) -> list:  # type: ignore[override]
         if self._buffering:
             self._buf.append(payload)
-            return []
+            return list()
         return super().command(payload)
 
     def start_buffering(self) -> None:
@@ -31,7 +31,7 @@ class SwayConn(i3ipc.Connection):
         # Send all buffered commands in one IPC call; disable buffering.
         self._buffering = False
         if not self._buf:
-            return []
+            return list()
         payload = ';'.join(self._buf)
         self._buf.clear()
         return super().command(payload)

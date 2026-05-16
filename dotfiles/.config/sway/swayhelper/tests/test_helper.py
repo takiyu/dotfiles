@@ -305,7 +305,7 @@ def test_strip_reorder_tmp_prefix_leaves_plain_workspace_unchanged() -> None:
 
 
 # -----------------------------------------------------------------------------
-# ----------------------- _cleanup_temp_workspaces ---------------------------
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 def test_cleanup_temp_workspaces_moves_windows_from_legacy_temp(
         monkeypatch) -> None:
@@ -657,7 +657,7 @@ def test_compact_workspaces_renames_gaps_without_empty(monkeypatch) -> None:
 
 
 # -----------------------------------------------------------------------------
-# --------- _collect_tiling_windows / _get_next_window --------------
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 def test_collect_tiling_windows_excludes_floating() -> None:
     # Floating nodes must not appear in the tiling window list.

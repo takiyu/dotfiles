@@ -113,7 +113,7 @@ def setup_workspace_names() -> None:
 
 
 def _delete_unmanaged_workspaces(all_disps: list[str]) -> None:
-    # Delete non-managed workspaces so stray names don't persist across reloads.
+    # Delete unmanaged workspaces so stray names don't persist across reloads.
     for disp in all_disps:
         disp_ws = list(get_workspaces_raw(disp))
         managed = [w for w in disp_ws if _is_managed_workspace(w)]
@@ -463,7 +463,7 @@ def list_workspace_windows(ws_name: str) -> list:
                          lambda n: n.get('type') == 'workspace'
                          and n.get('name') == ws_name)
     if ws_node is None:
-        return []
+        return list()
     return _collect_windows(ws_node)
 
 
@@ -749,23 +749,23 @@ def _update_display_map(all_disps: list[str]) -> dict[str, str]:
 
 
 def _load_display_map() -> dict[str, str]:
-    # Load display map from file; return {} on missing or invalid data.
+    # Load display map from file; return dict() on missing or invalid data.
     if not osp.exists(WS_DISP_MAP_FILE):
-        return {}
+        return dict()
     try:
         with open(WS_DISP_MAP_FILE, 'r') as f:
             data = json.load(f)
         if not isinstance(data, dict):
-            return {}
+            return dict()
         validated = {k: v for k, v in data.items()
                      if isinstance(k, str) and isinstance(v, str)
                      and re.match(r'^[A-Z]$', v)}
         # Reject map with duplicate letter assignments
         if len(validated.values()) != len(set(validated.values())):
-            return {}
+            return dict()
         return validated
     except Exception:
-        return {}
+        return dict()
 
 
 def _save_display_map(disp_to_letter: dict[str, str]) -> None:
