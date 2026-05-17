@@ -31,6 +31,7 @@ window#waybar {
 #tray,
 #window {
     background: #1a1a1a;
+    min-width: 30px;
 }
 
 #workspaces button {

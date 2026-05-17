@@ -89,7 +89,7 @@
             "on-scroll-up": "shift_up",
             "on-scroll-down": "shift_down"
         },
-        "on-click": "xdg-open https://calendar.google.com",
+        "on-click": "xdg-open https://calendar.google.com"
     },
     "idle_inhibitor": {
         "format": " 🖥️ {icon} ",
@@ -126,7 +126,7 @@
         "hwmon-path": "/sys/class/hwmon/hwmon0/temp1_input",
         "critical-threshold": 80,
         "format-critical": "Temp: {temperatureC}°C 🔥",
-        "format": "Temp: {temperatureC}°C",
+        "format": "Temp: {temperatureC}°C"
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
@@ -177,5 +177,5 @@
     "custom/right-arrow-light": {
         "format": "",
         "tooltip": false
-    },
+    }
 }
