@@ -1,5 +1,9 @@
 // Rich notification plugin with project details
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const APP_NAME = 'opencode';
 const FALLBACK_TITLE = 'OpenCode';
@@ -10,8 +14,10 @@ const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
 
-const SOUND_DIR = '/usr/share/sounds/freedesktop/stereo';
-const SOUND_PERMISSION = `${SOUND_DIR}/dialog-question.oga`;
+const SOUND_DIR = path.join(__dirname, 'sounds');
+const SOUND_COMPLETE = path.join(SOUND_DIR, 'complete.oga');
+const SOUND_ERROR = path.join(SOUND_DIR, 'dialog-error.oga');
+const SOUND_PERMISSION = path.join(SOUND_DIR, 'bell.oga');
 
 // ---------------------------------------------------------------------------
 // ------------------------------- Interfaces ----------------------------------
@@ -71,7 +77,7 @@ export const NotificationPlugin = async (
                     URGENCY_NORMAL,
                     description,
                     ICON_COMPLETE,
-                    `${SOUND_DIR}/complete.oga`
+                    `${SOUND_COMPLETE}`
                 );
             }
 
@@ -86,7 +92,7 @@ export const NotificationPlugin = async (
                     URGENCY_CRITICAL,
                     description,
                     null,
-                    `${SOUND_DIR}/dialog-error.oga`
+                    `${SOUND_ERROR}`
                 );
             }
 
