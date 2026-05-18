@@ -59,5 +59,19 @@
       ],
       "enabled": true
     }
+  },
+  "formatter": {
+    "python": {
+      "command": ["sh", "-c", "isort - | autopep8 -"],
+      "extensions": [".py"]
+    },
+    "typescript": {
+      "command": [
+        "npx", "prettier", "--stdin-filepath", "{filename}",
+        "--single-quote", "--semi", "--tab-width", "2",
+        "--print-width", "100", "--trailing-comma", "all"
+      ],
+      "extensions": [".ts", ".tsx", ".js", ".jsx"]
+    }
   }
 }
