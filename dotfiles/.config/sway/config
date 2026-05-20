@@ -127,6 +127,8 @@ bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
 bindsym Print exec grim - | wl-copy
 bindsym shift+Print exec slurp | grim -g - - | wl-copy
 bindsym shift+Ctrl+Print exec slurp | grim -g - - | tee ~/screenshot_$(date +%Y%m%d_%H%M%S).png | wl-copy
+# Special keys to take screen records
+bindsym $mod+Print exec ~/dotfiles/bin/record_screen_toggle.sh
 
 
 include /etc/sway/config.d/*
