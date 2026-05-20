@@ -13,6 +13,6 @@ else
         FILENAME=~/screenrec_$(date +%Y%m%d_%H%M%S).mp4
         wf-recorder -a -f "$FILENAME" --geometry "$GEOMETRY" &
         echo $! > "$PIDFILE"
-        notify-send "Recording started" "Screen recording started\n${FILENAME}"
+        notify-send --wait "Recording started" "Screen recording started\n${FILENAME}" > /dev/null 2>&1 &
     fi
 fi
