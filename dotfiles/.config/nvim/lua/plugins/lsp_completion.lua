@@ -9,7 +9,7 @@ return {
   { 'hrsh7th/cmp-path' },
   { 'hrsh7th/cmp-cmdline' },
   { 'hrsh7th/cmp-emoji' },
-  { 'hrsh7th/cmp-calc' },
+  { 'takiyu/cmp-calc' },  -- Self custom
   { 'octaltree/cmp-look' },
 
   ------------------------------------------------------------------------------
