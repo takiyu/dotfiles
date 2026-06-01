@@ -1,56 +1,17 @@
 ---
 name: auto-commit
-description: Generates commit message (Feature/Fix/Docs/Style/Refactor/Test) and checks code quality for staged changes. For fast use, prefer the copilot_auto_commit.sh script (gcmA alias).
+description: Generates commit messages and checks code quality for staged changes. Prefer gcmA alias for fast use.
 allowed-tools: bash
 ---
 
-# Auto-Commit (Interactive)
+# Auto-Commit Workflow
 
-Perform auto-commit workflow for staged git changes.
-
-## Steps
-
-### 1. Get Staged Diff
-
-```sh
-git diff --cached --submodule=diff
-```
-
-If empty: report "No staged changes." and stop.
-
-### 2. Single-Pass Analysis
-
-In **one analysis**, produce both:
-- **Commit message**: `Feature/Fix/Docs/Style/Refactor/Test: <description>`
-- **Quality check**: `OK` or issues in Japanese with `[高]/[中]/[低]` labels (≤10 lines)
-
-Print:
-```
-------------------------------------------------------------------
-------------------------- Code Difference ------------------------
-------------------------------------------------------------------
-<diff>
-------------------------------------------------------------------
----------------- Generating commit message by LLM ---------------
-------------------------------------------------------------------
- > <commit message>
-------------------------------------------------------------------
----------------------- Quality Check by LLM ----------------------
-------------------------------------------------------------------
- > <quality result>
-```
-
-### 3. User Confirmation
-
-```sh
-read -p "Commit? [y/N]: " _r && echo "$_r"
-```
-
-- `y`/`Y` → Step 4
-- else → "コミットを中止しました。" and stop
-
-### 4. Commit
-
-```sh
-git commit -m "<commit message from Step 2>"
-```
+1. Get staged diff: `git diff --cached --submodule=diff`
+   - If empty: stop with "No staged changes."
+2. In one analysis, produce both:
+   - Commit message: `Feature/Fix/Docs/Style/Refactor/Test: <description>`
+   - Quality check: `OK` or issues (≤10 lines, Japanese, `[高]/[中]/[低]`)
+3. Print diff, message, and quality result.
+4. Prompt user: `Commit? [y/N]`
+   - `y`/`Y` → `git commit -m "<message>"`
+   - Else → abort

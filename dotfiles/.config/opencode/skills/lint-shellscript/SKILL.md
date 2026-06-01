@@ -1,52 +1,20 @@
 ---
 name: lint-shellscript
-description: Run shell script lint tools (make lint → bash -n), then check custom coding rules. Reports violations with [高]/[中]/[低] severity labels in Japanese.
+description: Run shell lint tools, then check custom coding rules. Severity labels in Japanese.
 allowed-tools: bash, write, edit
 ---
 
-# ------------------------------------------------------------------------------
-# ------------------------------ Lint Shell Script -----------------------------
-# ------------------------------------------------------------------------------
+# Shell Script Lint
 
-# Run linters and custom coding rule checks for shell script files.
-
-
-# ------------------------------------------------------------------------------
-# ------------------------------- Step 1: Detect -------------------------------
-# ------------------------------------------------------------------------------
-
-# Detect available tools and project configuration.
-
-```sh
-# Detect available shell tools
-echo "=== tools available ==="
-for t in make bash sh; do
-    command -v "$t" >/dev/null 2>&1 \
-        && echo "$t: $(command -v $t)" || echo "$t: not found"
-done
-
-# Check for Makefile lint target
-echo "=== Makefile lint target ==="
-grep -c '^lint:' Makefile 2>/dev/null \
-    && echo "Makefile has lint target" || echo "no Makefile lint"
-```
-
-
-# ------------------------------------------------------------------------------
-# ------------------------------- Step 2: Run ----------------------------------
-# ------------------------------------------------------------------------------
-
-# Choose ONE branch based on Step 1 detection results.
+Detect available tools (make, bash, sh), then choose ONE branch:
 
 **Branch A** — Makefile has `lint:` target:
 ```sh
-# Run make lint target
 make lint 2>&1
 ```
 
 **Branch B** — fallback to bash syntax check + shellcheck (if available):
 ```sh
-# Syntax check with bash/sh and optionally shellcheck
 for f in $(find . -maxdepth 5 -name '*.sh' ! -path '*/.git/*'); do
     echo "=== checking $f ==="
     bash -n "$f" 2>&1 || true
@@ -55,95 +23,38 @@ for f in $(find . -maxdepth 5 -name '*.sh' ! -path '*/.git/*'); do
 done
 ```
 
-**Do NOT run `apt install`, `pip install`, or use any tool not found in Step 1.**
-
-
-# ------------------------------------------------------------------------------
-# --------------------------- Step 3: Find Files -------------------------------
-# ------------------------------------------------------------------------------
-
-# Discover and display relevant source files for review.
-
-```sh
-# Find relevant shell script files for review
-FILES=$(find . -maxdepth 5 -name '*.sh' \
-    ! -path '*/.git/*' ! -path '*/node_modules/*')
-for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
-```
-
-
-# ------------------------------------------------------------------------------
-# ---------------------- Step 4: Custom Rules Check ----------------------------
-# ------------------------------------------------------------------------------
-
-# For each source file found in Step 3, scan line-by-line for custom-rule violations.
-# **Do NOT collect all violations first** — follow this iterative process:
-#
-#   1. Pick ONE file.
-#   2. Scan it and find the FIRST violation you can fix with `write` or `edit`.
-#   3. Apply the fix immediately.
-#   4. Re-read the corrected file with `read`.
-#   5. Continue scanning the same file from the top for the next fixable issue.
-#   6. When the file is clean, move to the next file.
-#
-# After every edit, re-run the relevant Step 2 linter if appropriate to verify.
-# Report only violations that are **not** auto-fixable in this format (one per line):
-
-```
-<file>:<line>: [<severity>] <message>
-```
+Then scan custom rules (fix iteratively):
 
 **[高] Must fix:**
-- Missing `#!/bin/bash` or `#!/bin/sh` shebang at top of file
-- `eval "$(some_command)"` or `eval $var` — use indirect expansion or arrays instead
-- Unquoted variable expansions (`$VAR` instead of `"$VAR"`) in contexts where word-splitting/globbing is dangerous
-- `source` command without `set -e` or error handling
-- Unsupported shell features in POSIX `sh` scripts (arrays `()`, `[[ ]]`, `$'...'`, etc.)
-- Named section header (`# ---` x3 with centered name) not preceded by
-  exactly 2 blank lines, OR followed by any blank lines — must have 2
-  empty lines before and 0 after (code starts immediately)
-- Separator block (`# ---` x3 with no name, e.g. interface/impl divider or
-  EOF terminator) not preceded by exactly 2 blank lines, OR not followed
-  by exactly 1 blank line — must have 2 empty lines before and 1 after
-- Section delimiter line length or alignment wrong: every line must be
-  exactly 80 chars with no trailing whitespace. Lines 1 and 3 must be
-  `# ` + 78 `-`. Line 2 must center the section name with left and right
-  `-` counts equal or differing by exactly 1 (right side gets the extra
-  `-` when total is odd, never a trailing space)
-- File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------`
-  (each 80 chars) with no trailing newline after the last line
+- Missing `#!/bin/bash` or `#!/bin/sh` shebang
+- `eval` usage
+- Unquoted variable expansions where word-splitting/globbing is dangerous
+- `source` without `set -e` or error handling
+- POSIX `sh` scripts using arrays, `[[ ]]`, `$'...'`
+- Section delimiters wrong (80 chars, 2 blank lines before named header, 1 after separator)
+- File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 
 **[中] Should fix:**
-- Missing `set -euo pipefail` (bash) or `set -eu` (sh) at start of script
-- Hardcoded paths where `$HOME`, `$XDG_CONFIG_HOME`, or environment variables should be used
+- Missing `set -euo pipefail` (bash) or `set -eu` (sh)
+- Hardcoded paths where env vars should be used
 - Script exceeding ~100 lines without function extraction
-- `cd` without error check (`cd dir || exit 1`)
-- Subshell abuse where command grouping `{}` would suffice
+- `cd` without error check
+- Subshell abuse where `{}` would suffice
 - No English comment at start of non-trivial code block
 
 **[低] Nice to fix:**
-- Inconsistent indentation (mix of tabs and spaces)
+- Inconsistent indentation (tabs vs spaces)
 - Long pipeline chains exceeding ~3 stages without intermediate variables
-- `echo` with unescaped special characters (use `printf` instead)
+- `echo` with unescaped special characters (use `printf`)
 
-
-# ------------------------------------------------------------------------------
-# --------------------------- Step 5: Print Summary ----------------------------
-# ------------------------------------------------------------------------------
-
-# Print final summary of lint results.
-
+Print summary:
 ```
 ==================================================
  Lint complete (Shell Script)
 ==================================================
  Files checked : <N>
+ [高] Critical  : <N>
  [中] Important : <N>
  [低] Minor     : <N>
 ==================================================
 ```
-
-
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------

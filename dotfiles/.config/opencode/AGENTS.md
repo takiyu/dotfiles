@@ -1,34 +1,34 @@
 # Subagents
-- For tasks with multiple independent subtasks, use the task tool to delegate work to subagents.
-- Delegate exploration, research, and code review to subagents when parallelization helps.
+- Delegate independent subtasks via the task tool.
+- Delegate exploration, research, and code review to subagents for parallelization.
 
 # Task Rules
-- Never give up until finished the task including behavior check and testing without relying on users. (important)
-- Must check the code behavior by running or testing it. (important)
+- Never give up until finished; include behavior checks and testing without relying on users.
+- Must check code behavior by running or testing it.
 - When environment variable missing, search `.env` file and source it.
-- After completing tasks, you must repeatedly check that the rules are being followed.
-- Always use high reasoning effort for agent responses unless explicitly overridden.
+- After completing tasks, repeatedly check that rules are being followed.
+- Always use high reasoning effort unless explicitly overridden.
 - No git commit without user instructions.
-- **CRITICAL: Absolutely NEVER use Chinese in thinking or output. Use English for all thinking processes. Use Japanese for reports.**
+- **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
 
 # Coding Rules
 ## Must Do
 - Follow existing code style (important)
-- Use snake_case for files, variables: xxx_filename, xxx_dirname
+- Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
 - Write comments in English to explain logic
 - Add comments for complex logic blocks
 - Add one-line English comment at the beginning of each code block
-- Function dependencies should be clear (higher-level (caller) should be above; lower-level (callee) should be below)
-- Import/Include should be at the top of the file
-- Keep changes to a minimum and do not change irrelevant parts.
-- Absolutely forbid duplicated code; similar functionality must be consolidated into common functions.
-- Constants must be defined in `constants.*` files.
+- Function dependencies: higher-level (caller) above, lower-level (callee) below
+- Import/Include at the top of the file
+- Keep changes to a minimum; do not change irrelevant parts
+- Absolutely forbid duplicated code; consolidate similar functionality into common functions
+- Constants must be defined in `constants.*` files
 - Use semantically correct structure
 - Write minimal, concise, and readable code
-- Always write comparison operators with the left side smaller (use the "<" orientation)
-- After implementing each feature, you must compile and test to confirm operation before proceeding to the next feature.
+- Always write comparison operators with the left side smaller (`<` orientation)
+- After implementing each feature, compile and test before proceeding to the next
 
 ## Must Not Do
 - Use class methods/global variables (avoid)
@@ -39,90 +39,54 @@
 Import/include code here
 
 
-# -----------------------------------------------------------------------------
-# ------------------------------- Section Name --------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------- Section Name ---------------------------------
+# ------------------------------------------------------------------------------
 Interface code here
 
 
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# ------------------------------ Implementation -------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------ Implementation --------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# ------------------------------- Section Name --------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------- Section Name ---------------------------------
+# ------------------------------------------------------------------------------
 Implementation code here
 
 
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ```
 `#` can be replaced (e.g. `//`) for other languages.
 
-## Python Specifics
-- Must use Poetry for virtual environment
-- 79 chars/line, PEP 8 (important)
+## Language-specific
+### Python
+- 79 chars/line, PEP 8, Poetry environment
 - PascalCase classes, snake_case functions/variables
-- Use type hints, single quotes
-- Type annotations are mandatory; never omit them to avoid `Any`.
-- `Any` is discouraged, but permitted when no other suitable type exists.
-- `import os.path as osp` not Path
-- Use built-in generics (`dict[K, V]`, `list[X]`, `tuple[X, Y]`) and `Optional[X]` for type hints
-- Align continuation lines to the opening delimiter (`(`, `[`, `{`), not hanging indent
-- Pack multiple parameters/arguments per line within 79-char limit (do not use one-per-line unnecessarily)
-- When return type doesn't fit on last parameter line, put `)` aligned with params then `-> Type:` on the same line
+- Type hints mandatory; never omit annotations (use `Optional[X]`, not `X | None`)
+- `Any` discouraged but permitted when no other type exists
+- `import os.path as osp` (not `pathlib.Path`)
+- Built-in generics: `dict[K, V]`, `list[X]`, `tuple[X, Y]`, `Optional[X]`
+- Align continuation lines to opening delimiter (`(`, `[`, `{`)
+- Pack multiple parameters per line within 79-char limit
+- `dict()` / `list()` for empty containers (not `{}` / `[]`)
 
-
-### Known Antipatterns - NEVER write these
-```python
-# WRONG: def with ( alone at end of line
-def func(
-        arg1: str, arg2: int) -> None: ...
-# CORRECT:
-def func(arg1: str, arg2: int,
-         more: bool = False) -> None: ...
-
-# WRONG: function call with ( alone at end of line
-result = my_func(
-    arg1, arg2, arg3)
-# CORRECT:
-result = my_func(arg1, arg2,
-                 arg3)
-
-# WRONG: multi-line ternary expression
-x = (value
-     if condition else other)
-# CORRECT:
-if condition:
-    x = value
-else:
-    x = other
-
-# WRONG: closing ) at column 0 before ->
-def func(
-        arg1: str
-) -> Type: ...
-# CORRECT:
-def func(arg1: str,
-         arg2: int) -> Type: ...
-```
-
-## TypeScript Specifics
+### TypeScript
 - 2-space indent, 100 chars/line
 - PascalCase classes, camelCase functions, snake_case variables
 - Use React Bootstrap, i18n all text
-- vitest: test_*.ts files
+- vitest: `test_*.ts` files
 
-## Docker
-- Use Dockerfile only (not docker-compose for single service)
+### Docker
+- Dockerfile only (not docker-compose for single service)
 
-## Commit Messages
-- Feature/Fix/Docs/Style/Refactor/Test: description
+### Commit Messages
+- `Feature/Fix/Docs/Style/Refactor/Test: description`
