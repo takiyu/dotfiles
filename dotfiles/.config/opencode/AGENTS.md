@@ -37,36 +37,33 @@
 ## Code Structure Template
 ```python
 Import/include code here
-...
- (2 empty lines)
+
 
 # -----------------------------------------------------------------------------
 # ------------------------------- Section Name --------------------------------
-# ----------------------------------------------------------------------------- (no empty line)
+# -----------------------------------------------------------------------------
 Interface code here
-...
- (2 empty lines)
+
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
- (1 empty lines)
+
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # ------------------------------ Implementation -------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
- (1 empty lines)
+
 # -----------------------------------------------------------------------------
 # ------------------------------- Section Name --------------------------------
-# ----------------------------------------------------------------------------- (no empty line)
+# -----------------------------------------------------------------------------
 Implementation code here
-...
- (2 empty lines)
+
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------- (EOF)
+# -----------------------------------------------------------------------------
 ```
 `#` can be replaced (e.g. `//`) for other languages.
 
@@ -84,36 +81,36 @@ Implementation code here
 - When return type doesn't fit on last parameter line, put `)` aligned with params then `-> Type:` on the same line
 
 
-### Known Antipatterns — NEVER write these (失敗事例)
+### Known Antipatterns - NEVER write these
 ```python
-# ❌ WRONG: def with ( alone at end of line
+# WRONG: def with ( alone at end of line
 def func(
         arg1: str, arg2: int) -> None: ...
-# ✅ CORRECT:
+# CORRECT:
 def func(arg1: str, arg2: int,
          more: bool = False) -> None: ...
 
-# ❌ WRONG: function call with ( alone at end of line
+# WRONG: function call with ( alone at end of line
 result = my_func(
     arg1, arg2, arg3)
-# ✅ CORRECT:
+# CORRECT:
 result = my_func(arg1, arg2,
                  arg3)
 
-# ❌ WRONG: multi-line ternary expression
+# WRONG: multi-line ternary expression
 x = (value
      if condition else other)
-# ✅ CORRECT:
+# CORRECT:
 if condition:
     x = value
 else:
     x = other
 
-# ❌ WRONG: closing ) at column 0 before ->
+# WRONG: closing ) at column 0 before ->
 def func(
         arg1: str
 ) -> Type: ...
-# ✅ CORRECT:
+# CORRECT:
 def func(arg1: str,
          arg2: int) -> Type: ...
 ```

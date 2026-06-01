@@ -14,7 +14,7 @@ main() {
     input=$(cat)
     tool_name=$(extract_tool_name "$input")
 
-    if [ "$tool_name" != 'edit' ] && [ "$tool_name" != 'create' ]; then
+    if [ "$tool_name" != 'edit' ] && [ "$tool_name" != 'write' ]; then
         exit 0
     fi
 
@@ -97,7 +97,7 @@ extract_file_path() {
     # Extract nested path from toolArgs JSON string via jq
     local args_str
     args_str=$(echo "$1" | jq -r '.toolArgs' 2>/dev/null || echo '{}')
-    echo "$args_str" | jq -r '.path // empty' 2>/dev/null
+    echo "$args_str" | jq -r '.path // .filePath // empty' 2>/dev/null
 }
 
 
