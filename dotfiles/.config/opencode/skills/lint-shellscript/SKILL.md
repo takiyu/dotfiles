@@ -1,7 +1,7 @@
 ---
 name: lint-shellscript
 description: Run shell script lint tools (make lint → bash -n), then check custom coding rules. Reports violations with [高]/[中]/[低] severity labels in Japanese.
-allowed-tools: bash
+allowed-tools: bash, write, edit
 ---
 
 # ------------------------------------------------------------------------------
@@ -76,8 +76,18 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
 # ---------------------- Step 4: Custom Rules Check ----------------------------
 # ------------------------------------------------------------------------------
 
-# Review Steps 2–3 output. Report violations the tools **cannot** auto-fix.
-# One per line in this format:
+# For each source file found in Step 3, scan line-by-line for custom-rule violations.
+# **Do NOT collect all violations first** — follow this iterative process:
+#
+#   1. Pick ONE file.
+#   2. Scan it and find the FIRST violation you can fix with `write` or `edit`.
+#   3. Apply the fix immediately.
+#   4. Re-read the corrected file with `read`.
+#   5. Continue scanning the same file from the top for the next fixable issue.
+#   6. When the file is clean, move to the next file.
+#
+# After every edit, re-run the relevant Step 2 linter if appropriate to verify.
+# Report only violations that are **not** auto-fixable in this format (one per line):
 
 ```
 <file>:<line>: [<severity>] <message>
@@ -128,7 +138,6 @@ for f in $FILES; do echo "====== $f ======"; cat -n "$f"; echo; done
  Lint complete (Shell Script)
 ==================================================
  Files checked : <N>
- [高] Critical  : <N>
  [中] Important : <N>
  [低] Minor     : <N>
 ==================================================
