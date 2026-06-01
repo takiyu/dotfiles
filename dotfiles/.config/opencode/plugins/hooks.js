@@ -1,5 +1,8 @@
 // Plugin that bridges opencode hooks to lint-on-write.sh and reinforces
 // coding-style rules in every system prompt.
+import path from 'path';
+
+
 // -----------------------------------------------------------------------------
 // ----------------------------- Formatting rules ------------------------------
 // -----------------------------------------------------------------------------
@@ -23,9 +26,6 @@ const FORMATTING_RULES = `
 - Extract pure functions; avoid class methods / global mutable state.
 - Keep comments in English.
 `;
-
-import path from 'path';
-
 
 const LINT_SCRIPT = path.join(
   process.env.HOME,
