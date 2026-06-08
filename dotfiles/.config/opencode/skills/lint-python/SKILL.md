@@ -61,7 +61,7 @@ Then review source files and scan custom rules (fix iteratively):
 Print summary:
 ```
 ==================================================
- Lint complete
+ Lint complete (Python)
 ==================================================
  Files checked : <N>
  [高] Critical  : <N>
