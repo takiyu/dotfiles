@@ -32,6 +32,7 @@ Then scan custom rules (fix iteratively):
 - `source` without `set -e` or error handling
 - POSIX `sh` scripts using arrays, `[[ ]]`, `$'...'`
 - Section delimiters wrong (80 chars, 2 blank lines before named header, 1 after separator)
+- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 - File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 
 **[中] Should fix:**

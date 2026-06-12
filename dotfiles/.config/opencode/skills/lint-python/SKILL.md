@@ -43,6 +43,7 @@ Then review source files and scan custom rules (fix iteratively):
 - `X | None` syntax (use `Optional[X]`)
 - Private name accessed from another module (excluding tests)
 - Section delimiters wrong (79 chars, 2 blank lines before named header, 1 after separator)
+- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 - File does not end with exactly 3 lines of `# -----------------------------------------------------------------------------` (79 chars)
 
 **[中] Should fix:**

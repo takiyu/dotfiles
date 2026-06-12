@@ -35,6 +35,7 @@
 ## Must Not Do
 - Use class methods/global variables (avoid)
 - Create too many methods
+- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 
 ## Code Structure Template
 ```python

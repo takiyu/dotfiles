@@ -51,9 +51,9 @@ output_violations() {
     if [[ -n "$violations" ]]; then
         {
             echo ''
-            echo "╔══ ⚠  lint-on-write: $(basename "$file_path") ══"
+            echo "== lint-on-write: $(basename "$file_path") =="
             grep -v '^$' <<<"$violations"
-            echo '╚═══════════════════════════════════════════════'
+            echo '================================================'
             echo ''
         } >&2
     fi
@@ -84,9 +84,9 @@ check_python() {
     local docstring_match empty_dict_match empty_list_match
     docstring_match=$(grep -nE '^\s*("""|\x27\x27\x27)' "$file_path" \
         2>/dev/null || true)
-    empty_dict_match=$(grep -nE '=\s*\{\}\s*(#|$)' "$file_path" \
+    empty_dict_match=$(grep -nE '^\s*\{\}\s*(#|$)' "$file_path" \
         2>/dev/null || true)
-    empty_list_match=$(grep -nE '=\s*\[\]\s*(#|$)' "$file_path" \
+    empty_list_match=$(grep -nE '^\s*\[\]\s*(#|$)' "$file_path" \
         2>/dev/null || true)
 
     if [[ -n "$docstring_match" ]]; then
@@ -113,6 +113,7 @@ check_python() {
     v=$(append "$v" "$(check_python_closing_paren_arrow "$file_path")")
     v=$(append "$v" "$(check_python_multiline_ternary "$file_path")")
     v=$(append "$v" "$(check_python_section_delimiters "$file_path")")
+    v=$(append "$v" "$(check_trailing_comma "$file_path")")
 
     echo "$v"
 }
@@ -129,14 +130,14 @@ check_python_typing() {
     local file_path="$1"
     _grep_violation "$file_path" \
         '(typing\.(Dict|List|Tuple|Union|Any)\b|from typing import[^#]*(Dict|List|Tuple|Union|Any))' \
-        '高' 'Use dict[]/list[]/tuple[]/Optional[X], not typing.*'
+        '高' 'Use dict[]/list[]/tuple[]/Optional[], not typing.*'
 }
 
 check_python_none_union() {
     local file_path="$1"
     _grep_violation "$file_path" \
         '\w+\s*\|\s*None\b|None\s*\|\s*\w+' \
-        '高' 'Use Optional[X], not X | None'
+        '高' 'Use Optional[], not X | None'
 }
 
 check_python_def_parens() {
@@ -197,6 +198,89 @@ check_python_section_delimiters() {
     _check_file_section_delimiters "$1" 79 '# '
 }
 
+check_trailing_comma() {
+    local file_path="$1"
+    if ! command -v python3 >/dev/null 2>&1; then
+        return
+    fi
+
+    # Write a temporary Python script to avoid quoting issues in bash
+    local py_script
+    py_script=$(mktemp)
+    cat > "$py_script" << 'PYEOF'
+import os, re
+
+path = os.environ["PY_FILE"]
+with open(path) as f:
+    lines = f.readlines()
+
+
+def strip_strings_and_comments(line: str) -> str:
+    """Remove # comments and quoted strings from a line."""
+    s = re.sub(r"#.*", "", line)
+    s = re.sub(r'"([^"]|\\")*"', '""', s)
+    s = re.sub(r"'([^']|\\')*'", "''", s)
+    return s
+
+
+issues = []
+for i, line in enumerate(lines):
+    code = strip_strings_and_comments(line)
+    code_stripped = code.strip()
+    if not code_stripped:
+        continue
+
+    # Inline trailing comma on the same line as closing bracket
+    if re.search(r",\s*[\)\]\}]", code_stripped):
+        count = 0
+        for j in range(i, -1, -1):
+            prev = strip_strings_and_comments(lines[j])
+            count += prev.count(",")
+            if re.search(r"[({\[]", prev):
+                break
+        if count < 5:
+            issues.append((
+                i + 1,
+                "Trailing comma after last element "
+                "(only allowed with many elements)",
+            ))
+        continue
+
+    # Multiline trailing comma: line ends with comma and next
+    # non-blank line starts with a closing bracket.
+    if code_stripped.endswith(","):
+        for j in range(i + 1, len(lines)):
+            nxt = lines[j].strip()
+            if not nxt:
+                continue
+            if nxt[0] in ")]}" and not nxt[1:].startswith(":"):
+                count = 0
+                for k in range(i, -1, -1):
+                    prev = strip_strings_and_comments(lines[k])
+                    count += prev.count(",")
+                    if re.search(r"[({\[]", prev):
+                        break
+                if count < 5:
+                    issues.append((
+                        i + 1,
+                        "Trailing comma after last element "
+                        "(only allowed with many elements)",
+                    ))
+            break
+
+for line_no, msg in issues:
+    print(f"{path}:{line_no}: -> [高] {msg}")
+PYEOF
+
+    local result
+    result=$(PY_FILE="$file_path" python3 "$py_script" 2>/dev/null || true)
+    rm -f "$py_script"
+
+    if [[ -n "$result" ]]; then
+        echo "$result"
+    fi
+}
+
 
 # ------------------------------------------------------------------------------
 # ----------------------------- TS / JS checks ---------------------------------
@@ -209,6 +293,7 @@ check_typescript() {
     v=$(append "$v" "$(check_typescript_interface_props "$file_path")")
     v=$(append "$v" "$(check_untyped_params "$file_path")")
     v=$(append "$v" "$(check_typescript_section_delimiters "$file_path")")
+    v=$(append "$v" "$(check_trailing_comma "$file_path")")
     echo "$v"
 }
 
@@ -221,6 +306,7 @@ check_javascript() {
     v=$(append "$v" "$(check_console_logs "$file_path")")
     v=$(append "$v" "$(check_module_level_let "$file_path")")
     v=$(append "$v" "$(check_javascript_section_delimiters "$file_path")")
+    v=$(append "$v" "$(check_trailing_comma "$file_path")")
     echo "$v"
 }
 
@@ -259,10 +345,10 @@ check_untyped_params() {
 check_mixed_modules() {
     local file_path="$1"
     local has_require has_import
-    has_require=$(grep -cE '\brequire\s*\(' "$file_path" 2>/dev/null \
-        || echo 0)
-    has_import=$(grep -cE '\bimport\s+' "$file_path" 2>/dev/null \
-        || echo 0)
+    has_require=$(grep -cE '\brequire\s*\(' "$file_path" 2>/dev/null) || true
+    has_require=${has_require:-0}
+    has_import=$(grep -cE '\bimport\s+' "$file_path" 2>/dev/null) || true
+    has_import=${has_import:-0}
     if [[ "$has_require" -gt 0 && "$has_import" -gt 0 ]]; then
         printf '%s:0: -> [高] Mixed module systems: do not mix require() and import/export\n' \
             "$file_path"
@@ -314,6 +400,7 @@ check_shell() {
     v=$(append "$v" "$(check_shell_strict_mode "$file_path")")
     v=$(append "$v" "$(check_shell_cd_error "$file_path")")
     v=$(append "$v" "$(check_shell_section_delimiters "$file_path")")
+    v=$(append "$v" "$(check_trailing_comma "$file_path")")
     echo "$v"
 }
 

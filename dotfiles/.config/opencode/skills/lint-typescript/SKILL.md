@@ -35,6 +35,7 @@ Then scan custom rules (fix iteratively):
 - camelCase variable that should be snake_case (non-function, non-component)
 - PascalCase function that is not a React component or hook
 - Section delimiters wrong (80 chars, `// ` prefix)
+- Trailing comma after the last element in function args, list, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 - File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 
 **[中] Should fix:**
