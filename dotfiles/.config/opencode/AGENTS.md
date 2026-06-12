@@ -29,6 +29,8 @@
 - Write minimal, concise, and readable code
 - Always write comparison operators with the left side smaller (`<` orientation)
 - After implementing each feature, compile and test before proceeding to the next
+- Pack multiple statements or conditions per line when within length limits to reduce unnecessary line breaks
+- Never use inline if-else (ternary) expressions
 
 ## Must Not Do
 - Use class methods/global variables (avoid)

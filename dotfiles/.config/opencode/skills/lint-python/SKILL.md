@@ -57,6 +57,8 @@ Then review source files and scan custom rules (fix iteratively):
 - Sentence-style names with prepositions
 - Multi-line ternary expression
 - One-per-line params when packing fits within 79 chars
+- Inline if-else (ternary) expression (including single-line)
+- Unnecessary line breaks; pack multiple statements or conditions per line when within 79-char limit
 
 Print summary:
 ```

@@ -45,6 +45,8 @@ Then scan custom rules (fix iteratively):
 - Hook defined outside component but missing `use` prefix
 - Mutable module-level state
 - Unused import
+- Inline if-else (ternary) expressions
+- Unnecessary line breaks; pack multiple statements or conditions per line when within 100-char limit
 
 **[低] Nice to fix:**
 - `console.log` left in production code

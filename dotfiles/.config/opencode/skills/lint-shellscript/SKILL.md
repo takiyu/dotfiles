@@ -46,6 +46,8 @@ Then scan custom rules (fix iteratively):
 - Inconsistent indentation (tabs vs spaces)
 - Long pipeline chains exceeding ~3 stages without intermediate variables
 - `echo` with unescaped special characters (use `printf`)
+- Inline if-else (`&&` / `||` used as ternary replacement)
+- Unnecessary line breaks; pack multiple statements or conditions per line when within length limits
 
 Print summary:
 ```
