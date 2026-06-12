@@ -1,4 +1,4 @@
-.PHONY: all install lint test daemon setup helper
+.PHONY: all install lint test daemon setup helper generate
 
 PYTHON = .venv/bin/python
 
@@ -35,6 +35,13 @@ setup:
 # Helper action: ACTION=<action> [OPT=<n>]
 helper:
 	$(PYTHON) -m swayhelper.helper $(ACTION)$(if $(OPT), --opt $(OPT))
+
+# Auto-generate sway output config from DISPLAY_CONFIGS
+OUTPUT_CONFIG = $(HOME)/.config/sway/config_disp
+generate:
+	$(PYTHON) -m swayhelper.generate_sway_config > $(OUTPUT_CONFIG)
+	@echo "Generated $(OUTPUT_CONFIG)"
+
 
 
 # ------------------------------------------------------------------------------

@@ -21,21 +21,29 @@ MAX_REFLOW_ITERS_PER_WIN = 3
 # Generous bound; sway events typically arrive within milliseconds.
 MOVE_ID_TTL = 2.0
 
+# Display configuration: ordered list of (name, resolution, position, transform,
+# scale). From this single source both OUTPUT_TO_LETTER and INDEXED_OUTPUTS are
+# derived so that output names only need to be edited in one place.
+# transform may be an empty string when not needed.
+# scale may be an empty string when not needed.
+DISPLAY_CONFIGS: list[tuple[str, str, str, str, str]] = [
+    ('DP-3', '2560x1440', '0,320', '270', ''),
+    ('DP-1', '2560x1440', '1440,0', '180', ''),
+    ('HDMI-A-1', '2560x1440', '1440,1440', '', ''),
+    ('DVI-D-1', '2560x1440', '4000,320', '90', ''),
+]
+
 # Fixed mapping from sway output name to workspace letter prefix.
 # This mapping is absolute and does not change when displays are
 # reconnected. Keys: sway output names (e.g. DP-2). Values: single
 # uppercase letter used as workspace prefix (e.g. A).
-OUTPUT_TO_LETTER: dict[str, str] = {
-    'DP-2': 'A',
-    'DP-1': 'B',
-    'HDMI-A-2': 'C',
-    'HDMI-A-1': 'D',
-}
+OUTPUT_TO_LETTER: dict[str, str] = {cfg[0]: chr(65 + i)
+                                    for i, cfg in enumerate(DISPLAY_CONFIGS)}
 
 # Ordered list of output names for indexed display access via
 # focus_display / move_display. Index 0 corresponds to OPT=0 (h key),
 # 1 to OPT=1 (k), 2 to OPT=2 (j), 3 to OPT=3 (l).
-INDEXED_OUTPUTS: list[str] = ['DP-2', 'DP-1', 'HDMI-A-2', 'HDMI-A-1']
+INDEXED_OUTPUTS: list[str] = [cfg[0] for cfg in DISPLAY_CONFIGS]
 
 
 # -----------------------------------------------------------------------------

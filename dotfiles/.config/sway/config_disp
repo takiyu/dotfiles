@@ -1,0 +1,5 @@
+# Auto-generated from constants.py: do not edit by hand.
+output DP-3 resolution 2560x1440 position 0,320 transform 270
+output DP-1 resolution 2560x1440 position 1440,0 transform 180
+output HDMI-A-1 resolution 2560x1440 position 1440,1440
+output DVI-D-1 resolution 2560x1440 position 4000,320 transform 90
