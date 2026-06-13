@@ -27,10 +27,10 @@ MOVE_ID_TTL = 2.0
 # transform may be an empty string when not needed.
 # scale may be an empty string when not needed.
 DISPLAY_CONFIGS: list[tuple[str, str, str, str, str]] = [
-    ('DP-3', '2560x1440', '0,320', '270', ''),
-    ('DP-1', '2560x1440', '1440,0', '180', ''),
-    ('HDMI-A-1', '2560x1440', '1440,1440', '', ''),
-    ('DVI-D-1', '2560x1440', '4000,320', '90', ''),
+    ('DP-4', '2560x1440', '1440,0', '270', ''),
+    ('DP-3', '2560x1440', '0,320', '180', ''),
+    ('HDMI-A-3', '2560x1440', '4000,320', '0', ''),
+    ('HDMI-A-2', '2560x1440', '1440,1440', '90', ''),
 ]
 
 # Fixed mapping from sway output name to workspace letter prefix.
