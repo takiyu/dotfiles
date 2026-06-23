@@ -499,8 +499,8 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
     # Collect modified files in git repo (helper for gdvim/gdvimdiff)
     _get_git_modified_files() {
         local files
-        files=$(git ls-files -m -o --exclude-standard 2>/dev/null; \
-                git submodule foreach --recursive 'git ls-files -m -o --exclude-standard | sed "s#^#$path/#"' 2>/dev/null | sed '/^Entering /d') || true
+        files=$(git -c core.quotepath=false ls-files -m -o --exclude-standard 2>/dev/null; \
+                git submodule foreach --recursive 'git -c core.quotepath=false ls-files -m -o --exclude-standard | sed "s#^#$path/#"' 2>/dev/null | sed '/^Entering /d') || true
         if [ -z "$files" ]; then
             echo "No modified or untracked files found." >&2
             return 1
@@ -512,13 +512,7 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
         # Collect modified and untracked files in current repo and submodules
         local files
         files=$(_get_git_modified_files) || return 0
-        # Filter to existing regular files only and stream them to xargs (avoid nulls in command substitution)
-        printf '%s\n' "$files" | while IFS= read -r f; do
-            if [ -f "$f" ]; then
-                printf '%s\0' "$f"
-            fi
-        done | { read -r -d '' _ || true; } 2>/dev/null
-        # Open with nvim using null-delimited xargs directly from the pipe
+        # Filter to existing regular files only and open with nvim using null-delimited xargs
         printf '%s\n' "$files" | while IFS= read -r f; do
             if [ -f "$f" ]; then
                 printf '%s\0' "$f"
