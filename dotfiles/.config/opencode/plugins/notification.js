@@ -13,6 +13,7 @@ const ICON_ERROR = 'dialog-error';
 const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
+const ERROR_EXPIRE_MS = 60000;
 
 const SOUND_DIR = path.join(__dirname, 'sounds');
 const SOUND_COMPLETE = path.join(SOUND_DIR, 'complete.oga');
@@ -24,7 +25,8 @@ const SOUND_PERMISSION = path.join(SOUND_DIR, 'bell.oga');
 // ---------------------------------------------------------------------------
 // Send a desktop notification via `notify-send`.
 async function sendNotification($, title, status, urgency, description,
-                                iconOverride, soundFile) {
+                                iconOverride, soundFile,
+                                expireMs = null) {
     const icon = iconOverride
         || (urgency === URGENCY_CRITICAL ? ICON_ERROR : ICON);
     const args = [
@@ -32,6 +34,9 @@ async function sendNotification($, title, status, urgency, description,
         '-u', urgency,
         '-i', icon,
     ];
+    if (expireMs !== null) {
+        args.push('-t', String(expireMs));
+    }
     const body = description
         ? `${status}\n${description}`
         : status;
@@ -92,7 +97,8 @@ export const NotificationPlugin = async (
                     URGENCY_CRITICAL,
                     description,
                     null,
-                    `${SOUND_ERROR}`
+                    `${SOUND_ERROR}`,
+                    ERROR_EXPIRE_MS
                 );
             }
 
