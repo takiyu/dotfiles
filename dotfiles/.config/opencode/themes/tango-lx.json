@@ -100,39 +100,39 @@
       "light": "white"
     },
     "diffAdded": {
-      "dark": "lightgreen",
-      "light": "green"
+      "dark": "lnb_blue",
+      "light": "blue"
     },
     "diffRemoved": {
-      "dark": "magenta",
+      "dark": "lnb_red",
       "light": "red"
     },
     "diffContext": {
-      "dark": "lightgray",
-      "light": "gray"
+      "dark": "lnb_base00",
+      "light": "lightgray"
     },
     "diffHunkHeader": {
       "dark": "darkblue",
       "light": "darkblue"
     },
     "diffHighlightAdded": {
-      "dark": "green",
-      "light": "lightgreen"
+      "dark": "cyan",
+      "light": "darkblue"
     },
     "diffHighlightRemoved": {
       "dark": "red",
       "light": "magenta"
     },
     "diffAddedBg": {
-      "dark": "darkgreen",
-      "light": "#e6ffe6"
+      "dark": "darkblue",
+      "light": "#e6f0ff"
     },
     "diffRemovedBg": {
       "dark": "darkred",
       "light": "#ffe6e6"
     },
     "diffContextBg": {
-      "dark": "darkblue",
+      "dark": "black",
       "light": "white"
     },
     "diffLineNumber": {
@@ -140,8 +140,8 @@
       "light": "gray"
     },
     "diffAddedLineNumberBg": {
-      "dark": "darkgreen",
-      "light": "#e6ffe6"
+      "dark": "darkblue",
+      "light": "#e6f0ff"
     },
     "diffRemovedLineNumberBg": {
       "dark": "darkred",
