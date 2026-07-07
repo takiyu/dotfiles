@@ -27,9 +27,9 @@ MOVE_ID_TTL = 2.0
 # transform may be an empty string when not needed.
 # scale may be an empty string when not needed.
 DISPLAY_CONFIGS: list[tuple[str, str, str, str, str]] = [
-    ('DP-4', '2560x1440', '0,320', '270', ''),
-    ('DP-3', '2560x1440', '1440,0', '180', ''),
-    ('HDMI-A-3', '2560x1440', '1440,1440', '0', ''),
+    ('DP-2', '2560x1440', '0,320', '270', ''),
+    ('HDMI-A-1', '2560x1440', '1440,0', '180', ''),
+    ('DP-1', '2560x1440', '1440,1440', '0', ''),
     ('HDMI-A-2', '2560x1440', '4000,320', '90', ''),
 ]
 
