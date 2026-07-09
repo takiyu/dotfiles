@@ -14,6 +14,10 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Cursor
 export WLR_NO_HARDWARE_CURSORS=1
 
+# Workaround for NVIDIA proprietary driver issues on Wayland
+export WLR_DRM_NO_ATOMIC=1
+export __GL_GSYNC_ALLOWED=0
+
 # Fcitx
 export GTK_IM_MODULE=fcitx5
 export QT_IM_MODULE=fcitx5
