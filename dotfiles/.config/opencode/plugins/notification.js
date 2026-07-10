@@ -26,7 +26,8 @@ const SOUND_PERMISSION = path.join(SOUND_DIR, 'bell.oga');
 // Send a desktop notification via `notify-send`.
 async function sendNotification($, title, status, urgency, description,
                                 iconOverride, soundFile,
-                                expireMs = null) {
+                                expireMs = null,
+                                transient = false) {
     const icon = iconOverride
         || (urgency === URGENCY_CRITICAL ? ICON_ERROR : ICON);
     const args = [
@@ -36,6 +37,9 @@ async function sendNotification($, title, status, urgency, description,
     ];
     if (expireMs !== null) {
         args.push('-t', String(expireMs));
+    }
+    if (transient) {
+        args.push('-e');
     }
     const body = description
         ? `${status}\n${description}`
@@ -94,11 +98,12 @@ export const NotificationPlugin = async (
                     $,
                     title,
                     status,
-                    URGENCY_CRITICAL,
+                    URGENCY_NORMAL,
                     description,
-                    null,
+                    ICON_ERROR,
                     `${SOUND_ERROR}`,
-                    ERROR_EXPIRE_MS
+                    ERROR_EXPIRE_MS,
+                    true
                 );
             }
 
