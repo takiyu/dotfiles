@@ -46,8 +46,6 @@
         "websearch": "allow",
         "codesearch": "allow",
         "external_directory": {
-          "*": "deny",
-          "{cwd}/**": "allow",
           "/tmp/*": "allow"
         }
       }
