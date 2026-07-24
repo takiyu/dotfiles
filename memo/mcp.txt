@@ -1,0 +1,10 @@
+## Blender-MCP
+```
+uv tool install git+https://projects.blender.org/lab/blender_mcp.git#subdirectory=mcp
+```
+
+## Playwright-MCP
+```
+npx @playwright/mcp@latest --browser firefox
+npx playwright install firefox
+```

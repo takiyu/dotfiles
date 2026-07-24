@@ -61,6 +61,17 @@
         "firefox"
       ],
       "enabled": true
+    },
+    "blender": {
+      "type": "local",
+      "command": [
+        "blender-mcp"
+      ],
+      "enabled": true,
+      "environment": {
+        "BLENDER_MCP_HOST": "localhost",
+        "BLENDER_MCP_PORT": "9876"
+      }
     }
   },
   "formatter": {
