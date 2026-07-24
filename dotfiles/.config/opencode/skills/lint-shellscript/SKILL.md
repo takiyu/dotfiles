@@ -31,7 +31,10 @@ Then scan custom rules (fix iteratively):
 - Unquoted variable expansions where word-splitting/globbing is dangerous
 - `source` without `set -e` or error handling
 - POSIX `sh` scripts using arrays, `[[ ]]`, `$'...'`
-- Section delimiters wrong (80 chars, 2 blank lines before named header, 1 after separator)
+- Section delimiters wrong
+  - Named header (`# ---... Name ...---` block): 2 blank lines before, **0 after**.
+  - Separator block (end-of-file `# ---` triple): 2 blank lines before.
+  - Every delimiter line must be exactly 80 chars with a `# ` prefix.
 - Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 - File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 

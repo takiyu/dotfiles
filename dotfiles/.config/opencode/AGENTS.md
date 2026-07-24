@@ -25,6 +25,9 @@
 - Keep changes to a minimum; do not change irrelevant parts
 - Absolutely forbid duplicated code; consolidate similar functionality into common functions
 - Constants must be defined in `constants.*` files
+- Enumerations must be defined in `enum.*` files
+- Configuration control must be defined in `config.*` files
+  - However, for single-script projects or extremely small projects, these may be written in the main script
 - Use semantically correct structure
 - Write minimal, concise, and readable code
 - Always write comparison operators with the left side smaller (`<` orientation)
@@ -70,6 +73,11 @@ Implementation code here
 # -----------------------------------------------------------------------------
 ```
 `#` can be replaced (e.g. `//`) for other languages.
+
+Delimiter spacing:
+- Named header: 2 blank lines before, 0 after.
+- End-of-file separator block: 2 blank lines before.
+- Python: 79 chars per line; TypeScript/Shell: 80 chars.
 
 ## Language-specific
 ### Python

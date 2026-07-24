@@ -34,7 +34,10 @@ Then scan custom rules (fix iteratively):
 - `interface` used for props/state (use `type`)
 - camelCase variable that should be snake_case (non-function, non-component)
 - PascalCase function that is not a React component or hook
-- Section delimiters wrong (80 chars, `// ` prefix)
+- Section delimiters wrong
+  - Named header (`// ---... Name ...---` block): 2 blank lines before, **0 after**.
+  - Separator block (end-of-file `// ---` triple): 2 blank lines before.
+  - Every delimiter line must be exactly 80 chars with a `// ` prefix.
 - Trailing comma after the last element in function args, list, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
 - File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 
