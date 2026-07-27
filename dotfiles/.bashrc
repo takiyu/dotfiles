@@ -595,13 +595,13 @@ alias ca_free="copilot_allow_all_official --model gpt-5-mini"
 alias ca=ca_local
 
 # Aliases for opencode
-alias ocl="opencode_local.sh"
-alias oc=ocl
-alias oc_serve="ocl serve --hostname 0.0.0.0"
+alias oc="opencode_local.sh"
+alias oc_serve="oc serve --hostname 0.0.0.0"
 alias gcmA='auto_commit_opencode.sh'
 
 # Alias for agent
 alias a=oc
+alias ar="opencode_local_loop.sh"
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
