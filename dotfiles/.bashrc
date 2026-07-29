@@ -601,7 +601,7 @@ alias gcmA='auto_commit_opencode.sh'
 
 # Alias for agent
 alias a=oc
-alias ar="opencode_local_loop.sh"
+alias al="opencode_local_loop.sh"
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
