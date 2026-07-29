@@ -317,10 +317,14 @@ alias gbc='git branch --show-current'
 alias gra='git remote add'
 alias grao='git remote add origin'
 alias gurl='git remote -v'
-alias gurlset='git remote set-url'
-alias gurlseto='git remote set-url origin'
 alias gseturl='git remote set-url'
-alias gseturlo='git remote set-url origin'
+function gseturlo() {
+  if git remote get-url origin >/dev/null 2>&1; then
+    git remote set-url origin "$@"
+  else
+    git remote add origin "$@"
+  fi
+}
 alias gd='git diff'
 alias gdc='git diff --cached'
 alias gda='git diff --submodule=diff'
