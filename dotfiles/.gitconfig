@@ -4,6 +4,9 @@
 	email = takiyu1025.txu.development@gmail.com
 [alias]
 	graph = log --graph --pretty=format:'%C(green)<%ad>%C(reset)[%C(bold blue)%h%Creset](%C(yellow)%an%C(reset))%C(bold green)%d%Creset %C(reset)%s%C(reset) %C(green)<%cr>%C(reset)' --abbrev-commit --date=format-local:'%Y/%m/%d'
+[core]
+	quotepath = false
+	precomposeunicode = true
 [diff]
 	tool = nvim
 [difftool "nvim"]
