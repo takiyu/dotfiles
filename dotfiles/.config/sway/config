@@ -128,4 +128,17 @@ bindsym shift+Ctrl+Print exec slurp | grim -g - - | tee ~/screenshot_$(date +%Y%
 bindsym $mod+Print exec ~/dotfiles/bin/record_screen_toggle.sh
 
 
+### Workaround for Xwayland infinite loops
+# Float Xwayland dialog/utility/popup windows to avoid property/geometry loops
+# with the tiling WM (e.g. GIMP export dialogs). Main windows remain tiled.
+for_window [shell="xwayland" window_type="dialog"] floating enable
+for_window [shell="xwayland" window_type="utility"] floating enable
+for_window [shell="xwayland" window_type="toolbar"] floating enable
+for_window [shell="xwayland" window_type="splash"] floating enable
+for_window [shell="xwayland" window_type="menu"] floating enable
+for_window [shell="xwayland" window_type="popup_menu"] floating enable
+for_window [shell="xwayland" window_type="dropdown_menu"] floating enable
+for_window [shell="xwayland" window_type="tooltip"] floating enable
+for_window [shell="xwayland" window_type="notification"] floating enable
+
 include /etc/sway/config.d/*
