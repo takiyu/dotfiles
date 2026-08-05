@@ -10,9 +10,12 @@
 - Always use high reasoning effort unless explicitly overridden.
 - No git commit without user instructions.
 - **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
+- When project-specific rules or specifications are provided, append them to the project root AGENTS.md in English.
+- If the user's request is incomplete or you have a better suggestion, consult with the user.
 
 # Coding Rules
 ## Must Do
+- Code must always be kept clean, and any rule violations must be fixed immediately.
 - Follow existing code style (important)
 - Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting
