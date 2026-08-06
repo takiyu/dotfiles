@@ -29,6 +29,10 @@
             "output": [
               "text"
             ]
+          },
+          "limit": {
+            "context": 262144,
+            "output": 8192
           }
         }
       }
@@ -87,5 +91,11 @@
       ],
       "extensions": [".ts", ".tsx", ".js", ".jsx"]
     }
+  },
+  "compaction": {
+    "auto": true,
+    "reserved": 131072,
+    "tail_turns": 2,
+    "preserve_recent_tokens": 8000
   }
 }
