@@ -112,15 +112,43 @@ return {
         capabilities = capabilities,
       })
 
+      -- Resolve Poetry virtual environment path for a buffer.
+      local function resolve_poetry_python_path(bufname)
+        local root = vim.fs.root(bufname, 'pyproject.toml')
+        if not root then
+          return nil
+        end
+        local result = vim.system(
+          { 'poetry', 'env', 'info', '--path' },
+          { cwd = root, text = true }
+        ):wait()
+        if result.code ~= 0 then
+          return nil
+        end
+        local venv = vim.trim(result.stdout)
+        if venv == '' then
+          return nil
+        end
+        return venv .. '/bin/python'
+      end
+
       -- Configure PyRight
       vim.lsp.config('pyright', {
+        before_init = function(_, config)
+          local bufname = vim.api.nvim_buf_get_name(
+            vim.api.nvim_get_current_buf()
+          )
+          local python_path = resolve_poetry_python_path(bufname)
+          if python_path then
+            config.settings = config.settings or {}
+            config.settings.python = config.settings.python or {}
+            config.settings.python.pythonPath = python_path
+          end
+        end,
         settings = {
           python = {
-            venvPath = ".",
-            venv = ".venv",
-            pythonPath = "./.venv/bin/python",
             analysis = {
-              extraPaths = { "." }
+              extraPaths = { '.' }
             }
           }
         },
