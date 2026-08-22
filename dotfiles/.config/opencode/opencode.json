@@ -43,6 +43,15 @@
   "plugin": [
     "{env:HOME}/.config/opencode/plugins/hooks.js"
   ],
+  "permission": {
+    "external_directory": "allow",
+    "read": "allow",
+    "edit": {
+      "*": "allow",
+      "~/**": "ask",
+      "/**": "ask"
+    }
+  },
   "agent": {
     "build": {
       "permission": {
