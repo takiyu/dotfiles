@@ -23,8 +23,7 @@
           "attachment": true,
           "modalities": {
             "input": [
-              "text",
-              "image"
+              "text"
             ],
             "output": [
               "text"
@@ -33,6 +32,9 @@
           "limit": {
             "context": 262144,
             "output": 8192
+          },
+          "options": {
+            "reasoningEffort": "max"
           }
         }
       }
