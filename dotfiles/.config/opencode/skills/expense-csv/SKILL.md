@@ -22,12 +22,27 @@ and purpose from each receipt file in the target directory.
    - 会社名 (issuer/operating company)
    - 内容 (route, item, or description)
    - 金額（円） (integer)
-   - 備考 (source filename)
+   - 備考 (the moved/renamed filename, `./領収書/<name>`)
 5. Sort rows by date and append a total row.
 6. Save as `経費申請.csv` with UTF-8 BOM encoding.
+7. Move each input file into `./領収書/` with the name
+   `<日付>_<金額>_<分類>_<内容>.*`, where:
+   - 日付 is the ISO date (YYYY-MM-DD)
+   - 金額 is the integer amount in yen
+   - 分類 and 内容 are the CSV's 分類 and 内容 values
+   - The extension is preserved.
+   When one input file maps to multiple CSV rows (e.g. combined transit
+   history), treat it like any other file: make a single row whose 日付 is
+   the period covering all rows (`YYYY-MM-DD～YYYY-MM-DD`), 分類 and 内容
+   roughly summarized (e.g. 交通費 / 乗車履歴（往復）), and 金額 as the total.
+   Move it into `./領収書/` using that single name.
 
 ## Conventions
 
+- 分類 (expense category) must be one of: 交通費, 宿泊費, 会議費, 消耗品費,
+  印刷代. Airfare and transit both map to 交通費; meals map to 会議費;
+  office consumables (tape, wet wipes, etc.) map to 消耗品費; convenience-store
+  printing maps to 印刷代.
 - Use the actual company name: 東海旅客鉄道株式会社, 東日本旅客鉄道株式会社,
   東京地下鉄株式会社, 小田急電鉄株式会社, 伊豆箱根鉄道株式会社, etc.
 - For rail receipts, put only the route in 内容; omit train numbers and
