@@ -22,20 +22,22 @@ and purpose from each receipt file in the target directory.
    - 会社名 (issuer/operating company)
    - 内容 (route, item, or description)
    - 金額（円） (integer)
-   - 備考 (the moved/renamed filename, `./領収書/<name>`)
+   - 備考 (the renamed filename, `./領収書_<name>`)
 5. Sort rows by date and append a total row.
 6. Save as `経費申請.csv` with UTF-8 BOM encoding.
-7. Move each input file into `./領収書/` with the name
-   `<日付>_<金額>_<分類>_<内容>.*`, where:
-   - 日付 is the ISO date (YYYY-MM-DD)
-   - 金額 is the integer amount in yen
+7. Rename each input file in place (same directory, no subfolder) with the
+   prefix `領収書_` and the name
+   `領収書_<日付>_<金額>_<分類>_<内容>.*`, where:
+   - 日付 is the ISO date without dashes (YYYYMMDD, e.g. 20260903)
+   - 金額 is the integer amount in yen followed by 円 (e.g. 29652円)
    - 分類 and 内容 are the CSV's 分類 and 内容 values
    - The extension is preserved.
    When one input file maps to multiple CSV rows (e.g. combined transit
    history), treat it like any other file: make a single row whose 日付 is
-   the period covering all rows (`YYYY-MM-DD～YYYY-MM-DD`), 分類 and 内容
-   roughly summarized (e.g. 交通費 / 乗車履歴（往復）), and 金額 as the total.
-   Move it into `./領収書/` using that single name.
+   the period covering all rows, written without dashes
+   (`YYYYMMDD～YYYYMMDD`), 分類 and 内容 roughly summarized (e.g. 交通費 /
+   乗車履歴（往復）), and 金額 as the total. Rename it in place using that
+   single `領収書_`-prefixed name.
 
 ## Conventions
 
