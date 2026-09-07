@@ -1,0 +1,10 @@
+[project]
+name = "business-card-ocr"
+version = "0.1.0"
+description = "Business card OCR via RapidOCR"
+requires-python = ">=3.11"
+dependencies = [
+    "rapidocr>=3.9.2",
+    "onnxruntime>=1.17.0",
+    "pillow>=10.0.0",
+]
