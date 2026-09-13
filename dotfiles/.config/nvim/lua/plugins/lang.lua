@@ -64,7 +64,7 @@ return {
   {
     'fidian/hexmode',
     init = function()
-      vim.g.hexmode_patterns = '*.bin,*.exe,*.dat,*.o,*.DAT,*.NAT,*.mwf,*.MWF,*.ecg,*.ECG,*.glb'
+      vim.g.hexmode_patterns = '*.bin,*.exe,*.dat,*.o,*.DAT,*.NAT,*.mwf,*.MWF,*.ecg,*.ECG,*.glb,*.ext,*.idx'
       vim.g.hexmode_xxd_options = '-g 2' -- xxd option: 2 bytes
     end,
     config = function()
