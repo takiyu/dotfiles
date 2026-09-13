@@ -10,6 +10,8 @@
 - Always use high reasoning effort unless explicitly overridden.
 - No git commit without user instructions.
 - **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
+- Delete temporary/scratch files created during the task when they are no longer needed (work files under /tmp, autosaves, downloads, build artifacts, etc.).
+- Put session scratch files under /tmp/opencode/$OPENCODE_PID/ so unrelated sessions do not mix. Do not read or modify other sessions' directories.
 - When project-specific rules or specifications are provided, append them to the project root AGENTS.md in English.
 - If the user's request is incomplete or you have a better suggestion, consult with the user.
 
