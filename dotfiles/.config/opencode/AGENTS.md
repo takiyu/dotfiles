@@ -107,5 +107,15 @@ Delimiter spacing:
 ### Docker
 - Dockerfile only (not docker-compose for single service)
 
+### Makefile
+- Declare `.PHONY` with all targets at the top.
+- 80 chars/line, recipes indented with tab.
+- Section headers use dashed comment lines (`# --...--`), 2 blank lines before and 0 after; section name centered between dashes.
+- Target name followed by `:`; all commands are one line each, separated by line breaks.
+- Suppress echo with `@` for banner lines (`@echo "----"`); keep actual commands visible (no `@`).
+- Split long shell commands with `\` line continuation, indented with tab.
+- Group related targets into sections and keep an end-of-file separator block (2 blank lines before).
+- Use `$(MAKE)` for recursive make.
+
 ### Commit Messages
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
