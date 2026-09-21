@@ -1,6 +1,8 @@
 # Subagents
-- Delegate independent subtasks via the task tool.
+- Split tasks into the smallest possible independent subtasks.
+- Delegate subtasks via the task tool and work on them in parallel; run multiple task calls in a single message whenever possible.
 - Delegate exploration, research, and code review to subagents for parallelization.
+- Do not work directly on subtasks that a subagent can handle; delegate first and wait for results.
 
 # Task Rules
 - Never give up until finished; include behavior checks and testing without relying on users.
