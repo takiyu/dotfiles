@@ -1,7 +1,6 @@
 ---
 name: auto-commit
 description: Generates commit messages and checks code quality for staged changes. Prefer gcmA alias for fast use.
-allowed-tools: bash
 ---
 
 # Auto-Commit Workflow

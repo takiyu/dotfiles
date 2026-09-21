@@ -1,7 +1,6 @@
 ---
 name: lint-shellscript
 description: Run shell lint tools, then check custom coding rules. Severity labels in Japanese.
-allowed-tools: bash, write, edit
 ---
 
 # Shell Script Lint
@@ -31,11 +30,8 @@ Then scan custom rules (fix iteratively):
 - Unquoted variable expansions where word-splitting/globbing is dangerous
 - `source` without `set -e` or error handling
 - POSIX `sh` scripts using arrays, `[[ ]]`, `$'...'`
-- Section delimiters wrong
-  - Named header (`# ---... Name ...---` block): 2 blank lines before, **0 after**.
-  - Separator block (end-of-file `# ---` triple): 2 blank lines before.
-  - Every delimiter line must be exactly 80 chars with a `# ` prefix.
-- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
+- Section delimiters wrong (see AGENTS.md Delimiter spacing): 80 chars, `# ` prefix
+- Trailing comma after the last element (see AGENTS.md)
 - File does not end with exactly 3 lines of `# ------------------------------------------------------------------------------` (80 chars)
 
 **[中] Should fix:**

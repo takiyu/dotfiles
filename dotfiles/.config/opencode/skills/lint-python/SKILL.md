@@ -1,7 +1,6 @@
 ---
 name: lint-python
 description: Run Python lint tools, then check custom coding rules. Severity labels in Japanese.
-allowed-tools: bash, write, edit
 ---
 
 # Python Lint
@@ -34,7 +33,7 @@ command -v pycodestyle >/dev/null 2>&1 \
 Then review source files and scan custom rules (fix iteratively):
 
 **[高] Must fix:**
-- Docstrings present
+- Docstring forbidden (use English comments instead)
 - Missing type hints on params or return
 - `typing.Dict/List/Tuple/Union` (use `dict[]/list[]/tuple[]/Optional[X]`)
 - `typing.Any` — allowed when no other type exists; never omit annotations to avoid it
@@ -42,11 +41,8 @@ Then review source files and scan custom rules (fix iteratively):
 - `{}` for empty dict (use `dict()`), `[]` for empty list (use `list()`)
 - `X | None` syntax (use `Optional[X]`)
 - Private name accessed from another module (excluding tests)
-- Section delimiters wrong
-  - Named header (`# ---... Name ...---` block): 2 blank lines before, **0 after**.
-  - Separator block (end-of-file `# ---` triple): 2 blank lines before.
-  - Every delimiter line must be exactly 79 chars.
-- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
+- Section delimiters wrong (see AGENTS.md Delimiter spacing): 79 chars, `# ` prefix
+- Trailing comma after the last element (see AGENTS.md)
 - File does not end with exactly 3 lines of `# -----------------------------------------------------------------------------` (79 chars)
 
 **[中] Should fix:**

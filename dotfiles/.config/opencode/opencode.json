@@ -95,7 +95,7 @@
       "command": [
         "npx", "prettier", "--stdin-filepath", "{filename}",
         "--single-quote", "--semi", "--tab-width", "2",
-        "--print-width", "100", "--trailing-comma", "all"
+        "--print-width", "100", "--trailing-comma", "none"
       ],
       "extensions": [".ts", ".tsx", ".js", ".jsx"]
     }

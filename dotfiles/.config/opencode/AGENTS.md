@@ -26,9 +26,8 @@
 - Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
-- Write comments in English to explain logic
-- Add comments for complex logic blocks
-- Add one-line English comment at the beginning of each code block
+- Write comments in English
+- Add a one-line English comment at the start of each non-trivial code block (explain the logic below)
 - Function dependencies: higher-level (caller) above, lower-level (callee) below
 - Import/Include at the top of the file
 - Keep changes to a minimum; do not change irrelevant parts
@@ -40,8 +39,7 @@
 - Use semantically correct structure
 - Write minimal, concise, and readable code
 - Always write comparison operators with the left side smaller (`<` orientation)
-- After implementing each feature, compile and test before proceeding to the next
-- Incrementally implement one feature at a time: write code, test it, make it perfect, then move to the next. Do not write all code at once.
+- Incrementally implement one feature at a time: write code, compile and test it, make it perfect, then move to the next. Do not write all code at once.
 - Pack multiple statements or conditions per line when within length limits to reduce unnecessary line breaks
 - Never use inline if-else (ternary) expressions
 
