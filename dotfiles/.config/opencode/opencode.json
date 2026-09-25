@@ -29,6 +29,10 @@
             "output": [
               "text"
             ]
+          },
+          "limit": {
+            "context": {env:LLM_MAX_CONTEXT},
+            "output": {env:LLM_MAX_OUTPUT}
           }
         }
       }

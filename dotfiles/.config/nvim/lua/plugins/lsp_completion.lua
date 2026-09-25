@@ -21,7 +21,7 @@ return {
       -- Resolve local LLM model
       local function get_local_llm_config()
         -- 1. Check for local env variable
-        local host = os.getenv('LLM_API_HOST') or 'localhost:9000'
+        local host = os.getenv('LLM_API_HOST') or 'localhost:9001'
         -- 2. Determine local model
         local models_json = vim.fn.system('curl -sf --max-time 3 http://' .. host .. '/v1/models')
         local ok, models = pcall(vim.json.decode, models_json)
