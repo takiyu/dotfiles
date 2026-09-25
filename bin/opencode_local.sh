@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Starting OpenCode with local provider..."
-LLM_API_HOST="${LLM_API_HOST:-localhost:9000}"
+LLM_API_HOST="${LLM_API_HOST:-localhost:9001}"
 echo " - LLM_API_HOST: '$LLM_API_HOST'"
 
 if [ -z "$LLM_MODEL" ]; then
