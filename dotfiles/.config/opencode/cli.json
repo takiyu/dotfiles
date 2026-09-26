@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "theme": {
+    "name": "tango-lx"
+  },
+  "keybinds": {
+    "session.sidebar.toggle": "ctrl+f",
+    "session.list": "ctrl+l",
+    "session.toggle.thinking": "ctrl+t"
+  },
+  "scroll": {
+    "speed": 10,
+    "acceleration": true
+  },
+  "diffs": {
+    "wrap": "word"
+  },
+  "session": {
+    "sidebar": "auto",
+    "scrollbar": false,
+    "thinking": "hide"
+  },
+  "animations": true
+}

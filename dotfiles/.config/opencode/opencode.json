@@ -3,13 +3,7 @@
   "share": "disabled",
   "autoupdate": true,
   "lsp": true,
-  "disabled_providers": [
-    "opencode",
-    "openai",
-    "anthropic",
-    "github-copilot",
-    "openrouter"
-  ],
+  "enabled_providers": ["local"],
   "provider": {
     "local": {
       "npm": "@ai-sdk/openai-compatible",
@@ -20,7 +14,6 @@
       },
       "models": {
         "{env:LLM_MODEL}": {
-          "attachment": true,
           "modalities": {
             "input": [
               "text",
@@ -40,9 +33,6 @@
   },
   "model": "local/{env:LLM_MODEL}",
   "small_model": "local/{env:LLM_MODEL}",
-  "plugin": [
-    "{env:HOME}/.config/opencode/plugins/hooks.js"
-  ],
   "permission": {
     "external_directory": "allow",
     "read": "allow",
