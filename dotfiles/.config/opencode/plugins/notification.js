@@ -39,11 +39,16 @@ const definition = {
     const description = project.description || '';
     const controller = new AbortController();
 
-    // Subscribe to server events for the whole plugin lifetime.
+    // Subscribe to server events and notify only for own sessions.
     void (async () => {
       const options = { signal: controller.signal };
       for await (const event of ctx.event.subscribe(options)) {
-        handleEvent(event, title, description);
+        const request = notificationFor(event);
+        if (!request) continue;
+        const owner = await sessionDirectory(ctx, (event.data || {}).sessionID);
+        if (owner !== ctx.location.directory) continue;
+        sendNotification(title, request.status, URGENCY_NORMAL, description,
+          request.icon, request.sound, request.expire_ms, request.transient);
       }
     })();
 
@@ -66,22 +71,35 @@ if (typeof module !== 'undefined') {
 // -----------------------------------------------------------------------------
 // ------------------------------ Implementation -------------------------------
 // -----------------------------------------------------------------------------
-// Notify the user for supported event types.
-function handleEvent(event, title, description) {
+// Map a server event to a notification request, or null to skip.
+function notificationFor(event) {
+  const data = event.data || {};
   if (event.type === 'session.execution.succeeded') {
-    const status = event.message || 'Session completed';
-    sendNotification(title, status, URGENCY_NORMAL, description,
-      ICON_COMPLETE, SOUND_COMPLETE);
+    return { status: data.message || 'Session completed',
+      icon: ICON_COMPLETE, sound: SOUND_COMPLETE };
   }
   if (event.type === 'session.execution.failed') {
-    const status = event.message || event.error || 'An error occurred';
-    sendNotification(title, status, URGENCY_NORMAL, description,
-      ICON_ERROR, SOUND_ERROR, ERROR_EXPIRE_MS, true);
+    return { status: data.message || data.error || 'An error occurred',
+      icon: ICON_ERROR, sound: SOUND_ERROR,
+      expire_ms: ERROR_EXPIRE_MS, transient: true };
   }
   if (event.type === 'permission.asked') {
-    const status = event.message || 'Task paused — permission requested';
-    sendNotification(title, status, URGENCY_NORMAL, description,
-      ICON_PERMISSION, SOUND_PERMISSION);
+    return { status: data.message || 'Task paused — permission requested',
+      icon: ICON_PERMISSION, sound: SOUND_PERMISSION };
+  }
+  return null;
+}
+
+
+// Resolve the directory that owns the given session.
+async function sessionDirectory(ctx, session_id) {
+  if (!session_id) return null;
+  try {
+    const session = await ctx.session.get({ sessionID: session_id });
+    return (session && session.location && session.location.directory) || null;
+  } catch (error) {
+    void error;
+    return null;
   }
 }
 
