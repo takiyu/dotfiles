@@ -1,9 +1,3 @@
-# Subagents
-- Split tasks into the smallest possible independent subtasks.
-- Delegate subtasks via the task tool and work on them in parallel; run multiple task calls in a single message whenever possible.
-- Delegate exploration, research, and code review to subagents for parallelization.
-- Do not work directly on subtasks that a subagent can handle; delegate first and wait for results.
-
 # Task Rules
 - Never give up until finished; include behavior checks and testing without relying on users.
 - Must check code behavior by running or testing it.
@@ -119,3 +113,9 @@ Delimiter spacing:
 
 ### Commit Messages
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
+
+# FOR CRITICAL BUG FIX (MiMo-V2.6-Pro-RL & Subagent Environment)
+1. DO NOT duplicate identical tool calls with the same parameters in consecutive turns.
+2. If a tool call (e.g., executing a command or editing a file) results in the same output or an unchanged state, you MUST stop using that tool and change your plan immediately.
+3. You are running as the 'Build Subagent' inside OpenCode. Do NOT attempt to spawn other agents or invoke non-existent browser tools. Focus purely on writing, editing, and compiling/testing code using available workspace tools.
+4. Output your chain-of-thought within <think> tags strictly before generating the tool call.x
