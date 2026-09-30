@@ -6,7 +6,10 @@ LLM_API_HOST="${LLM_API_HOST:-localhost:9001}"
 echo " - LLM_API_HOST: '$LLM_API_HOST'"
 
 # Fetch model information
-MODELS_JSON=$(curl -sf "http://${LLM_API_HOST}/v1/models" | tr -d ' \n' || true)
+if ! MODELS_JSON=$(curl -sf "http://${LLM_API_HOST}/v1/models" | tr -d ' \n'); then
+    echo "Error: Failed to communicate with API server at '${LLM_API_HOST}'" >&2
+    exit 1
+fi
 # Parsing model name
 if [ -z "${LLM_MODEL:-}" ]; then
     LLM_MODEL=$(echo "$MODELS_JSON" | grep -o '"id":"[^"]*"' \
