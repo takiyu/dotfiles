@@ -3,7 +3,12 @@
   "share": "disabled",
   "autoupdate": true,
   "lsp": true,
-  "enabled_providers": ["local"],
+  "experimental": {
+    "policies": [
+      { "action": "provider.use", "resource": "*", "effect": "deny" },
+      { "action": "provider.use", "resource": "local", "effect": "allow" }
+    ]
+  },
   "provider": {
     "local": {
       "npm": "@ai-sdk/openai-compatible",
