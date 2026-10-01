@@ -5,8 +5,9 @@ echo "Starting OpenCode with local provider..."
 LLM_API_HOST="${LLM_API_HOST:-localhost:9001}"
 echo " - LLM_API_HOST: '$LLM_API_HOST'"
 
-# Fetch model information
-if ! MODELS_JSON=$(curl -sf "http://${LLM_API_HOST}/v1/models" | tr -d ' \n'); then
+# Fetch model information; abort if the API server is unreachable
+if ! MODELS_JSON=$(curl -sf --connect-timeout 5 --max-time 10 \
+        "http://${LLM_API_HOST}/v1/models" | tr -d ' \n'); then
     echo "Error: Failed to communicate with API server at '${LLM_API_HOST}'" >&2
     exit 1
 fi
@@ -14,6 +15,11 @@ fi
 if [ -z "${LLM_MODEL:-}" ]; then
     LLM_MODEL=$(echo "$MODELS_JSON" | grep -o '"id":"[^"]*"' \
         | head -1 | cut -d'"' -f4 || true)
+fi
+# Abort if the response held no usable model id
+if [ -z "$LLM_MODEL" ]; then
+    echo "Error: No model id parsed from API server at '${LLM_API_HOST}'" >&2
+    exit 1
 fi
 echo " - MODEL: '$LLM_MODEL'"
 # Parsing context length
