@@ -9,29 +9,37 @@
       { "action": "provider.use", "resource": "local", "effect": "allow" }
     ]
   },
-  "provider": {
+  "providers": {
     "local": {
-      "npm": "@ai-sdk/openai-compatible",
       "name": "Local LLM",
-      "options": {
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "http://{env:LLM_API_HOST}/v1",
         "apiKey": "local"
       },
       "models": {
         "{env:LLM_MODEL}": {
-          "modalities": {
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ]
+          "capabilities": {
+            "tools": true,
+            "input": ["text", "image"],
+            "output": ["text"]
           },
           "limit": {
             "context": {env:LLM_MAX_CONTEXT},
             "output": {env:LLM_MAX_OUTPUT}
-          }
+          },
+          "settings": {
+            "reasoningEffort": "high"
+          },
+          "variants": [
+            { "id": "none", "settings": { "reasoningEffort": "none" } },
+            { "id": "minimal", "settings": { "reasoningEffort": "minimal" } },
+            { "id": "low", "settings": { "reasoningEffort": "low" } },
+            { "id": "medium", "settings": { "reasoningEffort": "medium" } },
+            { "id": "high", "settings": { "reasoningEffort": "high" } },
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } },
+            { "id": "max", "settings": { "reasoningEffort": "max" } }
+          ]
         }
       }
     }
