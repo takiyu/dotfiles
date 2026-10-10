@@ -499,12 +499,22 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
     export EDITOR=nvim
     export GIT_EDITOR=nvim
 
-    # Open git modified/untracked files (including submodules) in nvim tabs
+    # Open git modified/untracked files in nvim tabs (gdva/gdvda add submodules)
     # Collect modified files in git repo (helper for gdvim/gdvimdiff)
+    # $1 == "with-submodule" also collects files inside submodules
     _get_git_modified_files() {
+        local with_submodule="$1"
         local files
-        files=$(git -c core.quotepath=false ls-files -m -o --exclude-standard 2>/dev/null; \
-                git submodule foreach --recursive 'git -c core.quotepath=false ls-files -m -o --exclude-standard | sed "s#^#$path/#"' 2>/dev/null | sed '/^Entering /d') || true
+        files=$(git -c core.quotepath=false ls-files -m -o --exclude-standard 2>/dev/null) || true
+        if [ "$with_submodule" = "with-submodule" ]; then
+            local sub_files
+            sub_files=$(git submodule foreach --recursive 'git -c core.quotepath=false ls-files -m -o --exclude-standard | sed "s#^#$displaypath/#"' 2>/dev/null | sed '/^Entering /d') || true
+            if [ -n "$files" ] && [ -n "$sub_files" ]; then
+                files=$(printf '%s\n%s' "$files" "$sub_files")
+            elif [ -n "$sub_files" ]; then
+                files=$sub_files
+            fi
+        fi
         if [ -z "$files" ]; then
             echo "No modified or untracked files found." >&2
             return 1
@@ -513,9 +523,9 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
     }
 
     gdvim() {
-        # Collect modified and untracked files in current repo and submodules
+        # Collect modified files; $1 == "with-submodule" includes submodules
         local files
-        files=$(_get_git_modified_files) || return 0
+        files=$(_get_git_modified_files "$1") || return 0
         # Filter to existing regular files only and open with nvim using null-delimited xargs
         printf '%s\n' "$files" | while IFS= read -r f; do
             if [ -f "$f" ]; then
@@ -524,26 +534,32 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
         done | xargs -0 nvim -p --
     }
     alias gdv=gdvim
+    alias gdva='gdvim with-submodule'
 
     gdvimdiff() {
-        # Collect modified files in current repo and submodules
+        # Collect modified files; $1 == "with-submodule" includes submodules
         local files
-        files=$(_get_git_modified_files) || return 0
-        # Get prefix for relative path conversion
-        local prefix
-        prefix=$(git rev-parse --show-prefix)
+        files=$(_get_git_modified_files "$1") || return 0
         # Prepare temp files and build nvim command
         local tmp_files=()
         local file_pairs=()
         while IFS= read -r f; do
-            if [ -f "$f" ] && git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
-                # Create secure temp file with mktemp
-                local tmp_file=$(mktemp /tmp/gdvimdiff_XXXXXX_$(basename "$f")) || continue
-                # Get git HEAD version to temp file (use prefix for repo-root relative path)
-                git show "HEAD:${prefix}${f}" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
-                tmp_files+=("$tmp_file")
-                file_pairs+=("$f" "$tmp_file")
-            fi
+            [ -f "$f" ] || continue
+            # Resolve the file inside its own repo/submodule for git lookups
+            local dir
+            dir=$(dirname "$f")
+            local base
+            base=$(basename "$f")
+            local rel
+            rel=$(git -C "$dir" -c core.quotepath=false ls-files --full-name \
+                    --error-unmatch -- "$base" 2>/dev/null) || continue
+            # Create secure temp file with mktemp
+            local tmp_file
+            tmp_file=$(mktemp "/tmp/gdvimdiff_XXXXXX_$base") || continue
+            # Get git HEAD version to temp file
+            git -C "$dir" show "HEAD:$rel" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
+            tmp_files+=("$tmp_file")
+            file_pairs+=("$f" "$tmp_file")
         done <<< "$files"
         # Open all files in vimdiff tabs
         if [ ${#file_pairs[@]} -gt 0 ]; then
@@ -564,6 +580,7 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
         fi
     }
     alias gdvd=gdvimdiff
+    alias gdvda='gdvimdiff with-submodule'
 fi
 
 # ------------------------------------------------------------------------------
