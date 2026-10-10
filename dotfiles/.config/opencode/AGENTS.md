@@ -22,7 +22,8 @@
 - Extract pure functions outside classes
 - Write comments in English
 - Add a one-line English comment at the start of each non-trivial code block (explain the logic below)
-- Function dependencies: higher-level (caller) above, lower-level (callee) below
+- Function declaration order MUST follow usage order, top-to-bottom: higher-level (caller) above, lower-level (callee) below. Group similar functions in the same section.
+- Constants and classes that are not exported MUST be placed below the `Implementation` section separator (together with the implementation), never in the public/interface section above it. In Python, add `from __future__ import annotations` when a class must be moved below a function that annotates it.
 - Import/Include at the top of the file
 - Keep changes to a minimum; do not change irrelevant parts
 - Absolutely forbid duplicated code; consolidate similar functionality into common functions
