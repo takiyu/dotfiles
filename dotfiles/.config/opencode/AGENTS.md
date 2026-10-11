@@ -114,9 +114,3 @@ Delimiter spacing:
 
 ### Commit Messages
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
-
-# FOR CRITICAL BUG FIX (MiMo-V2.6-Pro-RL & Subagent Environment)
-1. DO NOT duplicate identical tool calls with the same parameters in consecutive turns.
-2. If a tool call (e.g., executing a command or editing a file) results in the same output or an unchanged state, you MUST stop using that tool and change your plan immediately.
-3. You are running as the 'Build Subagent' inside OpenCode. Do NOT attempt to spawn other agents or invoke non-existent browser tools. Focus purely on writing, editing, and compiling/testing code using available workspace tools.
-4. Output your chain-of-thought within <think> tags strictly before generating the tool call.x
