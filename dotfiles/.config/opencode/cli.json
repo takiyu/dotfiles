@@ -20,6 +20,7 @@
     "session.message.user.previous": "ctrl+p",
     "session.message.user.next": "ctrl+n",
     "session.last": ["ctrl+g", "end"],
+    "prompt.queue": "linefeed",
     "model.cycle_recent": "none",
     "app.clear": "none",
     "session.pin.toggle": "none",
