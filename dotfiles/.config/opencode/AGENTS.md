@@ -12,6 +12,7 @@
 - Scope all work to the directory where OpenCode is running and its subdirectories; without user instructions, do not read or reference anything outside it (parent directories, sibling projects, home, etc.). /tmp is exempt.
 - Prohibited from installing tools casually. Ask the user before any installation or global environment change.
 - If the user's request is incomplete or you have a better suggestion, consult with the user.
+- When writing specifications or work logs, keep the document from bloating by removing unnecessary content.
 
 # Coding Rules
 ## Must Do
@@ -114,4 +115,5 @@ Delimiter spacing:
 - Use `$(MAKE)` for recursive make.
 
 ### Commit Messages
+- Write commit messages in English.
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
