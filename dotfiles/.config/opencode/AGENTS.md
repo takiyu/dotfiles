@@ -1,8 +1,7 @@
 # Task Rules
-- Never give up until finished; include behavior checks and testing without relying on users.
-- Must check code behavior by running or testing it.
+- Never give up until finished; must check code behavior by running or testing it without relying on users.
 - When environment variable missing, search `.env` file and source it.
-- After completing tasks, repeatedly check that rules are being followed.
+- After completing tasks, re-check the result against these rules before reporting.
 - Always use high reasoning effort unless explicitly overridden.
 - No git commit without user instructions.
 - **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
@@ -22,8 +21,7 @@
 - Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
-- Write comments in English
-- Add a one-line English comment at the start of each non-trivial code block (explain the logic below)
+- Write comments in English, and add a one-line comment at the start of each non-trivial code block (explain the logic below)
 - Function declaration order MUST follow usage order, top-to-bottom: higher-level (caller) above, lower-level (callee) below. Group similar functions in the same section.
 - Constants and classes that are not exported MUST be placed below the `Implementation` section separator (together with the implementation), never in the public/interface section above it. In Python, add `from __future__ import annotations` when a class must be moved below a function that annotates it.
 - Import/Include at the top of the file
@@ -33,17 +31,16 @@
 - Enumerations must be defined in `enum.*` files
 - Configuration control must be defined in `config.*` files
   - However, for single-script projects or extremely small projects, these may be written in the main script
-- Use semantically correct structure
-- Write minimal, concise, and readable code
+- Write minimal, concise, and readable code with semantically correct structure
 - Always write comparison operators with the left side smaller (`<` orientation)
 - Incrementally implement one feature at a time: write code, compile and test it, make it perfect, then move to the next. Do not write all code at once.
-- Pack multiple statements or conditions per line when within length limits to reduce unnecessary line breaks
+- Pack multiple statements, conditions, or parameters per line when within the length limit
 - Never use inline if-else (ternary) expressions
 
 ## Must Not Do
-- Use class methods/global variables (avoid)
+- Use class methods/global variables
 - Create too many methods
-- Trailing comma after the last element in function args, list, dict, tuple, etc. (only allowed when the number of elements is extremely large; prefer fewer lines over multiple lines, avoid trailing comma even when allowed)
+- Trailing comma after the last element in function args, list, dict, tuple, etc. (allowed only when the number of elements is extremely large)
 
 ## Code Structure Template
 ```python
@@ -81,7 +78,7 @@ Implementation code here
 Delimiter spacing:
 - Named header: 2 blank lines before, 0 after.
 - End-of-file separator block: 2 blank lines before.
-- Python: 79 chars per line; TypeScript/Shell: 80 chars.
+- Delimiter lines: Python 79 chars; TypeScript 100 chars; all others 80 chars.
 
 ## Language-specific
 ### Python
@@ -92,7 +89,6 @@ Delimiter spacing:
 - `import os.path as osp` (not `pathlib.Path`)
 - Built-in generics: `dict[K, V]`, `list[X]`, `tuple[X, Y]`, `Optional[X]`
 - Align continuation lines to opening delimiter (`(`, `[`, `{`)
-- Pack multiple parameters per line within 79-char limit
 - `dict()` / `list()` for empty containers (not `{}` / `[]`)
 
 ### TypeScript
@@ -114,6 +110,6 @@ Delimiter spacing:
 - Group related targets into sections and keep an end-of-file separator block (2 blank lines before).
 - Use `$(MAKE)` for recursive make.
 
-### Commit Messages
+## Commit Messages
 - Write commit messages in English.
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
