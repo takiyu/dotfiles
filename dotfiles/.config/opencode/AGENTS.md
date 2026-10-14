@@ -9,6 +9,7 @@
 - Delete temporary/scratch files created during the task when they are no longer needed (work files under /tmp, autosaves, downloads, build artifacts, etc.).
 - Put session scratch files under /tmp/opencode/$OPENCODE_PID/ so unrelated sessions do not mix. Do not read or modify other sessions' directories.
 - Do not pollute the global environment outside /tmp during work (no writes outside /tmp and the project without explicit approval).
+- Scope all work to the directory where OpenCode is running and its subdirectories; without user instructions, do not read or reference anything outside it (parent directories, sibling projects, home, etc.). /tmp is exempt.
 - Prohibited from installing tools casually. Ask the user before any installation or global environment change.
 - If the user's request is incomplete or you have a better suggestion, consult with the user.
 
