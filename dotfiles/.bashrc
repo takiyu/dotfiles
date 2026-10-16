@@ -615,10 +615,10 @@ alias ca_sonnet4.6="copilot_allow_all_official --model claude-sonnet-4.6"
 alias ca_free="copilot_allow_all_official --model gpt-5-mini"
 alias ca=ca_local
 
-# Aliases for opencode
+# Aliases and functions for opencode
 alias oc="opencode_local.sh"
 alias oc_serve="oc serve --hostname 0.0.0.0"
-alias gcmA='auto_commit_opencode.sh'
+function gcmA() { oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }
 
 # Alias for agent
 alias a=oc
