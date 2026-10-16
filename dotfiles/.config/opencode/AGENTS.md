@@ -96,6 +96,7 @@ Delimiter spacing:
 - PascalCase classes, camelCase functions, snake_case variables
 - Use React Bootstrap, i18n all text
 - vitest: `test_*.ts` files
+- Ternary expressions are allowed only in the JSX/HTML markup part of React components (e.g. `{cond ? <A /> : <B />}`)
 
 ### Docker
 - Dockerfile only (not docker-compose for single service)

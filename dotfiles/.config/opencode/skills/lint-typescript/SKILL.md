@@ -45,7 +45,7 @@ Then scan custom rules (fix iteratively):
 - Hook defined outside component but missing `use` prefix
 - Mutable module-level state
 - Unused import
-- Inline if-else (ternary) expressions
+- Inline if-else (ternary) expressions (allowed only in the JSX/HTML markup part of React components, e.g. `{cond ? <A /> : <B />}`)
 - Unnecessary line breaks; pack multiple statements or conditions per line when within 100-char limit
 
 **[低] Nice to fix:**
