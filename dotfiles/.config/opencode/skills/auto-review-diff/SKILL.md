@@ -38,6 +38,8 @@ history. The loop stops when a review finds nothing or only trivial issues.
   commands are read-only: `status`, `diff`, `log`, `show`, `ls-files`,
   `rev-parse`, and `blame`. Handle untracked files with `git ls-files --others`
   and read them directly; never stage them to expose them.
+- **Visible progress.** Announce each round with the emoji banner and progress
+  line, and finish with the summary table, as defined under "Report".
 
 ## Workflow
 
@@ -74,8 +76,8 @@ history. The loop stops when a review finds nothing or only trivial issues.
 
 3. **Truncate and print** — if the change set is longer than 12000 characters,
    keep the first 9000 and the last 3000 characters, joined by
-   `... [truncated: <N> chars total]`. Then, under a `Review Target` banner,
-   print the stat, a blank line, and the change set.
+   `... [truncated: <N> chars total]`. Then, under the `## 📋 Review Target`
+   banner, print the stat, a blank line, and the change set.
 
 4. **Review in a fresh subagent** — invoke the `general` subagent with the
    `task` tool. Pass the rules and the change set, and allow read-only tools so
@@ -140,24 +142,42 @@ history. The loop stops when a review finds nothing or only trivial issues.
 
    - `STATUS: OK` → stop and go to step 7.
    - Only `[低]` issues → stop and go to step 7.
-   - Otherwise → fix the `[高]` and `[中]` issues in the working tree only,
-     following the loaded rules and keeping each change minimal, then return
-     to step 2 for a fresh change set and review.
+   - Otherwise → print the progress line from "Report", fix the `[高]` and
+     `[中]` issues in the working tree only, following the loaded rules and
+     keeping each change minimal, then return to step 2 for a fresh change set
+     and review.
 
    Never touch the index while fixing; leave it exactly as the user left it.
 
    Stop early and go to step 7 when a round changes nothing or when 5 rounds
    have run, and say why.
 
-7. **Report** — print the summary:
+7. **Report** — print the summary defined under "Report".
 
-   ```
-   ==================================================
-    Auto-Review (Diff) complete
-   ==================================================
-    Rounds    : <N>
-    Fixed     : <N>
-    Remaining : <N> ([高] <a> / [中] <b> / [低] <c>)
-    Status    : clean | trivial-only | capped
-   ==================================================
-   ```
+## Report
+
+Use the banner and Markdown below for every user-facing update.
+
+Banners are Markdown H2 headings with a leading emoji:
+
+| Purpose | Banner |
+| --- | --- |
+| Change set under review | `## 📋 Review Target` |
+| Final summary | `## ✅ Auto-Review (Diff) complete` |
+
+Print a progress line before each fix round:
+
+`🔁 ラウンド <i>/<n> — [高] <a> / [中] <b> / [低] <c> を検出、修正中...`
+
+Print the summary when the loop stops:
+
+```markdown
+## ✅ Auto-Review (Diff) complete
+
+| 項目 | 値 |
+| --- | --- |
+| ラウンド | <N> |
+| 修正 | <N> 件 |
+| 残り | <N>（[高] <a> / [中] <b> / [低] <c>） |
+| 状態 | 完了 / 軽微のみ / 上限到達 |
+```

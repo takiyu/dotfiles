@@ -1,36 +1,62 @@
 ---
 name: lint-python
-description: Run Python lint tools, then check custom coding rules. Severity labels in Japanese.
+description: Run Python lint tools, then check the project's custom coding rules. Trigger when the user asks to lint Python code or audit coding-rule compliance.
 ---
 
 # Python Lint
 
-Detect available tools (make, poetry, isort, autopep8, pyright, flake8, pycodestyle) and choose ONE branch:
+Run the available Python lint tools, then check the project's custom coding
+rules and fix every violation iteratively. Findings use the severity labels
+`[高]` / `[中]` / `[低]`.
 
-**Branch A** — Makefile has `lint:` target:
-```sh
-[ -f .env ] && . ./.env; make lint 2>&1
-```
+## Principles
 
-**Branch B** — Poetry project (`[tool.poetry]` in pyproject.toml):
-```sh
-poetry run isort . 2>&1 || true
-poetry run autopep8 --in-place --recursive . 2>&1 || true
-poetry run pyright 2>&1 || true
-poetry run flake8 --exclude=.venv,*/.venv/* . 2>&1 || true
-```
+- **Tool-first.** Run the detected lint tools before hand-checking the custom
+  rules.
+- **Fix iteratively.** Fix every reported violation, then re-run until the
+  result is clean.
+- **Severity labels.** Report each finding as `[高]`, `[中]`, or `[低]`.
+- **Japanese output.** Write the summary and the findings in Japanese; keep
+  this skill body and the banners in English.
+- **Visible progress.** Announce the run and finish with the summary table
+  defined under "Report".
 
-**Branch C** — system tools only:
-```sh
-command -v autopep8 >/dev/null 2>&1 \
-    && autopep8 --in-place --recursive . 2>&1 || true
-command -v pycodestyle >/dev/null 2>&1 \
-    && pycodestyle --max-line-length=79 \
-       $(find . -maxdepth 5 -name '*.py' \
-           ! -path '*/.venv/*' ! -path '*/__pycache__/*') 2>&1 || true
-```
+## Workflow
 
-Then review source files and scan custom rules (fix iteratively):
+1. **Detect tools** — choose ONE branch below.
+
+   **Branch A** — Makefile has a `lint:` target:
+
+   ```sh
+   [ -f .env ] && . ./.env; make lint 2>&1
+   ```
+
+   **Branch B** — Poetry project (`[tool.poetry]` in pyproject.toml):
+
+   ```sh
+   poetry run isort . 2>&1 || true
+   poetry run autopep8 --in-place --recursive . 2>&1 || true
+   poetry run pyright 2>&1 || true
+   poetry run flake8 --exclude=.venv,*/.venv/* . 2>&1 || true
+   ```
+
+   **Branch C** — system tools only:
+
+   ```sh
+   command -v autopep8 >/dev/null 2>&1 \
+       && autopep8 --in-place --recursive . 2>&1 || true
+   command -v pycodestyle >/dev/null 2>&1 \
+       && pycodestyle --max-line-length=79 \
+          $(find . -maxdepth 5 -name '*.py' \
+              ! -path '*/.venv/*' ! -path '*/__pycache__/*') 2>&1 || true
+   ```
+
+2. **Review custom rules** — scan the source files against "Rules" below and
+   fix every violation iteratively.
+
+3. **Report** — print the summary defined under "Report".
+
+## Rules
 
 **[高] Must fix:**
 - Docstring forbidden (use English comments instead)
@@ -60,14 +86,21 @@ Then review source files and scan custom rules (fix iteratively):
 - Inline if-else (ternary) expression (including single-line)
 - Unnecessary line breaks; pack multiple statements or conditions per line when within 79-char limit
 
-Print summary:
+## Report
+
+Print the summary when the run finishes:
+
+```markdown
+## ✅ Lint complete (Python)
+
+| 項目 | 件数 |
+| --- | --- |
+| 対象ファイル | <N> |
+| [高] Critical | <N> |
+| [中] Important | <N> |
+| [低] Minor | <N> |
 ```
-==================================================
- Lint complete (Python)
-==================================================
- Files checked : <N>
- [高] Critical  : <N>
- [中] Important : <N>
- [低] Minor     : <N>
-==================================================
-```
+
+Print a progress line before each fix pass:
+
+`🔁 <i> 回目 — [高] <a> / [中] <b> / [低] <c> 残り`

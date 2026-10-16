@@ -1,6 +1,6 @@
 ---
 name: auto-commit
-description: Generates commit messages and checks code quality for staged changes.
+description: Generate a commit message and check code quality for staged changes. Trigger when the user asks to commit staged changes, write a commit message, or inspect the quality of staged code.
 ---
 
 # Auto-Commit
@@ -33,6 +33,8 @@ no shared history.
   pass, or a per-item loop that confirms each fix.
 - **No fabrication.** If analysis keeps failing, ask the user for a message
   instead of inventing one.
+- **Visible progress.** Announce every stage with the emoji banners and the
+  Markdown summary defined under "Report".
 
 ## Workflow
 
@@ -64,9 +66,9 @@ no shared history.
    first 9000 and the last 3000 characters, joined by
    `... [truncated: <N> chars total]`.
 
-4. **Print the diff** — under a `Code Difference` banner, print the stat, a
-   blank line, then the step 3 diff. Print the same file set the analysis
-   reviews, so the display matches the input.
+4. **Print the diff** — under the `## 📋 Code Difference` banner, print the
+   stat, a blank line, then the step 3 diff. Print the same file set the
+   analysis reviews, so the display matches the input.
 
 5. **Analyze in a fresh subagent** — invoke the `general` subagent with the
    `task` tool, passing only the prompt below plus the step 2 stat and the
@@ -87,7 +89,7 @@ no shared history.
    - OK (if no issues found)
    - Japanese description of code quality issues if any exist.
      Use multiple lines if needed.
-   Severity labels [高]/[中]/[低] must be used if any issues exist.
+     Severity labels [高]/[中]/[低] must be used if any issues exist.
    All text after QUALITY: must be in Japanese.
 
    stat:
@@ -112,9 +114,9 @@ no shared history.
    Re-invoke the subagent from step 5 up to 3 attempts total, then fall back to
    step 8.
 
-7. **Print results** — show the commit message under a
-   `Generating commit message by LLM` banner, then the quality check under a
-   `Quality Check by LLM` banner (`✅ <text>` when `OK`, else `⚠️  <text>`).
+7. **Print results** — under the `## 📝 Commit Message` banner print the
+   message, then under `## ✅ Quality Check` (or `## ⚠️ Quality Check` when
+   issues exist) print `✅ <text>` when `OK`, else `⚠️  <text>`.
 
 8. **Fallback** — when validation never passed, print the subagent's raw reply,
    then prompt `コミットメッセージを手動で入力してください (Enter で中止):`. Use
@@ -131,18 +133,18 @@ no shared history.
      then `[中]` then `[低]`) in the working tree, then repeat steps 2, 3, and
      5–7 with a fresh subagent, using `git diff HEAD` instead of
      `git diff --cached` and skipping the step 4 reprint. Leave the fixes
-     unstaged so the user can inspect them with `git diff`. Loop automatically
-     until the check returns `OK`; stop and report when an iteration changes
-     nothing.
+     unstaged so the user can inspect them with `git diff`. Print the progress
+     line from "Report" before each round. Loop automatically until the check
+     returns `OK`; stop and report when an iteration changes nothing.
    - **C. Auto-fix loop with confirmation** — same as B, but do not skip the
      step 10 confirmation (ask `⚠️  コミットしますか? [y/N]` before committing).
    - **D. Auto-fix once** — fix all reported issues automatically as in B,
      then repeat steps 2, 3, and 5–7 exactly once with a fresh subagent, using
-     `git diff HEAD` and skipping the step 4 reprint. This pass is never
-     repeated automatically: if issues remain, report them and return to this
-     step so the user chooses again; if the pass changes nothing, report that
-     and return to this step as well. Any commit reached afterwards confirms at
-     step 10.
+     `git diff HEAD` and skipping the step 4 reprint. Print the progress line
+     from "Report" before the pass. This pass is never repeated automatically:
+     if issues remain, report them and return to this step so the user chooses
+     again; if the pass changes nothing, report that and return to this step as
+     well. Any commit reached afterwards confirms at step 10.
    - **E. Per-item loop** — handle one issue at a time: state its index and a
      one-line plan in Japanese, wait for approval, apply the fix in the working
      tree, verify it, then ask the user whether the fix is valid. Revise and
@@ -163,3 +165,34 @@ no shared history.
     <commit message>
     COMMIT_MSG
     ```
+
+## Report
+
+Use the banners and Markdown below for every user-facing update.
+
+Banners are Markdown H2 headings with a leading emoji:
+
+| Purpose | Banner |
+| --- | --- |
+| Diff under review | `## 📋 Code Difference` |
+| Commit message | `## 📝 Commit Message` |
+| Quality check | `## ✅ Quality Check` / `## ⚠️ Quality Check` |
+| Final summary | `## ✅ Auto-Commit complete` |
+
+Print a progress line before each fix round:
+
+`🔁 ラウンド <i>/<n> — [高] <a> / [中] <b> / [低] <c> を修正中...`
+
+Print the summary when the commit succeeds (use Japanese status otherwise):
+
+```markdown
+## ✅ Auto-Commit complete
+
+| 項目 | 内容 |
+| --- | --- |
+| コミット | `<short-hash>` <message> |
+| 品質チェック | OK |
+| 修正した指摘 | <N> 件 |
+```
+
+When the user aborts, end with `コミットを中止しました。` instead of the table.

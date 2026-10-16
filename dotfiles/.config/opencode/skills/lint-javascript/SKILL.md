@@ -1,28 +1,54 @@
 ---
 name: lint-javascript
-description: Run JavaScript/React lint tools, then check custom coding rules. Severity labels in Japanese.
+description: Run JavaScript/React lint tools, then check the project's custom coding rules. Trigger when the user asks to lint JavaScript or React code, or audit coding-rule compliance.
 ---
 
 # JavaScript Lint
 
-Detect available tools (make, npm, npx, eslint), then choose ONE branch:
+Run the available JavaScript/React lint tools, then check the project's custom
+coding rules and fix every violation iteratively. Findings use the severity
+labels `[高]` / `[中]` / `[低]`.
 
-**Branch A** — Makefile has `lint:` target:
-```sh
-make lint 2>&1
-```
+## Principles
 
-**Branch B** — package.json has `lint` script:
-```sh
-npm run lint 2>&1
-```
+- **Tool-first.** Run the detected lint tools before hand-checking the custom
+  rules.
+- **Fix iteratively.** Fix every reported violation, then re-run until the
+  result is clean.
+- **Severity labels.** Report each finding as `[高]`, `[中]`, or `[低]`.
+- **Japanese output.** Write the summary and the findings in Japanese; keep
+  this skill body and the banners in English.
+- **Visible progress.** Announce the run and finish with the summary table
+  defined under "Report".
 
-**Branch C** — fallback to direct ESLint:
-```sh
-npx eslint --fix . 2>&1 || true
-```
+## Workflow
 
-Then scan custom rules (fix iteratively):
+1. **Detect tools** — choose ONE branch below.
+
+   **Branch A** — Makefile has a `lint:` target:
+
+   ```sh
+   make lint 2>&1
+   ```
+
+   **Branch B** — package.json has a `lint` script:
+
+   ```sh
+   npm run lint 2>&1
+   ```
+
+   **Branch C** — fallback to direct ESLint:
+
+   ```sh
+   npx eslint --fix . 2>&1 || true
+   ```
+
+2. **Review custom rules** — scan the source files against "Rules" below and
+   fix every violation iteratively.
+
+3. **Report** — print the summary defined under "Report".
+
+## Rules
 
 **[高] Must fix:**
 - Class component used (must use function component)
@@ -48,14 +74,21 @@ Then scan custom rules (fix iteratively):
 - `console.log` left in production code
 - Long function exceeding ~50 lines
 
-Print summary:
+## Report
+
+Print the summary when the run finishes:
+
+```markdown
+## ✅ Lint complete (JavaScript)
+
+| 項目 | 件数 |
+| --- | --- |
+| 対象ファイル | <N> |
+| [高] Critical | <N> |
+| [中] Important | <N> |
+| [低] Minor | <N> |
 ```
-==================================================
- Lint complete (JavaScript)
-==================================================
- Files checked : <N>
- [高] Critical  : <N>
- [中] Important : <N>
- [低] Minor     : <N>
-==================================================
-```
+
+Print a progress line before each fix pass:
+
+`🔁 <i> 回目 — [高] <a> / [中] <b> / [低] <c> 残り`

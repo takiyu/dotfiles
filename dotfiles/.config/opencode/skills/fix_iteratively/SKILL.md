@@ -24,6 +24,8 @@ items or proceed without approval.
   passes review; use the commit convention below.
 - **Minimal scope.** Touch only what the current item requires; follow
   surrounding style and the rules in `AGENTS.md`.
+- **Visible progress.** Keep the checklist and the per-item summary defined
+  under "Report" up to date so the whole run is easy to scan.
 
 ## Workflow
 
@@ -49,23 +51,30 @@ items or proceed without approval.
 9. **Next item** — mark the item done, announce the remaining count, and
    return to step 2. Stop when all items are finished.
 
-## Progress Tracking
-
-Keep a short checklist visible (done / current / remaining) and update it
-when an item is committed.
-
 ## Report
 
-After each committed item, print:
+Use the Markdown below for every user-facing update.
 
+Keep a task list visible, and update it when an item is committed:
+
+```markdown
+## 📌 Fix Progress
+
+- [x] 1. <item>
+- [ ] 2. <item>  ← 現在
+- [ ] 3. <item>
 ```
-==================================================
- Item <i>/<n> committed
-==================================================
- Item     : <summary>
- Fix      : <what changed>
- Verify   : <pass | none | fail>
- Commit   : <short hash> <message>
- Remaining: <n - i>
-==================================================
+
+After each committed item, print the per-item summary:
+
+```markdown
+## ✅ Item <i>/<n> committed
+
+| 項目 | 内容 |
+| --- | --- |
+| 対象 | <summary> |
+| 修正 | <what changed> |
+| 検証 | pass / none / fail |
+| コミット | `<short-hash>` <message> |
+| 残り | <n - i> |
 ```
