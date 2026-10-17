@@ -618,7 +618,11 @@ alias ca=ca_local
 # Aliases and functions for opencode
 alias oc="opencode_local.sh"
 alias oc_serve="oc serve --hostname 0.0.0.0"
-function gcmA() { oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }
+# Run auto-commit without showing or joining the shared session tab strip
+function gcmA() {
+    OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' \
+        oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'
+}
 
 # Alias for agent
 alias a=oc
