@@ -606,23 +606,9 @@ if [ "$($exist_command trizen)" = 'exist' ]; then
     alias trizen-noconfirm="trizen -Syu -y --noconfirm"
 fi
 
-# Aliases for opencode auto-commit
-copilot_allow_all_local() { copilot_local.sh --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
-alias ca_local="copilot_allow_all_local"
-copilot_allow_all_official() { copilot --allow-all --enable-all-github-mcp-tools --allow-all-urls "$@"; }
-alias ca_opus4.6="copilot_allow_all_official --model claude-opus-4.6"
-alias ca_sonnet4.6="copilot_allow_all_official --model claude-sonnet-4.6"
-alias ca_free="copilot_allow_all_official --model gpt-5-mini"
-alias ca=ca_local
-
 # Aliases and functions for opencode
 alias oc="opencode_local.sh"
-alias oc_serve="oc serve --hostname 0.0.0.0"
-# Run auto-commit without showing or joining the shared session tab strip
-function gcmA() {
-    OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' \
-        oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'
-}
+function gcmA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }  # Run auto-commit without tab feature
 
 # Alias for agent
 alias a=oc
