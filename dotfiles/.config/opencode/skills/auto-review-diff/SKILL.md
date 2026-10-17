@@ -35,6 +35,8 @@ history. The loop stops when a review finds nothing or only trivial issues.
   re-review with `git diff HEAD`.
 - **Japanese output.** Write the interactive messages and the issue text in
   Japanese; keep this skill body and the banners in English.
+- **Ask with options.** Use the `question` tool (opencode's option UI) for any
+  prompt; never ask with a plain `[y/N]` prompt.
 - **Read-only git only.** Never run a git command that changes state: `add`
   (including `-N`, `-A`, `-u`), `restore`, `checkout`, `switch`, `stash`,
   `reset`, `rm`, `mv`, `clean`, `apply`, `commit`, `merge`, `rebase`,
@@ -141,7 +143,8 @@ history. The loop stops when a review finds nothing or only trivial issues.
    - The reply is not a copy of the instructions or placeholder text.
 
    Re-invoke the subagent from step 4 up to 3 attempts total; if it still
-   fails, print its raw reply and ask the user how to proceed.
+   fails, print its raw reply and ask how to proceed with the `question` tool
+   (options such as `さらに再試行する` / `中止する`).
 
 6. **Print the findings** — under the `## ⚠️ Issues` banner print the numbered
    issue list verbatim, one number per line. Always print it, even when the

@@ -27,7 +27,7 @@ no shared history.
 - **Japanese output.** Write every interactive prompt and status message shown
   to the user in Japanese; keep the skill body, the banners, and the commit
   messages in English.
-- **Quality gates the commit.** When the check is `OK`, go straight to step 10.
+- **Quality gates the commit.** When the check is `OK`, confirm and commit.
   When issues are found, let the user choose: commit as-is, an automatic fix
   loop, an automatic fix loop with a final confirmation, a single auto-fix
   pass, or a per-item loop that confirms each fix.
@@ -129,14 +129,14 @@ no shared history.
    verbatim, one number per line. Show every issue the subagent returned.
 
 8. **Fallback** — when validation never passed, print the subagent's raw reply,
-   then prompt `コミットメッセージを手動で入力してください (Enter で中止):`. Use
-   the input as the message, or abort with `コミットを中止しました。` when it is
-   empty. With a manual message there is no issue list; go to step 10, which
-   confirms before committing.
+   then ask `コミットメッセージを入力してください` with the `question` tool and
+   the option `中止する`. Use the typed answer as the message, or abort with
+   `コミットを中止しました。` when it is empty or `中止する`. With a manual
+   message there is no issue list; confirm (see "Report") and go to step 10.
 
-9. **Resolve issues** — when the quality check is `OK`, skip to step 10.
-   Otherwise present the numbered list again with the choices below in
-   Japanese and follow the one chosen; on decline print
+9. **Resolve issues** — when the quality check is `OK`, confirm (see "Report")
+   and go to step 10. Otherwise ask for the choice below with the `question`
+   tool (Japanese labels) and follow the one chosen; on decline print
    `コミットを中止しました。` and stop.
 
    The user may name numbers to fix or to ignore (for example `1,3 を修正`,
@@ -145,38 +145,39 @@ no shared history.
    chosen mode: fix only the named numbers, skip ignored ones in every fix
    pass, and do not let an ignored issue block convergence.
 
-   - **A. Commit as-is** — keep the current message and go straight to step 10
-     without the confirmation prompt (choosing A is already the confirmation).
+   Offer these options: `A. このままコミット` / `B. 自動修正ループ` /
+   `C. 自動修正ループ（確認あり）` / `D. 自動修正を1回` / `E. 1件ずつ修正`.
+
+   - **A. Commit as-is** — keep the current message and go to step 10.
    - **B. Auto-fix loop** — fix the reported issues in severity order (`[高]`
      then `[中]` then `[低]`) in the working tree, then repeat steps 2, 3, and
      5–7 with a fresh subagent, using `git diff HEAD` instead of
      `git diff --cached` and skipping the step 4 reprint. Leave the fixes
      unstaged so the user can inspect them with `git diff`. Print the progress
      line from "Report" before each round. Loop automatically until the check
-     returns `OK`; stop and report when an iteration changes nothing.
-   - **C. Auto-fix loop with confirmation** — same as B, but do not skip the
-     step 10 confirmation (ask `⚠️  コミットしますか? [y/N]` before committing).
+     returns `OK`, then go to step 10; stop and report when an iteration changes
+     nothing.
+   - **C. Auto-fix loop with confirmation** — same as B, but confirm before
+     committing (see "Report").
    - **D. Auto-fix once** — fix all reported issues automatically as in B,
      then repeat steps 2, 3, and 5–7 exactly once with a fresh subagent, using
      `git diff HEAD` and skipping the step 4 reprint. Print the progress line
      from "Report" before the pass. This pass is never repeated automatically:
      if issues remain, report them and return to this step so the user chooses
      again; if the pass changes nothing, report that and return to this step as
-     well. Any commit reached afterwards confirms at step 10.
+     well. When it reaches a commit, confirm first (see "Report").
    - **E. Per-item loop** — handle one issue at a time: state its number from
-     the list and a one-line plan in Japanese, wait for approval, apply the
-     fix in the working tree, verify it, then ask the user whether the fix is
-     valid. Revise and ask again until the user answers OK, then advance to the
-     next issue. Do not stage; leave each fix unstaged for review. After the
-     last issue, go to step 10, which confirms before committing.
+     the list and a one-line plan in Japanese, wait for approval with the
+     `question` tool, apply the fix in the working tree, verify it, then ask
+     with the `question` tool whether the fix is valid. Revise and ask again
+     until the user approves, then advance to the next issue. Do not stage;
+     leave each fix unstaged for review. After the last issue, confirm (see
+     "Report") and go to step 10.
 
-10. **Confirm, stage, and commit** — ask `⚠️  コミットしますか? [y/N]` and
-    abort with `コミットを中止しました。` on anything but `y`/`Y`. Modes A and B
-    are the only exceptions: after choosing either, commit without this prompt
-    (A already confirmed by choosing it; B loops without confirmation). Then
-    stage the reviewed tracked change set (untracked files stay unstaged; stage
-    any intended new file explicitly first), and pipe the message to
-    `git commit` with a heredoc so the stdin source is explicit:
+10. **Stage and commit** — stage the reviewed tracked change set (untracked
+    files stay unstaged; stage any intended new file explicitly first), and
+    pipe the message to `git commit` with a heredoc so the stdin source is
+    explicit:
 
     ```sh
     git add -u
@@ -188,6 +189,13 @@ no shared history.
 ## Report
 
 Use the banners and Markdown below for every user-facing update.
+
+Ask every choice with the `question` tool (opencode's option UI); never ask
+with a plain `[y/N]` prompt.
+
+Where a step says to confirm, ask `コミットしますか?` with the options
+`コミットする` and `中止する`, and abort with `コミットを中止しました。` unless
+the user chooses `コミットする`.
 
 Banners are Markdown H2 headings with a leading emoji:
 

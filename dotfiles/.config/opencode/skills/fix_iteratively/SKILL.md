@@ -26,6 +26,8 @@ items or proceed without approval.
   surrounding style and the rules in `AGENTS.md`.
 - **Visible progress.** Keep the checklist and the per-item summary defined
   under "Report" up to date so the whole run is easy to scan.
+- **Ask with options.** Use the `question` tool (opencode's option UI) for every
+  approval and check; never ask with a plain `[y/N]` prompt.
 
 ## Workflow
 
@@ -37,12 +39,14 @@ items or proceed without approval.
 3. **Propose a plan (in Japanese)** — describe the concrete fix approach:
    files, functions, and the intended change. Keep it small and reviewable.
    Write this proposal in Japanese.
-4. **Wait for approval** — stop and ask the user to approve the plan. Do not
+4. **Wait for approval** — stop and ask the user to approve the plan with the
+   `question` tool (options such as `承認する` / `修正を依頼する`). Do not
    edit yet. Revise the plan if the user requests changes, then ask again.
 5. **Apply the fix** — after approval, make exactly the approved change.
 6. **Verify** — run the relevant tests/build/typecheck and the matching
    `lint-<language>` skill, then review the diff. Report the result.
-7. **Wait for the user's check** — stop and ask the user to review the fix.
+7. **Wait for the user's check** — stop and ask the user to review the fix with
+   the `question` tool (options such as `OK` / `修正が必要`).
    - OK → go to step 8.
    - Not OK → return to step 3 with the requested changes; re-verify.
 8. **Commit** — on explicit OK, commit the item with a message in the form
