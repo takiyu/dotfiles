@@ -66,9 +66,9 @@ no shared history.
    first 9000 and the last 3000 characters, joined by
    `... [truncated: <N> chars total]`.
 
-4. **Print the diff** — under the `## 📋 Code Difference` banner, print the
-   stat, a blank line, then the step 3 diff. Print the same file set the
-   analysis reviews, so the display matches the input.
+4. **Print the stat** — under the `## 📋 Code Difference` banner, print only the
+   step 2 stat (the per-file change summary). Do not print the full diff; the
+   analysis still reviews the step 3 diff.
 
 5. **Analyze in a fresh subagent** — invoke the `general` subagent with the
    `task` tool, passing only the prompt below plus the step 2 stat and the
