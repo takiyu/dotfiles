@@ -35,6 +35,10 @@ no shared history.
   before any fix; never hide or merge them away. The user may name numbers to
   fix or to ignore (for example `1,3 を修正`, `2 を無視`) and that selection is
   honored.
+- **Ignore trivial issues.** `[低]` covers trivial nits and cosmetic
+  coding-rule deviations. They are reported but never auto-fixed and never
+  block the commit; only `[高]` and `[中]` drive the fix loop unless the user
+  names a `[低]` number to fix.
 - **No fabrication.** If analysis keeps failing, ask the user for a message
   instead of inventing one.
 - **Visible progress.** Announce every stage with the emoji banners and the
@@ -97,6 +101,11 @@ no shared history.
        2. [中] ...
        3. [低] ...
      Every issue line must start with its number then a [高]/[中]/[低] label.
+     Use [高] only for real bugs, [中] for coding-rule violations and for
+     design and smell problems, and [低] for trivial nits and cosmetic
+     coding-rule deviations. Do not inflate severity: a negligible or
+     cosmetic coding-rule deviation is [低], never [高] or [中], and an issue
+     with no practical impact should be omitted.
    All text after QUALITY: must be in Japanese.
 
    stat:
@@ -149,23 +158,24 @@ no shared history.
    `C. 自動修正ループ（確認あり）` / `D. 自動修正を1回` / `E. 1件ずつ修正`.
 
    - **A. Commit as-is** — keep the current message and go to step 10.
-   - **B. Auto-fix loop** — fix the reported issues in severity order (`[高]`
-     then `[中]` then `[低]`) in the working tree, then repeat steps 2, 3, and
-     5–7 with a fresh subagent, using `git diff HEAD` instead of
+   - **B. Auto-fix loop** — fix the `[高]` and `[中]` issues in severity order
+     (`[高]` then `[中]`) in the working tree, then repeat steps 2, 3, and 5–7
+     with a fresh subagent, using `git diff HEAD` instead of
      `git diff --cached` and skipping the step 4 reprint. Leave the fixes
      unstaged so the user can inspect them with `git diff`. Print the progress
      line from "Report" before each round. Loop automatically until the check
-     returns `OK`, then go to step 10; stop and report when an iteration changes
-     nothing.
+     returns `OK` or only `[低]` issues remain, then go to step 10; stop and
+     report when an iteration changes nothing.
    - **C. Auto-fix loop with confirmation** — same as B, but confirm before
      committing (see "Report").
-   - **D. Auto-fix once** — fix all reported issues automatically as in B,
-     then repeat steps 2, 3, and 5–7 exactly once with a fresh subagent, using
-     `git diff HEAD` and skipping the step 4 reprint. Print the progress line
-     from "Report" before the pass. This pass is never repeated automatically:
-     if issues remain, report them and return to this step so the user chooses
-     again; if the pass changes nothing, report that and return to this step as
-     well. When it reaches a commit, confirm first (see "Report").
+   - **D. Auto-fix once** — fix the `[高]` and `[中]` issues automatically as
+     in B, then repeat steps 2, 3, and 5–7 exactly once with a fresh subagent,
+     using `git diff HEAD` and skipping the step 4 reprint. Print the progress
+     line from "Report" before the pass. This pass is never repeated
+     automatically: if issues remain, report them and return to this step so
+     the user chooses again; if the pass changes nothing, report that and
+     return to this step as well. When it reaches a commit, confirm first
+     (see "Report").
    - **E. Per-item loop** — handle one issue at a time: state its number from
      the list and a one-line plan in Japanese, wait for approval with the
      `question` tool, apply the fix in the working tree, verify it, then ask

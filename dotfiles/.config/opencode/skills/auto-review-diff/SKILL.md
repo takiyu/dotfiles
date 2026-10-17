@@ -24,6 +24,9 @@ history. The loop stops when a review finds nothing or only trivial issues.
   read-only tools (`read`, `grep`, `glob`) and forbid state-changing commands.
 - **Severity labels.** Report every issue as `[高]`, `[中]`, or `[低]`, highest
   first, always with file and line.
+- **Ignore trivial issues.** `[低]` covers trivial nits and cosmetic
+  coding-rule deviations. Never auto-fix `[低]`; it never blocks convergence
+  and stays out of the fix loop unless the user names its number to fix.
 - **Visible issues.** Print every issue the subagent reports as a numbered list
   under the findings banner before fixing anything; never hide or merge them
   away. By default fix `[高]` and `[中]`; when the user names numbers to fix or
@@ -122,8 +125,12 @@ history. The loop stops when a review finds nothing or only trivial issues.
    3. [低] ...
 
    Every issue line must start with its number then a [高]/[中]/[低] label.
-   Use [高] for rule violations and real bugs, [中] for design and smell
-   problems, and [低] for trivial nits. Write all issue text in Japanese.
+   Use [高] only for real bugs (wrong behavior, data loss, crashes), [中] for
+   coding-rule violations and for design and smell problems, and [低] for
+   trivial nits and cosmetic coding-rule deviations. Do not inflate severity:
+   a negligible or cosmetic coding-rule deviation is [低], never [高] or [中],
+   and an issue with no practical impact should be omitted entirely.
+   Write all issue text in Japanese.
 
    coding rules:
    <rules>
