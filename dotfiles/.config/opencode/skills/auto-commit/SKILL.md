@@ -31,6 +31,10 @@ no shared history.
   When issues are found, let the user choose: commit as-is, an automatic fix
   loop, an automatic fix loop with a final confirmation, a single auto-fix
   pass, or a per-item loop that confirms each fix.
+- **Visible issues.** Show every issue the subagent reports as a numbered list
+  before any fix; never hide or merge them away. The user may name numbers to
+  fix or to ignore (for example `1,3 を修正`, `2 を無視`) and that selection is
+  honored.
 - **No fabrication.** If analysis keeps failing, ask the user for a message
   instead of inventing one.
 - **Visible progress.** Announce every stage with the emoji banners and the
@@ -87,9 +91,12 @@ no shared history.
 
    The next line(s) must start with QUALITY: followed by one of:
    - OK (if no issues found)
-   - Japanese description of code quality issues if any exist.
-     Use multiple lines if needed.
-     Severity labels [高]/[中]/[低] must be used if any issues exist.
+   - A numbered list of code quality issues, one issue per line, numbered
+     sequentially from 1, highest severity first:
+       1. [高] <file>:<line> <problem> (why it is wrong / which rule)
+       2. [中] ...
+       3. [低] ...
+     Every issue line must start with its number then a [高]/[中]/[低] label.
    All text after QUALITY: must be in Japanese.
 
    stat:
@@ -110,13 +117,16 @@ no shared history.
    - The `COMMIT:` value is a single line with no embedded newlines.
    - The message length is 5–200 characters.
    - `QUALITY:` is present and non-empty.
+   - When `QUALITY:` is not `OK`, at least one following line matches
+     `^\d+\. \[(高|中|低)\]`.
 
    Re-invoke the subagent from step 5 up to 3 attempts total, then fall back to
    step 8.
 
 7. **Print results** — under the `## 📝 Commit Message` banner print the
    message, then under `## ✅ Quality Check` (or `## ⚠️ Quality Check` when
-   issues exist) print `✅ <text>` when `OK`, else `⚠️  <text>`.
+   issues exist) print `✅ OK` when clean, else print the numbered issue list
+   verbatim, one number per line. Show every issue the subagent returned.
 
 8. **Fallback** — when validation never passed, print the subagent's raw reply,
    then prompt `コミットメッセージを手動で入力してください (Enter で中止):`. Use
@@ -125,10 +135,18 @@ no shared history.
    confirms before committing.
 
 9. **Resolve issues** — when the quality check is `OK`, skip to step 10.
-   Otherwise present the choices below in Japanese and follow the one chosen;
-   on decline print `コミットを中止しました。` and stop.
+   Otherwise present the numbered list again with the choices below in
+   Japanese and follow the one chosen; on decline print
+   `コミットを中止しました。` and stop.
 
-   - **A. Commit as-is** — keep the current message and go to step 10.
+   The user may name numbers to fix or to ignore (for example `1,3 を修正`,
+   `2 を無視`). Record the selection by each issue's file, line, and problem
+   text so it survives the re-numbering in later rounds, then apply it to the
+   chosen mode: fix only the named numbers, skip ignored ones in every fix
+   pass, and do not let an ignored issue block convergence.
+
+   - **A. Commit as-is** — keep the current message and go straight to step 10
+     without the confirmation prompt (choosing A is already the confirmation).
    - **B. Auto-fix loop** — fix the reported issues in severity order (`[高]`
      then `[中]` then `[低]`) in the working tree, then repeat steps 2, 3, and
      5–7 with a fresh subagent, using `git diff HEAD` instead of
@@ -145,19 +163,20 @@ no shared history.
      if issues remain, report them and return to this step so the user chooses
      again; if the pass changes nothing, report that and return to this step as
      well. Any commit reached afterwards confirms at step 10.
-   - **E. Per-item loop** — handle one issue at a time: state its index and a
-     one-line plan in Japanese, wait for approval, apply the fix in the working
-     tree, verify it, then ask the user whether the fix is valid. Revise and
-     ask again until the user answers OK, then advance to the next issue. Do
-     not stage; leave each fix unstaged for review. After the last issue, go to
-     step 10, which confirms before committing.
+   - **E. Per-item loop** — handle one issue at a time: state its number from
+     the list and a one-line plan in Japanese, wait for approval, apply the
+     fix in the working tree, verify it, then ask the user whether the fix is
+     valid. Revise and ask again until the user answers OK, then advance to the
+     next issue. Do not stage; leave each fix unstaged for review. After the
+     last issue, go to step 10, which confirms before committing.
 
 10. **Confirm, stage, and commit** — ask `⚠️  コミットしますか? [y/N]` and
-    abort with `コミットを中止しました。` on anything but `y`/`Y`. Mode B is the
-    only exception: it commits without this prompt. Then stage the reviewed
-    tracked change set (untracked files stay unstaged; stage any intended new
-    file explicitly first), and pipe the message to `git commit` with a heredoc
-    so the stdin source is explicit:
+    abort with `コミットを中止しました。` on anything but `y`/`Y`. Modes A and B
+    are the only exceptions: after choosing either, commit without this prompt
+    (A already confirmed by choosing it; B loops without confirmation). Then
+    stage the reviewed tracked change set (untracked files stay unstaged; stage
+    any intended new file explicitly first), and pipe the message to
+    `git commit` with a heredoc so the stdin source is explicit:
 
     ```sh
     git add -u
@@ -193,6 +212,7 @@ Print the summary when the commit succeeds (use Japanese status otherwise):
 | コミット | `<short-hash>` <message> |
 | 品質チェック | OK |
 | 修正した指摘 | <N> 件 |
+| 無視した指摘 | <N> 件 |
 ```
 
 When the user aborts, end with `コミットを中止しました。` instead of the table.

@@ -24,6 +24,10 @@ history. The loop stops when a review finds nothing or only trivial issues.
   read-only tools (`read`, `grep`, `glob`) and forbid state-changing commands.
 - **Severity labels.** Report every issue as `[高]`, `[中]`, or `[低]`, highest
   first, always with file and line.
+- **Visible issues.** Print every issue the subagent reports as a numbered list
+  under the findings banner before fixing anything; never hide or merge them
+  away. By default fix `[高]` and `[中]`; when the user names numbers to fix or
+  to ignore (for example `1,3 を修正`, `2 を無視`), follow that selection.
 - **Loop to convergence.** Fix the reported issues, re-review from scratch, and
   stop only when nothing or only `[低]` issues remain, or when a round changes
   nothing.
@@ -110,11 +114,12 @@ history. The loop stops when a review finds nothing or only trivial issues.
    - STATUS: ISSUES
 
    When the status is ISSUES, follow it with one line per issue, ordered
-   highest severity first, each using one of these labels:
-   [高] <file>:<line> <problem> (why it is wrong / which rule)
-   [中] ...
-   [低] ...
+   highest severity first and numbered sequentially from 1:
+   1. [高] <file>:<line> <problem> (why it is wrong / which rule)
+   2. [中] ...
+   3. [低] ...
 
+   Every issue line must start with its number then a [高]/[中]/[低] label.
    Use [高] for rule violations and real bugs, [中] for design and smell
    problems, and [低] for trivial nits. Write all issue text in Japanese.
 
@@ -131,28 +136,39 @@ history. The loop stops when a review finds nothing or only trivial issues.
 5. **Validate the reply** — accept it only when all hold:
 
    - The first line is `STATUS: OK` or `STATUS: ISSUES`.
-   - When the status is `ISSUES`, at least one line starts with `[高]`, `[中]`,
-     or `[低]`.
+   - When the status is `ISSUES`, at least one line matches
+     `^\d+\. \[(高|中|低)\]`.
    - The reply is not a copy of the instructions or placeholder text.
 
    Re-invoke the subagent from step 4 up to 3 attempts total; if it still
    fails, print its raw reply and ask the user how to proceed.
 
-6. **Fix and loop** — decide from the validated reply:
+6. **Print the findings** — under the `## ⚠️ Issues` banner print the numbered
+   issue list verbatim, one number per line. Always print it, even when the
+   loop continues automatically; never hide or merge issues away. When the
+   status is `OK`, print `OK` instead.
 
-   - `STATUS: OK` → stop and go to step 7.
-   - Only `[低]` issues → stop and go to step 7.
+   The user may name numbers to fix or to ignore (for example `1,3 を修正`,
+   `2 を無視`). Record the selection by each issue's file, line, and problem
+   text so it survives the re-numbering in later rounds. Ignored items are not
+   fixed and do not block convergence.
+
+7. **Fix and loop** — decide from the validated reply:
+
+   - `STATUS: OK` → stop and go to step 8.
+   - Only `[低]` issues → stop and go to step 8.
    - Otherwise → print the progress line from "Report", fix the `[高]` and
-     `[中]` issues in the working tree only, following the loaded rules and
-     keeping each change minimal, then return to step 2 for a fresh change set
-     and review.
+     `[中]` issues in the working tree only, following the loaded rules,
+     keeping each change minimal, and skipping any issue the user named to
+     ignore. When the user named numbers to fix, fix only those. Then return
+     to step 2 for a fresh change set and review.
 
    Never touch the index while fixing; leave it exactly as the user left it.
 
-   Stop early and go to step 7 when a round changes nothing or when 5 rounds
-   have run, and say why.
+   Stop early and go to step 8 when nothing left to fix remains, when a round
+   changes nothing, or when 5 rounds have run, and say why.
 
-7. **Report** — print the summary defined under "Report".
+8. **Report** — print the summary defined under "Report".
 
 ## Report
 
@@ -163,6 +179,7 @@ Banners are Markdown H2 headings with a leading emoji:
 | Purpose | Banner |
 | --- | --- |
 | Change set under review | `## 📋 Review Target` |
+| Findings | `## ⚠️ Issues` |
 | Final summary | `## ✅ Auto-Review (Diff) complete` |
 
 Print a progress line before each fix round:
@@ -178,6 +195,7 @@ Print the summary when the loop stops:
 | --- | --- |
 | ラウンド | <N> |
 | 修正 | <N> 件 |
+| 無視 | <N> 件 |
 | 残り | <N>（[高] <a> / [中] <b> / [低] <c>） |
 | 状態 | 完了 / 軽微のみ / 上限到達 |
 ```
