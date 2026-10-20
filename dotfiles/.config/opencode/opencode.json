@@ -72,10 +72,13 @@
       "type": "local",
       "command": [
         "npx",
-        "@playwright/mcp@latest",
+        "--yes",
+        "--prefer-offline",
+        "@playwright/mcp@0.0.83",
         "--browser",
         "firefox"
       ],
+      "timeout": 30000,
       "enabled": true
     },
     "blender": {

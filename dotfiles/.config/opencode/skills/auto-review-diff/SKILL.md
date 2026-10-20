@@ -27,6 +27,10 @@ history. The loop stops when a review finds nothing or only trivial issues.
 - **Ignore trivial issues.** `[低]` covers trivial nits and cosmetic
   coding-rule deviations. Never auto-fix `[低]`; it never blocks convergence
   and stays out of the fix loop unless the user names its number to fix.
+- **Simplicity first.** Prefer the smallest solution that meets the
+  requirement. Judge unnecessary branches, helpers, abstractions,
+  dependencies, and defensive code for hypothetical cases as design problems,
+  and keep fixes minimal instead of adding new layers.
 - **Visible issues.** Print every issue the subagent reports as a numbered list
   under the findings banner before fixing anything; never hide or merge them
   away. By default fix `[高]` and `[中]`; when the user names numbers to fix or
@@ -101,7 +105,10 @@ history. The loop stops when a review finds nothing or only trivial issues.
    1. The AGENTS.md coding rules provided below.
    2. Sound software-engineering design and implementation: correctness,
       clear structure, no duplication, no dead code, sensible naming,
-      error handling, and simplicity.
+      error handling, and above all simplicity. Prefer the smallest solution
+      that meets the requirement; flag unnecessary branches, helpers,
+      abstractions, extra dependencies, and defensive code for hypothetical
+      cases.
 
    Read the affected files with read-only tools (read, grep, glob) when more
    context is needed. Do not modify anything. Never run a git command that
@@ -126,10 +133,13 @@ history. The loop stops when a review finds nothing or only trivial issues.
 
    Every issue line must start with its number then a [高]/[中]/[低] label.
    Use [高] only for real bugs (wrong behavior, data loss, crashes), [中] for
-   coding-rule violations and for design and smell problems, and [低] for
+   coding-rule violations and for design and smell problems (including
+   unnecessary complexity, duplication, and over-engineering), and [低] for
    trivial nits and cosmetic coding-rule deviations. Do not inflate severity:
-   a negligible or cosmetic coding-rule deviation is [低], never [高] or [中],
-   and an issue with no practical impact should be omitted entirely.
+   a negligible or cosmetic coding-rule deviation is [低], never [高] or [中].
+   A purely hypothetical edge case with no evidence is [低] or omitted.
+   Prefer the simplest fix; do not recommend extra abstractions, dependencies,
+   or branches unless a real defect requires them.
    Write all issue text in Japanese.
 
    coding rules:

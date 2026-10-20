@@ -31,6 +31,10 @@ no shared history.
   When issues are found, let the user choose: commit as-is, an automatic fix
   loop, an automatic fix loop with a final confirmation, a single auto-fix
   pass, or a per-item loop that confirms each fix.
+- **Simplicity first.** Prefer the smallest change that meets the requirement.
+  Treat unnecessary branches, helpers, abstractions, dependencies, and
+  defensive code for hypothetical cases as design problems, and never propose a
+  fix that makes the code longer without a concrete correctness benefit.
 - **Visible issues.** Show every issue the subagent reports as a numbered list
   before any fix; never hide or merge them away. The user may name numbers to
   fix or to ignore (for example `1,3 を修正`, `2 を無視`) and that selection is
@@ -102,10 +106,13 @@ no shared history.
        3. [低] ...
      Every issue line must start with its number then a [高]/[中]/[低] label.
      Use [高] only for real bugs, [中] for coding-rule violations and for
-     design and smell problems, and [低] for trivial nits and cosmetic
+     design and smell problems (including unnecessary complexity, duplication,
+     and over-engineering), and [低] for trivial nits and cosmetic
      coding-rule deviations. Do not inflate severity: a negligible or
-     cosmetic coding-rule deviation is [低], never [高] or [中], and an issue
-     with no practical impact should be omitted.
+     cosmetic coding-rule deviation is [低], never [高] or [中]. A purely
+     hypothetical edge case with no evidence in the change is [低] or omitted.
+     Prefer the simplest fix; do not recommend extra abstractions,
+     dependencies, or branches unless a real defect requires them.
    All text after QUALITY: must be in Japanese.
 
    stat:
