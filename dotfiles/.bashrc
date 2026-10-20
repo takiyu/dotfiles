@@ -608,11 +608,8 @@ fi
 
 # Aliases and functions for opencode
 alias oc="opencode_local.sh"
-function gcmA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }  # Run auto-commit without tab feature
-
-# Alias for agent
 alias a=oc
-alias al="opencode_local_loop.sh"
+function gcmA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }  # Run auto-commit without tab feature
 
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
