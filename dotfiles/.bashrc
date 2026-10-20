@@ -611,6 +611,17 @@ alias oc="opencode_local.sh"
 alias a=oc
 function gcmA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }  # Run auto-commit without tab feature
 
+# OpenCode completion
+if command -v opencode >/dev/null; then
+    _oc_comp="$HOME/.config/opencode/completion.bash"
+    if [ ! -s "$_oc_comp" ]; then
+        opencode --completions bash > "$_oc_comp"
+    fi
+    source "$_oc_comp"
+    complete -F _opencode oc a
+    unset _oc_comp
+fi
+
 # ------------------------------------------------------------------------------
 # ------------------------------------ WSL -------------------------------------
 # ------------------------------------------------------------------------------

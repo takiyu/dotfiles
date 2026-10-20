@@ -11,3 +11,4 @@
 
 __pycache__
 .copilot/config.json
+/.config/opencode/completion.bash
