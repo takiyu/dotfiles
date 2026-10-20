@@ -36,19 +36,6 @@ export LLM_MAX_CONTEXT
 export LLM_MAX_OUTPUT
 export OPENCODE_DISABLE_MODELS_FETCH=true
 
-# Run opencode bound to this process with --standalone (v1-like), so all work
-# stops on exit instead of persisting in the shared background service.
-
-# Server/management subcommands keep the shared background service behavior
-passthrough_cmds="acp api auth debug models mcp pair plugin reload serve"
-passthrough_cmds="$passthrough_cmds service session stats"
-passthrough_cmds="$passthrough_cmds uninstall update upgrade"
-
-# run/mini take the flag after the name, the bare TUI takes it up front
-if [ "${1:-}" = "run" ] || [ "${1:-}" = "mini" ]; then
-    exec opencode "$1" --standalone "${@:2}"
-fi
-case " $passthrough_cmds " in
-    *" ${1:-} "*) exec opencode "$@" ;;
-    *)        exec opencode --standalone "$@" ;;
-esac
+# Use the shared background service (no --standalone). The service freezes
+# LLM_* env vars at startup; run 'opencode service restart' to apply changes.
+exec opencode "$@"
