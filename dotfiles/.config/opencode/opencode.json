@@ -104,6 +104,14 @@
         "SLACK_MCP_ENABLED_TOOLS": "channels_list,conversations_history,conversations_replies,conversations_search_messages,conversations_unreads,users_search",
         "SLACK_MCP_LOG_LEVEL": "warn"
       }
+    },
+    "thunderbird": {
+      "type": "local",
+      "command": [
+        "tbird-mcp"
+      ],
+      "timeout": 30000,
+      "enabled": true
     }
   },
   "formatter": {

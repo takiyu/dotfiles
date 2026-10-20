@@ -9,6 +9,9 @@ PLAYWRIGHT_MCP="@playwright/mcp@0.0.83"
 BLENDER_MCP_VERSION="2.0.0"
 SLACK_MCP="slack-mcp-server@1.3.0"
 SLACK_TOKEN="$HOME/.secrets/slack-token"
+# Bump TBIRD_VERSION whenever TBIRD_MCP changes.
+TBIRD_MCP="git+https://github.com/takiyu/tbird-mcp@08308e1"
+TBIRD_VERSION="0.1.0+readonly.1"
 
 
 # ------------------------------------------------------------------------------
@@ -92,6 +95,18 @@ elif npm exec --offline --yes --package="$SLACK_MCP" -- true \
 else
     printf '  > install\n'
     npm exec --prefer-offline --yes --package="$SLACK_MCP" -- true >/dev/null
+fi
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------ Thunderbird MCP -------------------------------
+# ------------------------------------------------------------------------------
+printf '* Install Thunderbird MCP tbird-mcp\n'
+if uv tool list | grep -qF "tbird-mcp v$TBIRD_VERSION"; then
+    printf '  > skip\n'
+else
+    printf '  > install\n'
+    uv tool install --force --from "$TBIRD_MCP" tbird-mcp --with 'mcp<2'
 fi
 
 
