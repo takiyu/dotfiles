@@ -111,6 +111,12 @@ Delimiter spacing:
 - Group related targets into sections and keep an end-of-file separator block (2 blank lines before).
 - Use `$(MAKE)` for recursive make.
 
+## Git
+- Do not use fast-forward merges by default. Use `git merge --no-ff` unless the
+  user explicitly asks for a fast-forward merge.
+- When AGENTS.md is edited, stage and commit that change automatically with a
+  `Docs:` message.
+
 ## Commit Messages
 - Write commit messages in English.
 - `Feature/Fix/Docs/Style/Refactor/Test: description`
