@@ -7,6 +7,8 @@ CONFIG_DIR="$HOME/.config/opencode"
 # Keep these versions in sync with opencode.json.
 PLAYWRIGHT_MCP="@playwright/mcp@0.0.83"
 BLENDER_MCP_VERSION="2.0.0"
+SLACK_MCP="slack-mcp-server@1.3.0"
+SLACK_TOKEN="$HOME/.secrets/slack-token"
 
 
 # ------------------------------------------------------------------------------
@@ -75,6 +77,21 @@ if uv tool list | grep -q "blender-mcp v$BLENDER_MCP_VERSION"; then
 else
     printf '  > install\n'
     uv tool install --force "blender-mcp==$BLENDER_MCP_VERSION"
+fi
+
+
+# ------------------------------------------------------------------------------
+# --------------------------------- Slack MCP ----------------------------------
+# ------------------------------------------------------------------------------
+printf '* Install Slack MCP %s\n' "$SLACK_MCP"
+if [ ! -f "$SLACK_TOKEN" ]; then
+    printf '  > skip (no secret)\n'
+elif npm exec --offline --yes --package="$SLACK_MCP" -- true \
+        >/dev/null 2>&1; then
+    printf '  > skip\n'
+else
+    printf '  > install\n'
+    npm exec --prefer-offline --yes --package="$SLACK_MCP" -- true >/dev/null
 fi
 
 
