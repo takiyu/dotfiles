@@ -21,7 +21,8 @@
     "session.message.user.next": "ctrl+n",
     "session.line.up": "ctrl+k",
     "session.line.down": ["linefeed", "ctrl+j"],
-    "session.last": ["ctrl+g", "end"],
+    "session.last": ["end"],
+    "session.verbosity.cycle": "ctrl+g",
     "prompt.queue": "ctrl+q",
     "model.cycle_recent": "none",
     "app.clear": "none",
@@ -64,7 +65,8 @@
   "session": {
     "sidebar": "hide",
     "scrollbar": false,
-    "thinking": "hide"
+    "thinking": "hide",
+    "verbosity": "medium"
   },
   "animations": true
 }
