@@ -21,7 +21,7 @@
 - Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
-- Write comments in English, and add a one-line comment at the start of each non-trivial code block (explain the logic below)
+- Write comments in English, and add a **one-line** comment at the start of each non-trivial code block (explain the logic below). Keep every comment concise
 - Function declaration order MUST follow usage order, top-to-bottom: higher-level (caller) above, lower-level (callee) below. Group similar functions in the same section.
 - Constants and classes that are not exported MUST be placed below the `Implementation` section separator (together with the implementation), never in the public/interface section above it. In Python, add `from __future__ import annotations` when a class must be moved below a function that annotates it.
 - Import/Include at the top of the file
@@ -40,6 +40,7 @@
 ## Must Not Do
 - Use class methods/global variables
 - Create too many methods
+- Write multi-line comments (consecutive comment lines for one explanation); a comment must be a single line
 - Trailing comma after the last element in function args, list, dict, tuple, etc. (allowed only when the number of elements is extremely large)
 
 ## Code Structure Template
