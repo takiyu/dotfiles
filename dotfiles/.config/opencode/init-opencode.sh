@@ -4,6 +4,8 @@
 set -euo pipefail
 
 CONFIG_DIR="$HOME/.config/opencode"
+# The default installer URL only serves the legacy series.
+OPENCODE_INSTALL_URL="https://opencode.ai/v2/install"
 # Keep these versions in sync with opencode.json.
 PLAYWRIGHT_MCP="@playwright/mcp@0.0.83"
 BLENDER_MCP_VERSION="2.0.0"
@@ -18,11 +20,11 @@ TBIRD_VERSION="0.1.0+readonly.1"
 # ---------------------------------- OpenCode ----------------------------------
 # ------------------------------------------------------------------------------
 printf '* Install OpenCode\n'
-if command -v opencode >/dev/null; then
+if command -v opencode >/dev/null 2>&1; then
     printf '  > skip\n'
 else
     printf '  > install\n'
-    curl -fsSL https://opencode.ai/install | bash
+    curl -fsSL "$OPENCODE_INSTALL_URL" | bash
     mkdir -p "$HOME/.local/bin"
     ln -sf "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"
 fi
