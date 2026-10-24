@@ -610,6 +610,7 @@ fi
 alias oc="opencode_local.sh"
 alias a=oc
 function gcmA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更をコミットして'; }  # Run auto-commit without tab feature
+function gcmnA() { OPENCODE_CLI_CONFIG_CONTENT='{"tabs":{"mode":"off"}}' oc "$@" --prompt 'auto-commit スキルを使って、ステージ済みの変更を git commit --no-verify でコミットして'; }  # Run auto-commit without hooks or tab feature
 
 # OpenCode completion
 if command -v opencode >/dev/null; then
