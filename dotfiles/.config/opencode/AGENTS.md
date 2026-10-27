@@ -41,6 +41,7 @@
 - Use class methods/global variables
 - Create too many methods
 - Write multi-line comments (consecutive comment lines for one explanation); every comment, including existing ones, must be a single concise line
+- Write long comment sentences, or chain clauses in a comment with `;` or similar punctuation. Keep every comment short and single-clause
 - Trailing comma after the last element in function args, list, dict, tuple, etc. (allowed only when the number of elements is extremely large)
 
 ## Code Structure Template
