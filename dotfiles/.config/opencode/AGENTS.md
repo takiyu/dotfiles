@@ -32,6 +32,8 @@
 - Configuration control must be defined in `config.*` files
   - However, for single-script projects or extremely small projects, these may be written in the main script
 - Write minimal, concise, and readable code with semantically correct structure
+- Keep `README.md` short: a brief description and simple "How to use" steps only
+- Put work history and detailed configuration in `HISTORY.md`, not `README.md`
 - Always write comparison operators with the left side smaller (`<` orientation)
 - Incrementally implement one feature at a time: write code, compile and test it, make it perfect, then move to the next. Do not write all code at once.
 - Pack multiple statements, conditions, or parameters per line when within the length limit
