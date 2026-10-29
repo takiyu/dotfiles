@@ -118,8 +118,7 @@ Delimiter spacing:
 ## Git
 - Do not use fast-forward merges by default. Use `git merge --no-ff` unless the
   user explicitly asks for a fast-forward merge.
-- When AGENTS.md is edited, stage and commit that change automatically with a
-  `Docs:` message.
+- Name git branches as `<type>/<snake_case_summary>` (e.g. `feature/add_login`).
 
 ## Commit Messages
 - Write commit messages in English.
