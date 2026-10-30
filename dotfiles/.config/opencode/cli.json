@@ -33,7 +33,7 @@
     "model.dialog.favorite": "none",
     "permission.prompt.fullscreen": "none",
     "composer.subagent.interrupt": "none",
-    "composer.shell.kill": "none",
+    "composer.shell.kill": "ctrl+k",
     "dialog.move_session.delete": "none",
     "queued_prompt.delete": "none",
     "session.rename": "none",

@@ -22,6 +22,7 @@
 - Keep structure simple, avoid deep nesting
 - Extract pure functions outside classes
 - Write comments in English: every non-trivial code block must start with exactly one concise comment line
+- Write comments as short noun phrases, not sentences, preferring gerund (-ing) verbs (e.g. `# Building the application`, `# Path dependencies`)
 - Function declaration order MUST follow usage order, top-to-bottom: higher-level (caller) above, lower-level (callee) below. Group similar functions in the same section.
 - Constants and classes that are not exported MUST be placed below the `Implementation` section separator (together with the implementation), never in the public/interface section above it. In Python, add `from __future__ import annotations` when a class must be moved below a function that annotates it.
 - Import/Include at the top of the file
@@ -38,12 +39,16 @@
 - Incrementally implement one feature at a time: write code, compile and test it, make it perfect, then move to the next. Do not write all code at once.
 - Pack multiple statements, conditions, or parameters per line when within the length limit
 - Never use inline if-else (ternary) expressions
+- Write small shell scripts top-to-bottom with section separators; do not split them into functions
+- Start every script and Dockerfile with the file header defined under "Delimiter spacing"
+- Use the same comment for the same role across files
 
 ## Must Not Do
 - Use class methods/global variables
 - Create too many methods
 - Write multi-line comments (consecutive comment lines for one explanation); every comment, including existing ones, must be a single concise line
 - Write long comment sentences, or chain clauses in a comment with `;` or similar punctuation. Keep every comment short and single-clause
+- Leave stale paths or names in comments
 - Trailing comma after the last element in function args, list, dict, tuple, etc. (allowed only when the number of elements is extremely large)
 
 ## Code Structure Template
@@ -80,9 +85,11 @@ Implementation code here
 `#` can be replaced (e.g. `//`) for other languages.
 
 Delimiter spacing:
-- Named header: 2 blank lines before, 0 after.
-- End-of-file separator block: 2 blank lines before.
-- Delimiter lines: Python 79 chars; TypeScript 100 chars; all others 80 chars.
+- File header: 3 lines (separator, centered name, separator) directly below
+  the shebang or at the top, no blank lines before or after
+- Section header: 2 blank lines before, 0 after
+- End-of-file separator block: 2 blank lines before
+- Delimiter lines: Python 79 chars; TypeScript 100 chars; all others 80 chars
 
 ## Language-specific
 ### Python
@@ -122,4 +129,4 @@ Delimiter spacing:
 
 ## Commit Messages
 - Write commit messages in English.
-- `Feature/Fix/Docs/Style/Refactor/Test: description`
+- `Feature/Fix/Docs/Style/Refactor/Test/Security: description`
