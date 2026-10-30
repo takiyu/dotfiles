@@ -129,4 +129,4 @@ Delimiter spacing:
 
 ## Commit Messages
 - Write commit messages in English.
-- `Feature/Fix/Docs/Style/Refactor/Test/Security: description`
+- `Feature/Fix/Docs/Style/Refactor/Test/Security/Arrange: description`
