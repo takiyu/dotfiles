@@ -20,6 +20,9 @@ no shared history.
   `git diff HEAD` (staged plus working tree).
 - **Fresh context.** Delegate the analysis to a subagent that receives only the
   prompt and diff, so this session's unrelated knowledge cannot bias it.
+- **Trivial shortcut.** Skip the subagent and commit immediately when every
+  staged edit is comment-only, formatting, or a user-facing text change with no
+  logic or API impact.
 - **One analysis.** Produce the commit message and the quality check together
   in a single pass.
 - **Exact output.** Emit the `COMMIT:` and `QUALITY:` lines defined below, never
@@ -30,7 +33,8 @@ no shared history.
 - **Quality gates the commit.** When the check is `OK`, confirm and commit.
   When issues are found, let the user choose: commit as-is, an automatic fix
   loop, an automatic fix loop with a final confirmation, a single auto-fix
-  pass, or a per-item loop that confirms each fix.
+  pass, or a per-item loop that confirms each fix. The trivial shortcut below
+  skips both the check and the confirmation.
 - **Simplicity first.** Prefer the smallest change that meets the requirement.
   Treat unnecessary branches, helpers, abstractions, dependencies, and
   defensive code for hypothetical cases as design problems, and never propose a
@@ -82,10 +86,27 @@ no shared history.
    step 2 stat (the per-file change summary). Do not print the full diff; the
    analysis still reviews the step 3 diff.
 
-5. **Analyze in a fresh subagent** — invoke the `general` subagent with the
-   `task` tool, passing only the prompt below plus the step 2 stat and the
-   step 3 diff. Tell it to use no tools and reply with text only, so it runs
-   with no shared context. Substitute the stat and diff into:
+5. **Analyze** — apply the trivial-change shortcut first; otherwise invoke the
+   `general` subagent with the `task` tool, passing only the prompt below plus
+   the step 2 stat and the step 3 diff. Tell it to use no tools and reply with
+   text only, so it runs with no shared context. Substitute the stat and diff
+   into:
+
+   **Trivial-change shortcut** — inspect the step 3 diff yourself. Check each
+   hunk in order against the kinds below and skip the subagent only when the
+   diff was not truncated and every hunk matches one kind:
+
+   - a comment or docstring edit;
+   - whitespace, blank-line, or formatting only;
+   - a user-facing text or log string change (messages, labels) with no
+     control-flow, signature, or API impact.
+
+   Do not use the shortcut if any hunk touches logic, control flow,
+   signatures, imports, dependencies, error handling, or if you are unsure.
+   On the shortcut, write the commit message yourself with the same prefixes
+   as the prompt below, print it under `## 📝 Commit Message`, print
+   `## ✅ Quality Check` with `✅ OK`, then go straight to step 10 without
+   asking for confirmation.
 
    ```
    Review the staged changes below.
