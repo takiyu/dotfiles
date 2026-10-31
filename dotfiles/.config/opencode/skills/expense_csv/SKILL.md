@@ -1,5 +1,5 @@
 ---
-name: expense-csv
+name: expense_csv
 description: Create an expense-reimbursement CSV from receipt images and PDFs in a directory. Trigger when the user asks to summarize receipts, create a keihi (経費) CSV, or process ryo-shu-sho (領収書).
 ---
 

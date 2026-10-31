@@ -1,5 +1,5 @@
 ---
-name: auto-review-diff
+name: auto_review_diff
 description: Review the git diff regardless of staging (staged, unstaged, and untracked changes) against the AGENTS.md coding rules and sound software-engineering design, delegating each review to a fresh subagent and looping fixes until nothing or only trivial issues remain. Trigger when the user asks to review changes, review the diff, or audit modified files.
 ---
 

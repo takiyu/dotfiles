@@ -1,5 +1,5 @@
 ---
-name: lint-shellscript
+name: lint_shellscript
 description: Run shell lint tools, then check the project's custom coding rules. Trigger when the user asks to lint shell scripts or audit coding-rule compliance.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: business-card-ocr
+name: business_card_ocr
 description: Read business cards (名刺) from images in a directory and extract name, organization, role, and email into CSV/JSON plus renamed image copies. Trigger when the user asks to OCR business cards, extract 名刺 data, or convert card images into a contact list.
 ---
 
@@ -15,7 +15,7 @@ fields; file output and image copying are deterministic scripts.
 
 Run the two helper scripts from the **project directory** (the directory
 containing `./data_inp`). Reference the scripts by their absolute path under
-`~/.config/opencode/skills/business-card-ocr/scripts/`, or `cd` there and pass
+`~/.config/opencode/skills/business_card_ocr/scripts/`, or `cd` there and pass
 absolute `<input_dir>`/`<output_dir>` paths. Do NOT pass bare `./data_inp`
 after `cd`-ing into the scripts dir — that would resolve against the scripts
 dir, not the project.
@@ -23,9 +23,9 @@ dir, not the project.
 1. OCR all images with multi-engine consensus + validation:
 
    ```bash
-   uv --project ~/.config/opencode/skills/business-card-ocr/scripts run \
+   uv --project ~/.config/opencode/skills/business_card_ocr/scripts run \
      --python 3.11 python \
-     ~/.config/opencode/skills/business-card-ocr/scripts/ocr.py \
+     ~/.config/opencode/skills/business_card_ocr/scripts/ocr.py \
      ./data_inp ./data_out
    ```
 
@@ -67,9 +67,9 @@ dir, not the project.
 4. Generate CSV/JSON, a visual review page, and rename/copy the images:
 
    ```bash
-   uv --project ~/.config/opencode/skills/business-card-ocr/scripts run \
+   uv --project ~/.config/opencode/skills/business_card_ocr/scripts run \
      --python 3.11 python \
-     ~/.config/opencode/skills/business-card-ocr/scripts/finalize.py \
+     ~/.config/opencode/skills/business_card_ocr/scripts/finalize.py \
      ./data_inp ./data_out ./data_out/people.json
    ```
 

@@ -1,5 +1,5 @@
 ---
-name: lint-python
+name: lint_python
 description: Run Python lint tools, then check the project's custom coding rules. Trigger when the user asks to lint Python code or audit coding-rule compliance.
 ---
 

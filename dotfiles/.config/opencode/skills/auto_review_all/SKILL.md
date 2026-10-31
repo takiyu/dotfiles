@@ -1,5 +1,5 @@
 ---
-name: auto-review-all
+name: auto_review_all
 description: Review every file in the current folder against the AGENTS.md coding rules and sound software-engineering design, delegating each review to a fresh subagent and looping fixes until nothing or only trivial issues remain. Trigger when the user asks for a full-folder review, a coding-rule audit, or a design/implementation review of all files.
 ---
 

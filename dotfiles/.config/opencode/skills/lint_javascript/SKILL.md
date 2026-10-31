@@ -1,11 +1,11 @@
 ---
-name: lint-typescript
-description: Run TypeScript/React lint tools, then check the project's custom coding rules. Trigger when the user asks to lint TypeScript or React code, or audit coding-rule compliance.
+name: lint_javascript
+description: Run JavaScript/React lint tools, then check the project's custom coding rules. Trigger when the user asks to lint JavaScript or React code, or audit coding-rule compliance.
 ---
 
-# TypeScript Lint
+# JavaScript Lint
 
-Run the available TypeScript/React lint tools, then check the project's custom
+Run the available JavaScript/React lint tools, then check the project's custom
 coding rules and fix every violation iteratively. Findings use the severity
 labels `[高]` / `[中]` / `[低]`.
 
@@ -37,11 +37,10 @@ labels `[高]` / `[中]` / `[低]`.
    npm run lint 2>&1
    ```
 
-   **Branch C** — fallback to ESLint + tsc:
+   **Branch C** — fallback to direct ESLint:
 
    ```sh
    npx eslint --fix . 2>&1 || true
-   command -v tsc >/dev/null 2>&1 && tsc --noEmit 2>&1 || true
    ```
 
 2. **Review custom rules** — scan the source files against "Rules" below and
@@ -53,10 +52,8 @@ labels `[高]` / `[中]` / `[低]`.
 
 **[高] Must fix:**
 - Class component used (must use function component)
-- Props not typed
 - User-visible string not wrapped in `t()` (i18n)
-- `any` type used
-- `interface` used for props/state (use `type`)
+- Mixed require() and import/export in same file
 - camelCase variable that should be snake_case (non-function, non-component)
 - PascalCase function that is not a React component or hook
 - Section delimiters wrong (see AGENTS.md Delimiter spacing): 80 chars, `// ` prefix
@@ -64,15 +61,14 @@ labels `[高]` / `[中]` / `[低]`.
 - File does not end with exactly 3 lines of `// -----------------------------------------------------------------------------` (80 chars)
 
 **[中] Should fix:**
-- Test file not named `test_*.ts` / `test_*.tsx`
 - React Bootstrap not used where a UI component is needed
 - Missing English comment at start of non-trivial code block
 - Sentence-style names with prepositions
 - Hook defined outside component but missing `use` prefix
 - Mutable module-level state
-- Unused import
+- Unused import / require
 - Inline if-else (ternary) expressions (allowed only in the JSX/HTML markup part of React components, e.g. `{cond ? <A /> : <B />}`)
-- Unnecessary line breaks; pack multiple statements or conditions per line when within 100-char limit
+- Unnecessary line breaks; pack multiple statements or conditions per line when within length limits
 
 **[低] Nice to fix:**
 - `console.log` left in production code
@@ -83,7 +79,7 @@ labels `[高]` / `[中]` / `[低]`.
 Print the summary when the run finishes:
 
 ```markdown
-## ✅ Lint complete (TypeScript)
+## ✅ Lint complete (JavaScript)
 
 | 項目 | 件数 |
 | --- | --- |

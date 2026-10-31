@@ -44,14 +44,14 @@ items or proceed without approval.
    edit yet. Revise the plan if the user requests changes, then ask again.
 5. **Apply the fix** — after approval, make exactly the approved change.
 6. **Verify** — run the relevant tests/build/typecheck and the matching
-   `lint-<language>` skill, then review the diff. Report the result.
+   `lint_<language>` skill, then review the diff. Report the result.
 7. **Wait for the user's check** — stop and ask the user to review the fix with
    the `question` tool (options such as `OK` / `修正が必要`).
    - OK → go to step 8.
    - Not OK → return to step 3 with the requested changes; re-verify.
 8. **Commit** — on explicit OK, commit the item with a message in the form
    `Feature/Fix/Docs/Style/Refactor/Test: <description>` (or use the
-   `auto-commit` skill if the user prefers it).
+   `auto_commit` skill if the user prefers it).
 9. **Next item** — mark the item done, announce the remaining count, and
    return to step 2. Stop when all items are finished.
 

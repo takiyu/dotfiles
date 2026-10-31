@@ -1,5 +1,5 @@
 ---
-name: auto-commit
+name: auto_commit
 description: Generate a commit message and check code quality for staged changes. Trigger when the user asks to commit staged changes, write a commit message, or inspect the quality of staged code.
 ---
 
