@@ -117,6 +117,7 @@ no shared history.
    The first line must start with COMMIT: followed by a commit message.
    The commit message must begin with one of these prefixes:
    Feature: / Fix: / Docs: / Style: / Refactor: / Test:
+   The commit message must be written in English, never in Japanese.
 
    The next line(s) must start with QUALITY: followed by one of:
    - OK (if no issues found)
@@ -152,6 +153,7 @@ no shared history.
    - The message is not a copy of these instructions (not the literal prefix
      list `Feature/Fix/Docs/Style/Refactor/Test`).
    - The `COMMIT:` value is a single line with no embedded newlines.
+   - The `COMMIT:` value contains no Japanese characters (English only).
    - The message length is 5–200 characters.
    - `QUALITY:` is present and non-empty.
    - When `QUALITY:` is not `OK`, at least one following line matches
