@@ -11,6 +11,8 @@
     "session.list": "ctrl+l",
     "session.toggle.thinking": "ctrl+t",
     "variant.cycle": "ctrl+y",
+    "agent.cycle": "tab",
+    "agent.cycle.reverse": "shift+tab",
     "session.tab.close": ["ctrl+d", "f4"],
     "session.tab.reopen": ["f5"],
     "session.tab.previous": "f2",
