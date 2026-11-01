@@ -40,12 +40,12 @@
 - Pack multiple statements, conditions, or parameters per line when within the length limit
 - Never use inline if-else (ternary) expressions
 - Write small shell scripts top-to-bottom with section separators; do not split them into functions
-- Start every script and Dockerfile with the file header defined under "Delimiter spacing"
 - Use the same comment for the same role across files
 
 ## Must Not Do
 - Use class methods/global variables
 - Create too many methods
+- Put a file-name header block at the top of a file (the path already shows the name)
 - Write multi-line comments (consecutive comment lines for one explanation); every comment, including existing ones, must be a single concise line
 - Write long comment sentences, or chain clauses in a comment with `;` or similar punctuation. Keep every comment short and single-clause
 - Leave stale paths or names in comments
@@ -85,8 +85,6 @@ Implementation code here
 `#` can be replaced (e.g. `//`) for other languages.
 
 Delimiter spacing:
-- File header: 3 lines (separator, centered name, separator) directly below
-  the shebang or at the top, no blank lines before or after
 - Section header: 2 blank lines before, 0 after
 - End-of-file separator block: 2 blank lines before
 - Delimiter lines: Python 79 chars; TypeScript 100 chars; all others 80 chars

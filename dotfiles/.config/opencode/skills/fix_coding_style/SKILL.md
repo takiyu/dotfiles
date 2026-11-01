@@ -25,29 +25,28 @@ changing behavior is reported as unresolved instead of rewritten.
 - **Rules from AGENTS.md.** Use the project's `AGENTS.md` when it exists,
   otherwise `~/.config/opencode/AGENTS.md`. Apply only its "Coding Rules"
   section (Must Do, Must Not Do, structure, language-specific, Git).
-- **Exact templates.** Never invent decoration: no trailing `#`, no extra
-  dashes. A Python block (79 chars per line) looks exactly like this:
+- **Exact templates.** Never invent decoration: no file-name header at the
+  top, no trailing `#`, no extra dashes. A Python section header (79 chars per
+  line) looks exactly like this:
 
   ```
   # -----------------------------------------------------------------------------
-  # ---------------------------------- ansi.py ----------------------------------
+  # ------------------------------- Section Name --------------------------------
   # -----------------------------------------------------------------------------
   ```
 
-  The name is the file name. Build the line as `"# "` + dashes + `" "` + name
-  + `" "` + dashes, so the content between the leading `# ` and the end is
-  exactly width - 2 characters; when the width leaves an odd remainder, put
-  the extra dash on the right. TypeScript uses 100 and other languages 80,
-  with the same shape and the name re-centered by moving dashes between the
-  two sides.
+  Build the line as `"# "` + dashes + `" "` + name + `" "` + dashes, so the
+  content between the leading `# ` and the end is exactly width - 2
+  characters; when the width leaves an odd remainder, put the extra dash on
+  the right. TypeScript uses 100 and other languages 80, with the same shape
+  and the name re-centered by moving dashes between the two sides.
 
 - **Whole-file structure.** Copy this layout, taken from the AGENTS.md code
-  structure template. Existing license or copyright comments stay verbatim
-  directly below the file header, even when they name a file slightly
-  differently; the stale-path rule does not apply to license text:
+  structure template. Existing license or copyright comments stay verbatim at
+  the top of the file, even when they name a file slightly differently; the
+  stale-path rule does not apply to license text:
 
   ```
-  3-line file header            (top, nothing above it)
   license comment, if any
   imports
   interface code                (public functions, classes, constants)
@@ -70,11 +69,12 @@ changing behavior is reported as unresolved instead of rewritten.
   sits inside an indented platform branch (`try:` / `else:`), the top-level
   layout cannot be applied: leave the file as it is and report it.
 
-- **Sections are optional.** The file header, the Implementation block, and
-  the end-of-file block are always present when they apply. Named sections are
-  added only where the file already has or clearly needs distinct groups.
-  Never wrap a single statement or a single class in its own section, and
-  never give a section header to `__init__.py`-style re-export files.
+- **Sections are optional.** The Implementation block and the end-of-file
+  block are always present when they apply; a file-name header block is never
+  added. Named sections are added only where the file already has or clearly
+  needs distinct groups. Never wrap a single statement or a single class in
+  its own section, and never give a section header to `__init__.py`-style
+  re-export files.
 
 - **Public API is frozen.** Never rename exported names, class attributes,
   CLI flags, environment variables, or wire formats, even when they break the
@@ -186,9 +186,9 @@ changing behavior is reported as unresolved instead of rewritten.
    condensed rule list:
 
    *Structure*
-   - 3-line file header at the top, named after the file, centered, no
-     decoration.
-   - License or copyright comment kept verbatim below the header.
+   - No file-name header block at the top; a file that only gains one is a
+     violation to remove.
+   - License or copyright comment kept verbatim at the top of the file.
    - Section headers with 2 blank lines before and none after, only where
      groups exist.
    - A 3-line separator, then the 5-line Implementation block, before private
@@ -256,10 +256,10 @@ changing behavior is reported as unresolved instead of rewritten.
    awk 'length > 79 {print FILENAME": "FNR": "length}' <python files>
    ```
 
-   Then confirm by eye: every file starts with its 3-line header, ends with
-   exactly one 3-line block and 2 blank lines before it, has at most one
-   Implementation block, and has no other bare separator triple in the middle.
-   Finish with the diff audit from "Principles".
+   Then confirm by eye: no file starts with a file-name header block, every
+   file ends with exactly one 3-line block and 2 blank lines before it, has at
+   most one Implementation block, and has no other bare separator triple in the
+   middle. Finish with the diff audit from "Principles".
 
 8. **Re-scan** — repeat steps 4-7 until a pass finds no fixable `[高]` or
    `[中]` violations, a pass changes nothing, or 3 passes have run. A pass is
@@ -274,7 +274,7 @@ changing behavior is reported as unresolved instead of rewritten.
 
 | Label | Items |
 | --- | --- |
-| `[高]` | Missing or misaligned file header or end-of-file block, docstrings, missing type hints, trailing commas, unused or dead code, code that no longer compiles |
+| `[高]` | File-name header block at the top of a file, missing or misaligned end-of-file block, docstrings, missing type hints, trailing commas, unused or dead code, code that no longer compiles |
 | `[中]` | Missing or misplaced section header or separator block, constants not in `constants.*`, naming, spacing, nesting, module-level mutable state, comment style, ternary expressions, declaration order, duplication, lines over the limit, comparison orientation |
 | `[低]` | Cosmetic nits: extra blank lines inside a class, punctuation, wording of an existing comment |
 
