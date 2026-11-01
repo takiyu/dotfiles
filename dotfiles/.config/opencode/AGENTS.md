@@ -8,7 +8,7 @@
 - Delete temporary/scratch files created during the task when they are no longer needed (work files under /tmp, autosaves, downloads, build artifacts, etc.).
 - Put session scratch files under /tmp/opencode/$OPENCODE_PID/ so unrelated sessions do not mix. Do not read or modify other sessions' directories.
 - Do not pollute the global environment outside /tmp during work (no writes outside /tmp and the project without explicit approval).
-- Scope all work to the directory where OpenCode is running and its subdirectories; without user instructions, do not read or reference anything outside it (parent directories, sibling projects, home, etc.). /tmp is exempt.
+- Scope all work to the directory where OpenCode is running and its subdirectories; without user instructions, do not read or reference anything outside it (parent directories, sibling projects, home, etc.). /tmp is exempt. During worktree work, the assigned worktree counts as the project root.
 - Prohibited from installing tools casually. Ask the user before any installation or global environment change.
 - If the user's request is incomplete or you have a better suggestion, consult with the user.
 - When writing specifications or work logs, keep the document from bloating by removing unnecessary content.
@@ -127,6 +127,47 @@ Delimiter spacing:
   user explicitly asks for a fast-forward merge.
 - Name git branches as `<type>/<snake_case_summary>` (e.g. `feature/add_login`).
 
-## Commit Messages
+### Commit Messages
 - Write commit messages in English.
 - `Feature/Fix/Docs/Style/Refactor/Test/Security/Arrange: description`
+
+## Parallel Work with Git Worktrees
+### Starting
+- Use worktrees when the user asks for parallel work, or when the task splits into independent parts.
+- Announce the split before creating: task, branch, base commit, and file ownership.
+- Confirm the split first when it is inferred rather than instructed.
+- Create worktrees only with the OpenCode worktree tools, never with `git worktree`.
+- Never reuse a branch across worktrees.
+- Uncommitted changes in the original checkout are not carried over.
+
+### Session and ownership
+- Move the session into its worktree before any edit, and treat it as the project root.
+- Keep the original checkout read-only during parallel work.
+- Prefer one subagent per worktree, and pass it the path, base commit, scope, and test command.
+- Never let one session or subagent edit two worktrees.
+- Serialize tasks that touch the same files.
+- Use a task-specific plan filename; never share one plan file across worktrees.
+
+### Isolation
+- Install, build, and test inside each worktree; never share generated directories.
+- Use development `.env` values per worktree; never copy production secrets.
+- Use unique ports, database names, container names, and cache names per worktree.
+- Stop servers and background processes when finishing a worktree.
+- Keep scratch files under `/tmp/opencode/$OPENCODE_PID/`, never in a worktree.
+
+### Git safety
+- Avoid `stash`, `gc`, `prune`, `config`, and hook edits.
+- Never check out a branch held by another worktree.
+- Regenerate lock files in one worktree only, or serialize the change.
+
+### Review and integration
+- Stop after verification and wait for the user to review the worktree changes.
+- Never merge into the default branch before that review is approved.
+- Merge one branch at a time with `git merge --no-ff` after fetching.
+- Resolve conflicts in the integration worktree.
+
+### Cleanup and reporting
+- Report the path, branch, base commit, and test results.
+- Remove only your own worktree, and only after merge and user confirmation.
+- Check `worktree_list` before creating or removing; never touch another session's worktree.
+- Stop and ask when creation fails, the branch exists, or the tree is dirty.
