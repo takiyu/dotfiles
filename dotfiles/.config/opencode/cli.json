@@ -9,7 +9,7 @@
     "command.palette.show": "ctrl+r",
     "session.sidebar.toggle": "ctrl+f",
     "session.list": "ctrl+l",
-    "session.toggle.thinking": "ctrl+t",
+    "session.toggle.thinking": "ctrl+e",
     "variant.cycle": "ctrl+y",
     "agent.cycle": "tab",
     "agent.cycle.reverse": "shift+tab",

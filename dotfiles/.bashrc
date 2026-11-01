@@ -594,6 +594,7 @@ if [ $platform == 'Linux' ]; then
     # Linux Specific Aliases
     function filer() { command thunar "$@" & 2> /dev/null; disown; }
     function zathura() { command zathura "$@" & 2> /dev/null; disown; }
+    alias t=xfce4-terminal
 elif [ $platform == 'Windows' ]; then
     # Windows Specific Aliases
     function filer() { command explorer "$@" & 2> /dev/null; disown; }
