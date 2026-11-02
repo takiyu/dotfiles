@@ -41,11 +41,12 @@
 - Never use inline if-else (ternary) expressions
 - Write small shell scripts top-to-bottom with section separators; do not split them into functions
 - Use the same comment for the same role across files
+- Start every source file with a 3-line section header stating what the file does, e.g. `Korbato Scan Server Dockerfile`
 
 ## Must Not Do
 - Use class methods/global variables
 - Create too many methods
-- Put a file-name header block at the top of a file (the path already shows the name)
+- Put a bare file name (e.g. `auth.py`) as the top-of-file section header; describe the file's purpose instead
 - Write multi-line comments (consecutive comment lines for one explanation); every comment, including existing ones, must be a single concise line
 - Write long comment sentences, or chain clauses in a comment with `;` or similar punctuation. Keep every comment short and single-clause
 - Leave stale paths or names in comments
@@ -53,6 +54,9 @@
 
 ## Code Structure Template
 ```python
+# -----------------------------------------------------------------------------
+# ---------------------------- File Purpose Header ----------------------------
+# -----------------------------------------------------------------------------
 Import/include code here
 
 
@@ -85,6 +89,7 @@ Implementation code here
 `#` can be replaced (e.g. `//`) for other languages.
 
 Delimiter spacing:
+- File header: at the very top (below a shebang if present), 0 blank lines after, and 1 blank line before a following section header
 - Section header: 2 blank lines before, 0 after
 - End-of-file separator block: 2 blank lines before
 - Delimiter lines: Python 79 chars; TypeScript 100 chars; all others 80 chars
@@ -111,7 +116,7 @@ Delimiter spacing:
 - Dockerfile only (not docker-compose for single service)
 
 ### Makefile
-- Declare `.PHONY` with all targets at the top.
+- Declare `.PHONY` with all targets at the top, directly below the file header.
 - 80 chars/line, recipes indented with tab.
 - Section headers use dashed comment lines (`# --...--`), 2 blank lines before and 0 after; section name centered between dashes.
 - Target name followed by `:`; all commands are one line each, separated by line breaks.
