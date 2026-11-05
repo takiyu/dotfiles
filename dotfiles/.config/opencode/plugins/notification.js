@@ -45,10 +45,11 @@ const definition = {
       for await (const event of ctx.event.subscribe(options)) {
         const request = notificationFor(event);
         if (!request) continue;
-        const owner = await sessionDirectory(ctx, (event.data || {}).sessionID);
-        if (owner !== ctx.location.directory) continue;
-        sendNotification(title, request.status, URGENCY_NORMAL, description,
-          request.icon, request.sound, request.expire_ms, request.transient);
+        const info = await sessionInfo(ctx, (event.data || {}).sessionID);
+        if (!info || info.directory !== ctx.location.directory) continue;
+        sendNotification(title, info.title, request.status, URGENCY_NORMAL,
+          description, request.icon, request.sound, request.expire_ms,
+          request.transient);
       }
     })();
 
@@ -91,12 +92,13 @@ function notificationFor(event) {
 }
 
 
-// Resolve the directory that owns the given session.
-async function sessionDirectory(ctx, session_id) {
+// Resolving the directory and title that own the given session.
+async function sessionInfo(ctx, session_id) {
   if (!session_id) return null;
   try {
     const session = await ctx.session.get({ sessionID: session_id });
-    return (session && session.location && session.location.directory) || null;
+    if (!session || !session.location) return null;
+    return { directory: session.location.directory, title: session.title };
   } catch (error) {
     void error;
     return null;
@@ -105,7 +107,7 @@ async function sessionDirectory(ctx, session_id) {
 
 
 // Send a desktop notification via `notify-send` and play a sound file.
-function sendNotification(title, status, urgency, description,
+function sendNotification(title, session_title, status, urgency, description,
                           icon_override, sound_file, expire_ms = null,
                           transient = false) {
   let icon = ICON;
@@ -114,10 +116,15 @@ function sendNotification(title, status, urgency, description,
   const args = ['-a', APP_NAME, '-u', urgency, '-i', icon];
   if (expire_ms !== null) args.push('-t', String(expire_ms));
   if (transient) args.push('-e');
-  let body = status;
-  if (description) body = `${status}\n${description}`;
+  const body = notificationBody(session_title, status, description);
   spawnCommand('notify-send', args.concat([title, body]));
   if (sound_file) spawnCommand('paplay', [sound_file]);
+}
+
+
+// Composing notification body from session title, status, and description.
+function notificationBody(session_title, status, description) {
+  return [session_title, status, description].filter(Boolean).join('\n');
 }
 
 
