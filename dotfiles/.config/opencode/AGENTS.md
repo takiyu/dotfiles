@@ -3,7 +3,9 @@
 - When environment variable missing, search `.env` file and source it.
 - After completing tasks, re-check the result against these rules before reporting.
 - Always use high reasoning effort unless explicitly overridden.
+- Do not blindly apply reviewer or subagent findings; judge whether each is appropriate before changing code.
 - No git commit without user instructions.
+- A commit instruction covers only that single commit; never commit again unless the user explicitly asks for another commit.
 - **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
 - Delete temporary/scratch files created during the task when they are no longer needed (work files under /tmp, autosaves, downloads, build artifacts, etc.).
 - Put session scratch files under /tmp/opencode/$OPENCODE_PID/ so unrelated sessions do not mix. Do not read or modify other sessions' directories.
