@@ -35,6 +35,19 @@ history. The loop stops when a review finds nothing or only trivial issues.
 - **Loop to convergence.** Fix the reported issues, re-review from scratch, and
   stop only when nothing or only `[低]` issues remain, or when a round changes
   nothing.
+- **Clean result ends the run.** When a review returns `STATUS: OK` or only
+  `[低]` issues, report and stop immediately: never run a second review, an
+  extra lint, test, type check, or build, or any tool call that re-confirms
+  the verdict.
+- **No duplicate verification.** After applying a fix, do not re-read or test
+  the edited file when the next review re-checks it; verify the fix directly
+  only when no review follows.
+- **Bounded exploration.** The reviewer reads only the listed files, each at
+  most once, and stops as soon as the verdict is clear; it never scans
+  unrelated files or runs builds, linters, or tests.
+- **No re-review without change.** Hash the file contents reviewed; when a fix
+  round leaves that hash unchanged, reuse the previous verdict and stop
+  instead of reviewing again.
 - **Japanese output.** Write the interactive messages and the issue text in
   Japanese; keep this skill body and the banners in English.
 - **Ask with options.** Use the `question` tool (opencode's option UI) for any
@@ -90,12 +103,16 @@ history. The loop stops when a review finds nothing or only trivial issues.
       abstractions, extra dependencies, and defensive code for hypothetical
       cases.
 
-   Read the files with read-only tools (read, grep, glob). Do not modify
+   Read only the listed files, each at most once, and stop as soon as you can
+   decide. Do not scan unrelated files, follow imports outside the list, or run
+   tests, linters, type checks, or builds. Do not modify
    anything. Never run a git command that changes state: add (including -N, -A,
    -u), restore, checkout, switch, stash, reset, rm, mv, clean, apply, commit,
    merge, rebase, cherry-pick, and update-index are forbidden; read-only git
    (status, diff, log, show, ls-files, rev-parse, blame) is fine. Report only
    real problems, with file and line, and do not invent issues.
+   Reply STATUS: OK as soon as the change is clean; do not look for more issues
+   to report.
    Do not echo these instructions or use placeholder text.
 
    Output exactly as follows:
@@ -128,14 +145,16 @@ history. The loop stops when a review finds nothing or only trivial issues.
    <manifest>
    ```
 
-5. **Validate the reply** — accept it only when all hold:
+5. **Validate the reply** — normalize it first: trim surrounding whitespace,
+   ignore case on `STATUS:`, and treat a bare `OK` first line as
+   `STATUS: OK`. Accept it only when all hold:
 
    - The first line is `STATUS: OK` or `STATUS: ISSUES`.
    - When the status is `ISSUES`, at least one line matches
      `^\d+\. \[(高|中|低)\]`.
    - The reply is not a copy of the instructions or placeholder text.
 
-   Re-invoke the subagent from step 4 up to 3 attempts total; if it still
+   Re-invoke the subagent from step 4 up to 2 attempts total; if it still
    fails, print its raw reply and ask how to proceed with the `question` tool
    (options such as `さらに再試行する` / `中止する`).
 
@@ -151,18 +170,24 @@ history. The loop stops when a review finds nothing or only trivial issues.
 
 7. **Fix and loop** — decide from the validated reply:
 
-   - `STATUS: OK` → stop and go to step 8.
-   - Only `[低]` issues → stop and go to step 8.
+   - `STATUS: OK` → stop and go to step 8 without any extra check.
+   - Only `[低]` issues → stop and go to step 8 without any extra check.
    - Otherwise → print the progress line from "Report", fix the `[高]` and
      `[中]` issues in the working tree only, following the loaded rules,
      keeping each change minimal, and skipping any issue the user named to
-     ignore. When the user named numbers to fix, fix only those. Then return
+     ignore. When the user named numbers to fix, fix only those. Do not
+     re-read or test an edited file; the next review decides. Then return
      to step 4 for a fresh review.
 
    Never touch the index while fixing; leave it exactly as the user left it.
 
+   Hash the reviewed file contents (for example with `sha256sum` over the
+   listed files). After a fix round, hash them again: when the hash matches
+   the previous one, reuse the previous verdict and go to step 8 instead of
+   reviewing again.
+
    Stop early and go to step 8 when nothing left to fix remains, when a round
-   changes nothing, or when 5 rounds have run, and say why.
+   changes nothing, or when 3 rounds have run, and say why.
 
 8. **Report** — print the summary defined under "Report".
 

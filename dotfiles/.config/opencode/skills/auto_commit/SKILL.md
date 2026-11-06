@@ -25,6 +25,15 @@ no shared history.
   logic or API impact.
 - **One analysis.** Produce the commit message and the quality check together
   in a single pass.
+- **Clean result ends the run.** On `QUALITY: OK`, confirm and commit; never
+  run a second analysis, an extra lint, test, type check, or build, or any
+  tool call that re-confirms the verdict.
+- **No duplicate verification.** After applying a fix, do not re-read or test
+  the edited file when a later analysis re-checks it; verify the fix directly
+  only when no analysis follows (the per-item loop).
+- **No re-analysis without change.** Hash the exact stat and diff sent to the
+  subagent; when a fix round leaves the hash unchanged, stop the loop and reuse
+  the previous result instead of analyzing again.
 - **Exact output.** Emit the `COMMIT:` and `QUALITY:` lines defined below, never
   a copy of these instructions or placeholder text.
 - **Japanese output.** Write every interactive prompt and status message shown
@@ -93,16 +102,19 @@ no shared history.
    into:
 
    **Trivial-change shortcut** — inspect the step 3 diff yourself. Check each
-   hunk in order against the kinds below and skip the subagent only when the
-   diff was not truncated and every hunk matches one kind:
+   hunk in order against the kinds below and skip the subagent when the diff
+   was not truncated and every hunk matches one kind. This is the default
+   path: do not call the subagent when the shortcut applies.
 
    - a comment or docstring edit;
    - whitespace, blank-line, or formatting only;
    - a user-facing text or log string change (messages, labels) with no
-     control-flow, signature, or API impact.
+     control-flow, signature, or API impact;
+   - a file rename with no content change.
 
    Do not use the shortcut if any hunk touches logic, control flow,
-   signatures, imports, dependencies, error handling, or if you are unsure.
+   signatures, imports, dependencies, or error handling, or when a hunk cannot
+   be classified as one of the kinds above.
    On the shortcut, write the commit message yourself with the same prefixes
    as the prompt below, print it under `## 📝 Commit Message`, print
    `## ✅ Quality Check` with `✅ OK`, then go straight to step 10 without
@@ -111,6 +123,9 @@ no shared history.
    ```
    Review the staged changes below.
    Do not echo these instructions or use placeholder text.
+   Judge only the stat and diff below; do not request more files, tests,
+   linters, or builds. Reply QUALITY: OK as soon as the change is clean; do
+   not look for more issues to report.
 
    Output exactly as follows:
 
@@ -147,7 +162,9 @@ no shared history.
    The subagent must return exactly the `COMMIT:` and `QUALITY:` lines and
    nothing else.
 
-6. **Validate** — accept the subagent reply only when all hold:
+6. **Validate** — normalize the reply first: trim surrounding whitespace,
+   ignore case on `COMMIT:` and `QUALITY:`, and treat `QUALITY: ok` or a bare
+   `OK` as `QUALITY: OK`. Accept the reply only when all hold:
 
    - `COMMIT:` matches `^(Feature|Fix|Docs|Style|Refactor|Test): .+`.
    - The message is not a copy of these instructions (not the literal prefix
@@ -159,8 +176,9 @@ no shared history.
    - When `QUALITY:` is not `OK`, at least one following line matches
      `^\d+\. \[(高|中|低)\]`.
 
-   Re-invoke the subagent from step 5 up to 3 attempts total, then fall back to
-   step 8.
+   Re-invoke the subagent from step 5 up to 2 attempts total, then fall back to
+   step 8. Never re-invoke for a cosmetic deviation that normalization can
+   fix.
 
 7. **Print results** — under the `## 📝 Commit Message` banner print the
    message, then under `## ✅ Quality Check` (or `## ⚠️ Quality Check` when
@@ -174,9 +192,9 @@ no shared history.
    message there is no issue list; confirm (see "Report") and go to step 10.
 
 9. **Resolve issues** — when the quality check is `OK`, confirm (see "Report")
-   and go to step 10. Otherwise ask for the choice below with the `question`
-   tool (Japanese labels) and follow the one chosen; on decline print
-   `コミットを中止しました。` and stop.
+   and go to step 10 without any extra check. Otherwise ask for the choice
+   below with the `question` tool (Japanese labels) and follow the one chosen;
+   on decline print `コミットを中止しました。` and stop.
 
    The user may name numbers to fix or to ignore (for example `1,3 を修正`,
    `2 を無視`). Record the selection by each issue's file, line, and problem
@@ -191,17 +209,24 @@ no shared history.
    - **B. Auto-fix loop** — fix the `[高]` and `[中]` issues in severity order
      (`[高]` then `[中]`) in the working tree, then repeat steps 2, 3, and 5–7
      with a fresh subagent, using `git diff HEAD` instead of
-     `git diff --cached` and skipping the step 4 reprint. Leave the fixes
+     `git diff --cached` and skipping the step 4 reprint. Do not re-read or
+     test an edited file; the next analysis decides. Leave the fixes
      unstaged so the user can inspect them with `git diff`. Print the progress
-     line from "Report" before each round. Loop automatically until the check
-     returns `OK` or only `[低]` issues remain, then go to step 10; stop and
-     report when an iteration changes nothing.
+     line from "Report" before each round. Hash the exact stat and diff sent
+     to the subagent; when a round leaves the hash unchanged, return to this
+     step with the previous result. Loop automatically until the check returns
+     `OK` or only `[低]` issues remain, then go to step 10. When 3 rounds have
+     run with `[高]` or `[中]` issues left, return to this step with the
+     previous result.
    - **C. Auto-fix loop with confirmation** — same as B, but confirm before
      committing (see "Report").
    - **D. Auto-fix once** — fix the `[高]` and `[中]` issues automatically as
      in B, then repeat steps 2, 3, and 5–7 exactly once with a fresh subagent,
-     using `git diff HEAD` and skipping the step 4 reprint. Print the progress
-     line from "Report" before the pass. This pass is never repeated
+     using `git diff HEAD` and skipping the step 4 reprint. Do not re-read or
+     test an edited file; the analysis decides. Print the progress
+     line from "Report" before the pass. When the refreshed stat and diff hash
+     equals the previous one, skip the pass and return to this step with the
+     previous result. This pass is never repeated
      automatically: if issues remain, report them and return to this step so
      the user chooses again; if the pass changes nothing, report that and
      return to this step as well. When it reaches a commit, confirm first

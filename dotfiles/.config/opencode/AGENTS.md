@@ -5,8 +5,12 @@
 - When a rule violation or an inappropriate project state is found and fixed, add a short, general recurrence-prevention rule to the project's `AGENTS.md` in the same change. Do not record incident-specific details or concrete example values; state a rule that prevents the whole class of violation, and do not restate existing rules.
 - Always use high reasoning effort unless explicitly overridden.
 - Do not blindly apply reviewer or subagent findings; judge whether each is appropriate before changing code.
+- When the target project changes, call `session_move` to its working directory before reading, editing, running commands, starting builds, or changing configuration.
+- Do not treat the previous directory as the project root after the target project changes.
+- Stop and ask when the target working directory is unclear, missing, or cannot be moved to.
 - No git commit without user instructions.
 - A commit instruction covers only that single commit; never commit again unless the user explicitly asks for another commit.
+- Never infer commit permission from earlier requests, from "review and commit" on a previous change, or from finishing work. Never commit, amend, reset, or revert unless the current request explicitly asks for it.
 - **CRITICAL: NEVER use Chinese. Use English for thinking, Japanese for reports.**
 - Delete temporary/scratch files created during the task when they are no longer needed (work files under /tmp, autosaves, downloads, build artifacts, etc.).
 - Put session scratch files under /tmp/opencode/$OPENCODE_PID/ so unrelated sessions do not mix. Do not read or modify other sessions' directories.
