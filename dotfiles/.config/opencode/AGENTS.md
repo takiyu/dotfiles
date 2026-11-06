@@ -2,7 +2,7 @@
 - Never give up until finished; must check code behavior by running or testing it without relying on users.
 - When environment variable missing, search `.env` file and source it.
 - After completing tasks, re-check the result against these rules before reporting.
-- When a rule violation or an inappropriate project state is found and fixed, add a short recurrence-prevention rule to the project's `AGENTS.md` in the same change. Target the cause and do not restate existing rules.
+- When a rule violation or an inappropriate project state is found and fixed, add a short, general recurrence-prevention rule to the project's `AGENTS.md` in the same change. Do not record incident-specific details or concrete example values; state a rule that prevents the whole class of violation, and do not restate existing rules.
 - Always use high reasoning effort unless explicitly overridden.
 - Do not blindly apply reviewer or subagent findings; judge whether each is appropriate before changing code.
 - No git commit without user instructions.
