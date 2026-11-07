@@ -17,6 +17,8 @@ exec fcitx5 -r -d
 exec_always "make -C ~/.config/sway/swayhelper daemon"
 # Initial setups
 exec_always "make -C ~/.config/sway/swayhelper setup"
+# Display color correction for the HDMI-input monitors
+exec ~/.config/sway/fix_disp_color/start.sh
 
 ### Output configuration
 # Default wallpaper

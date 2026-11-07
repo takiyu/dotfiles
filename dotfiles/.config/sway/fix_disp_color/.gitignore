@@ -1,0 +1,4 @@
+fix_disp_color
+check_gamma
+*-client-protocol.h
+*-protocol.c
