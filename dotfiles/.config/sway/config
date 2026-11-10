@@ -13,6 +13,9 @@ exec_always systemctl --user import-environment XDG_CURRENT_DESKTOP WAYLAND_DISP
 # Start xdg-desktop-portal-wlr once (not on every reload to avoid restart)
 exec systemctl --user --now start xdg-desktop-portal-wlr
 exec fcitx5 -r -d
+# Switch IME state on terminal focus (opencode tabs get Japanese)
+exec_always pkill -f 'ime_focus_watch\.sh --daemon'
+exec_always ~/.config/sway/ime_focus_watch.sh --daemon
 # Start sway tiling daemon
 exec_always "make -C ~/.config/sway/swayhelper daemon"
 # Initial setups
