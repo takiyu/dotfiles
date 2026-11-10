@@ -49,6 +49,7 @@
 - Write small shell scripts top-to-bottom with section separators; do not split them into functions
 - Use the same comment for the same role across files
 - Start every source file with a 3-line section header stating what the file does, e.g. `Korbato Scan Server Dockerfile`
+- Align Markdown table borders to equal column widths, counting full-width characters as two columns
 
 ## Must Not Do
 - Use class methods/global variables
