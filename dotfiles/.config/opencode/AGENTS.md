@@ -36,7 +36,7 @@
 - Keep changes to a minimum; do not change irrelevant parts
 - Absolutely forbid duplicated code; consolidate similar functionality into common functions
 - Constants must be defined in `constants.*` files, except module-local constants prefixed with `_`, which may be defined below the `Implementation` section separator
-  - For single-script projects, constants may be declared at the top of the file
+  - For entrypoint files, constants may be declared at the top of the file
 - Enumerations must be defined in `enum.*` files
 - Represent kinds and types with enums, never with `str`
 - Configuration control must be defined in `config.*` files
