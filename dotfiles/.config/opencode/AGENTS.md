@@ -126,6 +126,7 @@ Delimiter spacing:
 ### Makefile
 - Declare `.PHONY` once with all targets at the top, directly below the file header.
 - Continue a long `.PHONY` target list with `\` instead of adding another `.PHONY` line.
+- Prefix every target in a Docker section with `docker_`.
 - 80 chars/line, recipes indented with tab.
 - Section headers use dashed comment lines (`# --...--`), 2 blank lines before and 0 after; section name centered between dashes.
 - Target name followed by `:`; all commands are one line each, separated by line breaks.
