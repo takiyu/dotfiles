@@ -16,6 +16,7 @@ const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
 const ERROR_EXPIRE_MS = 60000;
+const QUESTION_FORM_KIND = 'question';
 
 const SOUND_DIR = path.join(plugin_dir, 'sounds');
 const SOUND_COMPLETE = path.join(SOUND_DIR, 'complete.oga');
@@ -26,7 +27,7 @@ const SOUND_PERMISSION = path.join(SOUND_DIR, 'bell.oga');
 // -----------------------------------------------------------------------------
 // -------------------------------- Interfaces ---------------------------------
 // -----------------------------------------------------------------------------
-// Send desktop notifications and sounds for session and permission events.
+// Send desktop notifications and sounds for session and prompt events.
 const definition = {
   id: 'notification',
   setup(ctx) {
@@ -45,7 +46,7 @@ const definition = {
       for await (const event of ctx.event.subscribe(options)) {
         const request = notificationFor(event);
         if (!request) continue;
-        const info = await sessionInfo(ctx, (event.data || {}).sessionID);
+        const info = await sessionInfo(ctx, request.session_id);
         if (!info || info.directory !== ctx.location.directory) continue;
         sendNotification(title, info.title, request.status, URGENCY_NORMAL,
           description, request.icon, request.sound, request.expire_ms,
@@ -76,16 +77,26 @@ if (typeof module !== 'undefined') {
 function notificationFor(event) {
   const data = event.data || {};
   if (event.type === 'session.execution.succeeded') {
-    return { status: data.message || 'Session completed',
+    return { session_id: data.sessionID,
+      status: data.message || 'Session completed',
       icon: ICON_COMPLETE, sound: SOUND_COMPLETE };
   }
   if (event.type === 'session.execution.failed') {
-    return { status: data.message || data.error || 'An error occurred',
+    return { session_id: data.sessionID,
+      status: data.message || data.error || 'An error occurred',
       icon: ICON_ERROR, sound: SOUND_ERROR,
       expire_ms: ERROR_EXPIRE_MS, transient: true };
   }
   if (event.type === 'permission.asked') {
-    return { status: data.message || 'Task paused — permission requested',
+    return { session_id: data.sessionID,
+      status: data.message || 'Task paused — permission requested',
+      icon: ICON_PERMISSION, sound: SOUND_PERMISSION };
+  }
+  if (event.type === 'form.created') {
+    const form = data.form || {};
+    if ((form.metadata || {}).kind !== QUESTION_FORM_KIND) return null;
+    return { session_id: form.sessionID,
+      status: 'Task paused — question requested',
       icon: ICON_PERMISSION, sound: SOUND_PERMISSION };
   }
   return null;
