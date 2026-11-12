@@ -489,6 +489,16 @@ alias ekam=make
 alias mk=make
 alias km=make
 
+# Enabling make completion for typo aliases
+if declare -F _completion_loader >/dev/null 2>&1; then
+    _completion_loader make
+fi
+if declare -F _make >/dev/null 2>&1; then
+    # Wrapper passing make as command name
+    _make_typo_complete() { _make make; }
+    complete -F _make_typo_complete $(alias -p | command sed -n "s/^alias \([^=]*\)='make'$/\1/p")
+fi
+
 # ------------------------------------------------------------------------------
 # -------------------------------- Vim Commands --------------------------------
 # ------------------------------------------------------------------------------
@@ -502,6 +512,7 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
     alias gvimdiff="nvim -- -d"
     export EDITOR=nvim
     export GIT_EDITOR=nvim
+    export SYSTEMD_EDITOR=nvim
 
     # Open git modified/untracked files in nvim tabs (gdva/gdvda add submodules)
     # Collect modified files in git repo (helper for gdvim/gdvimdiff)
