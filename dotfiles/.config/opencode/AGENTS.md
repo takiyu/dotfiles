@@ -124,7 +124,8 @@ Delimiter spacing:
 - Dockerfile only (not docker-compose for single service)
 
 ### Makefile
-- Declare `.PHONY` with all targets at the top, directly below the file header.
+- Declare `.PHONY` once with all targets at the top, directly below the file header.
+- Continue a long `.PHONY` target list with `\` instead of adding another `.PHONY` line.
 - 80 chars/line, recipes indented with tab.
 - Section headers use dashed comment lines (`# --...--`), 2 blank lines before and 0 after; section name centered between dashes.
 - Target name followed by `:`; all commands are one line each, separated by line breaks.
