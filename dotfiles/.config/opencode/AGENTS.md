@@ -2,7 +2,6 @@
 - Never give up until finished; must check code behavior by running or testing it without relying on users.
 - When environment variable missing, search `.env` file and source it.
 - After completing tasks, re-check the result against these rules before reporting.
-- When a rule violation or an inappropriate project state is found and fixed, add a short, general recurrence-prevention rule to the project's `AGENTS.md` in the same change. Do not record incident-specific details or concrete example values; state a rule that prevents the whole class of violation, and do not restate existing rules.
 - Always use high reasoning effort unless explicitly overridden.
 - Do not blindly apply reviewer or subagent findings; judge whether each is appropriate before changing code.
 - When the target project changes, call `session_move` to its working directory before reading, editing, running commands, starting builds, or changing configuration.
@@ -19,6 +18,26 @@
 - Prohibited from installing tools casually. Ask the user before any installation or global environment change.
 - If the user's request is incomplete or you have a better suggestion, consult with the user.
 - When writing specifications or work logs, keep the document from bloating by removing unnecessary content.
+
+# Documentation Rules
+- Documents below follow the project conventions when a project `AGENTS.md` defines them; apply project-specific rules before these defaults.
+
+## Spec Directory (`spec/`)
+- Keep interface and operational contracts under `<root>/spec/`, one file per element (backend, frontend, devices, deployment) plus a `spec.md` index.
+- Update the matching spec file in the same change whenever behavior, API, configuration, UI, or deployment changes.
+- Keep the document map and update date in `spec.md` current.
+- When spec and implementation disagree, fix the wrong side; never leave them out of sync.
+- Keep specs to the current contract only; never record chronological history there.
+
+## Change History (`HISTORY.md`)
+- Append every change to `<root>/HISTORY.md` as a dated section, newest first.
+- Write each entry as concise bullet lines: what changed and the resulting behavior, not implementation narration.
+- Never duplicate history in specs.
+
+## Project Rules (`AGENTS.md`)
+- Keep `<root>/AGENTS.md` as the operational rule source for the project.
+- When a rule violation or an inappropriate project state is found and fixed, add a short, general recurrence-prevention rule to it in the same change.
+- State rules that prevent a whole class of violation; never record incident-specific details or concrete example values, and never restate existing rules.
 
 # Coding Rules
 ## Must Do
