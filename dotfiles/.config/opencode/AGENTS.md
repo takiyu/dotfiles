@@ -40,6 +40,14 @@
 - State rules that prevent a whole class of violation; never record incident-specific details or concrete example values, and never restate existing rules.
 
 # Coding Rules
+## File Naming
+- Name files as `<prefix>_<content>.<ext>` in snake_case, except standard entrypoints and language files.
+- Use one shared prefix per category; every file of the same kind must use the same prefix.
+- Keep the content part specific enough to identify the file's purpose.
+- Never invent a separate prefix per file or mix category prefixes for the same kind of file.
+- Examples: `api_models.py`, `app_logs.py`, `device_actions.py`, `elec_history.py`, `auto_control_settings.py`.
+- Exceptions: `main.py`, `app.py`, `constants.py`, `enum.py`, `__init__.py`, `README.md`, and other language-standard names.
+
 ## Must Do
 - Code must always be kept clean, and any rule violations must be fixed immediately.
 - Delete any unused variables or constants immediately.
