@@ -40,7 +40,7 @@ const definition = {
     const description = project.description || '';
     const controller = new AbortController();
 
-    // Subscribe to server events and notify only for own sessions.
+    // Notify own top-level sessions, excluding subagent sessions.
     void (async () => {
       const options = { signal: controller.signal };
       for await (const event of ctx.event.subscribe(options)) {
@@ -48,6 +48,7 @@ const definition = {
         if (!request) continue;
         const info = await sessionInfo(ctx, request.session_id);
         if (!info || info.directory !== ctx.location.directory) continue;
+        if (info.parent_id) continue;
         sendNotification(title, info.title, request.status, URGENCY_NORMAL,
           description, request.icon, request.sound, request.expire_ms,
           request.transient);
@@ -103,13 +104,14 @@ function notificationFor(event) {
 }
 
 
-// Resolving the directory and title that own the given session.
+// Resolving the directory, title, and parent of the given session.
 async function sessionInfo(ctx, session_id) {
   if (!session_id) return null;
   try {
     const session = await ctx.session.get({ sessionID: session_id });
     if (!session || !session.location) return null;
-    return { directory: session.location.directory, title: session.title };
+    return { directory: session.location.directory, title: session.title,
+      parent_id: session.parentID };
   } catch (error) {
     void error;
     return null;
