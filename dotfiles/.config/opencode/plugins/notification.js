@@ -15,6 +15,7 @@ const ICON_ERROR = 'dialog-error';
 const ICON_PERMISSION = 'dialog-question';
 const URGENCY_NORMAL = 'normal';
 const URGENCY_CRITICAL = 'critical';
+const DEFAULT_EXPIRE_MS = 30000;
 const ERROR_EXPIRE_MS = 60000;
 const QUESTION_FORM_KIND = 'question';
 
@@ -121,13 +122,14 @@ async function sessionInfo(ctx, session_id) {
 
 // Send a desktop notification via `notify-send` and play a sound file.
 function sendNotification(title, session_title, status, urgency, description,
-                          icon_override, sound_file, expire_ms = null,
+                          icon_override, sound_file,
+                          expire_ms = DEFAULT_EXPIRE_MS,
                           transient = false) {
   let icon = ICON;
   if (urgency === URGENCY_CRITICAL) icon = ICON_ERROR;
   if (icon_override) icon = icon_override;
   const args = ['-a', APP_NAME, '-u', urgency, '-i', icon];
-  if (expire_ms !== null) args.push('-t', String(expire_ms));
+  args.push('-t', String(expire_ms));
   if (transient) args.push('-e');
   const body = notificationBody(session_title, status, description);
   spawnCommand('notify-send', args.concat([title, body]));
