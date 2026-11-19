@@ -50,7 +50,7 @@
 
 ## Must Do
 - Code must always be kept clean, and any rule violations must be fixed immediately.
-- Delete any unused variables or constants immediately.
+- Delete dead code immediately (unused variables, constants, functions, classes, branches, fields, and compatibility layers) unless it is intentionally retained. When retained, keep the reason explicit.
 - Follow existing code style (important)
 - Use snake_case for files, variables (xxx_filename, xxx_dirname)
 - Keep structure simple, avoid deep nesting

@@ -68,7 +68,7 @@
     "sidebar": "hide",
     "scrollbar": false,
     "thinking": "hide",
-    "verbosity": "low"
+    "verbosity": "medium"
   },
   "animations": true
 }
