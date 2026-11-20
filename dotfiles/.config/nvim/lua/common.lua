@@ -193,26 +193,6 @@ vim.opt.spell = true
 vim.opt.spelllang = "en_us,cjk" -- Enabled by default
 vim.api.nvim_set_keymap('n', '<F12>', ':set spell! spelllang=en_us,cjk<CR>', { noremap = true })
 
---------------------------------- Auto IME Switching ---------------------------
--- Document filetypes that switch to Japanese input on insert
-local ime_filetypes = {
-  text = true, tex = true, plaintex = true, markdown = true, html = true
-}
--- Priming fcitx.nvim so insert mode restores Japanese input in these buffers
-local function prime_ime_input()
-  if vim.bo.buftype ~= '' then
-    return
-  end
-  local unnamed = vim.api.nvim_buf_get_name(0) == ''
-  if unnamed or ime_filetypes[vim.bo.filetype] then
-    vim.b.input_toggle_flag = true
-  end
-end
-vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-  pattern = { '*' },
-  callback = prime_ime_input,
-})
-
 ----------------------------------- Terminal -----------------------------------
 -- vim.api.nvim_set_keymap('n', '<F4>', ':new Terminal<CR>:resize 10<CR>:set spell! spelllang=<CR>:terminal<CR>', { noremap = true })
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
