@@ -515,32 +515,37 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
     export SYSTEMD_EDITOR=nvim
 
     # Open git modified/untracked files in nvim tabs (gdva/gdvda add submodules)
-    # Collect modified files in git repo (helper for gdvim/gdvimdiff)
-    # $1 == "with-submodule" also collects files inside submodules
-    _get_git_modified_files() {
-        local with_submodule="$1"
+    gdvim() { _git_view edit "$@"; }
+    alias gdv=gdvim
+    alias gdva='gdvim with-submodule'
+
+    gdvimdiff() { _git_view diff "$@"; }
+    alias gdvd=gdvimdiff
+    alias gdvda='gdvimdiff with-submodule'
+
+    # Parsing args and running the view; diff mode opens vimdiff
+    _git_view() {
+        local mode="$1"
+        shift
+        local with_submodule="" ref="" arg
+        for arg in "$@"; do
+            case "$arg" in
+                with-submodule) with_submodule="with-submodule" ;;
+                *) ref="$arg" ;;
+            esac
+        done
         local files
-        files=$(git -c core.quotepath=false ls-files -m -o --exclude-standard 2>/dev/null) || true
-        if [ "$with_submodule" = "with-submodule" ]; then
-            local sub_files
-            sub_files=$(git submodule foreach --recursive 'git -c core.quotepath=false ls-files -m -o --exclude-standard | sed "s#^#$displaypath/#"' 2>/dev/null | sed '/^Entering /d') || true
-            if [ -n "$files" ] && [ -n "$sub_files" ]; then
-                files=$(printf '%s\n%s' "$files" "$sub_files")
-            elif [ -n "$sub_files" ]; then
-                files=$sub_files
-            fi
+        files=$(_get_git_modified_files "$with_submodule" "$ref") || return 0
+        if [ "$mode" = "diff" ]; then
+            _open_git_diff "$files" "$ref"
+        else
+            _open_git_files "$files"
         fi
-        if [ -z "$files" ]; then
-            echo "No modified or untracked files found." >&2
-            return 1
-        fi
-        printf '%s\n' "$files"
     }
 
-    gdvim() {
-        # Collect modified files; $1 == "with-submodule" includes submodules
-        local files
-        files=$(_get_git_modified_files "$1") || return 0
+    # Opening files in nvim tabs
+    _open_git_files() {
+        local files="$1"
         # Filter to existing regular files only and open with nvim using null-delimited xargs
         printf '%s\n' "$files" | while IFS= read -r f; do
             if [ -f "$f" ]; then
@@ -548,13 +553,11 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
             fi
         done | xargs -0 nvim -p --
     }
-    alias gdv=gdvim
-    alias gdva='gdvim with-submodule'
 
-    gdvimdiff() {
-        # Collect modified files; $1 == "with-submodule" includes submodules
-        local files
-        files=$(_get_git_modified_files "$1") || return 0
+    # Opening files as vimdiff against the ref (default HEAD)
+    _open_git_diff() {
+        local files="$1"
+        local ref="$2"
         # Prepare temp files and build nvim command
         local tmp_files=()
         local file_pairs=()
@@ -571,8 +574,8 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
             # Create secure temp file with mktemp
             local tmp_file
             tmp_file=$(mktemp "/tmp/gdvimdiff_XXXXXX_$base") || continue
-            # Get git HEAD version to temp file
-            git -C "$dir" show "HEAD:$rel" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
+            # Get git ref (default HEAD) version to temp file
+            git -C "$dir" show "${ref:-HEAD}:$rel" > "$tmp_file" 2>/dev/null || { rm -f "$tmp_file"; continue; }
             tmp_files+=("$tmp_file")
             file_pairs+=("$f" "$tmp_file")
         done <<< "$files"
@@ -594,8 +597,75 @@ if [ "$($exist_command nvim)" = 'exist' ]; then
             done
         fi
     }
-    alias gdvd=gdvimdiff
-    alias gdvda='gdvimdiff with-submodule'
+
+    # Collecting changed files in git repo (helper for gdvim/gdvimdiff)
+    # $1 == "with-submodule" also collects files inside submodules
+    # $2 == optional git ref (branch/tag/commit) compared with working tree
+    _get_git_modified_files() {
+        local with_submodule="$1"
+        local ref="$2"
+        # Rejecting refs that do not resolve to a commit
+        if [ -n "$ref" ] && ! git rev-parse --verify --quiet "$ref^{commit}" >/dev/null; then
+            echo "Invalid git ref: $ref" >&2
+            return 1
+        fi
+        local files
+        files=$(_list_changed_files "$ref") || true
+        if [ "$with_submodule" = "with-submodule" ]; then
+            local sub_path sub_files=""
+            while IFS= read -r sub_path; do
+                [ -n "$sub_path" ] || continue
+                sub_files=$(_join_lines "$sub_files" "$(cd "$sub_path" && _list_changed_files "$ref" | sed "s#^#$sub_path/#")")
+            done <<< "$(git submodule foreach --recursive --quiet 'printf "%s\n" "$displaypath"' 2>/dev/null)"
+            files=$(_join_lines "$files" "$sub_files")
+        fi
+        if [ -z "$files" ]; then
+            echo "No modified or untracked files found." >&2
+            return 1
+        fi
+        printf '%s\n' "$files"
+    }
+
+    # Collecting changed files in one repository relative to current directory
+    _list_changed_files() {
+        local ref="$1"
+        if [ -n "$ref" ]; then
+            local tracked untracked
+            tracked=$(git -c core.quotepath=false diff --relative --name-only "$ref" 2>/dev/null) || true
+            untracked=$(git -c core.quotepath=false ls-files -o --exclude-standard 2>/dev/null) || true
+            _join_lines "$tracked" "$untracked"
+        else
+            git -c core.quotepath=false ls-files -m -o --exclude-standard 2>/dev/null
+        fi
+    }
+
+    # Joining two newline lists without empty lines
+    _join_lines() {
+        if [ -n "$1" ] && [ -n "$2" ]; then
+            printf '%s\n%s\n' "$1" "$2"
+        elif [ -n "$1" ]; then
+            printf '%s\n' "$1"
+        else
+            printf '%s\n' "$2"
+        fi
+    }
+
+    # Enabling branch/commit completion for gdv/gdvd and aliases
+    _gdv_complete() {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        local prev="${COMP_WORDS[COMP_CWORD-1]}"
+        # Allowing only a flag and a single ref
+        if [ 1 -lt "$COMP_CWORD" ] && [ "$prev" != "with-submodule" ]; then
+            return 0
+        fi
+        # Offering refs and recent commit hashes
+        __gitcomp_nl "$(__git_refs "" "" "" "$cur"; git log --all --format='%h' -n 50 2>/dev/null)"
+        # Offering the submodule flag only as the first argument
+        if [ "$COMP_CWORD" = 1 ]; then
+            __gitcomp_nl_append "with-submodule"
+        fi
+    }
+    complete -F _gdv_complete gdv gdva gdvd gdvda gdvim gdvimdiff
 fi
 
 # ------------------------------------------------------------------------------
